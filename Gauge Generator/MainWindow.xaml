@@ -5,8 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gauge_Generator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Gauge Generator" Height="500" Width="900" MinWidth="900" MinHeight="500">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="350px"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Background="#ababab">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30px" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Background="#888888" Content="Content layers" FontSize="16px" HorizontalContentAlignment="Center"></Label>
+            <Frame Grid.Row="1" NavigationUIVisibility="Hidden" x:Name="sidebar_frame" />
+        </Grid>
+        <Grid Grid.Column="1" Background="#cfcfcf">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="60px" />
+            </Grid.RowDefinitions>
+            <Grid.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="BorderBrush" Value="Gray" />
+                    <Setter Property="Background" Value="#FAFAFA" />
+                    <Setter Property="Margin" Value="2, 0, 2, 0" />
+                    <Setter Property="Width" Value="40px" />
+                    <Setter Property="Height" Value="40px" />
+                    
+                </Style>
+            </Grid.Resources>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="Z out" ToolTip="Zoom out preview"></Button>
+                <Button Content="100%" ToolTip="zoom out completely"></Button>
+                <Button Content="Z in" ToolTip="Zoom in preview"></Button>
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                <Button Content="New" ToolTip="New project"></Button>
+                <Button Content="Open" ToolTip="Open project"></Button>
+                <Button Content="Save" ToolTip="Save project data"></Button>
+                <Button Content="SaveAs" ToolTip="Save project data to new file"></Button>
+                <Button Content="Export" ToolTip="Export to PNG  image"></Button>
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                <Button Content="Doc" ToolTip="Show documentation"></Button>
+                <Button Content="Info" ToolTip="Get more information about this application"></Button>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
