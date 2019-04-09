@@ -11,23 +11,30 @@ namespace Gauge_Generator
     [Serializable()]
     public class ProjectData
     {
+        //EVENTS
+        public delegate void d_ImageSizeChanged(int newSize);
+        public event d_ImageSizeChanged ImageSizeChanged;
+
         //PRIVATE
-        int pImageSize = 100;
+        int pImageSize = 300;
 
         //PUBLIC
-        List<Layer> layers = new List<Layer>();
+        public List<Layer> layers = new List<Layer>();
 
+        //PROPERTIES
         public int ImageSize
         {
             get { return pImageSize; }
             set
             {
-                if(value >= 100 && value <= 1000)
+                if(value >= 300 && value <= 1000)
                 {
                     pImageSize = value;
-                    //TODO event size changed
+                    ImageSizeChanged?.Invoke(value);
                 }
             }
         }
+
+
     }
 }
