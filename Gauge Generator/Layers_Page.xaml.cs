@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,14 +16,13 @@ using System.Windows.Shapes;
 namespace Gauge_Generator
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for Layers_Page.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Layers_Page : Page
     {
-        public MainWindow()
+        public Layers_Page()
         {
             InitializeComponent();
-            sidebar_frame.NavigationService.Navigate(new Layers_Page());
         }
     }
 }

@@ -3,6 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        
+        
         xmlns:local="clr-namespace:Gauge_Generator"
         mc:Ignorable="d"
         Title="Gauge Generator" Height="500" Width="900" MinWidth="900" MinHeight="500">
@@ -24,16 +28,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="60px" />
             </Grid.RowDefinitions>
-            <Grid.Resources>
-                <Style TargetType="Button">
-                    <Setter Property="BorderBrush" Value="Gray" />
-                    <Setter Property="Background" Value="#FAFAFA" />
-                    <Setter Property="Margin" Value="2, 0, 2, 0" />
-                    <Setter Property="Width" Value="40px" />
-                    <Setter Property="Height" Value="40px" />
-                    
-                </Style>
-            </Grid.Resources>
+            <Image Grid.Row="0" Margin="10" x:Name="image_preview" />
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="Z out" ToolTip="Zoom out preview"></Button>
                 <Button Content="100%" ToolTip="zoom out completely"></Button>

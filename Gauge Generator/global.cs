@@ -8,6 +8,6 @@ namespace Gauge_Generator
 {
     public static class Global
     {
-
+        public static ProjectData project = new ProjectData();
     }
 }

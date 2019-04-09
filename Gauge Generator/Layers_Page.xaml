@@ -1,0 +1,29 @@
+﻿<Page x:Class="Gauge_Generator.Layers_Page"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Gauge_Generator"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="350"
+      Title="Layers list">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="60px" />
+        </Grid.RowDefinitions>
+        <ListBox Grid.Row="0" Margin="15, 20, 15, 5" ScrollViewer.VerticalScrollBarVisibility="Visible" Background="#868686" x:Name="layers_view">
+            
+        </ListBox>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="New" ToolTip="Create new layer"></Button>
+            <Button Content="Proj" ToolTip="Change settings project"></Button>
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            <Button Content="Del" ToolTip="Delete selected layer"></Button>
+            <Button Content="Edit" ToolTip="Edit properties of selected layer"></Button>
+            <Button Content="Up" ToolTip="Move up selected layer"></Button>
+            <Button Content="Dn" ToolTip="Move down selected layer"></Button>
+        </StackPanel>
+    </Grid>
+</Page>

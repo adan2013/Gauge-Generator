@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Gauge_Generator
 {
-    class Layer
+    public class Layer
     {
 
     }
