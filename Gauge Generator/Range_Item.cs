@@ -26,7 +26,7 @@ namespace Gauge_Generator
         public float CircleCenter_X
         {
             get { return _circlecenter_x; }
-            set { _circlecenter_x = ValidateFloat(value, -1, 1);  }
+            set { _circlecenter_x = ValidateFloat(value, -1, 1); }
         }
         public float CircleCenter_Y
         {

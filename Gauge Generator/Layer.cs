@@ -10,10 +10,17 @@ namespace Gauge_Generator
     public class Layer
     {
         //PRIVATE VARIABLES
-        //private Layer _rangesource;
+        string _label;
 
         //PROPERTIES
-        public string Label { get; set; }
+        public string Label
+        {
+            get { return _label; }
+            set
+            {
+                _label = ValidateString(value, 20);
+            }
+        }
 
         public string RangeName {
             get
@@ -61,6 +68,11 @@ namespace Gauge_Generator
         {
             if (removeAlpha) c.A = 255;
             return c;
+        }
+
+        public Layer()
+        {
+            Label = "New Layer";
         }
     }
 }

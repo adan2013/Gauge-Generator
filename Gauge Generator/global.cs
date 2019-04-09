@@ -12,7 +12,7 @@ namespace Gauge_Generator
         public const float MAX_FLOAT_VALUE = 0.8f;
         public const float MIN_RANGE_VALUE = -500f;
         public const float MAX_RANGE_VALUE = 500f;
-
+        public const int MAX_LAYERS = 30;
         
 
         public static ProjectData project = new ProjectData();

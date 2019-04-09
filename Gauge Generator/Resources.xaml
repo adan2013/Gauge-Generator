@@ -13,7 +13,7 @@
 
     <!--SCROLLBARS-->
     <!--Scrollbar Thumbs-->
-    <!--<Style x:Key="ScrollThumbs" TargetType="{x:Type Thumb}">
+    <Style x:Key="ScrollThumbs" TargetType="{x:Type Thumb}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
@@ -31,7 +31,8 @@
             </Setter.Value>
         </Setter>
     </Style>
-    --><!--ScrollBars--><!--
+    
+    <!--ScrollBars-->
     <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
         <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
         <Setter Property="Foreground" Value="#8C8C8C" />
@@ -87,5 +88,5 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>-->
+    </Style>
 </ResourceDictionary>
