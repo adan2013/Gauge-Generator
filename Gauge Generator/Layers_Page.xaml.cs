@@ -36,7 +36,7 @@ namespace Gauge_Generator
                 Image img = new Image();
                 Label lbl = new Label();
                 spnl.Orientation = Orientation.Horizontal;
-                img.Source = new BitmapImage(new Uri("pack://application:,,,/Images/range_item.png"));
+                img.Source = new BitmapImage(new Uri(Global.LayerSmallImages[(int)Global.GetLayerType(i)]));
                 img.Margin = new Thickness(3);
                 lbl.Content = i.Label;
                 lbl.FontSize = 16;

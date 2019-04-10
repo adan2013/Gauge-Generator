@@ -18,6 +18,31 @@ namespace Gauge_Generator
         public static ProjectData project = new ProjectData();
 
         public static Layer EditingLayer;
+        public static string[] LayerNames = { "Range", "Linear Scale", "Numeric Scale", "Arc", "Label", "Gauge" };
+        public static string[] LayerDescriptions = {
+            "Range Range Range Range Range Range Range Range Range Range Range Range Range Range Range",
+            "Linear Scale",
+            "Numeric Scale",
+            "Arc",
+            "Label",
+            "Gauge"
+        };
+        public static string[] LayerBigImages = {
+            "pack://application:,,,/Images/range_item_big.png",
+            "pack://application:,,,/Images/range_item_big.png",
+            "pack://application:,,,/Images/range_item_big.png",
+            "pack://application:,,,/Images/range_item_big.png",
+            "pack://application:,,,/Images/range_item_big.png",
+            "pack://application:,,,/Images/range_item_big.png"
+        };
+        public static string[] LayerSmallImages = {
+            "pack://application:,,,/Images/range_item.png",
+            "pack://application:,,,/Images/range_item.png",
+            "pack://application:,,,/Images/range_item.png",
+            "pack://application:,,,/Images/range_item.png",
+            "pack://application:,,,/Images/range_item.png",
+            "pack://application:,,,/Images/range_item.png"
+        };
 
         private static Frame SidebarObject;
         private static Label SidebarTitleObject;
@@ -39,12 +64,20 @@ namespace Gauge_Generator
             Editor
         }
 
+        public static LayersType GetLayerType(Layer obj)
+        {
+            if (obj is Range_Item) return LayersType.Range;
+            //TODO other types
+            return LayersType.Range;
+        }
+
         public static Type GetLayerObject(LayersType obj)
         {
             switch(obj)
             {
                 case LayersType.Range:
                     return typeof(Range_Item);
+                    //TODO other types
                 default:
                     return typeof(Range_Item);
             }

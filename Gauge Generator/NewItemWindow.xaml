@@ -8,41 +8,41 @@
         Title="New item" MinHeight="450" MinWidth="600" Height="450" Width="600" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Background="#cfcfcf">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30px" />
             <RowDefinition Height="*" />
             <RowDefinition Height="100px" />
-            <RowDefinition Height="60px" />
+            <RowDefinition Height="50px" />
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" Content="Choce item type:" FontSize="14px" VerticalAlignment="Center" Margin="8, 0, 0, 0" />
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="325px" />
+                <ColumnDefinition Width="355px" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" Width="325px" HorizontalAlignment="Left" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Column="0" x:Name="items_view" />
+            <ScrollViewer Margin="10">
+                <WrapPanel Orientation="Horizontal" Width="325px" HorizontalAlignment="Left" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Column="0" x:Name="items_view" />
+            </ScrollViewer>
             <StackPanel Grid.Column="1">
-                <Label FontSize="24px" FontWeight="Bold" x:Name="lbl_title" Margin="10, 10, 10, 0" Content="Range" />
-                <Label FontSize="14px" x:Name="lbl_description" Margin="10, 0, 10, 0" Content="Description" />
+                <TextBlock TextWrapping="WrapWithOverflow" FontSize="24px" FontWeight="Bold" x:Name="lbl_title" Margin="8, 5, 10, 0">Range</TextBlock>
+                <TextBlock TextWrapping="WrapWithOverflow" FontSize="14px" x:Name="lbl_description" Margin="10, 5, 10, 0">Description</TextBlock>
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50*" />
                 <ColumnDefinition Width="50*" />
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Margin="15, 15, 8, 10">
                 <Label Content="Name of layer:" />
-                <TextBox x:Name="txt_name" MaxLength="20" TextChanged="Txt_name_TextChanged" />
+                <TextBox x:Name="txt_name" MaxLength="20" TextChanged="Txt_name_TextChanged" KeyUp="Txt_name_KeyUp" />
                 <Label Content="Layer must have a name!" x:Name="lbl_err_name" Foreground="#DD0000" />
             </StackPanel>
-            <StackPanel Grid.Column="1" Margin="8, 15, 15, 10">
+            <StackPanel Grid.Column="1" Margin="8, 15, 15, 10" x:Name="RangePanel">
                 <Label Content="Range source layer:" />
                 <ComboBox x:Name="RangeItemsList" SelectionChanged="RangeItemsList_SelectionChanged">
                 </ComboBox>
                 <Label Content="This layer must have a range source!" x:Name="lbl_err_source" Foreground="#DD0000" />
             </StackPanel>
         </Grid>
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="OK" ToolTip="Create a new item" x:Name="ok_btn" Click="Ok_btn_Click"></Button>
             <Button Content="Cancel" ToolTip="Cancel operation" Click="Cancel_btn"></Button>
         </StackPanel>

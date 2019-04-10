@@ -31,6 +31,8 @@ namespace Gauge_Generator
             InitializeComponent();
             LoadItemsList();
             LoadRangeList();
+            LoadDescription((int)itemSelected);
+            RangePanel.Visibility = Visibility.Hidden;
             lbl_err_name.Content = "";
             lbl_err_source.Content = "";
             txt_name.Text = "New Layer";
@@ -41,7 +43,60 @@ namespace Gauge_Generator
 
         private void LoadItemsList()
         {
+            for(int i=0; i<6; i++)
+            {
+                Image img = new Image
+                {
+                    Source = new BitmapImage(new Uri(Global.LayerBigImages[i])),
+                    Width = 90,
+                    Height = 90
+                };
+                Border br = new Border
+                {
+                    Name = "item" + i,
+                    Child = img,
+                    BorderBrush = (i==0 ? Brushes.Black : Brushes.Transparent),
+                    BorderThickness = new Thickness(5),
+                    Margin = new Thickness(2)
+                };
+                br.MouseEnter += Br_MouseEnter;
+                br.MouseLeave += Br_MouseLeave;
+                br.MouseDown += Br_MouseDown;
+                items_view.Children.Add(br);
+            }
+        }
 
+        private void LoadDescription(int index)
+        {
+            lbl_title.Text = Global.LayerNames[index];
+            lbl_description.Text = Global.LayerDescriptions[index];
+        }
+
+        private void Br_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                foreach(object i in items_view.Children) if (i is Border o) o.BorderBrush = Brushes.Transparent;
+                Border br = (Border)sender;
+                itemSelected = (Global.LayersType)int.Parse(br.Name.Substring(4));
+                br.BorderBrush = Brushes.Black;
+                ValidateOperation();
+                RangePanel.Visibility = (itemSelected == Global.LayersType.Range ? Visibility.Hidden : Visibility.Visible);
+            }
+        }
+
+        private void Br_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Border br = (Border)sender;
+            if(br.BorderBrush == Brushes.DarkGray) br.BorderBrush = Brushes.Transparent;
+            LoadDescription((int)itemSelected);
+        }
+
+        private void Br_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Border br = (Border)sender;
+            if (itemSelected != (Global.LayersType)int.Parse(br.Name.Substring(4))) br.BorderBrush = Brushes.DarkGray;
+            LoadDescription(int.Parse(br.Name.Substring(4)));
         }
 
         private void LoadRangeList()
@@ -99,6 +154,11 @@ namespace Gauge_Generator
         private void Txt_name_TextChanged(object sender, TextChangedEventArgs e)
         {
             ValidateOperation();
+        }
+
+        private void Txt_name_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && ok_btn.IsEnabled) Ok_btn_Click(ok_btn, new RoutedEventArgs());
         }
     }
 }
