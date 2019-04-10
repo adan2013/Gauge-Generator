@@ -13,7 +13,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="60px" />
         </Grid.RowDefinitions>
-        <ListBox Grid.Row="0" Margin="15, 20, 15, 5" Background="#B6B6B6" x:Name="layers_view" SelectionChanged="Layers_view_SelectionChanged">
+        <ListBox Grid.Row="0" Margin="15, 20, 15, 5" Background="#B6B6B6" x:Name="layers_view" SelectionChanged="Layers_view_SelectionChanged" MouseDoubleClick="Layers_view_MouseDoubleClick">
         </ListBox>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="New" ToolTip="Create new layer" Click="New_layer_btn"></Button>

@@ -52,7 +52,10 @@ namespace Gauge_Generator
         {
             if(Global.project.layers.Count < Global.MAX_LAYERS)
             {
-                Global.project.layers.Insert(0, new Range_Item());
+                NewItemWindow w = new NewItemWindow();
+                w.Owner = Application.Current.MainWindow;
+                w.ShowDialog();
+                w.Close();
                 Reload_Layers_List(0);
             }
             else
@@ -110,6 +113,11 @@ namespace Gauge_Generator
             edit_btn.IsEnabled = r;
             up_btn.IsEnabled = r;
             dn_btn.IsEnabled = r;
+        }
+
+        private void Layers_view_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Edit_layer_btn(edit_btn, new RoutedEventArgs());
         }
     }
 }

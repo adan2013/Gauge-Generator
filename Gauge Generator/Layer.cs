@@ -10,7 +10,7 @@ namespace Gauge_Generator
     public class Layer
     {
         //PRIVATE VARIABLES
-        string _label;
+        string _label = "New Layer";
 
         //PROPERTIES
         public string Label
@@ -37,6 +37,12 @@ namespace Gauge_Generator
 
         protected Layer RangeSource { get; set; }
         
+        //PUBLIC METHODS
+        public void SetRangeSource(Layer obj)
+        {
+            if (obj is Range_Item) RangeSource = obj;
+        }
+
         //VIRTUAL METHODS
         virtual public void DrawLayer(ref DrawingContext dc, int size) { }
 
@@ -68,11 +74,6 @@ namespace Gauge_Generator
         {
             if (removeAlpha) c.A = 255;
             return c;
-        }
-
-        public Layer()
-        {
-            Label = "New Layer";
         }
     }
 }

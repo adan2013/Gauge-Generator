@@ -23,10 +23,31 @@ namespace Gauge_Generator
         private static Label SidebarTitleObject;
         public static SidebarPages Sidebar { get; private set; }
 
+        public enum LayersType
+        {
+            Range = 0,
+            LinearScale,
+            NumericScale,
+            Arc,
+            Label,
+            Gauge
+        }
+
         public enum SidebarPages
         {
             Layers = 0,
-            Editor = 1
+            Editor
+        }
+
+        public static Type GetLayerObject(LayersType obj)
+        {
+            switch(obj)
+            {
+                case LayersType.Range:
+                    return typeof(Range_Item);
+                default:
+                    return typeof(Range_Item);
+            }
         }
 
         public static void SetSidebarObject(Frame obj, Label lbl)
