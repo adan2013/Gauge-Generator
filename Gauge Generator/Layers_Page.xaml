@@ -13,16 +13,16 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="60px" />
         </Grid.RowDefinitions>
-        <ListBox Grid.Row="0" Margin="15, 20, 15, 5" ScrollViewer.VerticalScrollBarVisibility="Visible" Background="#B6B6B6" x:Name="layers_view">
+        <ListBox Grid.Row="0" Margin="15, 20, 15, 5" Background="#B6B6B6" x:Name="layers_view" SelectionChanged="Layers_view_SelectionChanged">
         </ListBox>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="New" ToolTip="Create new layer" Click="New_layer_btn"></Button>
             <Button Content="Proj" ToolTip="Change settings project"></Button>
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-            <Button Content="Del" ToolTip="Delete selected layer" Click="Delete_layer_btn"></Button>
-            <Button Content="Edit" ToolTip="Edit properties of selected layer" Click="Edit_layer_btn"></Button>
-            <Button Content="Up" ToolTip="Move up selected layer" Click="Moveup_layer_btn"></Button>
-            <Button Content="Dn" ToolTip="Move down selected layer" Click="Movedn_layer_btn"></Button>
+            <Button IsEnabled="False" x:Name="del_btn" Content="Del" ToolTip="Delete selected layer" Click="Delete_layer_btn"></Button>
+            <Button IsEnabled="False" x:Name="edit_btn" Content="Edit" ToolTip="Edit properties of selected layer" Click="Edit_layer_btn"></Button>
+            <Button IsEnabled="False" x:Name="up_btn" Content="Up" ToolTip="Move up selected layer" Click="Moveup_layer_btn"></Button>
+            <Button IsEnabled="False" x:Name="dn_btn" Content="Dn" ToolTip="Move down selected layer" Click="Movedn_layer_btn"></Button>
         </StackPanel>
     </Grid>
 </Page>

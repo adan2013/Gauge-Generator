@@ -22,7 +22,7 @@ namespace Gauge_Generator
             }
         }
 
-        public string RangeName {
+        public string RangeSourceName {
             get
             {
                 if (RangeSource == null) {

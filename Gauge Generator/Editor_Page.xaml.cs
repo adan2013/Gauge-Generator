@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,14 +16,26 @@ using System.Windows.Shapes;
 namespace Gauge_Generator
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for Editor_Page.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Editor_Page : Page
     {
-        public MainWindow()
+        public Editor_Page()
         {
             InitializeComponent();
-            Global.SetSidebarObject(sidebar_frame, sidebar_title);
+            if (Global.EditingLayer == null)
+            {
+                Global.SetSidebar(Global.SidebarPages.Layers);
+            }
+            else
+            {
+                prop_grid.SelectedObject = Global.EditingLayer;
+            }
+        }
+
+        private void Close_btn(object sender, RoutedEventArgs e)
+        {
+            Global.EditingLayer = null;
             Global.SetSidebar(Global.SidebarPages.Layers);
         }
     }

@@ -71,7 +71,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Editor_Page.xaml.cs">
+      <DependentUpon>Editor_Page.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Range_Item.cs" />
+    <Page Include="Editor_Page.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Layers_Page.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

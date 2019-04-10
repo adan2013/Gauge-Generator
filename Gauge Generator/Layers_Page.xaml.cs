@@ -23,6 +23,7 @@ namespace Gauge_Generator
         public Layers_Page()
         {
             InitializeComponent();
+            Reload_Layers_List(-1);
         }
 
         private void Reload_Layers_List(int index)
@@ -73,7 +74,8 @@ namespace Gauge_Generator
         {
             if (layers_view.SelectedIndex >= 0)
             {
-                //TODO switch to edit page
+                Global.EditingLayer = Global.project.layers[layers_view.SelectedIndex];
+                Global.SetSidebar(Global.SidebarPages.Editor);
             }
         }
 
@@ -99,6 +101,15 @@ namespace Gauge_Generator
                 Global.project.layers.Insert(i + 1, temp);
                 Reload_Layers_List(i + 1);
             }
+        }
+
+        private void Layers_view_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            bool r = !(layers_view.SelectedIndex < 0);
+            del_btn.IsEnabled = r;
+            edit_btn.IsEnabled = r;
+            up_btn.IsEnabled = r;
+            dn_btn.IsEnabled = r;
         }
     }
 }

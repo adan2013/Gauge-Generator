@@ -3,10 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        
-        
         xmlns:local="clr-namespace:Gauge_Generator"
         mc:Ignorable="d"
         Title="Gauge Generator" Height="500" Width="900" MinWidth="900" MinHeight="500">
@@ -20,7 +16,7 @@
                 <RowDefinition Height="30px" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Background="#888888" Content="Content layers" FontSize="16px" HorizontalContentAlignment="Center"></Label>
+            <Label Grid.Row="0" Background="#888888" Content="Content layers" FontSize="16px" HorizontalContentAlignment="Center" x:Name="sidebar_title"></Label>
             <Frame Grid.Row="1" NavigationUIVisibility="Hidden" x:Name="sidebar_frame" />
         </Grid>
         <Grid Grid.Column="1" Background="#cfcfcf">

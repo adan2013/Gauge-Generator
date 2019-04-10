@@ -10,17 +10,17 @@ namespace Gauge_Generator
     class Range_Item : Layer
     {
         //PRIVATE VARIABLES
-        float _circlecenter_x;
-        float _circlecenter_y;
-        float _circleradius;
-        int _anglestart;
-        int _anglelength;
-        float _rangestartvalue;
-        float _rangeendvalue;
-        float _gaugeoffset_x;
-        float _gaugeoffset_y;
-        float _gaugepointsize;
-        Color _gaugepointcolor;
+        float _circlecenter_x = 0;
+        float _circlecenter_y = 0;
+        float _circleradius = 1;
+        int _anglestart = 160;
+        int _anglelength = 220;
+        float _rangestartvalue = 0;
+        float _rangeendvalue = 100;
+        float _gaugeoffset_x = 0;
+        float _gaugeoffset_y = 0;
+        float _gaugepointsize = 0.05f;
+        Color _gaugepointcolor = Color.FromRgb(255, 255, 255);
 
         //PROPERTIES
         public float CircleCenter_X
