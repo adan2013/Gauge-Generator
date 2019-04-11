@@ -26,18 +26,18 @@
             </Grid.RowDefinitions>
             <Image Grid.Row="0" Margin="10" x:Name="image_preview" />
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Z out" ToolTip="Zoom out preview"></Button>
-                <Button Content="100%" ToolTip="zoom out completely"></Button>
-                <Button Content="Z in" ToolTip="Zoom in preview"></Button>
+                <Button IsEnabled="False" Content="Z out" ToolTip="Zoom out preview"></Button>
+                <Button IsEnabled="False" Content="100%" ToolTip="zoom out completely"></Button>
+                <Button IsEnabled="False" Content="Z in" ToolTip="Zoom in preview"></Button>
                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                <Button Content="New" ToolTip="New project"></Button>
-                <Button Content="Open" ToolTip="Open project"></Button>
-                <Button Content="Save" ToolTip="Save project data"></Button>
-                <Button Content="SaveAs" ToolTip="Save project data to new file"></Button>
-                <Button Content="Export" ToolTip="Export to PNG  image"></Button>
+                <Button IsEnabled="False" Content="New" ToolTip="New project"></Button>
+                <Button IsEnabled="False" Content="Open" ToolTip="Open project"></Button>
+                <Button IsEnabled="False" Content="Save" ToolTip="Save project data"></Button>
+                <Button IsEnabled="False" Content="SaveAs" ToolTip="Save project data to new file"></Button>
+                <Button IsEnabled="False" Content="Export" ToolTip="Export to PNG  image"></Button>
                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                <Button Content="Doc" ToolTip="Show documentation"></Button>
-                <Button Content="Info" ToolTip="Get more information about this application"></Button>
+                <Button IsEnabled="False" Content="Doc" ToolTip="Show documentation"></Button>
+                <Button IsEnabled="False" Content="Info" ToolTip="Get more information about this application"></Button>
             </StackPanel>
         </Grid>
     </Grid>

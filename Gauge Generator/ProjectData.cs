@@ -35,6 +35,20 @@ namespace Gauge_Generator
             }
         }
 
+        public Color BackgroundColor { get; set; }
 
+        public Color ForegroundColor { get; set; }
+
+        public bool RoundForeground { get; set; }
+
+        public bool AntiAliasing { get; set; }
+
+        public ProjectData()
+        {
+            BackgroundColor = Colors.Transparent;
+            ForegroundColor = Colors.Black;
+            RoundForeground = true;
+            AntiAliasing = true;
+        }
     }
 }

@@ -35,7 +35,7 @@ namespace Gauge_Generator
             }
         }
 
-        protected Layer RangeSource { get; set; }
+        public Layer RangeSource { get; private set; }
         
         //PUBLIC METHODS
         public void SetRangeSource(Layer obj)

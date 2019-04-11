@@ -17,7 +17,7 @@
         </ListBox>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="New" ToolTip="Create new layer" Click="New_layer_btn"></Button>
-            <Button Content="Proj" ToolTip="Change settings project"></Button>
+            <Button Content="Proj" ToolTip="Change settings project" Click="Open_proj_settings"></Button>
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
             <Button IsEnabled="False" x:Name="del_btn" Content="Del" ToolTip="Delete selected layer" Click="Delete_layer_btn"></Button>
             <Button IsEnabled="False" x:Name="edit_btn" Content="Edit" ToolTip="Edit properties of selected layer" Click="Edit_layer_btn"></Button>

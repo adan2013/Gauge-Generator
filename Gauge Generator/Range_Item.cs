@@ -20,7 +20,7 @@ namespace Gauge_Generator
         float _gaugeoffset_x = 0;
         float _gaugeoffset_y = 0;
         float _gaugepointsize = 0.05f;
-        Color _gaugepointcolor = Color.FromRgb(255, 255, 255);
+        Color _gaugepointcolor = Colors.White;
 
         //PROPERTIES
         public float CircleCenter_X

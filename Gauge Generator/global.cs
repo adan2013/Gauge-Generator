@@ -61,7 +61,8 @@ namespace Gauge_Generator
         public enum SidebarPages
         {
             Layers = 0,
-            Editor
+            Editor,
+            ProjectSettings
         }
 
         public static LayersType GetLayerType(Layer obj)
@@ -101,6 +102,10 @@ namespace Gauge_Generator
                 case SidebarPages.Editor:
                     SidebarObject.NavigationService.Navigate(new Editor_Page());
                     SidebarTitleObject.Content = "Property editor";
+                    break;
+                case SidebarPages.ProjectSettings:
+                    SidebarObject.NavigationService.Navigate(new Project_Settings_Page());
+                    SidebarTitleObject.Content = "Project settings";
                     break;
             }
         }

@@ -34,15 +34,15 @@ namespace Gauge_Generator
                 ListBoxItem item = new ListBoxItem();
                 StackPanel spnl = new StackPanel();
                 Image img = new Image();
-                Label lbl = new Label();
+                TextBlock tblock = new TextBlock();
                 spnl.Orientation = Orientation.Horizontal;
                 img.Source = new BitmapImage(new Uri(Global.LayerSmallImages[(int)Global.GetLayerType(i)]));
                 img.Margin = new Thickness(3);
-                lbl.Content = i.Label;
-                lbl.FontSize = 16;
-                lbl.FontFamily = new FontFamily("Segoe UI");
+                tblock.Text = i.Label;
+                tblock.FontSize = 16;
+                tblock.FontFamily = new FontFamily("Segoe UI");
                 spnl.Children.Add(img);
-                spnl.Children.Add(lbl);
+                spnl.Children.Add(tblock);
                 layers_view.Items.Add(spnl);
             }
             layers_view.SelectedIndex = index;
@@ -66,7 +66,23 @@ namespace Gauge_Generator
 
         private void Delete_layer_btn(object sender, RoutedEventArgs e)
         {
-            if(layers_view.SelectedIndex >= 0 && MessageBox.Show("Do want to delete this object? Are you sure?", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) == MessageBoxResult.Yes)
+            //TODO i need to test
+            Layer target = Global.project.layers[layers_view.SelectedIndex];
+            bool conflict = false;
+            if(Global.GetLayerType(target) == Global.LayersType.Range)
+            {
+                foreach(Layer i in Global.project.layers)
+                {
+                    if(i.RangeSource == target)
+                    {
+                        conflict = true;
+                        break;
+                    }
+                }
+                //TODO message info
+                if (conflict) MessageBox.Show("Error", "Error", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK);
+            }
+            if (!conflict && layers_view.SelectedIndex >= 0 && MessageBox.Show("Do want to delete this object? Are you sure?", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) == MessageBoxResult.Yes)
             {
                 Global.project.layers.RemoveAt(layers_view.SelectedIndex);
                 Reload_Layers_List(-1);
@@ -118,6 +134,11 @@ namespace Gauge_Generator
         private void Layers_view_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Edit_layer_btn(edit_btn, new RoutedEventArgs());
+        }
+
+        private void Open_proj_settings(object sender, RoutedEventArgs e)
+        {
+            Global.SetSidebar(Global.SidebarPages.ProjectSettings);
         }
     }
 }
