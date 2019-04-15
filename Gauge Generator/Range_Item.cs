@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 namespace Gauge_Generator
 {
-    class Range_Item : Layer
+    public class Range_Item : Layer
     {
         //PRIVATE VARIABLES
         float _circlecenter_x = 0;
@@ -51,12 +51,20 @@ namespace Gauge_Generator
         public float RangeStartValue
         {
             get { return _rangestartvalue; }
-            set { _rangestartvalue = ValidateFloat(value, Global.MIN_RANGE_VALUE, Global.MAX_RANGE_VALUE); }
+            set
+            {
+                _rangestartvalue = ValidateFloat(value, Global.MIN_RANGE_VALUE, Global.MAX_RANGE_VALUE);
+                _rangestartvalue = ValidateFloat(_rangestartvalue, Global.MIN_RANGE_VALUE, RangeEndValue);
+            }
         }
         public float RangeEndValue
         {
             get { return _rangeendvalue; }
-            set { _rangeendvalue = ValidateFloat(value, Global.MIN_RANGE_VALUE, Global.MAX_RANGE_VALUE); }
+            set
+            {
+                _rangeendvalue = ValidateFloat(value, Global.MIN_RANGE_VALUE, Global.MAX_RANGE_VALUE);
+                _rangeendvalue = ValidateFloat(_rangeendvalue, RangeStartValue, Global.MAX_RANGE_VALUE);
+            }
         }
         public float GaugeOffset_X
         {
@@ -79,6 +87,7 @@ namespace Gauge_Generator
             set { _gaugepointcolor = ValidateColor(value, true); }
         }
 
+        //METHODS
         public override void DrawLayer(ref DrawingContext dc, int size)
         {
             base.DrawLayer(ref dc, size);

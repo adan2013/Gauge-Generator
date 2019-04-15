@@ -79,8 +79,7 @@ namespace Gauge_Generator
                         break;
                     }
                 }
-                //TODO message info
-                if (conflict) MessageBox.Show("Error", "Error", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK);
+                if (conflict) MessageBox.Show("This layer is associated with other objects, so it can not be removed!", "Error", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK);
             }
             if (!conflict && layers_view.SelectedIndex >= 0 && MessageBox.Show("Do want to delete this object? Are you sure?", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) == MessageBoxResult.Yes)
             {
