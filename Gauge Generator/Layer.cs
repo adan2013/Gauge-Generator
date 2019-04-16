@@ -35,15 +35,12 @@ namespace Gauge_Generator
             }
         }
 
-        public Range_Item RangeSource { get; private set; }
-        
-        //PUBLIC METHODS
-        public void SetRangeSource(Layer obj)
-        {
-            if (obj is Range_Item) RangeSource = (Range_Item)obj;
-        }
+        public Range_Item RangeSource { get; set; }
 
         //VIRTUAL METHODS
+
+        virtual public void ValidateWithSource() { }
+
         virtual public void DrawLayer(ref DrawingContext dc, int size) { }
 
         virtual public void DrawOverlay(ref DrawingContext dc, int size, float alpha) { }

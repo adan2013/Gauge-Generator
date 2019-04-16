@@ -35,6 +35,10 @@ namespace Gauge_Generator
 
         private void Close_btn(object sender, RoutedEventArgs e)
         {
+            foreach(Layer i in Global.project.layers)
+            {
+                if (i.RangeSource == Global.EditingLayer) i.ValidateWithSource();
+            }
             Global.EditingLayer = null;
             Global.SetSidebar(Global.SidebarPages.Layers);
         }

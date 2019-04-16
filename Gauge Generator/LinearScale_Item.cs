@@ -25,7 +25,7 @@ namespace Gauge_Generator
             set
             {
                 _rangemin = ValidateFloat(value, RangeSource.RangeStartValue, RangeSource.RangeEndValue);
-                _rangemin = ValidateFloat(_rangemin, RangeSource.RangeStartValue, RangeMax);
+                ValidateWithSource();
             }
         }
         public float RangeMax
@@ -34,7 +34,7 @@ namespace Gauge_Generator
             set
             {
                 _rangemax = ValidateFloat(value, RangeSource.RangeStartValue, RangeSource.RangeEndValue);
-                _rangemax = ValidateFloat(_rangemax, RangeMin, RangeSource.RangeEndValue);
+                ValidateWithSource();
             }
         }
         public float Tick
@@ -64,6 +64,13 @@ namespace Gauge_Generator
         }
 
         //METHODS
+        public override void ValidateWithSource()
+        {
+            _rangemin = ValidateFloat(_rangemin, RangeSource.RangeStartValue, RangeMax);
+            _rangemax = ValidateFloat(_rangemax, RangeMin, RangeSource.RangeEndValue);
+            base.ValidateWithSource();
+        }
+
         public override void DrawLayer(ref DrawingContext dc, int size)
         {
             base.DrawLayer(ref dc, size);

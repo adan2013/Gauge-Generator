@@ -66,7 +66,6 @@ namespace Gauge_Generator
 
         private void Delete_layer_btn(object sender, RoutedEventArgs e)
         {
-            //TODO i need to test
             Layer target = Global.project.layers[layers_view.SelectedIndex];
             bool conflict = false;
             if(Global.GetLayerType(target) == Global.LayersType.Range)

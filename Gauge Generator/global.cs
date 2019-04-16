@@ -68,6 +68,7 @@ namespace Gauge_Generator
         public static LayersType GetLayerType(Layer obj)
         {
             if (obj is Range_Item) return LayersType.Range;
+            if (obj is LinearScale_Item) return LayersType.LinearScale;
             //TODO other types
             return LayersType.Range;
         }
@@ -78,6 +79,8 @@ namespace Gauge_Generator
             {
                 case LayersType.Range:
                     return typeof(Range_Item);
+                case LayersType.LinearScale:
+                    return typeof(LinearScale_Item);
                     //TODO other types
                 default:
                     return typeof(Range_Item);

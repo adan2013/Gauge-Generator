@@ -123,7 +123,7 @@ namespace Gauge_Generator
         {
             Layer newItem = (Layer)Activator.CreateInstance(Global.GetLayerObject(itemSelected));
             newItem.Label = txt_name.Text;
-            if (itemSelected != Global.LayersType.Range) newItem.SetRangeSource(RefList[RangeItemsList.SelectedIndex]);
+            if (itemSelected != Global.LayersType.Range) newItem.RangeSource = (Range_Item)RefList[RangeItemsList.SelectedIndex];
             Global.project.layers.Insert(0, newItem);
             DialogResult = true;
         }
