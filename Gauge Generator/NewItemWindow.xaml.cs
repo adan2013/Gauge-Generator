@@ -82,6 +82,7 @@ namespace Gauge_Generator
                 br.BorderBrush = Brushes.Black;
                 ValidateOperation();
                 RangePanel.Visibility = (itemSelected == Global.LayersType.Range ? Visibility.Hidden : Visibility.Visible);
+                if (e.ClickCount == 2 && ok_btn.IsEnabled) Ok_btn_Click(ok_btn, new RoutedEventArgs());
             }
         }
 
@@ -123,7 +124,7 @@ namespace Gauge_Generator
         {
             Layer newItem = (Layer)Activator.CreateInstance(Global.GetLayerObject(itemSelected));
             newItem.Label = txt_name.Text;
-            if (itemSelected != Global.LayersType.Range) newItem.RangeSource = (Range_Item)RefList[RangeItemsList.SelectedIndex];
+            if (itemSelected != Global.LayersType.Range) newItem.SetRangeSource((Range_Item)RefList[RangeItemsList.SelectedIndex]);
             Global.project.layers.Insert(0, newItem);
             DialogResult = true;
         }

@@ -18,14 +18,14 @@ namespace Gauge_Generator
         public static ProjectData project = new ProjectData();
 
         public static Layer EditingLayer;
-        public static string[] LayerNames = { "Range", "Linear Scale", "Numeric Scale", "Arc", "Label", "Gauge" };
+        public static string[] LayerNames = { "Range", "Linear Scale", "Numeric Scale", "Arc", "Label", "Clock Hand" };
         public static string[] LayerDescriptions = {
             "Range Range Range Range Range Range Range Range Range Range Range Range Range Range Range",
             "Linear Scale",
             "Numeric Scale",
             "Arc",
             "Label",
-            "Gauge"
+            "Clock Hand"
         };
         public static string[] LayerBigImages = {
             "pack://application:,,,/Images/range_item_big.png",
@@ -55,7 +55,7 @@ namespace Gauge_Generator
             NumericScale,
             Arc,
             Label,
-            Gauge
+            ClockHand
         }
 
         public enum SidebarPages

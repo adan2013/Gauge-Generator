@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.ComponentModel;
 
 namespace Gauge_Generator
 {
@@ -13,6 +14,7 @@ namespace Gauge_Generator
         string _label = "New Layer";
 
         //PROPERTIES
+        [Description("Layer name"), Category("Basics")]
         public string Label
         {
             get { return _label; }
@@ -22,6 +24,7 @@ namespace Gauge_Generator
             }
         }
 
+        [Description("Base layer name (read only)"), Category("Basics")]
         public string RangeSourceName {
             get
             {
@@ -35,9 +38,14 @@ namespace Gauge_Generator
             }
         }
 
-        public Range_Item RangeSource { get; set; }
+        [Description("Base layer object (read only)"), Category("Basics"), Browsable(false)]
+        public Range_Item RangeSource { get; private set; }
 
         //VIRTUAL METHODS
+        virtual public void SetRangeSource(Range_Item obj)
+        {
+            RangeSource = obj;
+        }
 
         virtual public void ValidateWithSource() { }
 
