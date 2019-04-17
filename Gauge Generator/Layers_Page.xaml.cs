@@ -46,6 +46,7 @@ namespace Gauge_Generator
                 layers_view.Items.Add(spnl);
             }
             layers_view.SelectedIndex = index;
+            Global.RefreshScreen();
         }
 
         private void New_layer_btn(object sender, RoutedEventArgs e)

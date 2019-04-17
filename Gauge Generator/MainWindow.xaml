@@ -24,7 +24,9 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="60px" />
             </Grid.RowDefinitions>
-            <Image Grid.Row="0" Margin="10" x:Name="image_preview" />
+            <Border Margin="40" BorderBrush="Black" SizeChanged="Preview_SizeChanged">
+                <Canvas Grid.Row="0" x:Name="preview" Background="White" />
+            </Border>
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button IsEnabled="False" Content="Z out" ToolTip="Zoom out preview"></Button>
                 <Button IsEnabled="False" Content="100%" ToolTip="zoom out completely"></Button>

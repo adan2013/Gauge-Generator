@@ -17,6 +17,7 @@ namespace Gauge_Generator
         
         public static ProjectData project = new ProjectData();
 
+        public static Canvas ScreenCanvas;
         public static Layer EditingLayer;
         public static string[] LayerNames = { "Range", "Linear Scale", "Numeric Scale", "Arc", "Label", "Clock Hand" };
         public static string[] LayerDescriptions = {
@@ -111,6 +112,11 @@ namespace Gauge_Generator
                     SidebarTitleObject.Content = "Project settings";
                     break;
             }
+        }
+
+        public static void RefreshScreen()
+        {
+            if (ScreenCanvas != null) project.DrawProject(ref ScreenCanvas, (int)ScreenCanvas.Width);
         }
     }
 }

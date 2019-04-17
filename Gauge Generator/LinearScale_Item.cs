@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.ComponentModel;
+using System.Windows.Controls;
 
 namespace Gauge_Generator
 {
@@ -95,14 +96,14 @@ namespace Gauge_Generator
             base.ValidateWithSource();
         }
 
-        public override void DrawLayer(ref DrawingContext dc, int size)
+        public override void DrawLayer(ref Canvas can, int size)
         {
-            base.DrawLayer(ref dc, size);
+            base.DrawLayer(ref can, size);
         }
 
-        public override void DrawOverlay(ref DrawingContext dc, int size, float alpha)
+        public override void DrawOverlay(ref Canvas can, int size, float alpha)
         {
-            base.DrawOverlay(ref dc, size, alpha);
+            base.DrawOverlay(ref can, size, alpha);
         }
     }
 }

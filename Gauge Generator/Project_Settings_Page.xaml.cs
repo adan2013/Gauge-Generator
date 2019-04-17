@@ -30,5 +30,11 @@ namespace Gauge_Generator
         {
             Global.SetSidebar(Global.SidebarPages.Layers);
         }
+
+        private void Prop_grid_PropertyValueChanged(object sender, Xceed.Wpf.Toolkit.PropertyGrid.PropertyValueChangedEventArgs e)
+        {
+            Global.RefreshScreen();
+            System.Diagnostics.Debug.WriteLine("SIZE: {0}", Global.project.ImageSize);
+        }
     }
 }

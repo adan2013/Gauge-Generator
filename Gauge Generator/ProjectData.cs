@@ -5,6 +5,8 @@ using System.Windows.Media;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Shapes;
 
 namespace Gauge_Generator
 {
@@ -41,14 +43,34 @@ namespace Gauge_Generator
 
         public bool RoundForeground { get; set; }
 
-        public bool AntiAliasing { get; set; }
-
         public ProjectData()
         {
             BackgroundColor = Colors.Transparent;
             ForegroundColor = Colors.Black;
             RoundForeground = true;
-            AntiAliasing = true;
+        }
+
+        public void DrawProject(ref Canvas pnl, int size)
+        {
+            pnl.Children.Clear();
+            if (RoundForeground)
+            {
+                pnl.Background = new SolidColorBrush(BackgroundColor);
+                Ellipse el = new Ellipse();
+                el.Fill = new SolidColorBrush(ForegroundColor);
+                el.Width = size;
+                el.Height = size;
+                pnl.Children.Add(el);
+            }
+            else
+            {
+                pnl.Background = new SolidColorBrush(ForegroundColor);
+            }
+            for(int i = layers.Count - 1; i >= 0; i--)
+            {
+                layers[i].DrawLayer(ref pnl, size);
+            }
+            if (Global.EditingLayer != null) Global.EditingLayer.DrawOverlay(ref pnl, size, 1);
         }
     }
 }

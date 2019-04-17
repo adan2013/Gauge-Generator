@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.ComponentModel;
+using System.Windows.Controls;
 
 namespace Gauge_Generator
 {
@@ -49,9 +50,9 @@ namespace Gauge_Generator
 
         virtual public void ValidateWithSource() { }
 
-        virtual public void DrawLayer(ref DrawingContext dc, int size) { }
+        virtual public void DrawLayer(ref Canvas can, int size) { }
 
-        virtual public void DrawOverlay(ref DrawingContext dc, int size, float alpha) { }
+        virtual public void DrawOverlay(ref Canvas can, int size, float alpha) { }
 
         //VALIDATION
         protected int ValidateInt(int val, int min, int max)

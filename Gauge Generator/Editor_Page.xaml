@@ -13,7 +13,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="60px" />
         </Grid.RowDefinitions>
-        <xctk:PropertyGrid Grid.Row="0" Margin="15, 20, 15, 5" x:Name="prop_grid" ShowSortOptions="False" ShowTitle="False"/>
+        <xctk:PropertyGrid Grid.Row="0" Margin="15, 20, 15, 5" x:Name="prop_grid" ShowSortOptions="False" ShowTitle="False" PropertyValueChanged="Prop_grid_PropertyValueChanged"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Close" ToolTip="Close this editor" Click="Close_btn"></Button>
             <Button IsEnabled="False" Content="Reset" ToolTip="Reset all properties to default values"></Button>

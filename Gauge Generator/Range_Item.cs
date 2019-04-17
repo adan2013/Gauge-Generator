@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.ComponentModel;
+using System.Windows.Controls;
+using System.Windows.Shapes;
 
 namespace Gauge_Generator
 {
@@ -100,14 +102,20 @@ namespace Gauge_Generator
         }
 
         //METHODS
-        public override void DrawLayer(ref DrawingContext dc, int size)
+        public override void DrawLayer(ref Canvas can, int size)
         {
-            base.DrawLayer(ref dc, size);
+            //TODO temp
+            Line l = new Line { X1 = 0, Y1 = 0, X2 = size, Y2 = size, Stroke = Brushes.Red };
+            can.Children.Add(l);
+            base.DrawLayer(ref can, size);
         }
 
-        public override void DrawOverlay(ref DrawingContext dc, int size, float alpha)
+        public override void DrawOverlay(ref Canvas can, int size, float alpha)
         {
-            base.DrawOverlay(ref dc, size, alpha);
+            //TODO temp
+            Line l = new Line { X1 = size, Y1 = 0, X2 = 0, Y2 = size, Stroke = Brushes.Green };
+            can.Children.Add(l);
+            base.DrawOverlay(ref can, size, alpha);
         }
     }
 }

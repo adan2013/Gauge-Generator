@@ -31,6 +31,7 @@ namespace Gauge_Generator
             {
                 prop_grid.SelectedObject = Global.EditingLayer;
             }
+            Global.RefreshScreen();
         }
 
         private void Close_btn(object sender, RoutedEventArgs e)
@@ -41,6 +42,11 @@ namespace Gauge_Generator
             }
             Global.EditingLayer = null;
             Global.SetSidebar(Global.SidebarPages.Layers);
+        }
+
+        private void Prop_grid_PropertyValueChanged(object sender, Xceed.Wpf.Toolkit.PropertyGrid.PropertyValueChangedEventArgs e)
+        {
+            Global.RefreshScreen();
         }
     }
 }

@@ -26,6 +26,14 @@ namespace Gauge_Generator
             InitializeComponent();
             Global.SetSidebarObject(sidebar_frame, sidebar_title);
             Global.SetSidebar(Global.SidebarPages.Layers);
+            Global.ScreenCanvas = preview;
+        }
+
+        private void Preview_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            preview.Width = Math.Min(e.NewSize.Width, e.NewSize.Height);
+            preview.Height = Math.Min(e.NewSize.Width, e.NewSize.Height);
+            Global.RefreshScreen();
         }
     }
 }
