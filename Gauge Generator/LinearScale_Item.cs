@@ -10,6 +10,9 @@ namespace Gauge_Generator
 {
     public class LinearScale_Item : Layer
     {
+        //CONSTS
+        const int DEFAULT_STEP_PARTS = 5;
+
         //PRIVATE VARIABLES
         float _rangemin = 0;
         float _rangemax = 100;
@@ -81,7 +84,7 @@ namespace Gauge_Generator
             base.SetRangeSource(obj);
             _rangemin = obj.RangeStartValue;
             _rangemax = obj.RangeEndValue;
-            _rangestep = _rangemax - _rangemin;
+            _rangestep = (_rangemax - _rangemin) / DEFAULT_STEP_PARTS;
         }
 
         public override void ValidateWithSource()
