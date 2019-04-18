@@ -21,7 +21,7 @@ namespace Gauge_Generator
         public static Layer EditingLayer;
         public static string[] LayerNames = { "Range", "Linear Scale", "Numeric Scale", "Arc", "Label", "Clock Hand" };
         public static string[] LayerDescriptions = {
-            "Range Range Range Range Range Range Range Range Range Range Range Range Range Range Range",
+            "Basic element defining size and range of values. It is required by other elements (layers)",
             "Linear Scale",
             "Numeric Scale",
             "Arc",

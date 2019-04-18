@@ -24,7 +24,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="60px" />
             </Grid.RowDefinitions>
-            <Border Margin="40" BorderBrush="Black" SizeChanged="Preview_SizeChanged">
+            <Border Margin="40" BorderBrush="Black" SizeChanged="Preview_SizeChanged" MaxWidth="800" MaxHeight="800">
                 <Canvas Grid.Row="0" x:Name="preview" Background="White" />
             </Border>
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">

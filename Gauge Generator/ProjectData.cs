@@ -56,10 +56,12 @@ namespace Gauge_Generator
             if (RoundForeground)
             {
                 pnl.Background = new SolidColorBrush(BackgroundColor);
-                Ellipse el = new Ellipse();
-                el.Fill = new SolidColorBrush(ForegroundColor);
-                el.Width = size;
-                el.Height = size;
+                Ellipse el = new Ellipse
+                {
+                    Fill = new SolidColorBrush(ForegroundColor),
+                    Width = size,
+                    Height = size
+                };
                 pnl.Children.Add(el);
             }
             else
