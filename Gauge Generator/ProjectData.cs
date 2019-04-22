@@ -50,7 +50,7 @@ namespace Gauge_Generator
             RoundForeground = true;
         }
 
-        public void DrawProject(ref Canvas pnl, int size)
+        public void DrawProject(ref Canvas pnl, bool HQmode, int size)
         {
             pnl.Children.Clear();
             if (RoundForeground)
@@ -70,9 +70,9 @@ namespace Gauge_Generator
             }
             for(int i = layers.Count - 1; i >= 0; i--)
             {
-                layers[i].DrawLayer(ref pnl, size);
+                layers[i].DrawLayer(ref pnl, HQmode, size);
             }
-            if (Global.EditingLayer != null) Global.EditingLayer.DrawOverlay(ref pnl, size, 1);
+            if (Global.EditingLayer != null) Global.EditingLayer.DrawOverlay(ref pnl, HQmode, size, 1);
         }
     }
 }

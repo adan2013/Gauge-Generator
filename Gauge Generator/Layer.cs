@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media;
+using System.Drawing;
 using System.ComponentModel;
 using System.Windows.Controls;
 
@@ -50,9 +50,9 @@ namespace Gauge_Generator
 
         virtual public void ValidateWithSource() { }
 
-        virtual public void DrawLayer(ref Canvas can, int size) { }
+        virtual public void DrawLayer(ref Canvas can, bool HQmode, int size) { }
 
-        virtual public void DrawOverlay(ref Canvas can, int size, float alpha) { }
+        virtual public void DrawOverlay(ref Canvas can, bool HQmode, int size, double alpha) { }
 
         //VALIDATION
         protected int ValidateInt(int val, int min, int max)
@@ -62,7 +62,7 @@ namespace Gauge_Generator
             return val;
         }
 
-        protected float ValidateFloat(float val, float min, float max)
+        protected double ValidateDouble(double val, double min, double max)
         {
             if (val < min) return min;
             if (val > max) return max;
@@ -76,7 +76,7 @@ namespace Gauge_Generator
             return val;
         }
 
-        protected Color ValidateColor(Color c, bool removeAlpha)
+        protected System.Windows.Media.Color ValidateColor(System.Windows.Media.Color c, bool removeAlpha)
         {
             if (removeAlpha) c.A = 255;
             return c;

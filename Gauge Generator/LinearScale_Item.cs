@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media;
+using System.Drawing;
 using System.ComponentModel;
 using System.Windows.Controls;
 
@@ -15,42 +15,42 @@ namespace Gauge_Generator
         const int DEFAULT_STEP_PARTS = 5;
 
         //PRIVATE VARIABLES
-        float _rangemin = 0;
-        float _rangemax = 100;
-        float _rangestep = 20;
+        double _rangemin = 0;
+        double _rangemax = 100;
+        double _rangestep = 20;
         int _linethickness = 2;
-        float _distancefromcenter = 1;
-        float _linelength = 0.2f;
-        Color _linecolor = Colors.White;
+        double _distancefromcenter = 1;
+        double _linelength = 0.2f;
+        System.Windows.Media.Color _linecolor = System.Windows.Media.Colors.White;
 
         //PROPERTIES
         [Description("Initial value of the visible scale"), Category("Range")]
-        public float RangeMin
+        public double RangeMin
         {
             get { return _rangemin; }
             set
             {
-                _rangemin = ValidateFloat(value, RangeSource.RangeStartValue, RangeSource.RangeEndValue);
+                _rangemin = ValidateDouble(value, RangeSource.RangeStartValue, RangeSource.RangeEndValue);
                 ValidateWithSource();
             }
         }
         [Description("Final value of the visible scale"), Category("Range")]
-        public float RangeMax
+        public double RangeMax
         {
             get { return _rangemax; }
             set
             {
-                _rangemax = ValidateFloat(value, RangeSource.RangeStartValue, RangeSource.RangeEndValue);
+                _rangemax = ValidateDouble(value, RangeSource.RangeStartValue, RangeSource.RangeEndValue);
                 ValidateWithSource();
             }
         }
         [Description("Line frequency"), Category("Range")]
-        public float Step
+        public double Step
         {
             get { return _rangestep; }
             set
             {
-                _rangestep = ValidateFloat(value, Global.MIN_FLOAT_VALUE, Global.MAX_RANGE_VALUE);
+                _rangestep = ValidateDouble(value, Global.MIN_DOUBLE_VALUE, Global.MAX_RANGE_VALUE);
                 ValidateWithSource();
             }
         }
@@ -61,19 +61,19 @@ namespace Gauge_Generator
             set { _linethickness = ValidateInt(value, 1, 50); }
         }
         [Description("Distance between the end of lines and center of the clock face"), Category("Lines")]
-        public float DistanceFromCenter
+        public double DistanceFromCenter
         {
             get { return _distancefromcenter; }
-            set { _distancefromcenter = ValidateFloat(value, 0, 1); }
+            set { _distancefromcenter = ValidateDouble(value, 0, 1); }
         }
         [Description("Line length"), Category("Lines")]
-        public float LineLength
+        public double LineLength
         {
             get { return _linelength; }
-            set { _linelength = ValidateFloat(value, 0, 1); }
+            set { _linelength = ValidateDouble(value, 0, 1); }
         }
         [Description("Line color"), Category("Lines")]
-        public Color LineColor
+        public System.Windows.Media.Color LineColor
         {
             get { return _linecolor; }
             set { _linecolor = ValidateColor(value, false); }
@@ -90,20 +90,20 @@ namespace Gauge_Generator
 
         public override void ValidateWithSource()
         {
-            _rangemin = ValidateFloat(_rangemin, RangeSource.RangeStartValue, RangeMax);
-            _rangemax = ValidateFloat(_rangemax, RangeMin, RangeSource.RangeEndValue);
-            _rangestep = ValidateFloat(_rangestep, Global.MIN_FLOAT_VALUE, _rangemax - _rangemin);
+            _rangemin = ValidateDouble(_rangemin, RangeSource.RangeStartValue, RangeMax);
+            _rangemax = ValidateDouble(_rangemax, RangeMin, RangeSource.RangeEndValue);
+            _rangestep = ValidateDouble(_rangestep, Global.MIN_DOUBLE_VALUE, _rangemax - _rangemin);
             base.ValidateWithSource();
         }
 
-        public override void DrawLayer(ref Canvas can, int size)
+        public override void DrawLayer(ref Canvas can, bool HQmode, int size)
         {
-            base.DrawLayer(ref can, size);
+            base.DrawLayer(ref can, HQmode, size);
         }
 
-        public override void DrawOverlay(ref Canvas can, int size, float alpha)
+        public override void DrawOverlay(ref Canvas can, bool HQmode, int size, double alpha)
         {
-            base.DrawOverlay(ref can, size, alpha);
+            base.DrawOverlay(ref can, HQmode, size, alpha);
         }
     }
 }

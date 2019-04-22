@@ -34,6 +34,11 @@ namespace Gauge_Generator
             preview.Width = Math.Min(e.NewSize.Width, e.NewSize.Height);
             preview.Height = Math.Min(e.NewSize.Width, e.NewSize.Height);
             Global.RefreshScreen();
+
+            //TODO diagnostic code
+            Global.project.layers.Add(new Range_Item());
+            Global.EditingLayer = Global.project.layers[0];
+            Global.SetSidebar(Global.SidebarPages.Editor);
         }
     }
 }
