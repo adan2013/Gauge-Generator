@@ -146,32 +146,73 @@ namespace Gauge_Generator
 
         public static void DrawArc(ref Canvas obj, bool HQmode, Point center, int startAngle, int openingAngle, int radius, int weight, Color color)
         {
-            int LoD = GetLoD(HQmode, radius, openingAngle);
-            var ArcPoints = new Point[LoD];
-            for (int i = 0; i < LoD; i++) ArcPoints[i] = GetPointOnCircle(center, radius, startAngle + (openingAngle / ((double)LoD - 1) * i));
-            Polyline pl = new Polyline
+            if (openingAngle == 360)
             {
-                StrokeThickness = weight,
-                Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
-            };
-            for (int i = 0; i < LoD; i++) pl.Points.Add(new System.Windows.Point(ArcPoints[i].X, ArcPoints[i].Y));
-            obj.Children.Add(pl);
+                DrawCircle(ref obj, center, radius, weight, color);
+            }
+            else
+            {
+                int LoD = GetLoD(HQmode, radius, openingAngle);
+                var ArcPoints = new Point[LoD];
+                for (int i = 0; i < LoD; i++) ArcPoints[i] = GetPointOnCircle(center, radius, startAngle + (openingAngle / ((double)LoD - 1) * i));
+                Polyline pl = new Polyline
+                {
+                    StrokeThickness = weight,
+                    Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
+                };
+                for (int i = 0; i < LoD; i++) pl.Points.Add(new System.Windows.Point(ArcPoints[i].X, ArcPoints[i].Y));
+                obj.Children.Add(pl);
+            }
         }
 
         public static void DrawCirclePart(ref Canvas obj, bool HQmode, Point center, int startAngle, int openingAngle, int radius, Color color)
         {
-            int LoD = GetLoD(HQmode, radius, openingAngle);
-            var ArcPoints = new Point[LoD];
-            for (int i = 0; i < LoD; i++) ArcPoints[i] = GetPointOnCircle(center, radius, startAngle + (openingAngle / ((double)LoD - 1) * i));
-            Polygon pg = new Polygon
+            if (openingAngle == 360)
             {
-                StrokeThickness = 2,
+                FillCircle(ref obj, center, radius, color);
+            }
+            else
+            {
+                int LoD = GetLoD(HQmode, radius, openingAngle);
+                var ArcPoints = new Point[LoD];
+                for (int i = 0; i < LoD; i++) ArcPoints[i] = GetPointOnCircle(center, radius, startAngle + (openingAngle / ((double)LoD - 1) * i));
+                Polygon pg = new Polygon
+                {
+                    StrokeThickness = 2,
+                    Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B)),
+                    Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
+                };
+                for (int i = 0; i < LoD; i++) pg.Points.Add(new System.Windows.Point(ArcPoints[i].X, ArcPoints[i].Y));
+                pg.Points.Add(new System.Windows.Point(center.X, center.Y));
+                obj.Children.Add(pg);
+            }
+        }
+
+        public static void DrawCircle(ref Canvas obj, Point center, int radius, int weight, Color color)
+        {
+            Ellipse el = new Ellipse
+            {
+                Width = radius * 2,
+                Height = radius * 2,
+                Margin = new System.Windows.Thickness(center.X - radius, center.Y - radius, 0, 0),
+                StrokeThickness = weight,
+                Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
+            };
+            obj.Children.Add(el);
+        }
+
+        public static void FillCircle(ref Canvas obj, Point center, int radius, Color color)
+        {
+            Ellipse el = new Ellipse
+            {
+                Width = radius * 2,
+                Height = radius * 2,
+                Margin = new System.Windows.Thickness(center.X - radius, center.Y - radius, 0, 0),
+                StrokeThickness = 1,
                 Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B)),
                 Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
             };
-            for (int i = 0; i < LoD; i++) pg.Points.Add(new System.Windows.Point(ArcPoints[i].X, ArcPoints[i].Y));
-            pg.Points.Add(new System.Windows.Point(center.X, center.Y));
-            obj.Children.Add(pg);
+            obj.Children.Add(el);
         }
     }
 }
