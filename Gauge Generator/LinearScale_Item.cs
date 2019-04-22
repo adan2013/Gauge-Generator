@@ -20,7 +20,7 @@ namespace Gauge_Generator
         double _rangestep = 20;
         int _linethickness = 2;
         double _distancefromcenter = 1;
-        double _linelength = 0.2f;
+        double _linelength = 0.2;
         System.Windows.Media.Color _linecolor = System.Windows.Media.Colors.White;
 
         //PROPERTIES

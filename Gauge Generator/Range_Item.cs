@@ -22,7 +22,7 @@ namespace Gauge_Generator
         double _rangeendvalue = 100;
         double _clockhandsoffset_x = 0;
         double _clockhandsoffset_y = 0;
-        double _clockhandspointsize = 0.05f;
+        double _clockhandspointsize = 0.01;
         System.Windows.Media.Color _clockhandspointcolor = System.Windows.Media.Colors.White;
 
         //PROPERTIES
@@ -92,7 +92,7 @@ namespace Gauge_Generator
         public double ClockHandsPointSize
         {
             get { return _clockhandspointsize; }
-            set { _clockhandspointsize = ValidateDouble(value, 0.01f, 0.1f); }
+            set { _clockhandspointsize = ValidateDouble(value, 0.01, 0.05); }
         }
         [Description("Color of dot for clock hands"), Category("Clock hands")]
         public System.Windows.Media.Color ClockHandsPointColor
@@ -104,6 +104,10 @@ namespace Gauge_Generator
         //METHODS
         public override void DrawLayer(ref Canvas can, bool HQmode, int size)
         {
+            Global.FillCircle(ref can,
+                              Global.GetOffsetPoint(new Point(size / 2, size / 2), size / 2 * _circleradius, _clockhandsoffset_x, _clockhandsoffset_y),
+                              (int)(_clockhandspointsize * size),
+                              Color.FromArgb(_clockhandspointcolor.A, _clockhandspointcolor.R, _clockhandspointcolor.G, _clockhandspointcolor.B));
             base.DrawLayer(ref can, HQmode, size);
         }
 
