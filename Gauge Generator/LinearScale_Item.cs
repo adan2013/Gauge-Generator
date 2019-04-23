@@ -18,9 +18,10 @@ namespace Gauge_Generator
         double _rangemin = 0;
         double _rangemax = 100;
         double _rangestep = 20;
-        int _linethickness = 2;
+        double _linethickness = 0.01;
         double _distancefromcenter = 1;
         double _linelength = 0.2;
+        bool _drawarconedge = false;
         System.Windows.Media.Color _linecolor = System.Windows.Media.Colors.White;
 
         //PROPERTIES
@@ -54,11 +55,17 @@ namespace Gauge_Generator
                 ValidateWithSource();
             }
         }
+        [Description("Draw arc on the edge of range"), Category("Range")]
+        public bool DrawArcOnEdge
+        {
+            get { return _drawarconedge; }
+            set { _drawarconedge = value; }
+        }
         [Description("Line thickness"), Category("Lines")]
-        public int LineThickness
+        public double LineThickness
         {
             get { return _linethickness; }
-            set { _linethickness = ValidateInt(value, 1, 50); }
+            set { _linethickness = ValidateDouble(value, 0.01, 0.05); }
         }
         [Description("Distance between the end of lines and center of the clock face"), Category("Lines")]
         public double DistanceFromCenter

@@ -36,7 +36,9 @@ namespace Gauge_Generator
             Global.RefreshScreen();
 
             //TODO diagnostic code
+            Global.project.layers.Add(new LinearScale_Item());
             Global.project.layers.Add(new Range_Item());
+            Global.project.layers[0].SetRangeSource((Range_Item)Global.project.layers[1]);
             Global.EditingLayer = Global.project.layers[0];
             Global.SetSidebar(Global.SidebarPages.Editor);
         }

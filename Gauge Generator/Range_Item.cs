@@ -104,8 +104,9 @@ namespace Gauge_Generator
         //METHODS
         public override void DrawLayer(ref Canvas can, bool HQmode, int size)
         {
+            Point c = Global.GetOffsetPoint(new Point(size / 2, size / 2), size / 2, _circlecenter_x, _circlecenter_y);
             Global.FillCircle(ref can,
-                              Global.GetOffsetPoint(new Point(size / 2, size / 2), size / 2 * _circleradius, _clockhandsoffset_x, _clockhandsoffset_y),
+                              Global.GetOffsetPoint(c, size / 2 * _circleradius, _clockhandsoffset_x, _clockhandsoffset_y),
                               (int)(_clockhandspointsize * size),
                               Color.FromArgb(_clockhandspointcolor.A, _clockhandspointcolor.R, _clockhandspointcolor.G, _clockhandspointcolor.B));
             base.DrawLayer(ref can, HQmode, size);
@@ -115,7 +116,7 @@ namespace Gauge_Generator
         {
             Shape s = Global.DrawCirclePart(ref can,
                                             false,
-                                            Global.GetOffsetPoint(new Point(size / 2, size / 2), size / 2 * _circleradius, _circlecenter_x, _circlecenter_y),
+                                            Global.GetOffsetPoint(new Point(size / 2, size / 2), size / 2, _circlecenter_x, _circlecenter_y),
                                             _anglestart,
                                             _openingangle,
                                             (int)(size / 2 * _circleradius),
