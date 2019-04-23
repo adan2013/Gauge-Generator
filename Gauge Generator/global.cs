@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
 using System.Windows.Controls;
+using System.Timers;
 
 namespace Gauge_Generator
 {
@@ -19,13 +20,48 @@ namespace Gauge_Generator
 
         public const int ARC_LOD_LQ = 5;
         public const int ARC_LOD_HQ = 1;
-        public const int MAX_ALPHA_OVERLAY = 180;
-        public static Color Overlay1 { get { return Color.FromArgb(80, 66, 105, 165); } }
+        public const int DURATION_ALPHA_OVERLAY = 2000;
+        public const double MIN_ALPHA_OVERLAY = 0.1;
+        public const double MAX_ALPHA_OVERLAY = 0.6;
+        public static Color Overlay1 { get { return Color.FromArgb(255, 66, 105, 165); } }
         
         public static ProjectData project = new ProjectData();
 
         public static Canvas ScreenCanvas;
         public static Layer EditingLayer;
+
+        #region "CONFIG"
+
+        public enum LayersType
+        {
+            Range = 0,
+            LinearScale,
+            NumericScale,
+            Arc,
+            Label,
+            ClockHand
+        }
+        public static LayersType GetLayerType(Layer obj)
+        {
+            if (obj is Range_Item) return LayersType.Range;
+            if (obj is LinearScale_Item) return LayersType.LinearScale;
+            //TODO other types
+            return LayersType.Range;
+        }
+
+        public static Type GetLayerObject(LayersType obj)
+        {
+            switch (obj)
+            {
+                case LayersType.Range:
+                    return typeof(Range_Item);
+                case LayersType.LinearScale:
+                    return typeof(LinearScale_Item);
+                //TODO other types
+                default:
+                    return typeof(Range_Item);
+            }
+        }
         public static string[] LayerNames = { "Range", "Linear Scale", "Numeric Scale", "Arc", "Label", "Clock Hand" };
         public static string[] LayerDescriptions = {
             "Basic element defining size and range of values. It is required by other elements (layers)",
@@ -52,47 +88,19 @@ namespace Gauge_Generator
             "pack://application:,,,/Images/range_item.png"
         };
 
+        #endregion
+
+        #region "SIDEBAR"
+
         private static Frame SidebarObject;
         private static Label SidebarTitleObject;
         public static SidebarPages Sidebar { get; private set; }
-
-        public enum LayersType
-        {
-            Range = 0,
-            LinearScale,
-            NumericScale,
-            Arc,
-            Label,
-            ClockHand
-        }
 
         public enum SidebarPages
         {
             Layers = 0,
             Editor,
             ProjectSettings
-        }
-
-        public static LayersType GetLayerType(Layer obj)
-        {
-            if (obj is Range_Item) return LayersType.Range;
-            if (obj is LinearScale_Item) return LayersType.LinearScale;
-            //TODO other types
-            return LayersType.Range;
-        }
-
-        public static Type GetLayerObject(LayersType obj)
-        {
-            switch(obj)
-            {
-                case LayersType.Range:
-                    return typeof(Range_Item);
-                case LayersType.LinearScale:
-                    return typeof(LinearScale_Item);
-                    //TODO other types
-                default:
-                    return typeof(Range_Item);
-            }
         }
 
         public static void SetSidebarObject(Frame obj, Label lbl)
@@ -104,7 +112,7 @@ namespace Gauge_Generator
         public static void SetSidebar(SidebarPages newPage)
         {
             Sidebar = newPage;
-            switch(Sidebar)
+            switch (Sidebar)
             {
                 case SidebarPages.Layers:
                     SidebarObject.NavigationService.Navigate(new Layers_Page());
@@ -120,6 +128,104 @@ namespace Gauge_Generator
                     break;
             }
         }
+
+        #endregion
+
+        #region "DRAWING"
+
+        public static Shape DrawArc(ref Canvas obj, bool HQmode, Point center, int startAngle, int openingAngle, int radius, int weight, Color color)
+        {
+            if (openingAngle == 360)
+            {
+                return DrawCircle(ref obj, center, radius, weight, color);
+            }
+            else
+            {
+                int LoD = GetLoD(HQmode, radius, openingAngle);
+                var ArcPoints = new Point[LoD];
+                for (int i = 0; i < LoD; i++) ArcPoints[i] = GetPointOnCircle(center, radius, startAngle + (openingAngle / ((double)LoD - 1) * i));
+                Polyline pl = new Polyline
+                {
+                    StrokeThickness = weight,
+                    Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
+                };
+                for (int i = 0; i < LoD; i++) pl.Points.Add(new System.Windows.Point(ArcPoints[i].X, ArcPoints[i].Y));
+                obj.Children.Add(pl);
+                return pl;
+            }
+        }
+
+        public static Shape DrawCirclePart(ref Canvas obj, bool HQmode, Point center, int startAngle, int openingAngle, int radius, Color color)
+        {
+            if (openingAngle == 360)
+            {
+                return FillCircle(ref obj, center, radius, color);
+            }
+            else
+            {
+                int LoD = GetLoD(HQmode, radius, openingAngle);
+                var ArcPoints = new Point[LoD];
+                for (int i = 0; i < LoD; i++) ArcPoints[i] = GetPointOnCircle(center, radius, startAngle + (openingAngle / ((double)LoD - 1) * i));
+                Polygon pg = new Polygon
+                {
+                    StrokeThickness = 2,
+                    Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B)),
+                    Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
+                };
+                for (int i = 0; i < LoD; i++) pg.Points.Add(new System.Windows.Point(ArcPoints[i].X, ArcPoints[i].Y));
+                pg.Points.Add(new System.Windows.Point(center.X, center.Y));
+                obj.Children.Add(pg);
+                return pg;
+            }
+        }
+
+        public static Shape DrawCircle(ref Canvas obj, Point center, int radius, int weight, Color color)
+        {
+            Ellipse el = new Ellipse
+            {
+                Width = radius * 2,
+                Height = radius * 2,
+                Margin = new System.Windows.Thickness(center.X - radius, center.Y - radius, 0, 0),
+                StrokeThickness = weight,
+                Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
+            };
+            obj.Children.Add(el);
+            return el;
+        }
+
+        public static Shape FillCircle(ref Canvas obj, Point center, int radius, Color color)
+        {
+            Ellipse el = new Ellipse
+            {
+                Width = radius * 2,
+                Height = radius * 2,
+                Margin = new System.Windows.Thickness(center.X - radius, center.Y - radius, 0, 0),
+                StrokeThickness = 1,
+                Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B)),
+                Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
+            };
+            obj.Children.Add(el);
+            return el;
+        }
+
+        #endregion
+
+        #region "OVERLAY ALPHA"
+
+        public static void AddOpacityAnimation(Shape obj)
+        {
+            System.Windows.Media.Animation.DoubleAnimation da = new System.Windows.Media.Animation.DoubleAnimation
+            {
+                From = MIN_ALPHA_OVERLAY,
+                To = MAX_ALPHA_OVERLAY,
+                Duration = new System.Windows.Duration(TimeSpan.FromMilliseconds(DURATION_ALPHA_OVERLAY)),
+                RepeatBehavior = System.Windows.Media.Animation.RepeatBehavior.Forever,
+                AutoReverse = true
+            };
+            obj.BeginAnimation(System.Windows.UIElement.OpacityProperty, da);
+        }
+
+        #endregion
 
         public static void RefreshScreen()
         {
@@ -142,77 +248,6 @@ namespace Gauge_Generator
             int i = (int)(Math.Abs(angle) / 180.0 * Math.PI * 30 / (HQmode ? ARC_LOD_HQ : ARC_LOD_LQ));
             if (i < 2) i = 2;
             return i;
-        }
-
-        public static void DrawArc(ref Canvas obj, bool HQmode, Point center, int startAngle, int openingAngle, int radius, int weight, Color color)
-        {
-            if (openingAngle == 360)
-            {
-                DrawCircle(ref obj, center, radius, weight, color);
-            }
-            else
-            {
-                int LoD = GetLoD(HQmode, radius, openingAngle);
-                var ArcPoints = new Point[LoD];
-                for (int i = 0; i < LoD; i++) ArcPoints[i] = GetPointOnCircle(center, radius, startAngle + (openingAngle / ((double)LoD - 1) * i));
-                Polyline pl = new Polyline
-                {
-                    StrokeThickness = weight,
-                    Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
-                };
-                for (int i = 0; i < LoD; i++) pl.Points.Add(new System.Windows.Point(ArcPoints[i].X, ArcPoints[i].Y));
-                obj.Children.Add(pl);
-            }
-        }
-
-        public static void DrawCirclePart(ref Canvas obj, bool HQmode, Point center, int startAngle, int openingAngle, int radius, Color color)
-        {
-            if (openingAngle == 360)
-            {
-                FillCircle(ref obj, center, radius, color);
-            }
-            else
-            {
-                int LoD = GetLoD(HQmode, radius, openingAngle);
-                var ArcPoints = new Point[LoD];
-                for (int i = 0; i < LoD; i++) ArcPoints[i] = GetPointOnCircle(center, radius, startAngle + (openingAngle / ((double)LoD - 1) * i));
-                Polygon pg = new Polygon
-                {
-                    StrokeThickness = 2,
-                    Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B)),
-                    Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
-                };
-                for (int i = 0; i < LoD; i++) pg.Points.Add(new System.Windows.Point(ArcPoints[i].X, ArcPoints[i].Y));
-                pg.Points.Add(new System.Windows.Point(center.X, center.Y));
-                obj.Children.Add(pg);
-            }
-        }
-
-        public static void DrawCircle(ref Canvas obj, Point center, int radius, int weight, Color color)
-        {
-            Ellipse el = new Ellipse
-            {
-                Width = radius * 2,
-                Height = radius * 2,
-                Margin = new System.Windows.Thickness(center.X - radius, center.Y - radius, 0, 0),
-                StrokeThickness = weight,
-                Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
-            };
-            obj.Children.Add(el);
-        }
-
-        public static void FillCircle(ref Canvas obj, Point center, int radius, Color color)
-        {
-            Ellipse el = new Ellipse
-            {
-                Width = radius * 2,
-                Height = radius * 2,
-                Margin = new System.Windows.Thickness(center.X - radius, center.Y - radius, 0, 0),
-                StrokeThickness = 1,
-                Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B)),
-                Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
-            };
-            obj.Children.Add(el);
         }
     }
 }

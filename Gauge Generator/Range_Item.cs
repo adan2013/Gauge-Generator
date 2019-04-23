@@ -113,13 +113,14 @@ namespace Gauge_Generator
 
         public override void DrawOverlay(ref Canvas can, bool HQmode, int size, double alpha)
         {
-            Global.DrawCirclePart(ref can,
-                                  false,
-                                  Global.GetOffsetPoint(new Point(size / 2, size / 2), size / 2 * _circleradius, _circlecenter_x, _circlecenter_y),
-                                  _anglestart,
-                                  _openingangle,
-                                  (int)(size / 2 * _circleradius),
-                                  Global.Overlay1);
+            Shape s = Global.DrawCirclePart(ref can,
+                                            false,
+                                            Global.GetOffsetPoint(new Point(size / 2, size / 2), size / 2 * _circleradius, _circlecenter_x, _circlecenter_y),
+                                            _anglestart,
+                                            _openingangle,
+                                            (int)(size / 2 * _circleradius),
+                                            Global.Overlay1);
+            Global.AddOpacityAnimation(s);
             base.DrawOverlay(ref can, HQmode, size, alpha);
         }
     }
