@@ -31,10 +31,15 @@ namespace Gauge_Generator
 
         private void Preview_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            preview.Width = Math.Min(e.NewSize.Width, e.NewSize.Height);
-            preview.Height = Math.Min(e.NewSize.Width, e.NewSize.Height);
+            double w = e.NewSize.Width - 20;
+            double h = e.NewSize.Height - 20;
+            preview.Width = Math.Min(w, h);
+            preview.Height = Math.Min(w, h);
             Global.RefreshScreen();
+        }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
             //TODO diagnostic code
             Global.project.layers.Add(new LinearScale_Item());
             Global.project.layers.Add(new Range_Item());

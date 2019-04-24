@@ -109,14 +109,27 @@ namespace Gauge_Generator
             if (RangeSource.OpeningAngle != 0 && RangeMax - RangeMin != 0)
             {
                 Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource.CircleCenter_X, RangeSource.CircleCenter_Y);
-                for(double i = RangeMin; i <= RangeMax; i += Step)
+                double circle1 = (DistanceFromCenter - LineLength < 0 ? 0 : DistanceFromCenter - LineLength) * RangeSource.CircleRadius * half_size;
+                double circle2 = DistanceFromCenter * RangeSource.CircleRadius * half_size;
+                for (double i = RangeMin; i <= RangeMax; i += Step)
                 {
                     double ang = Math.Round(i / RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart);
                     Global.DrawLine(ref can,
-                                    Global.GetPointOnCircle(c, (DistanceFromCenter - LineLength) * RangeSource.CircleRadius * half_size, ang),
-                                    Global.GetPointOnCircle(c, DistanceFromCenter * RangeSource.CircleRadius * half_size, ang),
+                                    Global.GetPointOnCircle(c, circle1, ang),
+                                    Global.GetPointOnCircle(c, circle2, ang),
                                     (int)(LineThickness * half_size),
                                     Color.FromArgb(LineColor.A, LineColor.R, LineColor.G, LineColor.B));
+                }
+                if (DrawArcOnEdge)
+                {
+                    Global.DrawArc(ref can,
+                                   HQmode,
+                                   c,
+                                   (int)Math.Round(RangeMin / RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart),
+                                   (int)Math.Round(RangeMax / RangeSource.RangeEndValue * RangeSource.OpeningAngle),
+                                   (int)Math.Round(circle2),
+                                   (int)(LineThickness * half_size),
+                                   Color.FromArgb(LineColor.A, LineColor.R, LineColor.G, LineColor.B));
                 }
             }
             base.DrawLayer(ref can, HQmode, size);

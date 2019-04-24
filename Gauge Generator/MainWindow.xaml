@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gauge_Generator"
         mc:Ignorable="d"
-        Title="Gauge Generator" Height="500" Width="900" MinWidth="900" MinHeight="500" WindowState="Maximized">
+        Title="Gauge Generator" Height="500" Width="900" MinWidth="900" MinHeight="500" WindowState="Maximized" Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="350px"/>
@@ -24,8 +24,10 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="60px" />
             </Grid.RowDefinitions>
-            <Border Margin="40" BorderBrush="Black" SizeChanged="Preview_SizeChanged" MaxWidth="800" MaxHeight="800">
-                <Canvas Grid.Row="0" x:Name="preview" Background="White" ClipToBounds="True" />
+            <Border Margin="40" BorderBrush="Black" MaxWidth="800" MaxHeight="800">
+                <Border ClipToBounds="True" SizeChanged="Preview_SizeChanged" Padding="10">
+                    <Canvas Grid.Row="0" x:Name="preview" Background="White" />
+                </Border>
             </Border>
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button IsEnabled="False" Content="Z out" ToolTip="Zoom out preview"></Button>

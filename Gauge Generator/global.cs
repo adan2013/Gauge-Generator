@@ -18,7 +18,7 @@ namespace Gauge_Generator
         public const double MAX_RANGE_VALUE = 500f;
         public const int MAX_LAYERS = 30;
 
-        public const int ARC_LOD_LQ = 5;
+        public const int ARC_LOD_LQ = 3;
         public const int ARC_LOD_HQ = 1;
         public const int DURATION_ALPHA_OVERLAY = 2000;
         public const double MIN_ALPHA_OVERLAY = 0.1;
