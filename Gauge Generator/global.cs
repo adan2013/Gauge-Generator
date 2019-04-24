@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
 using System.Windows.Controls;
-using System.Timers;
+using MEDIA = System.Windows.Media;
 
 namespace Gauge_Generator
 {
@@ -147,7 +147,7 @@ namespace Gauge_Generator
                 Polyline pl = new Polyline
                 {
                     StrokeThickness = weight,
-                    Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
+                    Stroke = new MEDIA.SolidColorBrush(MEDIA.Color.FromArgb(color.A, color.R, color.G, color.B))
                 };
                 for (int i = 0; i < LoD; i++) pl.Points.Add(new System.Windows.Point(ArcPoints[i].X, ArcPoints[i].Y));
                 obj.Children.Add(pl);
@@ -169,8 +169,8 @@ namespace Gauge_Generator
                 Polygon pg = new Polygon
                 {
                     StrokeThickness = 2,
-                    Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B)),
-                    Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
+                    Stroke = new MEDIA.SolidColorBrush(MEDIA.Color.FromArgb(color.A, color.R, color.G, color.B)),
+                    Fill = new MEDIA.SolidColorBrush(MEDIA.Color.FromArgb(color.A, color.R, color.G, color.B))
                 };
                 for (int i = 0; i < LoD; i++) pg.Points.Add(new System.Windows.Point(ArcPoints[i].X, ArcPoints[i].Y));
                 pg.Points.Add(new System.Windows.Point(center.X, center.Y));
@@ -187,7 +187,7 @@ namespace Gauge_Generator
                 Height = radius * 2,
                 Margin = new System.Windows.Thickness(center.X - radius, center.Y - radius, 0, 0),
                 StrokeThickness = weight,
-                Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
+                Stroke = new MEDIA.SolidColorBrush(MEDIA.Color.FromArgb(color.A, color.R, color.G, color.B))
             };
             obj.Children.Add(el);
             return el;
@@ -201,11 +201,24 @@ namespace Gauge_Generator
                 Height = radius * 2,
                 Margin = new System.Windows.Thickness(center.X - radius, center.Y - radius, 0, 0),
                 StrokeThickness = 1,
-                Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B)),
-                Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B))
+                Stroke = new MEDIA.SolidColorBrush(MEDIA.Color.FromArgb(color.A, color.R, color.G, color.B)),
+                Fill = new MEDIA.SolidColorBrush(MEDIA.Color.FromArgb(color.A, color.R, color.G, color.B))
             };
             obj.Children.Add(el);
             return el;
+        }
+
+        public static Shape DrawLine(ref Canvas obj, Point p1, Point p2, int weight, Color color)
+        {
+            Line l = new Line
+            {
+                X1 = p1.X, Y1 = p1.Y,
+                X2 = p2.X, Y2 = p2.Y,
+                StrokeThickness = weight,
+                Stroke = new MEDIA.SolidColorBrush(MEDIA.Color.FromArgb(color.A, color.R, color.G, color.B))
+            };
+            obj.Children.Add(l);
+            return l;
         }
 
         #endregion
@@ -214,12 +227,12 @@ namespace Gauge_Generator
 
         public static void AddOpacityAnimation(Shape obj)
         {
-            System.Windows.Media.Animation.DoubleAnimation da = new System.Windows.Media.Animation.DoubleAnimation
+            MEDIA.Animation.DoubleAnimation da = new MEDIA.Animation.DoubleAnimation
             {
                 From = MIN_ALPHA_OVERLAY,
                 To = MAX_ALPHA_OVERLAY,
                 Duration = new System.Windows.Duration(TimeSpan.FromMilliseconds(DURATION_ALPHA_OVERLAY)),
-                RepeatBehavior = System.Windows.Media.Animation.RepeatBehavior.Forever,
+                RepeatBehavior = MEDIA.Animation.RepeatBehavior.Forever,
                 AutoReverse = true
             };
             obj.BeginAnimation(System.Windows.UIElement.OpacityProperty, da);

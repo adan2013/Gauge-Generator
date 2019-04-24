@@ -20,7 +20,7 @@ namespace Gauge_Generator
         double _rangestep = 20;
         double _linethickness = 0.01;
         double _distancefromcenter = 1;
-        double _linelength = 0.2;
+        double _linelength = 0.05;
         bool _drawarconedge = false;
         System.Windows.Media.Color _linecolor = System.Windows.Media.Colors.White;
 
@@ -31,7 +31,7 @@ namespace Gauge_Generator
             get { return _rangemin; }
             set
             {
-                _rangemin = ValidateDouble(value, RangeSource.RangeStartValue, RangeSource.RangeEndValue);
+                _rangemin = ValidateDouble(value, RangeSource.RangeStartValue, RangeMax);
                 ValidateWithSource();
             }
         }
@@ -41,7 +41,7 @@ namespace Gauge_Generator
             get { return _rangemax; }
             set
             {
-                _rangemax = ValidateDouble(value, RangeSource.RangeStartValue, RangeSource.RangeEndValue);
+                _rangemax = ValidateDouble(value, RangeMin, RangeSource.RangeEndValue);
                 ValidateWithSource();
             }
         }
@@ -71,13 +71,13 @@ namespace Gauge_Generator
         public double DistanceFromCenter
         {
             get { return _distancefromcenter; }
-            set { _distancefromcenter = ValidateDouble(value, 0, 1); }
+            set { _distancefromcenter = ValidateDouble(value, Global.MIN_DOUBLE_VALUE, 1); }
         }
         [Description("Line length"), Category("Lines")]
         public double LineLength
         {
             get { return _linelength; }
-            set { _linelength = ValidateDouble(value, 0, 1); }
+            set { _linelength = ValidateDouble(value, 0.05, 1); }
         }
         [Description("Line color"), Category("Lines")]
         public System.Windows.Media.Color LineColor
@@ -105,11 +105,30 @@ namespace Gauge_Generator
 
         public override void DrawLayer(ref Canvas can, bool HQmode, int size)
         {
+            int half_size = size / 2;
+            if (RangeSource.OpeningAngle != 0 && RangeMax - RangeMin != 0)
+            {
+                Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource.CircleCenter_X, RangeSource.CircleCenter_Y);
+                for(double i = RangeMin; i <= RangeMax; i += Step)
+                {
+                    double ang = Math.Round(i / RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart);
+                    Global.DrawLine(ref can,
+                                    Global.GetPointOnCircle(c, (DistanceFromCenter - LineLength) * RangeSource.CircleRadius * half_size, ang),
+                                    Global.GetPointOnCircle(c, DistanceFromCenter * RangeSource.CircleRadius * half_size, ang),
+                                    (int)(LineThickness * half_size),
+                                    Color.FromArgb(LineColor.A, LineColor.R, LineColor.G, LineColor.B));
+                }
+            }
             base.DrawLayer(ref can, HQmode, size);
         }
 
         public override void DrawOverlay(ref Canvas can, bool HQmode, int size, double alpha)
         {
+            //Point c = Global.GetOffsetPoint(new Point(size / 2, size / 2), size / 2, RangeSource.CircleCenter_X, RangeSource.CircleCenter_Y);
+            //int max_r = (int)(size / 2 * RangeSource.CircleRadius);
+            //Global.DrawLine(ref can, c, Global.GetPointOnCircle(c, _distancefromcenter * max_r, RangeSource.AngleStart), 2, Global.Overlay1);
+            //Global.DrawLine(ref can, c, Global.GetPointOnCircle(c, _distancefromcenter * max_r, RangeSource.AngleStart + RangeSource.OpeningAngle), 2, Global.Overlay1);
+            
             base.DrawOverlay(ref can, HQmode, size, alpha);
         }
     }
