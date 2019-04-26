@@ -19,7 +19,7 @@ namespace Gauge_Generator
         double _rangemax = 100;
         double _rangestep = 20;
         double _linethickness = 0.01;
-        double _distancefromcenter = 1;
+        double _distancefromcenter = 0.95;
         double _linelength = 0.05;
         bool _drawarconedge = false;
         System.Windows.Media.Color _linecolor = System.Windows.Media.Colors.White;
@@ -71,7 +71,7 @@ namespace Gauge_Generator
         public double DistanceFromCenter
         {
             get { return _distancefromcenter; }
-            set { _distancefromcenter = ValidateDouble(value, Global.MIN_DOUBLE_VALUE, 1); }
+            set { _distancefromcenter = ValidateDouble(value, Global.MIN_DOUBLE_VALUE, 0.95); }
         }
         [Description("Line length"), Category("Lines")]
         public double LineLength
@@ -111,13 +111,14 @@ namespace Gauge_Generator
                 Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource.CircleCenter_X, RangeSource.CircleCenter_Y);
                 double circle1 = (DistanceFromCenter - LineLength < 0 ? 0 : DistanceFromCenter - LineLength) * RangeSource.CircleRadius * half_size;
                 double circle2 = DistanceFromCenter * RangeSource.CircleRadius * half_size;
+                int weight = (int)(LineThickness * half_size);
                 for (double i = RangeMin; i <= RangeMax; i += Step)
                 {
                     double ang = Math.Round(i / RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart);
                     Global.DrawLine(ref can,
                                     Global.GetPointOnCircle(c, circle1, ang),
                                     Global.GetPointOnCircle(c, circle2, ang),
-                                    (int)(LineThickness * half_size),
+                                    weight,
                                     Color.FromArgb(LineColor.A, LineColor.R, LineColor.G, LineColor.B));
                 }
                 if (DrawArcOnEdge)
@@ -128,7 +129,7 @@ namespace Gauge_Generator
                                    (int)Math.Round(RangeMin / RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart),
                                    (int)Math.Round(RangeMax / RangeSource.RangeEndValue * RangeSource.OpeningAngle),
                                    (int)Math.Round(circle2),
-                                   (int)(LineThickness * half_size),
+                                   weight,
                                    Color.FromArgb(LineColor.A, LineColor.R, LineColor.G, LineColor.B));
                 }
             }
