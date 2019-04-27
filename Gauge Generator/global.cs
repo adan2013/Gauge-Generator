@@ -155,6 +155,34 @@ namespace Gauge_Generator
             }
         }
 
+        public static Shape DrawArcWithLines(ref Canvas obj, bool HQmode, Point center, int startAngle, int openingAngle, int radius, int weight, Color color, List<double> pointangles, List<Point> secondpoint, double LineLength)
+        {
+            int LoD = GetLoD(HQmode, radius, openingAngle);
+            List<Point> ArcPoints = new List<Point>();
+            pointangles.Insert(0, 0);
+            secondpoint.Insert(0, new Point(0, 0));
+            for (int ang_idx = 1; ang_idx < pointangles.Count; ang_idx++)
+            {
+                for (int i = 0; i < LoD; i++)
+                {
+                    ArcPoints.Add(GetPointOnCircle(center, radius, startAngle + pointangles[ang_idx - 1] + ((pointangles[ang_idx] - pointangles[ang_idx - 1]) / ((double)LoD - 1) * i)));
+                    if (i + 1 == LoD)
+                    {
+                        ArcPoints.Add(secondpoint[ang_idx]);
+                        ArcPoints.Add(GetPointOnCircle(center, radius, startAngle + pointangles[ang_idx - 1] + ((pointangles[ang_idx] - pointangles[ang_idx - 1]) / ((double)LoD - 1) * i)));
+                    }
+                }
+            }
+            Polyline pl = new Polyline
+            {
+                StrokeThickness = weight,
+                Stroke = new MEDIA.SolidColorBrush(MEDIA.Color.FromArgb(color.A, color.R, color.G, color.B))
+            };
+            foreach (Point i in ArcPoints) pl.Points.Add(new System.Windows.Point(i.X, i.Y));
+            obj.Children.Add(pl);
+            return pl;
+        }
+
         public static Shape DrawCirclePart(ref Canvas obj, bool HQmode, Point center, int startAngle, int openingAngle, int radius, Color color)
         {
             if (openingAngle == 360)

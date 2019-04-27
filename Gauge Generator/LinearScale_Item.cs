@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.ComponentModel;
 using System.Windows.Controls;
+using System.Windows.Shapes;
 
 namespace Gauge_Generator
 {
@@ -112,25 +113,40 @@ namespace Gauge_Generator
                 double circle1 = (DistanceFromCenter - LineLength < 0 ? 0 : DistanceFromCenter - LineLength) * RangeSource.CircleRadius * half_size;
                 double circle2 = DistanceFromCenter * RangeSource.CircleRadius * half_size;
                 int weight = (int)(LineThickness * half_size);
-                for (double i = RangeMin; i <= RangeMax; i += Step)
-                {
-                    double ang = Math.Round(i / RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart);
-                    Global.DrawLine(ref can,
-                                    Global.GetPointOnCircle(c, circle1, ang),
-                                    Global.GetPointOnCircle(c, circle2, ang),
-                                    weight,
-                                    Color.FromArgb(LineColor.A, LineColor.R, LineColor.G, LineColor.B));
-                }
                 if (DrawArcOnEdge)
                 {
-                    Global.DrawArc(ref can,
-                                   HQmode,
-                                   c,
-                                   (int)Math.Round(RangeMin / RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart),
-                                   (int)Math.Round(RangeMax / RangeSource.RangeEndValue * RangeSource.OpeningAngle),
-                                   (int)Math.Round(circle2),
-                                   weight,
-                                   Color.FromArgb(LineColor.A, LineColor.R, LineColor.G, LineColor.B));
+                    List<double> points_lst1 = new List<double>();
+                    List<Point> points_lst2 = new List<Point>();
+                    for (double i = RangeMin; i <= RangeMax; i += Step)
+                    {
+                        double ang = Math.Round(i / RangeSource.RangeEndValue * RangeSource.OpeningAngle);
+                        points_lst1.Add(ang);
+                        points_lst2.Add(Global.GetPointOnCircle(c, circle1, ang + RangeSource.AngleStart));
+                    }
+                    Global.DrawArcWithLines(ref can,
+                                            HQmode,
+                                            c,
+                                            (int)Math.Round(RangeMin / RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart),
+                                            (int)Math.Round(RangeMax / RangeSource.RangeEndValue * RangeSource.OpeningAngle),
+                                            (int)Math.Round(circle2),
+                                            weight,
+                                            Color.FromArgb(LineColor.A, LineColor.R, LineColor.G, LineColor.B),
+                                            points_lst1,
+                                            points_lst2,
+                                            circle1
+                                            );
+                }
+                else
+                {
+                    for (double i = RangeMin; i <= RangeMax; i += Step)
+                    {
+                        double ang = Math.Round(i / RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart);
+                        Global.DrawLine(ref can,
+                                        Global.GetPointOnCircle(c, circle1, ang),
+                                        Global.GetPointOnCircle(c, circle2, ang),
+                                        weight,
+                                        Color.FromArgb(LineColor.A, LineColor.R, LineColor.G, LineColor.B));
+                    }
                 }
             }
             base.DrawLayer(ref can, HQmode, size);
