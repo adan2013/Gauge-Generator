@@ -100,7 +100,6 @@ namespace Gauge_Generator
         {
             _rangemin = ValidateDouble(_rangemin, RangeSource.RangeStartValue, RangeMax);
             _rangemax = ValidateDouble(_rangemax, RangeMin, RangeSource.RangeEndValue);
-            _rangestep = ValidateDouble(_rangestep, Global.MIN_DOUBLE_VALUE, _rangemax - _rangemin);
             base.ValidateWithSource();
         }
 
