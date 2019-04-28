@@ -153,11 +153,16 @@ namespace Gauge_Generator
 
         public override void DrawOverlay(ref Canvas can, bool HQmode, int size, double alpha)
         {
-            //Point c = Global.GetOffsetPoint(new Point(size / 2, size / 2), size / 2, RangeSource.CircleCenter_X, RangeSource.CircleCenter_Y);
-            //int max_r = (int)(size / 2 * RangeSource.CircleRadius);
-            //Global.DrawLine(ref can, c, Global.GetPointOnCircle(c, _distancefromcenter * max_r, RangeSource.AngleStart), 2, Global.Overlay1);
-            //Global.DrawLine(ref can, c, Global.GetPointOnCircle(c, _distancefromcenter * max_r, RangeSource.AngleStart + RangeSource.OpeningAngle), 2, Global.Overlay1);
-            
+            int half_size = size / 2;
+            Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource.CircleCenter_X, RangeSource.CircleCenter_Y);
+            Shape s = Global.DrawCirclePart(ref can,
+                                            false,
+                                            c,
+                                            (int)Math.Round(RangeMin / RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart),
+                                            (int)Math.Round(RangeMax / RangeSource.RangeEndValue * RangeSource.OpeningAngle),
+                                            (int)Math.Round(DistanceFromCenter * RangeSource.CircleRadius * half_size),
+                                            Global.Overlay1);
+            Global.AddOpacityAnimation(s);
             base.DrawOverlay(ref can, HQmode, size, alpha);
         }
     }
