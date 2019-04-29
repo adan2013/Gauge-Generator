@@ -154,5 +154,17 @@
   <ItemGroup>
     <Resource Include="Images\range_item_big.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\arc.png" />
+    <Resource Include="Images\arc_big.png" />
+    <Resource Include="Images\clock_hand.png" />
+    <Resource Include="Images\clock_hand_big.png" />
+    <Resource Include="Images\label.png" />
+    <Resource Include="Images\label_big.png" />
+    <Resource Include="Images\linear_scale.png" />
+    <Resource Include="Images\linear_scale_big.png" />
+    <Resource Include="Images\numeric_scale.png" />
+    <Resource Include="Images\numeric_scale_big.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

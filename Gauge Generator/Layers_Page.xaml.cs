@@ -36,8 +36,11 @@ namespace Gauge_Generator
                 Image img = new Image();
                 TextBlock tblock = new TextBlock();
                 spnl.Orientation = Orientation.Horizontal;
+                img.Width = 40;
+                img.Height = 40;
                 img.Source = new BitmapImage(new Uri(Global.LayerSmallImages[(int)Global.GetLayerType(i)]));
-                img.Margin = new Thickness(3);
+                img.Margin = new Thickness(3, 3, 10, 3);
+                tblock.VerticalAlignment = VerticalAlignment.Center;
                 tblock.Text = i.Label;
                 tblock.FontSize = 16;
                 tblock.FontFamily = new FontFamily("Segoe UI");

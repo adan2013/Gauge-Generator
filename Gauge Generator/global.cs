@@ -80,19 +80,19 @@ namespace Gauge_Generator
         };
         public static string[] LayerBigImages = {
             "pack://application:,,,/Images/range_item_big.png",
-            "pack://application:,,,/Images/range_item_big.png",
-            "pack://application:,,,/Images/range_item_big.png",
-            "pack://application:,,,/Images/range_item_big.png",
-            "pack://application:,,,/Images/range_item_big.png",
-            "pack://application:,,,/Images/range_item_big.png"
+            "pack://application:,,,/Images/linear_scale_big.png",
+            "pack://application:,,,/Images/numeric_scale_big.png",
+            "pack://application:,,,/Images/arc_big.png",
+            "pack://application:,,,/Images/label_big.png",
+            "pack://application:,,,/Images/clock_hand_big.png"
         };
         public static string[] LayerSmallImages = {
             "pack://application:,,,/Images/range_item.png",
-            "pack://application:,,,/Images/range_item.png",
-            "pack://application:,,,/Images/range_item.png",
-            "pack://application:,,,/Images/range_item.png",
-            "pack://application:,,,/Images/range_item.png",
-            "pack://application:,,,/Images/range_item.png"
+            "pack://application:,,,/Images/linear_scale.png",
+            "pack://application:,,,/Images/numeric_scale.png",
+            "pack://application:,,,/Images/arc.png",
+            "pack://application:,,,/Images/label.png",
+            "pack://application:,,,/Images/clock_hand.png"
         };
 
         #endregion
