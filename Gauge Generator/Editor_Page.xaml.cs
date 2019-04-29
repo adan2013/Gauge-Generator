@@ -48,5 +48,16 @@ namespace Gauge_Generator
         {
             Global.RefreshScreen();
         }
+
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Do you want to restore default properties for this layer?", "Reset", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) == MessageBoxResult.Yes)
+            {
+                Global.EditingLayer.LoadDefaultValues();
+                prop_grid.SelectedObject = null;
+                prop_grid.SelectedObject = Global.EditingLayer;
+                Global.RefreshScreen();
+            }
+        }
     }
 }

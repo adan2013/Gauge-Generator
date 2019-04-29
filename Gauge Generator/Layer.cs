@@ -48,6 +48,8 @@ namespace Gauge_Generator
             RangeSource = obj;
         }
 
+        virtual public void LoadDefaultValues() { }
+
         virtual public void ValidateWithSource() { }
 
         virtual public void DrawLayer(ref Canvas can, bool HQmode, int size) { }

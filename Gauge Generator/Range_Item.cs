@@ -7,23 +7,24 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Drawing;
+using MEDIA = System.Windows.Media;
 
 namespace Gauge_Generator
 {
     public class Range_Item : Layer
     {
         //PRIVATE VARIABLES
-        double _circlecenter_x = 0;
-        double _circlecenter_y = 0;
-        double _circleradius = 1;
-        int _anglestart = 160;
-        int _openingangle = 220;
-        double _rangestartvalue = 0;
-        double _rangeendvalue = 100;
-        double _clockhandsoffset_x = 0;
-        double _clockhandsoffset_y = 0;
-        double _clockhandspointsize = 0.01;
-        System.Windows.Media.Color _clockhandspointcolor = System.Windows.Media.Colors.White;
+        double _circlecenter_x;
+        double _circlecenter_y;
+        double _circleradius;
+        int _anglestart;
+        int _openingangle;
+        double _rangestartvalue;
+        double _rangeendvalue;
+        double _clockhandsoffset_x;
+        double _clockhandsoffset_y;
+        double _clockhandspointsize;
+        MEDIA.Color _clockhandspointcolor;
 
         //PROPERTIES
         [Description("X coordinate of the center of circle"), Category("Circle position")]
@@ -95,13 +96,34 @@ namespace Gauge_Generator
             set { _clockhandspointsize = ValidateDouble(value, 0.01, 0.05); }
         }
         [Description("Color of dot for clock hands"), Category("Clock hands")]
-        public System.Windows.Media.Color ClockHandsPointColor
+        public MEDIA.Color ClockHandsPointColor
         {
             get { return _clockhandspointcolor; }
             set { _clockhandspointcolor = ValidateColor(value, true); }
         }
 
+        public Range_Item()
+        {
+            LoadDefaultValues();
+        }
+
         //METHODS
+        public override void LoadDefaultValues()
+        {
+            _circlecenter_x = 0;
+            _circlecenter_y = 0;
+            _circleradius = 1;
+            _anglestart = 150;
+            _openingangle = 240;
+            _rangestartvalue = 0;
+            _rangeendvalue = 100;
+            _clockhandsoffset_x = 0;
+            _clockhandsoffset_y = 0;
+            _clockhandspointsize = 0.01;
+            _clockhandspointcolor = MEDIA.Colors.White;
+            base.LoadDefaultValues();
+        }
+
         public override void DrawLayer(ref Canvas can, bool HQmode, int size)
         {
             int half_size = size / 2;

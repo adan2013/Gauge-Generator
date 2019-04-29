@@ -62,14 +62,21 @@ namespace Gauge_Generator
                     return typeof(Range_Item);
             }
         }
-        public static string[] LayerNames = { "Range", "Linear Scale", "Numeric Scale", "Arc", "Label", "Clock Hand" };
-        public static string[] LayerDescriptions = {
-            "Basic element defining size and range of values. It is required by other elements (layers)",
+        public static string[] LayerNames = {
+            "Range",
             "Linear Scale",
             "Numeric Scale",
             "Arc",
             "Label",
             "Clock Hand"
+        };
+        public static string[] LayerDescriptions = {
+            "Basic element defining size and range of values. It is required by other elements (layers)",
+            "Element generates a visible clock scale consisting of lines",
+            "Element generates a visible clock scale consisting of numerical values",
+            "Element generates a colorful arc. For example, to mark a dangerous range of values",
+            "Element generates a custom text label",
+            "Element generates a clock hand"
         };
         public static string[] LayerBigImages = {
             "pack://application:,,,/Images/range_item_big.png",

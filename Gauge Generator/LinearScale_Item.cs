@@ -7,23 +7,24 @@ using System.Drawing;
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Shapes;
+using MEDIA = System.Windows.Media;
 
 namespace Gauge_Generator
 {
     public class LinearScale_Item : Layer
     {
         //CONSTS
-        const int DEFAULT_STEP_PARTS = 5;
+        const int DEFAULT_STEP_PARTS = 10;
 
         //PRIVATE VARIABLES
-        double _rangemin = 0;
-        double _rangemax = 100;
-        double _rangestep = 20;
-        double _linethickness = 0.01;
-        double _distancefromcenter = 0.95;
-        double _linelength = 0.05;
-        bool _drawarconedge = false;
-        System.Windows.Media.Color _linecolor = System.Windows.Media.Colors.White;
+        double _rangemin;
+        double _rangemax;
+        double _rangestep;
+        double _linethickness;
+        double _distancefromcenter;
+        double _linelength;
+        bool _drawarconedge;
+        MEDIA.Color _linecolor;
 
         //PROPERTIES
         [Description("Initial value of the visible scale"), Category("Range")]
@@ -81,13 +82,32 @@ namespace Gauge_Generator
             set { _linelength = ValidateDouble(value, 0.05, 1); }
         }
         [Description("Line color"), Category("Lines")]
-        public System.Windows.Media.Color LineColor
+        public MEDIA.Color LineColor
         {
             get { return _linecolor; }
             set { _linecolor = ValidateColor(value, false); }
         }
 
+        public LinearScale_Item()
+        {
+            LoadDefaultValues();
+        }
+
         //METHODS
+        public override void LoadDefaultValues()
+        {
+            _rangemin = 0;
+            _rangemax = 100;
+            _rangestep = 10;
+            _linethickness = 0.01;
+            _distancefromcenter = 0.95;
+            _linelength = 0.05;
+            _drawarconedge = false;
+            _linecolor = MEDIA.Colors.White;
+            ValidateWithSource();
+            base.LoadDefaultValues();
+        }
+
         public override void SetRangeSource(Range_Item obj)
         {
             base.SetRangeSource(obj);
@@ -98,8 +118,11 @@ namespace Gauge_Generator
 
         public override void ValidateWithSource()
         {
-            _rangemin = ValidateDouble(_rangemin, RangeSource.RangeStartValue, RangeMax);
-            _rangemax = ValidateDouble(_rangemax, RangeMin, RangeSource.RangeEndValue);
+            if (RangeSource != null)
+            {
+                _rangemin = ValidateDouble(_rangemin, RangeSource.RangeStartValue, RangeMax);
+                _rangemax = ValidateDouble(_rangemax, RangeMin, RangeSource.RangeEndValue);
+            }
             base.ValidateWithSource();
         }
 
