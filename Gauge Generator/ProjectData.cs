@@ -18,7 +18,7 @@ namespace Gauge_Generator
         public event d_ImageSizeChanged ImageSizeChanged;
 
         //PRIVATE
-        int pImageSize = 300;
+        int _imagesize = 300;
 
         //PUBLIC
         public List<Layer> layers = new List<Layer>();
@@ -26,22 +26,23 @@ namespace Gauge_Generator
         //PROPERTIES
         public int ImageSize
         {
-            get { return pImageSize; }
+            get { return _imagesize; }
             set
             {
                 if(value >= 300 && value <= 1000)
                 {
-                    pImageSize = value;
+                    _imagesize = value;
                     ImageSizeChanged?.Invoke(value);
                 }
             }
         }
-
         public Color BackgroundColor { get; set; }
-
         public Color ForegroundColor { get; set; }
-
         public bool RoundForeground { get; set; }
+
+        public bool ShowOnlyThisLayer { get; set; }
+        public bool BringToFront { get; set; }
+        public bool HideOverlay { get; set; }
 
         public ProjectData()
         {
@@ -70,9 +71,15 @@ namespace Gauge_Generator
             }
             for(int i = layers.Count - 1; i >= 0; i--)
             {
+                if(Global.EditingLayer != null)
+                {
+                    if (ShowOnlyThisLayer && layers[i] != Global.EditingLayer) continue;
+                    if (BringToFront && layers[i] == Global.EditingLayer) continue;
+                }
                 layers[i].DrawLayer(ref pnl, HQmode, size);
             }
-            if (Global.EditingLayer != null) Global.EditingLayer.DrawOverlay(ref pnl, HQmode, size, 1);
+            if (BringToFront && Global.EditingLayer != null) Global.EditingLayer.DrawLayer(ref pnl, HQmode, size);
+            if (Global.EditingLayer != null && !HideOverlay) Global.EditingLayer.DrawOverlay(ref pnl, HQmode, size, 1);
         }
     }
 }

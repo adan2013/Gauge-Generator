@@ -20,6 +20,9 @@ namespace Gauge_Generator
     /// </summary>
     public partial class Editor_Page : Page
     {
+
+        bool ignorecheckboxs = true;
+
         public Editor_Page()
         {
             InitializeComponent();
@@ -31,6 +34,10 @@ namespace Gauge_Generator
             {
                 prop_grid.SelectedObject = Global.EditingLayer;
             }
+            ShowOnlyThis.IsChecked = Global.project.ShowOnlyThisLayer;
+            BringToFront.IsChecked = Global.project.BringToFront;
+            HideOverlay.IsChecked = Global.project.HideOverlay;
+            ignorecheckboxs = false;
             Global.RefreshScreen();
         }
 
@@ -58,6 +65,15 @@ namespace Gauge_Generator
                 prop_grid.SelectedObject = Global.EditingLayer;
                 Global.RefreshScreen();
             }
+        }
+
+        private void EditorModificatorsChanged(object sender, RoutedEventArgs e)
+        {
+            if (ignorecheckboxs) return;
+            Global.project.ShowOnlyThisLayer = (bool)ShowOnlyThis.IsChecked;
+            Global.project.BringToFront = (bool)BringToFront.IsChecked;
+            Global.project.HideOverlay = (bool)HideOverlay.IsChecked;
+            Global.RefreshScreen();
         }
     }
 }

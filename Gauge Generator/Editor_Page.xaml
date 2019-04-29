@@ -19,9 +19,9 @@
             <Button Content="Reset" ToolTip="Reset all properties to default values" Click="Reset_Click"></Button>
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
             <StackPanel VerticalAlignment="Center">
-                <CheckBox IsEnabled="False" Margin="1" Content="Display only this layer" />
-                <CheckBox IsEnabled="False" Margin="1" Content="Bring to front this layer" />
-                <CheckBox IsEnabled="False" Margin="1" Content="Hide the overlay" />
+                <CheckBox Margin="1" Checked="EditorModificatorsChanged" Unchecked="EditorModificatorsChanged" x:Name="ShowOnlyThis" Content="Display only this layer" />
+                <CheckBox Margin="1" Checked="EditorModificatorsChanged" Unchecked="EditorModificatorsChanged" x:Name="BringToFront" Content="Bring to front this layer" />
+                <CheckBox Margin="1" Checked="EditorModificatorsChanged" Unchecked="EditorModificatorsChanged" x:Name="HideOverlay" Content="Hide the overlay" />
             </StackPanel>
         </StackPanel>
     </Grid>
