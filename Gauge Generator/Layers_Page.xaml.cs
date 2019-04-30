@@ -59,8 +59,12 @@ namespace Gauge_Generator
                 NewItemWindow w = new NewItemWindow();
                 w.Owner = Application.Current.MainWindow;
                 w.ShowDialog();
+                if(w.DialogResult.HasValue && w.DialogResult.Value)
+                {
+                    Global.EditingLayer = Global.project.layers[0];
+                    Global.SetSidebar(Global.SidebarPages.Editor);
+                }
                 w.Close();
-                Reload_Layers_List(0);
             }
             else
             {
