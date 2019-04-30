@@ -283,12 +283,12 @@ namespace Gauge_Generator
         public static Point GetPointOnCircle(Point center, double radius, double angle)
         {
             angle = Math.PI * angle / 180.0;
-            return new Point((int)(radius * Math.Cos(angle) + center.X), (int)(radius * Math.Sin(angle) + center.Y));
+            return new Point((int)Math.Round(radius * Math.Cos(angle) + center.X), (int)Math.Round(radius * Math.Sin(angle) + center.Y));
         }
 
         public static Point GetOffsetPoint(Point input, double range, double X_Offset, double Y_Offset)
         {
-            return new Point((int)(input.X + X_Offset * range), (int)(input.Y + Y_Offset * range));
+            return new Point((int)Math.Round(input.X + X_Offset * range), (int)Math.Round(input.Y + Y_Offset * range));
         }
 
         public static int GetLoD(bool HQmode, int radius, int angle)

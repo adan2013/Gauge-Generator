@@ -132,16 +132,16 @@ namespace Gauge_Generator
             if (RangeSource.OpeningAngle != 0 && RangeMax - RangeMin != 0)
             {
                 Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource.CircleCenter_X, RangeSource.CircleCenter_Y);
-                double circle1 = (DistanceFromCenter - LineLength < 0 ? 0 : DistanceFromCenter - LineLength) * RangeSource.CircleRadius * half_size;
+                double circle1 = Math.Max(0.0, DistanceFromCenter - LineLength) * RangeSource.CircleRadius * half_size;
                 double circle2 = DistanceFromCenter * RangeSource.CircleRadius * half_size;
                 int weight = (int)(LineThickness * half_size);
                 if (DrawArcOnEdge)
                 {
                     List<double> points_lst1 = new List<double>();
                     List<Point> points_lst2 = new List<Point>();
-                    for (double i = RangeMin; i <= RangeMax; i += RangeStep)
+                    for (int i = RangeMin; i <= RangeMax; i += RangeStep)
                     {
-                        double ang = Math.Round(i / RangeSource.RangeEndValue * RangeSource.OpeningAngle);
+                        double ang = i / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle;
                         points_lst1.Add(ang);
                         points_lst2.Add(Global.GetPointOnCircle(c, circle1, ang + RangeSource.AngleStart));
                     }
@@ -160,9 +160,9 @@ namespace Gauge_Generator
                 }
                 else
                 {
-                    for (double i = RangeMin; i <= RangeMax; i += RangeStep)
+                    for (int i = RangeMin; i <= RangeMax; i += RangeStep)
                     {
-                        double ang = Math.Round(i / RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart);
+                        double ang = i / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart;
                         Global.DrawLine(ref can,
                                         Global.GetPointOnCircle(c, circle1, ang),
                                         Global.GetPointOnCircle(c, circle2, ang),
