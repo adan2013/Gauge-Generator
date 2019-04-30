@@ -19,8 +19,8 @@ namespace Gauge_Generator
         double _circleradius;
         int _anglestart;
         int _openingangle;
-        double _rangestartvalue;
-        double _rangeendvalue;
+        int _rangestartvalue;
+        int _rangeendvalue;
         double _clockhandsoffset_x;
         double _clockhandsoffset_y;
         double _clockhandspointsize;
@@ -58,23 +58,23 @@ namespace Gauge_Generator
             set { _openingangle = ValidateInt(value, -360, 360); }
         }
         [Description("Initial value of the scale"), Category("Range")]
-        public double RangeStartValue
+        public int RangeStartValue
         {
             get { return _rangestartvalue; }
             set
             {
-                _rangestartvalue = ValidateDouble(value, Global.MIN_RANGE_VALUE, Global.MAX_RANGE_VALUE);
-                _rangestartvalue = ValidateDouble(_rangestartvalue, Global.MIN_RANGE_VALUE, RangeEndValue);
+                _rangestartvalue = ValidateInt(value, Global.MIN_RANGE_VALUE, Global.MAX_RANGE_VALUE);
+                _rangestartvalue = ValidateInt(_rangestartvalue, Global.MIN_RANGE_VALUE, RangeEndValue);
             }
         }
         [Description("Final value of the scale"), Category("Range")]
-        public double RangeEndValue
+        public int RangeEndValue
         {
             get { return _rangeendvalue; }
             set
             {
-                _rangeendvalue = ValidateDouble(value, Global.MIN_RANGE_VALUE, Global.MAX_RANGE_VALUE);
-                _rangeendvalue = ValidateDouble(_rangeendvalue, RangeStartValue, Global.MAX_RANGE_VALUE);
+                _rangeendvalue = ValidateInt(value, Global.MIN_RANGE_VALUE, Global.MAX_RANGE_VALUE);
+                _rangeendvalue = ValidateInt(_rangeendvalue, RangeStartValue, Global.MAX_RANGE_VALUE);
             }
         }
         [Description("X coordinate of clock hands"), Category("Clock hands")]

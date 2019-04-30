@@ -17,9 +17,9 @@ namespace Gauge_Generator
         const int DEFAULT_STEP_PARTS = 10;
 
         //PRIVATE VARIABLES
-        double _rangemin;
-        double _rangemax;
-        double _rangestep;
+        int _rangemin;
+        int _rangemax;
+        int _rangestep;
         double _linethickness;
         double _distancefromcenter;
         double _linelength;
@@ -28,32 +28,32 @@ namespace Gauge_Generator
 
         //PROPERTIES
         [Description("Initial value of the visible scale"), Category("Range")]
-        public double RangeMin
+        public int RangeMin
         {
             get { return _rangemin; }
             set
             {
-                _rangemin = ValidateDouble(value, RangeSource.RangeStartValue, RangeMax);
+                _rangemin = ValidateInt(value, RangeSource.RangeStartValue, RangeMax);
                 ValidateWithSource();
             }
         }
         [Description("Final value of the visible scale"), Category("Range")]
-        public double RangeMax
+        public int RangeMax
         {
             get { return _rangemax; }
             set
             {
-                _rangemax = ValidateDouble(value, RangeMin, RangeSource.RangeEndValue);
+                _rangemax = ValidateInt(value, RangeMin, RangeSource.RangeEndValue);
                 ValidateWithSource();
             }
         }
         [Description("Line frequency"), Category("Range")]
-        public double Step
+        public int RangeStep
         {
             get { return _rangestep; }
             set
             {
-                _rangestep = ValidateDouble(value, Global.MIN_DOUBLE_VALUE, Global.MAX_RANGE_VALUE);
+                _rangestep = ValidateInt(value, 1, Global.MAX_RANGE_VALUE);
                 ValidateWithSource();
             }
         }
@@ -120,8 +120,8 @@ namespace Gauge_Generator
         {
             if (RangeSource != null)
             {
-                _rangemin = ValidateDouble(_rangemin, RangeSource.RangeStartValue, RangeMax);
-                _rangemax = ValidateDouble(_rangemax, RangeMin, RangeSource.RangeEndValue);
+                _rangemin = ValidateInt(_rangemin, RangeSource.RangeStartValue, RangeMax);
+                _rangemax = ValidateInt(_rangemax, RangeMin, RangeSource.RangeEndValue);
             }
             base.ValidateWithSource();
         }
@@ -139,7 +139,7 @@ namespace Gauge_Generator
                 {
                     List<double> points_lst1 = new List<double>();
                     List<Point> points_lst2 = new List<Point>();
-                    for (double i = RangeMin; i <= RangeMax; i += Step)
+                    for (double i = RangeMin; i <= RangeMax; i += RangeStep)
                     {
                         double ang = Math.Round(i / RangeSource.RangeEndValue * RangeSource.OpeningAngle);
                         points_lst1.Add(ang);
@@ -148,8 +148,8 @@ namespace Gauge_Generator
                     Global.DrawArcWithLines(ref can,
                                             HQmode,
                                             c,
-                                            (int)Math.Round(RangeMin / RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart),
-                                            (int)Math.Round(RangeMax / RangeSource.RangeEndValue * RangeSource.OpeningAngle),
+                                            (int)Math.Round(RangeMin / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart),
+                                            (int)Math.Round(RangeMax / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle),
                                             (int)Math.Round(circle2),
                                             weight,
                                             Color.FromArgb(LineColor.A, LineColor.R, LineColor.G, LineColor.B),
@@ -160,7 +160,7 @@ namespace Gauge_Generator
                 }
                 else
                 {
-                    for (double i = RangeMin; i <= RangeMax; i += Step)
+                    for (double i = RangeMin; i <= RangeMax; i += RangeStep)
                     {
                         double ang = Math.Round(i / RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart);
                         Global.DrawLine(ref can,
@@ -181,8 +181,8 @@ namespace Gauge_Generator
             Shape s = Global.DrawCirclePart(ref can,
                                             false,
                                             c,
-                                            (int)Math.Round(RangeMin / RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart),
-                                            (int)Math.Round(RangeMax / RangeSource.RangeEndValue * RangeSource.OpeningAngle),
+                                            (int)Math.Round(RangeMin / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart),
+                                            (int)Math.Round(RangeMax / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle),
                                             (int)Math.Round(DistanceFromCenter * RangeSource.CircleRadius * half_size),
                                             Global.Overlay1);
             Global.AddOpacityAnimation(s);

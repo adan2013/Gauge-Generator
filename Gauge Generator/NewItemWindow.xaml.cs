@@ -57,7 +57,8 @@ namespace Gauge_Generator
                     Child = img,
                     BorderBrush = (i==0 ? Brushes.Black : Brushes.Transparent),
                     BorderThickness = new Thickness(5),
-                    Margin = new Thickness(2)
+                    Margin = new Thickness(2),
+                    ToolTip = Global.LayerNames[i]
                 };
                 br.MouseEnter += Br_MouseEnter;
                 br.MouseLeave += Br_MouseLeave;
@@ -80,6 +81,7 @@ namespace Gauge_Generator
                 Border br = (Border)sender;
                 itemSelected = (Global.LayersType)int.Parse(br.Name.Substring(4));
                 br.BorderBrush = Brushes.Black;
+                LoadDescription(int.Parse(br.Name.Substring(4)));
                 ValidateOperation();
                 RangePanel.Visibility = (itemSelected == Global.LayersType.Range ? Visibility.Hidden : Visibility.Visible);
                 if (e.ClickCount == 2 && ok_btn.IsEnabled) Ok_btn_Click(ok_btn, new RoutedEventArgs());
@@ -90,14 +92,12 @@ namespace Gauge_Generator
         {
             Border br = (Border)sender;
             if(br.BorderBrush == Brushes.DarkGray) br.BorderBrush = Brushes.Transparent;
-            LoadDescription((int)itemSelected);
         }
 
         private void Br_MouseEnter(object sender, MouseEventArgs e)
         {
             Border br = (Border)sender;
             if (itemSelected != (Global.LayersType)int.Parse(br.Name.Substring(4))) br.BorderBrush = Brushes.DarkGray;
-            LoadDescription(int.Parse(br.Name.Substring(4)));
         }
 
         private void LoadRangeList()

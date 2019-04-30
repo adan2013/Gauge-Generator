@@ -12,10 +12,10 @@ namespace Gauge_Generator
 {
     public static class Global
     {
-        public const double MIN_DOUBLE_VALUE = 0.2f;
-        public const double MAX_DOUBLE_VALUE = 0.8f;
-        public const double MIN_RANGE_VALUE = -500f;
-        public const double MAX_RANGE_VALUE = 500f;
+        public const double MIN_DOUBLE_VALUE = 0.2;
+        public const double MAX_DOUBLE_VALUE = 0.8;
+        public const int MIN_RANGE_VALUE = -500;
+        public const int MAX_RANGE_VALUE = 500;
         public const int MAX_LAYERS = 30;
 
         public const int ARC_LOD_LQ = 3;

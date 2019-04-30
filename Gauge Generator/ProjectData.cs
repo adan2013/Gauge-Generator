@@ -40,8 +40,11 @@ namespace Gauge_Generator
         public Color ForegroundColor { get; set; }
         public bool RoundForeground { get; set; }
 
+        [Browsable(false)]
         public bool ShowOnlyThisLayer { get; set; }
+        [Browsable(false)]
         public bool BringToFront { get; set; }
+        [Browsable(false)]
         public bool HideOverlay { get; set; }
 
         public ProjectData()
