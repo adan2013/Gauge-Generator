@@ -18,8 +18,8 @@ namespace Gauge_Generator
         public const int MAX_RANGE_VALUE = 500;
         public const int MAX_LAYERS = 30;
 
-        public const int ARC_LOD_LQ = 3;
-        public const int ARC_LOD_HQ = 1;
+        public const int ARC_LOD_LQ = 40;
+        public const int ARC_LOD_HQ = 4;
         public const int DURATION_ALPHA_OVERLAY = 2000;
         public const double MIN_ALPHA_OVERLAY = 0.1;
         public const double MAX_ALPHA_OVERLAY = 0.6;
@@ -170,7 +170,9 @@ namespace Gauge_Generator
             List<double> bp = new List<double>();
 
             for (int val = min; val <= max; val += step) bp.Add(startAngle + openingAngle * ((val - min) / (double)(max - min)));
-            double LoD = GetLoD(HQmode, radius2, openingAngle); //TODO calculate distance between two points of scale
+            if (bp.Count == 0) new Polyline();
+
+            double LoD = GetLoD(HQmode, radius2, openingAngle / bp.Count);
 
             ArcPoints.Add(GetPointOnCircle(center, radius2, bp[0]));
             ArcPoints.Add(GetPointOnCircle(center, radius1, bp[0]));
@@ -298,7 +300,8 @@ namespace Gauge_Generator
 
         public static int GetLoD(bool HQmode, int radius, int angle)
         {
-            int i = (int)(Math.Abs(angle) / 180.0 * Math.PI * 30 / (HQmode ? ARC_LOD_HQ : ARC_LOD_LQ));
+            int i = (int)(Math.Abs(angle) / 180.0 * Math.PI * radius / (HQmode ? ARC_LOD_HQ : ARC_LOD_LQ));
+            i++;
             if (i < 2) i = 2;
             return i;
         }
