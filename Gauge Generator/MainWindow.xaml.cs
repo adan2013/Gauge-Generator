@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MEDIA = System.Windows.Media;
 
 namespace Gauge_Generator
 {
@@ -27,6 +28,7 @@ namespace Gauge_Generator
             Global.SetSidebarObject(sidebar_frame, sidebar_title);
             Global.SetSidebar(Global.SidebarPages.Layers);
             Global.ScreenCanvas = preview;
+            MEDIA.Animation.Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(MEDIA.Animation.Timeline), new FrameworkPropertyMetadata { DefaultValue = 15 });
         }
 
         private void Preview_SizeChanged(object sender, SizeChangedEventArgs e)
