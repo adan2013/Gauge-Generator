@@ -57,6 +57,7 @@ namespace Gauge_Generator
         public void DrawProject(ref Canvas pnl, bool HQmode, int size)
         {
             pnl.Children.Clear();
+            //background
             if (RoundForeground)
             {
                 pnl.Background = new SolidColorBrush(BackgroundColor);
@@ -72,17 +73,20 @@ namespace Gauge_Generator
             {
                 pnl.Background = new SolidColorBrush(ForegroundColor);
             }
+            //layers
             for(int i = layers.Count - 1; i >= 0; i--)
             {
                 if(Global.EditingLayer != null)
                 {
                     if (ShowOnlyThisLayer && layers[i] != Global.EditingLayer) continue;
                     if (BringToFront && layers[i] == Global.EditingLayer) continue;
+                    if (layers[i].RangeSource == Global.EditingLayer) continue;
                 }
                 layers[i].DrawLayer(ref pnl, HQmode, size);
             }
             if (BringToFront && Global.EditingLayer != null) Global.EditingLayer.DrawLayer(ref pnl, HQmode, size);
-            if (Global.EditingLayer != null && !HideOverlay) Global.EditingLayer.DrawOverlay(ref pnl, HQmode, size, 1);
+            //overlay
+            if (Global.EditingLayer != null && (Global.EditingLayer is Range_Item || !HideOverlay)) Global.EditingLayer.DrawOverlay(ref pnl, HQmode, size, 1);
         }
     }
 }

@@ -8,13 +8,17 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="350"
       Title="Property Editor">
-    <Grid>
+    <Grid x:Name="main_grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="60px" />
+            <RowDefinition Height="60px" />
         </Grid.RowDefinitions>
         <xctk:PropertyGrid Grid.Row="0" Margin="15, 20, 15, 5" x:Name="prop_grid" ShowSortOptions="False" ShowTitle="False" PropertyValueChanged="Prop_grid_PropertyValueChanged"/>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+        <Border x:Name="hiddenMSG" Grid.Row="1" Margin="15, 8" Background="LightGoldenrodYellow" CornerRadius="8">
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="WrapWithOverflow" Text="Layers associated with this range were hidden during the edition. Return to the list of layers to refresh preview" />
+        </Border>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Close" ToolTip="Close this editor" Click="Close_btn"></Button>
             <Button Content="Reset" ToolTip="Reset all properties to default values" Click="Reset_Click"></Button>
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />

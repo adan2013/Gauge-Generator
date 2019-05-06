@@ -20,7 +20,7 @@ namespace Gauge_Generator
 
         public const int ARC_LOD_LQ = 40;
         public const int ARC_LOD_HQ = 4;
-        public const int DURATION_ALPHA_OVERLAY = 2000;
+        public const int DURATION_ALPHA_OVERLAY = 1600;
         public const double MIN_ALPHA_OVERLAY = 0.1;
         public const double MAX_ALPHA_OVERLAY = 0.6;
         public static Color Overlay1 { get { return Color.FromArgb(255, 66, 105, 165); } }

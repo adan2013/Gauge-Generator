@@ -38,6 +38,15 @@ namespace Gauge_Generator
             BringToFront.IsChecked = Global.project.BringToFront;
             HideOverlay.IsChecked = Global.project.HideOverlay;
             ignorecheckboxs = false;
+            if (Global.EditingLayer is Range_Item)
+            {
+                HideOverlay.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                Grid.SetRowSpan(prop_grid, 2);
+                hiddenMSG.Visibility = Visibility.Collapsed;
+            }
             Global.RefreshScreen();
         }
 
