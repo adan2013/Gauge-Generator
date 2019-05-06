@@ -137,25 +137,18 @@ namespace Gauge_Generator
                 int weight = (int)(LineThickness * half_size);
                 if (DrawArcOnEdge)
                 {
-                    List<double> points_lst1 = new List<double>();
-                    List<Point> points_lst2 = new List<Point>();
-                    for (int i = RangeMin; i <= RangeMax; i += RangeStep)
-                    {
-                        double ang = i / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle;
-                        points_lst1.Add(ang);
-                        points_lst2.Add(Global.GetPointOnCircle(c, circle1, ang + RangeSource.AngleStart));
-                    }
                     Global.DrawArcWithLines(ref can,
                                             HQmode,
                                             c,
                                             (int)Math.Round(RangeMin / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart),
-                                            (int)Math.Round(RangeMax / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle),
+                                            (int)Math.Round((RangeMax - RangeMin) / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle),
+                                            (int)Math.Round(circle1),
                                             (int)Math.Round(circle2),
                                             weight,
                                             Color.FromArgb(LineColor.A, LineColor.R, LineColor.G, LineColor.B),
-                                            points_lst1,
-                                            points_lst2,
-                                            circle1
+                                            RangeMin,
+                                            RangeMax,
+                                            RangeStep
                                             );
                 }
                 else
@@ -182,7 +175,7 @@ namespace Gauge_Generator
                                             false,
                                             c,
                                             (int)Math.Round(RangeMin / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart),
-                                            (int)Math.Round(RangeMax / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle),
+                                            (int)Math.Round((RangeMax - RangeMin) / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle),
                                             (int)Math.Round(DistanceFromCenter * RangeSource.CircleRadius * half_size),
                                             Global.Overlay1);
             Global.AddOpacityAnimation(s);

@@ -161,25 +161,30 @@ namespace Gauge_Generator
                 return pl;
             }
         }
-
-        public static Shape DrawArcWithLines(ref Canvas obj, bool HQmode, Point center, int startAngle, int openingAngle, int radius, int weight, Color color, List<double> pointangles, List<Point> secondpoint, double LineLength)
+        
+        public static Shape DrawArcWithLines(ref Canvas obj, bool HQmode, Point center, int startAngle, int openingAngle, int radius1, int radius2, int weight, Color color, int min, int max, int step)
         {
-            int LoD = GetLoD(HQmode, radius, openingAngle);
+            if (step == 0 || min == max) new Polyline();
+
             List<Point> ArcPoints = new List<Point>();
-            pointangles.Insert(0, 0);
-            secondpoint.Insert(0, new Point(0, 0));
-            for (int ang_idx = 1; ang_idx < pointangles.Count; ang_idx++)
+            List<double> bp = new List<double>();
+
+            for (int val = min; val <= max; val += step) bp.Add(startAngle + openingAngle * ((val - min) / (double)(max - min)));
+            double LoD = GetLoD(HQmode, radius2, openingAngle); //TODO calculate distance between two points of scale
+
+            ArcPoints.Add(GetPointOnCircle(center, radius2, bp[0]));
+            ArcPoints.Add(GetPointOnCircle(center, radius1, bp[0]));
+            ArcPoints.Add(GetPointOnCircle(center, radius2, bp[0]));
+            for (int bp_idx = 1; bp_idx < bp.Count; bp_idx++)
             {
-                for (int i = 0; i < LoD; i++)
-                {
-                    ArcPoints.Add(GetPointOnCircle(center, radius, startAngle + pointangles[ang_idx - 1] + ((pointangles[ang_idx] - pointangles[ang_idx - 1]) / ((double)LoD - 1) * i)));
-                    if (i + 1 == LoD)
-                    {
-                        ArcPoints.Add(secondpoint[ang_idx]);
-                        ArcPoints.Add(GetPointOnCircle(center, radius, startAngle + pointangles[ang_idx - 1] + ((pointangles[ang_idx] - pointangles[ang_idx - 1]) / ((double)LoD - 1) * i)));
-                    }
-                }
+                double p1 = bp[bp_idx - 1];
+                double p2 = bp[bp_idx] - bp[bp_idx - 1];
+                for (int i = 0; i < LoD; i++) ArcPoints.Add(GetPointOnCircle(center, radius2, p1 + p2 * (i / LoD)));
+                ArcPoints.Add(GetPointOnCircle(center, radius2, bp[bp_idx]));
+                ArcPoints.Add(GetPointOnCircle(center, radius1, bp[bp_idx]));
+                ArcPoints.Add(GetPointOnCircle(center, radius2, bp[bp_idx]));
             }
+            
             Polyline pl = new Polyline
             {
                 StrokeThickness = weight,
