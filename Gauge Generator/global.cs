@@ -45,6 +45,7 @@ namespace Gauge_Generator
         {
             if (obj is Range_Item) return LayersType.Range;
             if (obj is LinearScale_Item) return LayersType.LinearScale;
+            if (obj is NumericScale_Item) return LayersType.NumericScale;
             //TODO other types
             return LayersType.Range;
         }
@@ -57,6 +58,8 @@ namespace Gauge_Generator
                     return typeof(Range_Item);
                 case LayersType.LinearScale:
                     return typeof(LinearScale_Item);
+                case LayersType.NumericScale:
+                    return typeof(NumericScale_Item);
                 //TODO other types
                 default:
                     return typeof(Range_Item);
@@ -261,6 +264,29 @@ namespace Gauge_Generator
             };
             obj.Children.Add(l);
             return l;
+        }
+
+        public static void DrawString(ref Canvas obj, Point p, double size, string font, string text, MEDIA.Color color, double angle)
+        {
+            TextBlock tb = new TextBlock
+            {
+                Text = text,
+                FontSize = size,
+                FontFamily = new MEDIA.FontFamily(font),
+                Foreground = new MEDIA.SolidColorBrush(color)
+            };
+            var formattedText = new MEDIA.FormattedText(
+                tb.Text,
+                System.Globalization.CultureInfo.CurrentCulture,
+                System.Windows.FlowDirection.LeftToRight,
+                new MEDIA.Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight, tb.FontStretch),
+                tb.FontSize,
+                tb.Foreground,
+                new MEDIA.NumberSubstitution(),
+                MEDIA.TextFormattingMode.Display);
+            tb.Margin = new System.Windows.Thickness(p.X - formattedText.Width / 2, p.Y - formattedText.Height / 2, 0, 0);
+            if (angle != 0) tb.RenderTransform = new MEDIA.RotateTransform(angle + 90, formattedText.Width / 2, formattedText.Height / 2);
+            obj.Children.Add(tb);
         }
 
         #endregion

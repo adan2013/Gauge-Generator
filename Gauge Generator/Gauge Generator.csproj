@@ -78,6 +78,7 @@
     <Compile Include="NewItemWindow.xaml.cs">
       <DependentUpon>NewItemWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NumericScale_Item.cs" />
     <Compile Include="Project_Settings_Page.xaml.cs">
       <DependentUpon>Project_Settings_Page.xaml</DependentUpon>
     </Compile>
