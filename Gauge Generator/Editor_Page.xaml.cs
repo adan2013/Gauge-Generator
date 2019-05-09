@@ -38,16 +38,19 @@ namespace Gauge_Generator
             BringToFront.IsChecked = Global.project.BringToFront;
             HideOverlay.IsChecked = Global.project.HideOverlay;
             ignorecheckboxs = false;
-            if (Global.EditingLayer is Range_Item)
-            {
-                HideOverlay.Visibility = Visibility.Collapsed;
-            }
-            else
+            if (Global.EditingLayer is Range_Item) HideOverlay.Visibility = Visibility.Collapsed;
+            if (!(Global.EditingLayer is Range_Item) || !CheckRangeConnection())
             {
                 Grid.SetRowSpan(prop_grid, 2);
                 hiddenMSG.Visibility = Visibility.Collapsed;
             }
             Global.RefreshScreen();
+        }
+
+        private bool CheckRangeConnection()
+        {
+            foreach(Layer i in Global.project.layers) if (i.RangeSource == Global.EditingLayer) return true;
+            return false;
         }
 
         private void Close_btn(object sender, RoutedEventArgs e)
