@@ -57,6 +57,11 @@ namespace Gauge_Generator
         virtual public void DrawOverlay(ref Canvas can, bool HQmode, int size, double alpha) { }
 
         //VALIDATION
+        protected double TranslateValue(double value)
+        {
+            return Math.Round(value * 100, 1);
+        }
+
         protected int ValidateInt(int val, int min, int max)
         {
             if (val < min) return min;
@@ -64,8 +69,9 @@ namespace Gauge_Generator
             return val;
         }
 
-        protected double ValidateDouble(double val, double min, double max)
+        protected double ValidateDouble(double val, double min, double max, bool translatevalue = true)
         {
+            if (translatevalue) val = val / 100;
             if (val < min) return min;
             if (val > max) return max;
             return val;

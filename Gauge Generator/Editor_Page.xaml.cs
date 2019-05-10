@@ -70,7 +70,7 @@ namespace Gauge_Generator
 
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Do you want to restore default properties for this layer?", "Reset", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Do you want to restore default properties in this layer?", "Reset", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) == MessageBoxResult.Yes)
             {
                 Global.EditingLayer.LoadDefaultValues();
                 prop_grid.SelectedObject = null;

@@ -14,35 +14,35 @@ namespace Gauge_Generator
     public class Range_Item : Layer
     {
         //PRIVATE VARIABLES
-        double _circlecenter_x;
-        double _circlecenter_y;
-        double _circleradius;
-        int _anglestart;
-        int _openingangle;
-        int _rangestartvalue;
-        int _rangeendvalue;
-        double _clockhandsoffset_x;
-        double _clockhandsoffset_y;
-        double _clockhandspointsize;
-        MEDIA.Color _clockhandspointcolor;
+        public double _circlecenter_x;
+        public double _circlecenter_y;
+        public double _circleradius;
+        public int _anglestart;
+        public int _openingangle;
+        public int _rangestartvalue;
+        public int _rangeendvalue;
+        public double _clockhandsoffset_x;
+        public double _clockhandsoffset_y;
+        public double _clockhandspointsize;
+        public MEDIA.Color _clockhandspointcolor;
 
         //PROPERTIES
         [Description("X coordinate of the center of circle"), Category("Circle position")]
         public double CircleCenter_X
         {
-            get { return _circlecenter_x; }
+            get { return TranslateValue(_circlecenter_x); }
             set { _circlecenter_x = ValidateDouble(value, -1, 1); }
         }
         [Description("Y coordinate of the center of circle"), Category("Circle position")]
         public double CircleCenter_Y
         {
-            get { return _circlecenter_y; }
+            get { return TranslateValue(_circlecenter_y); }
             set { _circlecenter_y = ValidateDouble(value, -1, 1); }
         }
         [Description("Radius of the clock face"), Category("Circle position")]
         public double CircleRadius
         {
-            get { return _circleradius; }
+            get { return TranslateValue(_circleradius); }
             set { _circleradius = ValidateDouble(value, Global.MIN_DOUBLE_VALUE, 1); }
         }
         [Description("Angle of the start of scale range"), Category("Range")]
@@ -80,19 +80,19 @@ namespace Gauge_Generator
         [Description("X coordinate of clock hands"), Category("Clock hands")]
         public double ClockHandsOffset_X
         {
-            get { return _clockhandsoffset_x; }
+            get { return TranslateValue(_clockhandsoffset_x); }
             set { _clockhandsoffset_x = ValidateDouble(value, -Global.MAX_DOUBLE_VALUE, Global.MAX_DOUBLE_VALUE); }
         }
         [Description("Y coordinate of clock hands"), Category("Clock hands")]
         public double ClockHandsOffset_Y
         {
-            get { return _clockhandsoffset_y; }
+            get { return TranslateValue(_clockhandsoffset_y); }
             set { _clockhandsoffset_y = ValidateDouble(value, -Global.MAX_DOUBLE_VALUE, Global.MAX_DOUBLE_VALUE); }
         }
         [Description("Dot size for clock hands"), Category("Clock hands")]
         public double ClockHandsPointSize
         {
-            get { return _clockhandspointsize; }
+            get { return TranslateValue(_clockhandspointsize); }
             set { _clockhandspointsize = ValidateDouble(value, 0.01, 0.05); }
         }
         [Description("Color of dot for clock hands"), Category("Clock hands")]

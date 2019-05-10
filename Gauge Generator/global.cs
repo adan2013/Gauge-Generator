@@ -37,8 +37,8 @@ namespace Gauge_Generator
             Range = 0,
             LinearScale,
             NumericScale,
-            Arc,
             Label,
+            Arc,
             ClockHand
         }
         public static LayersType GetLayerType(Layer obj)
@@ -69,32 +69,32 @@ namespace Gauge_Generator
             "Range",
             "Linear Scale",
             "Numeric Scale",
-            "Arc",
             "Label",
+            "Arc",
             "Clock Hand"
         };
         public static string[] LayerDescriptions = {
             "Basic element defining size and range of values. It is required by other elements (layers)",
             "Element generates a visible clock scale consisting of lines",
             "Element generates a visible clock scale consisting of numerical values",
-            "Element generates a colorful arc. For example, to mark a dangerous range of values",
             "Element generates a custom text label",
+            "Element generates a colorful arc. For example, to mark a dangerous range of values",
             "Element generates a clock hand"
         };
         public static string[] LayerBigImages = {
             "pack://application:,,,/Images/range_item_big.png",
             "pack://application:,,,/Images/linear_scale_big.png",
             "pack://application:,,,/Images/numeric_scale_big.png",
-            "pack://application:,,,/Images/arc_big.png",
             "pack://application:,,,/Images/label_big.png",
+            "pack://application:,,,/Images/arc_big.png",
             "pack://application:,,,/Images/clock_hand_big.png"
         };
         public static string[] LayerSmallImages = {
             "pack://application:,,,/Images/range_item.png",
             "pack://application:,,,/Images/linear_scale.png",
             "pack://application:,,,/Images/numeric_scale.png",
-            "pack://application:,,,/Images/arc.png",
             "pack://application:,,,/Images/label.png",
+            "pack://application:,,,/Images/arc.png",
             "pack://application:,,,/Images/clock_hand.png"
         };
 

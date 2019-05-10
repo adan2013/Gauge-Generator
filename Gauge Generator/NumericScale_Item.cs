@@ -17,16 +17,16 @@ namespace Gauge_Generator
         const int DEFAULT_STEP_PARTS = 10;
 
         //PRIVATE VARIABLES
-        int _rangemin;
-        int _rangemax;
-        int _rangestep;
-        double _scalemultiplier;
-        int _rounding;
-        double _distancefromcenter;
-        double _fontsize;
-        string _fontfamily;
-        MEDIA.Color _fontcolor;
-        bool _rotated;
+        public int _rangemin;
+        public int _rangemax;
+        public int _rangestep;
+        public double _scalemultiplier;
+        public int _rounding;
+        public double _distancefromcenter;
+        public double _fontsize;
+        public string _fontfamily;
+        public MEDIA.Color _fontcolor;
+        public bool _rotated;
 
         //PROPERTIES
         [Description("Initial value of the visible scale"), Category("Range")]
@@ -63,7 +63,7 @@ namespace Gauge_Generator
         public double ScaleMultiplier
         {
             get { return _scalemultiplier; }
-            set { _scalemultiplier = ValidateDouble(value, 0.1, 10); }
+            set { _scalemultiplier = ValidateDouble(value, 0.1, 10, false); }
         }
         [Description("Number of decimal places"), Category("Range")]
         public int Rounding
@@ -74,7 +74,7 @@ namespace Gauge_Generator
         [Description("Distance between center of labels and center of the clock face"), Category("Position")]
         public double DistanceFromCenter
         {
-            get { return _distancefromcenter; }
+            get { return TranslateValue(_distancefromcenter); }
             set { _distancefromcenter = ValidateDouble(value, Global.MIN_DOUBLE_VALUE, 1); }
         }
         [Description("Rotate text around the center"), Category("Position")]
@@ -92,7 +92,7 @@ namespace Gauge_Generator
         [Description("Font size"), Category("Font")]
         public double FontSize
         {
-            get { return _fontsize; }
+            get { return TranslateValue(_fontsize); }
             set { _fontsize = ValidateDouble(value, 0.05, 0.2); }
         }
         [Description("Font family"), Category("Font")]
@@ -126,8 +126,8 @@ namespace Gauge_Generator
         public override void SetRangeSource(Range_Item obj)
         {
             base.SetRangeSource(obj);
-            _rangemin = obj.RangeStartValue;
-            _rangemax = obj.RangeEndValue;
+            _rangemin = obj._rangestartvalue;
+            _rangemax = obj._rangeendvalue;
             RangeStep = (_rangemax - _rangemin) / DEFAULT_STEP_PARTS;
         }
 
@@ -135,8 +135,8 @@ namespace Gauge_Generator
         {
             if (RangeSource != null)
             {
-                _rangemin = ValidateInt(_rangemin, RangeSource.RangeStartValue, RangeMax);
-                _rangemax = ValidateInt(_rangemax, RangeMin, RangeSource.RangeEndValue);
+                _rangemin = ValidateInt(_rangemin, RangeSource._rangestartvalue, _rangemax);
+                _rangemax = ValidateInt(_rangemax, _rangemin, RangeSource._rangeendvalue);
             }
             base.ValidateWithSource();
         }
@@ -144,22 +144,22 @@ namespace Gauge_Generator
         public override void DrawLayer(ref Canvas can, bool HQmode, int size)
         {
             int half_size = size / 2;
-            if (RangeSource.OpeningAngle != 0 && RangeMax - RangeMin != 0)
+            if (RangeSource._openingangle != 0 && _rangemax - _rangemin != 0)
             {
-                Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource.CircleCenter_X, RangeSource.CircleCenter_Y);
-                double circle = DistanceFromCenter * RangeSource.CircleRadius * half_size;
-                int fsize = (int)(FontSize * half_size);
-                for (int i = RangeMin; i <= RangeMax; i += RangeStep)
+                Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource._circlecenter_x, RangeSource._circlecenter_y);
+                double circle = _distancefromcenter * RangeSource._circleradius * half_size;
+                int fsize = (int)(_fontsize * half_size);
+                for (int i = _rangemin; i <= _rangemax; i += _rangestep)
                 {
-                    double ang = i / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart;
-                    string s = string.Format(GetStringFormat(), i * ScaleMultiplier);
+                    double ang = i / (double)RangeSource._rangeendvalue * RangeSource._openingangle + RangeSource._anglestart;
+                    string s = string.Format(GetStringFormat(), i * _scalemultiplier);
                     Global.DrawString(ref can,
                                       Global.GetPointOnCircle(c, circle, ang),
                                       fsize,
-                                      FontFamily,
+                                      _fontfamily,
                                       s,
-                                      FontColor,
-                                      Rotated ? ang + 90 : 0);
+                                      _fontcolor,
+                                      _rotated ? ang + 90 : 0);
                 }
             }
             base.DrawLayer(ref can, HQmode, size);
@@ -168,13 +168,13 @@ namespace Gauge_Generator
         public override void DrawOverlay(ref Canvas can, bool HQmode, int size, double alpha)
         {
             int half_size = size / 2;
-            Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource.CircleCenter_X, RangeSource.CircleCenter_Y);
+            Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource._circlecenter_x, RangeSource._circlecenter_y);
             Shape s = Global.DrawArc(ref can,
                                      false,
                                      c,
-                                     (int)Math.Round(RangeMin / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart),
-                                     (int)Math.Round((RangeMax - RangeMin) / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle),
-                                     (int)Math.Round(DistanceFromCenter * RangeSource.CircleRadius * half_size),
+                                     (int)Math.Round(_rangemin / (double)RangeSource._rangeendvalue * RangeSource._openingangle + RangeSource._anglestart),
+                                     (int)Math.Round((_rangemax - _rangemin) / (double)RangeSource._rangeendvalue * RangeSource._openingangle),
+                                     (int)Math.Round(_distancefromcenter * RangeSource._circleradius * half_size),
                                      10,
                                      Global.Overlay1);
             Global.AddOpacityAnimation(s);
@@ -183,7 +183,7 @@ namespace Gauge_Generator
 
         private string GetStringFormat()
         {
-            switch(Rounding)
+            switch(_rounding)
             {
                 case 0: return "{0:0}";
                 case 1: return "{0:0.0}";

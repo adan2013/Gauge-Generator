@@ -17,14 +17,14 @@ namespace Gauge_Generator
         const int DEFAULT_STEP_PARTS = 10;
 
         //PRIVATE VARIABLES
-        int _rangemin;
-        int _rangemax;
-        int _rangestep;
-        double _linethickness;
-        double _distancefromcenter;
-        double _linelength;
-        bool _drawarconedge;
-        MEDIA.Color _linecolor;
+        public int _rangemin;
+        public int _rangemax;
+        public int _rangestep;
+        public double _linethickness;
+        public double _distancefromcenter;
+        public double _linelength;
+        public bool _drawarconedge;
+        public MEDIA.Color _linecolor;
 
         //PROPERTIES
         [Description("Initial value of the visible scale"), Category("Range")]
@@ -66,19 +66,19 @@ namespace Gauge_Generator
         [Description("Line thickness"), Category("Lines")]
         public double LineThickness
         {
-            get { return _linethickness; }
+            get { return TranslateValue(_linethickness); }
             set { _linethickness = ValidateDouble(value, 0.01, 0.05); }
         }
         [Description("Distance between the end of lines and center of the clock face"), Category("Lines")]
         public double DistanceFromCenter
         {
-            get { return _distancefromcenter; }
+            get { return TranslateValue(_distancefromcenter); }
             set { _distancefromcenter = ValidateDouble(value, Global.MIN_DOUBLE_VALUE, 0.95); }
         }
         [Description("Line length"), Category("Lines")]
         public double LineLength
         {
-            get { return _linelength; }
+            get { return TranslateValue(_linelength); }
             set { _linelength = ValidateDouble(value, 0.02, 1); }
         }
         [Description("Line color"), Category("Lines")]
@@ -111,17 +111,17 @@ namespace Gauge_Generator
         public override void SetRangeSource(Range_Item obj)
         {
             base.SetRangeSource(obj);
-            _rangemin = obj.RangeStartValue;
-            _rangemax = obj.RangeEndValue;
-            _rangestep = (_rangemax - _rangemin) / DEFAULT_STEP_PARTS;
+            _rangemin = obj._rangestartvalue;
+            _rangemax = obj._rangeendvalue;
+            RangeStep = (_rangemax - _rangemin) / DEFAULT_STEP_PARTS;
         }
 
         public override void ValidateWithSource()
         {
             if (RangeSource != null)
             {
-                _rangemin = ValidateInt(_rangemin, RangeSource.RangeStartValue, RangeMax);
-                _rangemax = ValidateInt(_rangemax, RangeMin, RangeSource.RangeEndValue);
+                _rangemin = ValidateInt(_rangemin, RangeSource._rangestartvalue, _rangemax);
+                _rangemax = ValidateInt(_rangemax,_rangemin, RangeSource._rangeendvalue);
             }
             base.ValidateWithSource();
         }
@@ -129,38 +129,38 @@ namespace Gauge_Generator
         public override void DrawLayer(ref Canvas can, bool HQmode, int size)
         {
             int half_size = size / 2;
-            if (RangeSource.OpeningAngle != 0 && RangeMax - RangeMin != 0)
+            if (RangeSource._openingangle != 0 && _rangemax - _rangemin != 0)
             {
-                Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource.CircleCenter_X, RangeSource.CircleCenter_Y);
-                double circle1 = Math.Max(0.0, DistanceFromCenter - LineLength) * RangeSource.CircleRadius * half_size;
-                double circle2 = DistanceFromCenter * RangeSource.CircleRadius * half_size;
-                double weight = LineThickness * half_size;
-                if (DrawArcOnEdge)
+                Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource._circlecenter_x, RangeSource._circlecenter_y);
+                double circle1 = Math.Max(0.0, _distancefromcenter - _linelength) * RangeSource._circleradius * half_size;
+                double circle2 = _distancefromcenter * RangeSource._circleradius * half_size;
+                double weight = _linethickness * half_size;
+                if (_drawarconedge)
                 {
                     Global.DrawArcWithLines(ref can,
                                             HQmode,
                                             c,
-                                            (int)Math.Round(RangeMin / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart),
-                                            (int)Math.Round((RangeMax - RangeMin) / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle),
+                                            (int)Math.Round(_rangemin / (double)RangeSource._rangeendvalue * RangeSource._openingangle + RangeSource._anglestart),
+                                            (int)Math.Round((_rangemax - _rangemin) / (double)RangeSource._rangeendvalue * RangeSource._openingangle),
                                             Math.Round(circle1),
                                             Math.Round(circle2),
                                             weight,
-                                            Color.FromArgb(LineColor.A, LineColor.R, LineColor.G, LineColor.B),
-                                            RangeMin,
-                                            RangeMax,
-                                            RangeStep
+                                            Color.FromArgb(_linecolor.A, _linecolor.R, _linecolor.G, _linecolor.B),
+                                            _rangemin,
+                                            _rangemax,
+                                            _rangestep
                                             );
                 }
                 else
                 {
-                    for (int i = RangeMin; i <= RangeMax; i += RangeStep)
+                    for (int i = _rangemin; i <= _rangemax; i += _rangestep)
                     {
-                        double ang = i / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart;
+                        double ang = i / (double)RangeSource._rangeendvalue * RangeSource._openingangle + RangeSource._anglestart;
                         Global.DrawLine(ref can,
                                         Global.GetPointOnCircle(c, circle1, ang),
                                         Global.GetPointOnCircle(c, circle2, ang),
                                         weight,
-                                        Color.FromArgb(LineColor.A, LineColor.R, LineColor.G, LineColor.B));
+                                        Color.FromArgb(_linecolor.A, _linecolor.R, _linecolor.G, _linecolor.B));
                     }
                 }
             }
@@ -170,13 +170,13 @@ namespace Gauge_Generator
         public override void DrawOverlay(ref Canvas can, bool HQmode, int size, double alpha)
         {
             int half_size = size / 2;
-            Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource.CircleCenter_X, RangeSource.CircleCenter_Y);
+            Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource._circlecenter_x, RangeSource._circlecenter_y);
             Shape s = Global.DrawCirclePart(ref can,
                                             false,
                                             c,
-                                            (int)Math.Round(RangeMin / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart),
-                                            (int)Math.Round((RangeMax - RangeMin) / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle),
-                                            (int)Math.Round(DistanceFromCenter * RangeSource.CircleRadius * half_size),
+                                            (int)Math.Round(_rangemin / (double)RangeSource._rangeendvalue * RangeSource._openingangle + RangeSource._anglestart),
+                                            (int)Math.Round((_rangemax - _rangemin) / (double)RangeSource._rangeendvalue * RangeSource._openingangle),
+                                            (int)Math.Round(_distancefromcenter * RangeSource._circleradius * half_size),
                                             Global.Overlay1);
             Global.AddOpacityAnimation(s);
             base.DrawOverlay(ref can, HQmode, size, alpha);
