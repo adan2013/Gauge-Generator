@@ -165,7 +165,7 @@ namespace Gauge_Generator
             }
         }
         
-        public static Shape DrawArcWithLines(ref Canvas obj, bool HQmode, Point center, int startAngle, int openingAngle, int radius1, int radius2, int weight, Color color, int min, int max, int step)
+        public static Shape DrawArcWithLines(ref Canvas obj, bool HQmode, Point center, int startAngle, int openingAngle, double radius1, double radius2, double weight, Color color, int min, int max, int step)
         {
             if (step == 0 || min == max) new Polyline();
 
@@ -253,7 +253,7 @@ namespace Gauge_Generator
             return el;
         }
 
-        public static Shape DrawLine(ref Canvas obj, Point p1, Point p2, int weight, Color color)
+        public static Shape DrawLine(ref Canvas obj, Point p1, Point p2, double weight, Color color)
         {
             Line l = new Line
             {
@@ -285,7 +285,7 @@ namespace Gauge_Generator
                 new MEDIA.NumberSubstitution(),
                 MEDIA.TextFormattingMode.Display);
             tb.Margin = new System.Windows.Thickness(p.X - formattedText.Width / 2, p.Y - formattedText.Height / 2, 0, 0);
-            if (angle != 0) tb.RenderTransform = new MEDIA.RotateTransform(angle + 90, formattedText.Width / 2, formattedText.Height / 2);
+            if (angle != 0) tb.RenderTransform = new MEDIA.RotateTransform(angle, formattedText.Width / 2, formattedText.Height / 2);
             obj.Children.Add(tb);
         }
 
@@ -324,7 +324,7 @@ namespace Gauge_Generator
             return new Point((int)Math.Round(input.X + X_Offset * range), (int)Math.Round(input.Y + Y_Offset * range));
         }
 
-        public static int GetLoD(bool HQmode, int radius, int angle)
+        public static int GetLoD(bool HQmode, double radius, int angle)
         {
             int i = (int)(Math.Abs(angle) / 180.0 * Math.PI * radius / (HQmode ? ARC_LOD_HQ : ARC_LOD_LQ));
             i++;

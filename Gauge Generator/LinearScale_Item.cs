@@ -79,7 +79,7 @@ namespace Gauge_Generator
         public double LineLength
         {
             get { return _linelength; }
-            set { _linelength = ValidateDouble(value, 0.05, 1); }
+            set { _linelength = ValidateDouble(value, 0.02, 1); }
         }
         [Description("Line color"), Category("Lines")]
         public MEDIA.Color LineColor
@@ -134,7 +134,7 @@ namespace Gauge_Generator
                 Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource.CircleCenter_X, RangeSource.CircleCenter_Y);
                 double circle1 = Math.Max(0.0, DistanceFromCenter - LineLength) * RangeSource.CircleRadius * half_size;
                 double circle2 = DistanceFromCenter * RangeSource.CircleRadius * half_size;
-                int weight = (int)(LineThickness * half_size);
+                double weight = LineThickness * half_size;
                 if (DrawArcOnEdge)
                 {
                     Global.DrawArcWithLines(ref can,
@@ -142,8 +142,8 @@ namespace Gauge_Generator
                                             c,
                                             (int)Math.Round(RangeMin / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle + RangeSource.AngleStart),
                                             (int)Math.Round((RangeMax - RangeMin) / (double)RangeSource.RangeEndValue * RangeSource.OpeningAngle),
-                                            (int)Math.Round(circle1),
-                                            (int)Math.Round(circle2),
+                                            Math.Round(circle1),
+                                            Math.Round(circle2),
                                             weight,
                                             Color.FromArgb(LineColor.A, LineColor.R, LineColor.G, LineColor.B),
                                             RangeMin,
