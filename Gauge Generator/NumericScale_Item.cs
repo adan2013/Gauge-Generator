@@ -99,7 +99,7 @@ namespace Gauge_Generator
         public string FontFamily
         {
             get { return _fontfamily; }
-            set { _fontfamily = ValidateString(value, 30); }
+            set { _fontfamily = ValidateFontFamily(value); }
         }
 
         public NumericScale_Item()
@@ -118,7 +118,7 @@ namespace Gauge_Generator
             _distancefromcenter = 0.85;
             _fontcolor = MEDIA.Colors.White;
             _fontsize = 0.1;
-            _fontfamily = "Arial";
+            _fontfamily = Global.DEFAULT_FONT;
             ValidateWithSource();
             base.LoadDefaultValues();
         }

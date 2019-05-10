@@ -12,7 +12,7 @@ namespace Gauge_Generator
     public class Layer
     {
         //PRIVATE VARIABLES
-        string _label = "New Layer";
+        public string _label = "New Layer";
 
         //PROPERTIES
         [Description("Layer name"), Category("Basics")]
@@ -88,6 +88,16 @@ namespace Gauge_Generator
         {
             if (removeAlpha) c.A = 255;
             return c;
+        }
+
+        protected string ValidateFontFamily(string val)
+        {
+            try
+            {
+                FontFamily test = new FontFamily(val);
+                if (test.Name == val) return val;
+            } catch { }
+            return Global.DEFAULT_FONT;
         }
     }
 }

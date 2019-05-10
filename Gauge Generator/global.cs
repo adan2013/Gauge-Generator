@@ -12,6 +12,7 @@ namespace Gauge_Generator
 {
     public static class Global
     {
+        public const string DEFAULT_FONT = "Arial";
         public const double MIN_DOUBLE_VALUE = 0.2;
         public const double MAX_DOUBLE_VALUE = 0.8;
         public const int MIN_RANGE_VALUE = -500;
