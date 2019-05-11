@@ -21,7 +21,7 @@ namespace Gauge_Generator
             get { return _label; }
             set
             {
-                _label = ValidateString(value, 20);
+                _label = ValidateString(value, 25);
             }
         }
 
@@ -51,6 +51,12 @@ namespace Gauge_Generator
         virtual public void LoadDefaultValues() { }
 
         virtual public void ValidateWithSource() { }
+        
+        virtual public void CloneCreator(Layer original)
+        {
+            Label = original.Label + "_Clone";
+            RangeSource = original.RangeSource;
+        }
 
         virtual public void DrawLayer(ref Canvas can, bool HQmode, int size) { }
 

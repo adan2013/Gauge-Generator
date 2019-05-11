@@ -95,12 +95,17 @@ namespace Gauge_Generator
             }
         }
 
-        private void Edit_layer_btn(object sender, RoutedEventArgs e)
+        private void Clone_layer_btn(object sender, RoutedEventArgs e)
         {
             if (layers_view.SelectedIndex >= 0)
             {
-                Global.EditingLayer = Global.project.layers[layers_view.SelectedIndex];
-                Global.SetSidebar(Global.SidebarPages.Editor);
+                int i = layers_view.SelectedIndex;
+                Layer l = Global.project.layers[i];
+                Global.LayersType t = Global.GetLayerType(l);
+                Layer newItem = (Layer)Activator.CreateInstance(Global.GetLayerObject(t));
+                newItem.CloneCreator(l);
+                Global.project.layers.Insert(i, newItem);
+                Reload_Layers_List(i);
             }
         }
 
@@ -132,14 +137,15 @@ namespace Gauge_Generator
         {
             bool r = !(layers_view.SelectedIndex < 0);
             del_btn.IsEnabled = r;
-            edit_btn.IsEnabled = r;
+            clone_btn.IsEnabled = r;
             up_btn.IsEnabled = r;
             dn_btn.IsEnabled = r;
         }
 
         private void Layers_view_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Edit_layer_btn(edit_btn, new RoutedEventArgs());
+            Global.EditingLayer = Global.project.layers[layers_view.SelectedIndex];
+            Global.SetSidebar(Global.SidebarPages.Editor);
         }
 
         private void Open_proj_settings(object sender, RoutedEventArgs e)

@@ -124,6 +124,23 @@ namespace Gauge_Generator
             base.LoadDefaultValues();
         }
 
+        public override void CloneCreator(Layer original)
+        {
+            base.CloneCreator(original);
+            Range_Item o = (Range_Item)original;
+            _circlecenter_x = o._circlecenter_x;
+            _circlecenter_y = o._circlecenter_y;
+            _circleradius = o._circleradius;
+            _anglestart = o._anglestart;
+            _openingangle = o._openingangle;
+            _rangestartvalue = o._rangestartvalue;
+            _rangeendvalue = o._rangeendvalue;
+            _clockhandsoffset_x = o._clockhandsoffset_x;
+            _clockhandsoffset_y = o._clockhandsoffset_y;
+            _clockhandspointsize = o._clockhandspointsize;
+            _clockhandspointcolor = o._clockhandspointcolor;
+        }
+
         public override void DrawLayer(ref Canvas can, bool HQmode, int size)
         {
             int half_size = size / 2;

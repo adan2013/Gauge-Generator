@@ -123,6 +123,21 @@ namespace Gauge_Generator
             base.LoadDefaultValues();
         }
 
+        public override void CloneCreator(Layer original)
+        {
+            base.CloneCreator(original);
+            NumericScale_Item o = (NumericScale_Item)original;
+            _rangemin = o._rangemin;
+            _rangemax = o._rangemax;
+            _rangestep = o._rangestep;
+            _scalemultiplier = o._scalemultiplier;
+            _rounding = o._rounding;
+            _distancefromcenter = o._distancefromcenter;
+            _fontcolor = o._fontcolor;
+            _fontsize = o._fontsize;
+            _fontfamily = o._fontfamily;
+        }
+
         public override void SetRangeSource(Range_Item obj)
         {
             base.SetRangeSource(obj);

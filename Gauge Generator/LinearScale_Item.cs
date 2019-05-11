@@ -108,6 +108,20 @@ namespace Gauge_Generator
             base.LoadDefaultValues();
         }
 
+        public override void CloneCreator(Layer original)
+        {
+            base.CloneCreator(original);
+            LinearScale_Item o = (LinearScale_Item)original;
+            _rangemin = o._rangemin;
+            _rangemax = o._rangemax;
+            _rangestep = o._rangestep;
+            _linethickness = o._linethickness;
+            _distancefromcenter = o._distancefromcenter;
+            _linelength = o._linelength;
+            _drawarconedge = o._drawarconedge;
+            _linecolor = o._linecolor;
+        }
+
         public override void SetRangeSource(Range_Item obj)
         {
             base.SetRangeSource(obj);
