@@ -74,6 +74,7 @@
     <Compile Include="Editor_Page.xaml.cs">
       <DependentUpon>Editor_Page.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Label_Item.cs" />
     <Compile Include="LinearScale_Item.cs" />
     <Compile Include="NewItemWindow.xaml.cs">
       <DependentUpon>NewItemWindow.xaml</DependentUpon>

@@ -25,6 +25,9 @@ namespace Gauge_Generator
         public double _distancefromcenter;
         public double _fontsize;
         public string _fontfamily;
+        public bool _bold;
+        public bool _italic;
+        public bool _underline;
         public MEDIA.Color _fontcolor;
         public bool _rotated;
 
@@ -101,6 +104,24 @@ namespace Gauge_Generator
             get { return _fontfamily; }
             set { _fontfamily = ValidateFontFamily(value); }
         }
+        [Description("Font modifier: bold"), Category("Font")]
+        public bool Bold
+        {
+            get { return _bold; }
+            set { _bold = value; }
+        }
+        [Description("Font modifier: italic"), Category("Font")]
+        public bool Italic
+        {
+            get { return _italic; }
+            set { _italic = value; }
+        }
+        [Description("Font modifier: underline"), Category("Font")]
+        public bool Underline
+        {
+            get { return _underline; }
+            set { _underline = value; }
+        }
 
         public NumericScale_Item()
         {
@@ -119,6 +140,9 @@ namespace Gauge_Generator
             _fontcolor = MEDIA.Colors.White;
             _fontsize = 0.1;
             _fontfamily = Global.DEFAULT_FONT;
+            _bold = false;
+            _italic = false;
+            _underline = false;
             ValidateWithSource();
             base.LoadDefaultValues();
         }
@@ -136,6 +160,9 @@ namespace Gauge_Generator
             _fontcolor = o._fontcolor;
             _fontsize = o._fontsize;
             _fontfamily = o._fontfamily;
+            _bold = o._bold;
+            _italic = o._italic;
+            _underline = o._underline;
         }
 
         public override void SetRangeSource(Range_Item obj)
@@ -172,6 +199,9 @@ namespace Gauge_Generator
                                       Global.GetPointOnCircle(c, circle, ang),
                                       fsize,
                                       _fontfamily,
+                                      _bold,
+                                      _italic,
+                                      _underline,
                                       s,
                                       _fontcolor,
                                       _rotated ? ang + 90 : 0);

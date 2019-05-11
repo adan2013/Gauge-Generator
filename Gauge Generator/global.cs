@@ -47,6 +47,7 @@ namespace Gauge_Generator
             if (obj is Range_Item) return LayersType.Range;
             if (obj is LinearScale_Item) return LayersType.LinearScale;
             if (obj is NumericScale_Item) return LayersType.NumericScale;
+            if (obj is Label_Item) return LayersType.Label;
             //TODO other types
             return LayersType.Range;
         }
@@ -61,6 +62,8 @@ namespace Gauge_Generator
                     return typeof(LinearScale_Item);
                 case LayersType.NumericScale:
                     return typeof(NumericScale_Item);
+                case LayersType.Label:
+                    return typeof(Label_Item);
                 //TODO other types
                 default:
                     return typeof(Range_Item);
@@ -267,7 +270,7 @@ namespace Gauge_Generator
             return l;
         }
 
-        public static void DrawString(ref Canvas obj, Point p, double size, string font, string text, MEDIA.Color color, double angle)
+        public static void DrawString(ref Canvas obj, Point p, double size, string font, bool b, bool i, bool u, string text, MEDIA.Color color, double angle)
         {
             TextBlock tb = new TextBlock
             {
@@ -276,6 +279,9 @@ namespace Gauge_Generator
                 FontFamily = new MEDIA.FontFamily(font),
                 Foreground = new MEDIA.SolidColorBrush(color)
             };
+            if (b) tb.FontWeight = System.Windows.FontWeights.Bold;
+            if (i) tb.FontStyle = System.Windows.FontStyles.Italic;
+            if (u) tb.TextDecorations = System.Windows.TextDecorations.Underline;
             var formattedText = new MEDIA.FormattedText(
                 tb.Text,
                 System.Globalization.CultureInfo.CurrentCulture,
