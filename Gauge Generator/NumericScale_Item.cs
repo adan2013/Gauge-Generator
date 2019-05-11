@@ -193,7 +193,7 @@ namespace Gauge_Generator
                 int fsize = (int)(_fontsize * half_size);
                 for (int i = _rangemin; i <= _rangemax; i += _rangestep)
                 {
-                    double ang = i / (double)RangeSource._rangeendvalue * RangeSource._openingangle + RangeSource._anglestart;
+                    double ang = (i - RangeSource._rangestartvalue) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle + RangeSource._anglestart;
                     string s = string.Format(GetStringFormat(), i * _scalemultiplier);
                     Global.DrawString(ref can,
                                       Global.GetPointOnCircle(c, circle, ang),
@@ -217,8 +217,8 @@ namespace Gauge_Generator
             Shape s = Global.DrawArc(ref can,
                                      false,
                                      c,
-                                     (int)Math.Round(_rangemin / (double)RangeSource._rangeendvalue * RangeSource._openingangle + RangeSource._anglestart),
-                                     (int)Math.Round((_rangemax - _rangemin) / (double)RangeSource._rangeendvalue * RangeSource._openingangle),
+                                     (int)Math.Round((_rangemin - RangeSource._rangestartvalue) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle + RangeSource._anglestart),
+                                     (int)Math.Round((_rangemax - _rangemin) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle),
                                      (int)Math.Round(_distancefromcenter * RangeSource._circleradius * half_size),
                                      5,
                                      Global.Overlay1);

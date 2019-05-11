@@ -154,8 +154,8 @@ namespace Gauge_Generator
                     Global.DrawArcWithLines(ref can,
                                             HQmode,
                                             c,
-                                            (int)Math.Round(_rangemin / (double)RangeSource._rangeendvalue * RangeSource._openingangle + RangeSource._anglestart),
-                                            (int)Math.Round((_rangemax - _rangemin) / (double)RangeSource._rangeendvalue * RangeSource._openingangle),
+                                            (int)Math.Round((_rangemin - RangeSource._rangestartvalue) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle + RangeSource._anglestart),
+                                            (int)Math.Round((_rangemax - _rangemin) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle),
                                             Math.Round(circle1),
                                             Math.Round(circle2),
                                             weight,
@@ -169,7 +169,7 @@ namespace Gauge_Generator
                 {
                     for (int i = _rangemin; i <= _rangemax; i += _rangestep)
                     {
-                        double ang = i / (double)RangeSource._rangeendvalue * RangeSource._openingangle + RangeSource._anglestart;
+                        double ang = (i - RangeSource._rangestartvalue) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle + RangeSource._anglestart;
                         Global.DrawLine(ref can,
                                         Global.GetPointOnCircle(c, circle1, ang),
                                         Global.GetPointOnCircle(c, circle2, ang),
@@ -188,8 +188,8 @@ namespace Gauge_Generator
             Shape s = Global.DrawCirclePart(ref can,
                                             false,
                                             c,
-                                            (int)Math.Round(_rangemin / (double)RangeSource._rangeendvalue * RangeSource._openingangle + RangeSource._anglestart),
-                                            (int)Math.Round((_rangemax - _rangemin) / (double)RangeSource._rangeendvalue * RangeSource._openingangle),
+                                            (int)Math.Round((_rangemin - RangeSource._rangestartvalue) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle + RangeSource._anglestart),
+                                            (int)Math.Round((_rangemax - _rangemin) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle),
                                             (int)Math.Round(_distancefromcenter * RangeSource._circleradius * half_size),
                                             Global.Overlay1);
             Global.AddOpacityAnimation(s);
