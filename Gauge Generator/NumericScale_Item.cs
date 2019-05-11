@@ -66,7 +66,7 @@ namespace Gauge_Generator
         public double ScaleMultiplier
         {
             get { return _scalemultiplier; }
-            set { _scalemultiplier = ValidateDouble(value, 0.1, 10, false); }
+            set { _scalemultiplier = ValidateDouble(value, 0.01, 100, false); }
         }
         [Description("Number of decimal places"), Category("Range")]
         public int Rounding
@@ -220,7 +220,7 @@ namespace Gauge_Generator
                                      (int)Math.Round(_rangemin / (double)RangeSource._rangeendvalue * RangeSource._openingangle + RangeSource._anglestart),
                                      (int)Math.Round((_rangemax - _rangemin) / (double)RangeSource._rangeendvalue * RangeSource._openingangle),
                                      (int)Math.Round(_distancefromcenter * RangeSource._circleradius * half_size),
-                                     10,
+                                     5,
                                      Global.Overlay1);
             Global.AddOpacityAnimation(s);
             base.DrawOverlay(ref can, HQmode, size, alpha);

@@ -112,7 +112,7 @@ namespace Gauge_Generator
                     RangeItemsList.Items.Add(i.Label);
                 }
             }
-            if (RangeItemsList.Items.Count == 1) RangeItemsList.SelectedIndex = 0;
+            if (RangeItemsList.Items.Count > 0) RangeItemsList.SelectedIndex = 0;
         }
 
         private void Cancel_btn(object sender, RoutedEventArgs e)
