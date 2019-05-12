@@ -135,7 +135,7 @@ namespace Gauge_Generator
                 Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource._circlecenter_x, RangeSource._circlecenter_y);
                 int fsize = (int)(_fontsize * half_size);
                 Global.DrawString(ref can,
-                                    new Point((int)Math.Round(c.X + _position_x * half_size), (int)Math.Round(c.Y + _position_y * half_size)),
+                                    new Point((int)Math.Round(c.X + _position_x * RangeSource._circleradius * half_size), (int)Math.Round(c.Y + _position_y * RangeSource._circleradius * half_size)),
                                     fsize,
                                     _fontfamily,
                                     _bold,
@@ -152,7 +152,7 @@ namespace Gauge_Generator
         {
             int half_size = size / 2;
             Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource._circlecenter_x, RangeSource._circlecenter_y);
-            Point l = new Point((int)Math.Round(c.X + _position_x * half_size), (int)Math.Round(c.Y + _position_y * half_size));
+            Point l = new Point((int)Math.Round(c.X + _position_x * RangeSource._circleradius * half_size), (int)Math.Round(c.Y + _position_y * RangeSource._circleradius * half_size));
 
             Shape s1 = Global.DrawLine(ref can,
                                        new Point(l.X, 0),

@@ -43,7 +43,7 @@ namespace Gauge_Generator
 
         private void LoadItemsList()
         {
-            for(int i=0; i<4; i++)
+            for(int i=0; i<5; i++)
             {
                 Image img = new Image
                 {

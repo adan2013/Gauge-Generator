@@ -19,7 +19,7 @@ namespace Gauge_Generator
         public const int MAX_RANGE_VALUE = 500;
         public const int MAX_LAYERS = 30;
 
-        public const int ARC_LOD_LQ = 40;
+        public const int ARC_LOD_LQ = 20;
         public const int ARC_LOD_HQ = 4;
         public const int DURATION_ALPHA_OVERLAY = 1600;
         public const double MIN_ALPHA_OVERLAY = 0.1;
@@ -48,6 +48,7 @@ namespace Gauge_Generator
             if (obj is LinearScale_Item) return LayersType.LinearScale;
             if (obj is NumericScale_Item) return LayersType.NumericScale;
             if (obj is Label_Item) return LayersType.Label;
+            if (obj is Arc_Item) return LayersType.Arc;
             //TODO other types
             return LayersType.Range;
         }
@@ -64,6 +65,8 @@ namespace Gauge_Generator
                     return typeof(NumericScale_Item);
                 case LayersType.Label:
                     return typeof(Label_Item);
+                case LayersType.Arc:
+                    return typeof(Arc_Item);
                 //TODO other types
                 default:
                     return typeof(Range_Item);
@@ -168,16 +171,37 @@ namespace Gauge_Generator
                 return pl;
             }
         }
+
+        public static Shape DrawPolygonArc(ref Canvas obj, bool HQmode, Point center, int startAngle, int openingAngle, double radius1, double radius2, Color color)
+        {
+            Polygon pg = new Polygon();
+            if (openingAngle != 0)
+            {
+                List<Point> ArcPoints = new List<Point>();
+                //circle 1
+                int LoD1 = GetLoD(HQmode, radius1, openingAngle);
+                for (int i = 0; i < LoD1; i++) ArcPoints.Add(GetPointOnCircle(center, radius1, startAngle + (openingAngle / ((double)LoD1 - 1) * i)));
+                //circle 2
+                int LoD2 = GetLoD(HQmode, radius2, openingAngle);
+                for (int i = LoD2 - 1; i >= 0; i--) ArcPoints.Add(GetPointOnCircle(center, radius2, startAngle + (openingAngle / ((double)LoD2 - 1) * i)));
+                pg.StrokeThickness = 1;
+                pg.Stroke = new MEDIA.SolidColorBrush(MEDIA.Color.FromArgb(color.A, color.R, color.G, color.B));
+                pg.Fill = new MEDIA.SolidColorBrush(MEDIA.Color.FromArgb(color.A, color.R, color.G, color.B));
+                foreach (Point p in ArcPoints) pg.Points.Add(new System.Windows.Point(p.X, p.Y));
+                obj.Children.Add(pg);
+            }
+            return pg;
+        }
         
         public static Shape DrawArcWithLines(ref Canvas obj, bool HQmode, Point center, int startAngle, int openingAngle, double radius1, double radius2, double weight, Color color, int min, int max, int step)
         {
-            if (step == 0 || min == max) new Polyline();
+            if (step == 0 || min == max) return new Polyline();
 
             List<Point> ArcPoints = new List<Point>();
             List<double> bp = new List<double>();
 
             for (int val = min; val <= max; val += step) bp.Add(startAngle + openingAngle * ((val - min) / (double)(max - min)));
-            if (bp.Count == 0) new Polyline();
+            if (bp.Count == 0) return new Polyline();
 
             double LoD = GetLoD(HQmode, radius2, openingAngle / bp.Count);
 
