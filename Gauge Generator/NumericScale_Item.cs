@@ -38,7 +38,7 @@ namespace Gauge_Generator
             get { return _rangemin; }
             set
             {
-                _rangemin = ValidateInt(value, RangeSource.RangeStartValue, RangeMax);
+                _rangemin = ValidateInt(value, RangeSource._rangestartvalue, _rangemax);
                 ValidateWithSource();
             }
         }
@@ -48,7 +48,7 @@ namespace Gauge_Generator
             get { return _rangemax; }
             set
             {
-                _rangemax = ValidateInt(value, RangeMin, RangeSource.RangeEndValue);
+                _rangemax = ValidateInt(value, _rangemin, RangeSource._rangeendvalue);
                 ValidateWithSource();
             }
         }

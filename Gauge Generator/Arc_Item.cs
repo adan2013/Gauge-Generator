@@ -19,7 +19,10 @@ namespace Gauge_Generator
         //PRIVATE VARIABLES
         public double _circleoffset_x;
         public double _circleoffset_y;
-        public double _circleradius;
+        public double _distancefromcenter;
+        public bool _manualangle;
+        public int _rangemin;
+        public int _rangemax;
         public int _anglestart;
         public int _openingangle;
         public MEDIA.Color _color;
@@ -39,18 +42,44 @@ namespace Gauge_Generator
             set { _circleoffset_y = ValidateDouble(value, -1, 1); }
         }
         [Description("Radius of the circle"), Category("Position")]
-        public double CircleRadius
+        public double DistanceFromCenter
         {
-            get { return TranslateValue(_circleradius); }
-            set { _circleradius = ValidateDouble(value, Global.MIN_DOUBLE_VALUE, 1); }
+            get { return TranslateValue(_distancefromcenter); }
+            set { _distancefromcenter = ValidateDouble(value, Global.MIN_DOUBLE_VALUE, 1); }
         }
-        [Description("Start angle"), Category("Arc")]
+        [Description("False = Numeric range; True = Manual angle"), Category("Arc")]
+        public bool ManualAngle
+        {
+            get { return _manualangle; }
+            set { _manualangle = value; }
+        }
+        [Description("Initial value"), Category("Range")]
+        public int RangeMin
+        {
+            get { return _rangemin; }
+            set
+            {
+                _rangemin = ValidateInt(value, RangeSource._rangestartvalue, _rangemax);
+                ValidateWithSource();
+            }
+        }
+        [Description("Final value"), Category("Range")]
+        public int RangeMax
+        {
+            get { return _rangemax; }
+            set
+            {
+                _rangemax = ValidateInt(value, _rangemin, RangeSource._rangeendvalue);
+                ValidateWithSource();
+            }
+        }
+        [Description("Start angle"), Category("Range")]
         public int AngleStart
         {
             get { return _anglestart; }
             set { _anglestart = ValidateInt(value, 0, 360); }
         }
-        [Description("Opening angle"), Category("Arc")]
+        [Description("Opening angle"), Category("Range")]
         public int OpeningAngle
         {
             get { return _openingangle; }
@@ -79,7 +108,10 @@ namespace Gauge_Generator
         {
             _circleoffset_x = 0;
             _circleoffset_y = 0;
-            _circleradius = 0.5;
+            _distancefromcenter = 0.5;
+            _manualangle = false;
+            _rangemin = 0;
+            _rangemax = 0;
             _anglestart = 0;
             _openingangle = 90;
             _color = MEDIA.Colors.Red;
@@ -93,11 +125,31 @@ namespace Gauge_Generator
             Arc_Item o = (Arc_Item)original;
             _circleoffset_x = o._circleoffset_x;
             _circleoffset_y = o._circleoffset_y;
-            _circleradius = o._circleradius;
+            _distancefromcenter = o._distancefromcenter;
+            _manualangle = o._manualangle;
+            _rangemin = o._rangemin;
+            _rangemax = o._rangemax;
             _anglestart = o._anglestart;
             _openingangle = o._openingangle;
             _color = o._color;
             _weight = o._weight;
+        }
+
+        public override void SetRangeSource(Range_Item obj)
+        {
+            base.SetRangeSource(obj);
+            _rangemin = obj._rangestartvalue;
+            _rangemax = obj._rangeendvalue;
+        }
+
+        public override void ValidateWithSource()
+        {
+            if (RangeSource != null)
+            {
+                _rangemin = ValidateInt(_rangemin, RangeSource._rangestartvalue, _rangemax);
+                _rangemax = ValidateInt(_rangemax, _rangemin, RangeSource._rangeendvalue);
+            }
+            base.ValidateWithSource();
         }
 
         public override void DrawLayer(ref Canvas can, bool HQmode, int size)
@@ -107,13 +159,20 @@ namespace Gauge_Generator
                 int half_size = size / 2;
                 Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource._circlecenter_x, RangeSource._circlecenter_y);
                 c = Global.GetOffsetPoint(c, half_size, _circleoffset_x, _circleoffset_y);
-                double circle1 = Math.Max(0.0, _circleradius - _weight) * RangeSource._circleradius * half_size;
-                double circle2 = _circleradius * RangeSource._circleradius * half_size;
+                double circle1 = Math.Max(0.0, _distancefromcenter - _weight) * RangeSource._circleradius * half_size;
+                double circle2 = _distancefromcenter * RangeSource._circleradius * half_size;
+                double minangle = 0;
+                double maxangle = 0;
+                if(!_manualangle)
+                {
+                    minangle = (_rangemin - RangeSource._rangestartvalue) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle + RangeSource._anglestart;
+                    maxangle = (_rangemax - RangeSource._rangestartvalue) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle + RangeSource._anglestart;
+                }
                 Global.DrawPolygonArc(ref can,
                                       HQmode,
                                       c,
-                                      _anglestart,
-                                      _openingangle,
+                                      _manualangle ? _anglestart : (int)Math.Round(minangle),
+                                      _manualangle ? _openingangle : (int)Math.Round(maxangle - minangle),
                                       circle1,
                                       circle2,
                                       System.Drawing.Color.FromArgb(_color.A, _color.R, _color.G, _color.B));
