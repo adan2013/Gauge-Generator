@@ -56,8 +56,10 @@ namespace Gauge_Generator
         {
             if(Global.project.layers.Count < Global.MAX_LAYERS)
             {
-                NewItemWindow w = new NewItemWindow();
-                w.Owner = Application.Current.MainWindow;
+                NewItemWindow w = new NewItemWindow
+                {
+                    Owner = Application.Current.MainWindow
+                };
                 w.ShowDialog();
                 if(w.DialogResult.HasValue && w.DialogResult.Value)
                 {
@@ -99,13 +101,18 @@ namespace Gauge_Generator
         {
             if (layers_view.SelectedIndex >= 0)
             {
-                int i = layers_view.SelectedIndex;
-                Layer l = Global.project.layers[i];
-                Global.LayersType t = Global.GetLayerType(l);
-                Layer newItem = (Layer)Activator.CreateInstance(Global.GetLayerObject(t));
-                newItem.CloneCreator(l);
-                Global.project.layers.Insert(i, newItem);
-                Reload_Layers_List(i);
+                CloneWindow cw = new CloneWindow
+                {
+                    Owner = Application.Current.MainWindow,
+                    LayerIndex = layers_view.SelectedIndex
+                };
+                cw.ShowDialog();
+                if (cw.DialogResult.HasValue && cw.DialogResult.Value)
+                {
+                    Global.EditingLayer = Global.project.layers[layers_view.SelectedIndex];
+                    Global.SetSidebar(Global.SidebarPages.Editor);
+                }
+                cw.Close();
             }
         }
 

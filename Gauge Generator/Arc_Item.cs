@@ -119,9 +119,9 @@ namespace Gauge_Generator
             base.LoadDefaultValues();
         }
 
-        public override void CloneCreator(Layer original)
+        public override void CloneCreator(Layer original, string name)
         {
-            base.CloneCreator(original);
+            base.CloneCreator(original, name);
             Arc_Item o = (Arc_Item)original;
             _circleoffset_x = o._circleoffset_x;
             _circleoffset_y = o._circleoffset_y;

@@ -72,6 +72,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Arc_Item.cs" />
+    <Compile Include="CloneWindow.xaml.cs">
+      <DependentUpon>CloneWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Editor_Page.xaml.cs">
       <DependentUpon>Editor_Page.xaml</DependentUpon>
     </Compile>
@@ -85,6 +88,10 @@
       <DependentUpon>Project_Settings_Page.xaml</DependentUpon>
     </Compile>
     <Compile Include="Range_Item.cs" />
+    <Page Include="CloneWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Editor_Page.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

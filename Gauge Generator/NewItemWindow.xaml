@@ -32,7 +32,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Margin="15, 15, 8, 10">
                 <Label Content="Name of layer:" />
-                <TextBox x:Name="txt_name" MaxLength="20" TextChanged="Txt_name_TextChanged" KeyUp="Txt_name_KeyUp" />
+                <TextBox x:Name="txt_name" MaxLength="25" TextChanged="Txt_name_TextChanged" KeyUp="Txt_name_KeyUp" />
                 <Label Content="Layer must have a name!" x:Name="lbl_err_name" Foreground="#DD0000" />
             </StackPanel>
             <StackPanel Grid.Column="1" Margin="8, 15, 15, 10" x:Name="RangePanel">

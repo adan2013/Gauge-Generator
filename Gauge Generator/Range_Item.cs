@@ -124,9 +124,9 @@ namespace Gauge_Generator
             base.LoadDefaultValues();
         }
 
-        public override void CloneCreator(Layer original)
+        public override void CloneCreator(Layer original, string name)
         {
-            base.CloneCreator(original);
+            base.CloneCreator(original, name);
             Range_Item o = (Range_Item)original;
             _circlecenter_x = o._circlecenter_x;
             _circlecenter_y = o._circlecenter_y;

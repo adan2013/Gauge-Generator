@@ -108,9 +108,9 @@ namespace Gauge_Generator
             base.LoadDefaultValues();
         }
 
-        public override void CloneCreator(Layer original)
+        public override void CloneCreator(Layer original, string name)
         {
-            base.CloneCreator(original);
+            base.CloneCreator(original, name);
             LinearScale_Item o = (LinearScale_Item)original;
             _rangemin = o._rangemin;
             _rangemax = o._rangemax;

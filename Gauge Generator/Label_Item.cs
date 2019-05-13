@@ -111,9 +111,9 @@ namespace Gauge_Generator
             base.LoadDefaultValues();
         }
 
-        public override void CloneCreator(Layer original)
+        public override void CloneCreator(Layer original, string name)
         {
-            base.CloneCreator(original);
+            base.CloneCreator(original, name);
             Label_Item o = (Label_Item)original;
             _fontcolor = o._fontcolor;
             _fontsize = o._fontsize;

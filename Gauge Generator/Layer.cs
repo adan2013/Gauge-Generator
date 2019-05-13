@@ -52,9 +52,9 @@ namespace Gauge_Generator
 
         virtual public void ValidateWithSource() { }
         
-        virtual public void CloneCreator(Layer original)
+        virtual public void CloneCreator(Layer original, string name)
         {
-            Label = original.Label + "_Clone";
+            Label = name;
             RangeSource = original.RangeSource;
         }
 

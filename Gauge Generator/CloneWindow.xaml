@@ -1,0 +1,29 @@
+﻿<Window x:Class="Gauge_Generator.CloneWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gauge_Generator"
+        mc:Ignorable="d"
+        Title="Clone" Height="250" Width="350" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Background="#cfcfcf">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="90px" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50px" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <TextBlock TextWrapping="WrapWithOverflow" FontSize="24px" FontWeight="Bold" Margin="8, 8, 8, 8">Clone</TextBlock>
+            <TextBlock TextWrapping="WrapWithOverflow" FontSize="12px" x:Name="lbl_description" Margin="10, 0, 10, 0">Description</TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Margin="10, 0, 10, 0">
+            <Label Content="Name of layer:" />
+            <TextBox x:Name="txt_name" Margin="4, 0, 4, 0" MaxLength="25" TextChanged="Txt_name_TextChanged" KeyUp="Txt_name_KeyUp" />
+            <Label Content="Layer must have a name!" x:Name="lbl_err_name" Foreground="#DD0000" />
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="OK" ToolTip="Clone layer" x:Name="ok_btn" Click="Ok_btn_Click"></Button>
+            <Button Content="Cancel" ToolTip="Cancel operation" Click="Cancel_btn"></Button>
+        </StackPanel>
+    </Grid>
+</Window>
