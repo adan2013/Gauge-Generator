@@ -23,7 +23,7 @@ namespace Gauge_Generator
         public Layers_Page()
         {
             InitializeComponent();
-            Reload_Layers_List(-1);
+            Reload_Layers_List(Global.LastEditedLayer);
         }
 
         private void Reload_Layers_List(int index)
@@ -67,6 +67,7 @@ namespace Gauge_Generator
                     Global.SetSidebar(Global.SidebarPages.Editor);
                 }
                 w.Close();
+                Global.LastEditedLayer = 0;
             }
             else
             {
@@ -147,6 +148,7 @@ namespace Gauge_Generator
             clone_btn.IsEnabled = r;
             up_btn.IsEnabled = r;
             dn_btn.IsEnabled = r;
+            Global.LastEditedLayer = layers_view.SelectedIndex;
         }
 
         private void Layers_view_MouseDoubleClick(object sender, MouseButtonEventArgs e)

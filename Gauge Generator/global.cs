@@ -30,6 +30,7 @@ namespace Gauge_Generator
 
         public static Canvas ScreenCanvas;
         public static Layer EditingLayer;
+        public static int LastEditedLayer = -1;
 
         #region "CONFIG"
 

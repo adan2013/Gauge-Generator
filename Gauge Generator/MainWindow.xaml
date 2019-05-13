@@ -30,10 +30,6 @@
                 </Border>
             </Border>
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button IsEnabled="False" Content="Z out" ToolTip="Zoom out preview"></Button>
-                <Button IsEnabled="False" Content="100%" ToolTip="zoom out completely"></Button>
-                <Button IsEnabled="False" Content="Z in" ToolTip="Zoom in preview"></Button>
-                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                 <Button IsEnabled="False" Content="New" ToolTip="New project"></Button>
                 <Button IsEnabled="False" Content="Open" ToolTip="Open project"></Button>
                 <Button IsEnabled="False" Content="Save" ToolTip="Save project data"></Button>
