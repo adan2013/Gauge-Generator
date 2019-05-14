@@ -108,10 +108,10 @@ namespace Gauge_Generator
         {
             _circleoffset_x = 0;
             _circleoffset_y = 0;
-            _distancefromcenter = 0.5;
+            _distancefromcenter = 1;
             _manualangle = false;
             _rangemin = 0;
-            _rangemax = 0;
+            _rangemax = 100;
             _anglestart = 0;
             _openingangle = 90;
             _color = MEDIA.Colors.Red;
@@ -154,50 +154,55 @@ namespace Gauge_Generator
 
         public override void DrawLayer(ref Canvas can, bool HQmode, int size)
         {
-            if (_openingangle != 0)
+            int half_size = size / 2;
+            Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource._circlecenter_x, RangeSource._circlecenter_y);
+            c = Global.GetOffsetPoint(c, half_size * RangeSource._circleradius, _circleoffset_x, _circleoffset_y);
+            double circle1 = Math.Max(0.0, _distancefromcenter - _weight) * RangeSource._circleradius * half_size;
+            double circle2 = _distancefromcenter * RangeSource._circleradius * half_size;
+            double minangle = 0;
+            double maxangle = 0;
+            if(!_manualangle)
             {
-                int half_size = size / 2;
-                Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource._circlecenter_x, RangeSource._circlecenter_y);
-                c = Global.GetOffsetPoint(c, half_size, _circleoffset_x, _circleoffset_y);
-                double circle1 = Math.Max(0.0, _distancefromcenter - _weight) * RangeSource._circleradius * half_size;
-                double circle2 = _distancefromcenter * RangeSource._circleradius * half_size;
-                double minangle = 0;
-                double maxangle = 0;
-                if(!_manualangle)
-                {
-                    minangle = (_rangemin - RangeSource._rangestartvalue) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle + RangeSource._anglestart;
-                    maxangle = (_rangemax - RangeSource._rangestartvalue) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle + RangeSource._anglestart;
-                }
-                Global.DrawPolygonArc(ref can,
-                                      HQmode,
-                                      c,
-                                      _manualangle ? _anglestart : (int)Math.Round(minangle),
-                                      _manualangle ? _openingangle : (int)Math.Round(maxangle - minangle),
-                                      circle1,
-                                      circle2,
-                                      System.Drawing.Color.FromArgb(_color.A, _color.R, _color.G, _color.B));
+                minangle = (_rangemin - RangeSource._rangestartvalue) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle + RangeSource._anglestart;
+                maxangle = (_rangemax - RangeSource._rangestartvalue) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle + RangeSource._anglestart;
             }
+            Global.DrawPolygonArc(ref can,
+                                    HQmode,
+                                    c,
+                                    _manualangle ? _anglestart : (int)Math.Round(minangle),
+                                    _manualangle ? _openingangle : (int)Math.Round(maxangle - minangle),
+                                    circle1,
+                                    circle2,
+                                    System.Drawing.Color.FromArgb(_color.A, _color.R, _color.G, _color.B));
             base.DrawLayer(ref can, HQmode, size);
         }
 
         public override void DrawOverlay(ref Canvas can, bool HQmode, int size, double alpha)
         {
-            //int half_size = size / 2;
-            //Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource._circlecenter_x, RangeSource._circlecenter_y);
-            //Point l = new Point((int)Math.Round(c.X + _position_x * half_size), (int)Math.Round(c.Y + _position_y * half_size));
-
-            //Shape s1 = Global.DrawLine(ref can,
-            //                           new Point(l.X, 0),
-            //                           new Point(l.X, size),
-            //                           5,
-            //                           Global.Overlay1);
-            //Shape s2 = Global.DrawLine(ref can,
-            //                           new Point(0, l.Y),
-            //                           new Point(size, l.Y),
-            //                           5,
-            //                           Global.Overlay1);
-            //Global.AddOpacityAnimation(s1);
-            //Global.AddOpacityAnimation(s2);
+            int half_size = size / 2;
+            Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource._circlecenter_x, RangeSource._circlecenter_y);
+            c = Global.GetOffsetPoint(c, half_size * RangeSource._circleradius, _circleoffset_x, _circleoffset_y);
+            double circle1 = Math.Max(0.0, _distancefromcenter - _weight) * RangeSource._circleradius * half_size;
+            double circle2 = _distancefromcenter * RangeSource._circleradius * half_size;
+            double minangle = 0;
+            double maxangle = 0;
+            if (!_manualangle)
+            {
+                minangle = (_rangemin - RangeSource._rangestartvalue) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle + RangeSource._anglestart;
+                maxangle = (_rangemax - RangeSource._rangestartvalue) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle + RangeSource._anglestart;
+            }
+            Shape s1 = Global.DrawLine(ref can,
+                                       c,
+                                       Global.GetPointOnCircle(c, circle2, _manualangle ? _anglestart : minangle),
+                                       5,
+                                       Global.Overlay1);
+            Shape s2 = Global.DrawLine(ref can,
+                                       c,
+                                       Global.GetPointOnCircle(c, circle2, _manualangle ? _anglestart + _openingangle : maxangle),
+                                       5,
+                                       Global.Overlay1);
+            Global.AddOpacityAnimation(s1);
+            Global.AddOpacityAnimation(s2);
             base.DrawOverlay(ref can, HQmode, size, alpha);
         }
     }
