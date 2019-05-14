@@ -72,6 +72,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Arc_Item.cs" />
+    <Compile Include="ClockHand_Item.cs" />
     <Compile Include="CloneWindow.xaml.cs">
       <DependentUpon>CloneWindow.xaml</DependentUpon>
     </Compile>

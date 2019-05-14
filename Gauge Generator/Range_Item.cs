@@ -64,7 +64,7 @@ namespace Gauge_Generator
             set
             {
                 _rangestartvalue = ValidateInt(value, Global.MIN_RANGE_VALUE, Global.MAX_RANGE_VALUE);
-                _rangestartvalue = ValidateInt(_rangestartvalue, Global.MIN_RANGE_VALUE, RangeEndValue);
+                _rangestartvalue = ValidateInt(_rangestartvalue, Global.MIN_RANGE_VALUE, _rangeendvalue);
             }
         }
         [Description("Final value of the scale"), Category("Range")]
@@ -74,7 +74,7 @@ namespace Gauge_Generator
             set
             {
                 _rangeendvalue = ValidateInt(value, Global.MIN_RANGE_VALUE, Global.MAX_RANGE_VALUE);
-                _rangeendvalue = ValidateInt(_rangeendvalue, RangeStartValue, Global.MAX_RANGE_VALUE);
+                _rangeendvalue = ValidateInt(_rangeendvalue, _rangestartvalue, Global.MAX_RANGE_VALUE);
             }
         }
         [Description("X coordinate of clock hands"), Category("Clock hands")]

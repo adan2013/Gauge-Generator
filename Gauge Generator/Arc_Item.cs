@@ -13,9 +13,6 @@ namespace Gauge_Generator
 {
     class Arc_Item : Layer
     {
-        //CONSTS
-        const int DEFAULT_STEP_PARTS = 10;
-
         //PRIVATE VARIABLES
         public double _circleoffset_x;
         public double _circleoffset_y;
@@ -59,7 +56,7 @@ namespace Gauge_Generator
             get { return _rangemin; }
             set
             {
-                _rangemin = ValidateInt(value, RangeSource._rangestartvalue, _rangemax);
+                _rangemin = ValidateInt(value, Global.MIN_RANGE_VALUE, Global.MAX_RANGE_VALUE);
                 ValidateWithSource();
             }
         }
@@ -69,7 +66,7 @@ namespace Gauge_Generator
             get { return _rangemax; }
             set
             {
-                _rangemax = ValidateInt(value, _rangemin, RangeSource._rangeendvalue);
+                _rangemax = ValidateInt(value, Global.MIN_RANGE_VALUE, Global.MAX_RANGE_VALUE);
                 ValidateWithSource();
             }
         }
@@ -116,6 +113,7 @@ namespace Gauge_Generator
             _openingangle = 90;
             _color = MEDIA.Colors.Red;
             _weight = 0.2;
+            ValidateWithSource();
             base.LoadDefaultValues();
         }
 

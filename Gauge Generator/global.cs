@@ -50,6 +50,7 @@ namespace Gauge_Generator
             if (obj is NumericScale_Item) return LayersType.NumericScale;
             if (obj is Label_Item) return LayersType.Label;
             if (obj is Arc_Item) return LayersType.Arc;
+            if (obj is ClockHand_Item) return LayersType.ClockHand;
             //TODO other types
             return LayersType.Range;
         }
@@ -68,6 +69,8 @@ namespace Gauge_Generator
                     return typeof(Label_Item);
                 case LayersType.Arc:
                     return typeof(Arc_Item);
+                case LayersType.ClockHand:
+                    return typeof(ClockHand_Item);
                 //TODO other types
                 default:
                     return typeof(Range_Item);
