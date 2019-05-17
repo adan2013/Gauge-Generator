@@ -31,6 +31,7 @@ namespace Gauge_Generator
         {
             Normal = 0,
             Rounded,
+            SmallArrow,
             Arrow
         }
 
@@ -45,7 +46,7 @@ namespace Gauge_Generator
         public double Thickness
         {
             get { return TranslateValue(_thickness); }
-            set { _thickness = ValidateDouble(value, 0.01, 0.05); }
+            set { _thickness = ValidateDouble(value, 0.01, 0.1); }
         }
         [Description("Color of negative part of clock hand"), Category("Beginning of clock hand")]
         public MEDIA.Color N_Color
@@ -121,12 +122,12 @@ namespace Gauge_Generator
         public override void LoadDefaultValues()
         {
             _n_length = 0.2;
-            _thickness = 0.02;
+            _thickness = 0.03;
             _n_color = MEDIA.Colors.DarkGray;
-            _p_length = 0.95;
+            _p_length = 0.9;
             _endtype = ClockHandType.Normal;
             _p_color = MEDIA.Colors.White;
-            _circlesize = 0.1;
+            _circlesize = 0.08;
             _circlecolor = MEDIA.Colors.DarkGray;
             _circlebehindthearrow = false;
             _value = 0;
@@ -202,12 +203,34 @@ namespace Gauge_Generator
             Polygon pg = new Polygon
             {
                 Fill = lgb,
-                RenderTransform = new MEDIA.RotateTransform(ang, ratio, ratio)
-        };
-            pg.Points.Add(new System.Windows.Point(0, 0));
-            pg.Points.Add(new System.Windows.Point(half_size, 0));
-            pg.Points.Add(new System.Windows.Point(half_size, 50));
-            pg.Points.Add(new System.Windows.Point(0, 50));
+                RenderTransform = new MEDIA.RotateTransform(ang, c.X, c.Y)
+            };
+            pg.Points.Add(new System.Windows.Point(c.X - _n_length * RangeSource._circleradius * half_size, c.Y - _thickness * half_size / 2));
+            pg.Points.Add(new System.Windows.Point(c.X - _n_length * RangeSource._circleradius * half_size, c.Y + _thickness * half_size / 2));
+            switch (_endtype)
+            {
+                case ClockHandType.Normal:
+                    pg.Points.Add(new System.Windows.Point(c.X + _p_length * RangeSource._circleradius * half_size, c.Y + _thickness * half_size / 2));
+                    pg.Points.Add(new System.Windows.Point(c.X + _p_length * RangeSource._circleradius * half_size, c.Y - _thickness * half_size / 2));
+                    break;
+                case ClockHandType.Rounded:
+                    Point rc = new Point((int)(c.X + _p_length * RangeSource._circleradius * half_size), c.Y);
+                    int rc_lod = Global.GetLoD(true, _thickness * half_size / 2, 180);
+                    for(int i = rc_lod; i >= 0; i--)
+                    {
+                        Point p = Global.GetPointOnCircle(rc, _thickness * half_size / 2, i / (double)rc_lod * 180 - 90);
+                        pg.Points.Add(new System.Windows.Point(p.X, p.Y));
+                    }
+                    break;
+                case ClockHandType.SmallArrow:
+                    pg.Points.Add(new System.Windows.Point(c.X + _p_length * RangeSource._circleradius * half_size, c.Y + _thickness * half_size / 2));
+                    pg.Points.Add(new System.Windows.Point(c.X + _p_length * RangeSource._circleradius * half_size + _thickness * half_size / 2, c.Y));
+                    pg.Points.Add(new System.Windows.Point(c.X + _p_length * RangeSource._circleradius * half_size, c.Y - _thickness * half_size / 2));
+                    break;
+                case ClockHandType.Arrow:
+                    pg.Points.Add(new System.Windows.Point(c.X + _p_length * RangeSource._circleradius * half_size, c.Y));
+                    break;
+            }
             can.Children.Add(pg);
 
             if (!_circlebehindthearrow)
