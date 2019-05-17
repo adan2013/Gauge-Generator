@@ -15,11 +15,11 @@ namespace Gauge_Generator
     {
         //PRIVATE VARIABLES
         public double _n_length;
-        public double _n_weight;
+        public double _thickness;
         public MEDIA.Color _n_color;
         public double _p_length;
-        public double _p_weight;
         public MEDIA.Color _p_color;
+        public ClockHandType _endtype;
         public double _circlesize;
         public MEDIA.Color _circlecolor;
         public bool _circlebehindthearrow;
@@ -27,46 +27,45 @@ namespace Gauge_Generator
         public int _angle;
         public bool _manualangle;
 
+        public enum ClockHandType
+        {
+            Normal = 0,
+            Rounded,
+            Arrow
+        }
+
         //PROPERTIES
-        [Description("Length of negative part of clock hand"), Category("Negative part")]
+        [Description("Length of negative part of clock hand"), Category("Beginning of clock hand")]
         public double N_Length
         {
             get { return TranslateValue(_n_length); }
-            set { _n_length = ValidateDouble(value, 0, Global.MAX_DOUBLE_VALUE); }
+            set { _n_length = ValidateDouble(value, 0, 0.5); }
         }
-        [Description("Size of negative part of clock hand"), Category("Negative part")]
-        public double N_Weight
+        [Description("Size of clock hand"), Category("Beginning of clock hand")]
+        public double Thickness
         {
-            get { return TranslateValue(_n_weight); }
-            set
-            {
-                _n_weight = ValidateDouble(value, 0.01, 0.05);
-                _n_weight = ValidateDouble(value, _p_weight, 0.05);
-            }
+            get { return TranslateValue(_thickness); }
+            set { _thickness = ValidateDouble(value, 0.01, 0.05); }
         }
-        [Description("Color of negative part of clock hand"), Category("Negative part")]
+        [Description("Color of negative part of clock hand"), Category("Beginning of clock hand")]
         public MEDIA.Color N_Color
         {
             get { return _n_color; }
             set { _n_color = ValidateColor(value, false); }
         }
-        [Description("Length of positive part of clock hand"), Category("Positive part")]
+        [Description("Length of positive part of clock hand"), Category("End of clock hand")]
         public double P_Length
         {
             get { return TranslateValue(_p_length); }
             set { _p_length = ValidateDouble(value, Global.MIN_DOUBLE_VALUE, 1); }
         }
-        [Description("Size of positive part of clock hand"), Category("Positive part")]
-        public double P_Weight
+        [Description("End type of clock hand"), Category("End of clock hand")]
+        public ClockHandType EndType
         {
-            get { return TranslateValue(_p_weight); }
-            set
-            {
-                _p_weight = ValidateDouble(value, 0.01, 0.05);
-                _p_weight = ValidateDouble(value, 0.01, _n_weight);
-            }
+            get { return _endtype; }
+            set { _endtype = value; }
         }
-        [Description("Color of positive part of clock hand"), Category("Positive part")]
+        [Description("Color of positive part of clock hand"), Category("End of clock hand")]
         public MEDIA.Color P_Color
         {
             get { return _p_color; }
@@ -121,15 +120,15 @@ namespace Gauge_Generator
         //METHODS
         public override void LoadDefaultValues()
         {
-            _n_length = 0.05;
-            _n_weight = 0.02;
-            _n_color = MEDIA.Colors.White;
+            _n_length = 0.2;
+            _thickness = 0.02;
+            _n_color = MEDIA.Colors.DarkGray;
             _p_length = 0.95;
-            _p_weight = 0.02;
+            _endtype = ClockHandType.Normal;
             _p_color = MEDIA.Colors.White;
             _circlesize = 0.1;
             _circlecolor = MEDIA.Colors.DarkGray;
-            _circlebehindthearrow = true;
+            _circlebehindthearrow = false;
             _value = 0;
             _angle = 0;
             _manualangle = false;
@@ -142,10 +141,10 @@ namespace Gauge_Generator
             base.CloneCreator(original, name);
             ClockHand_Item o = (ClockHand_Item)original;
             _n_length = o._n_length;
-            _n_weight = o._n_weight;
+            _thickness = o._thickness;
             _n_color = o._n_color;
             _p_length = o._p_length;
-            _p_weight = o._p_weight;
+            _endtype = o._endtype;
             _p_color = o._p_color;
             _circlesize = o._circlesize;
             _circlecolor = o._circlecolor;
@@ -183,7 +182,33 @@ namespace Gauge_Generator
                               Color.FromArgb(_circlecolor.A, _circlecolor.R, _circlecolor.G, _circlecolor.B));
             }
 
-
+            double ratio = _n_length / (_n_length + _p_length);
+            double ang = _angle;
+            if (!_manualangle)
+            {
+                ang = (_value - RangeSource._rangestartvalue) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle + RangeSource._anglestart;
+            }
+            Point start_p = Global.GetPointOnCircle(c, _n_length * RangeSource._circleradius * half_size, ang + 180);
+            Point end_p = Global.GetPointOnCircle(c, _p_length * RangeSource._circleradius * half_size, ang);
+            MEDIA.LinearGradientBrush lgb = new MEDIA.LinearGradientBrush
+            {
+                StartPoint = new System.Windows.Point(0, 0),
+                EndPoint = new System.Windows.Point(1, 0)
+            };
+            lgb.GradientStops.Add(new MEDIA.GradientStop(_n_color, 0));
+            lgb.GradientStops.Add(new MEDIA.GradientStop(_n_color, ratio));
+            lgb.GradientStops.Add(new MEDIA.GradientStop(_p_color, ratio));
+            lgb.GradientStops.Add(new MEDIA.GradientStop(_p_color, 1));
+            Polygon pg = new Polygon
+            {
+                Fill = lgb,
+                RenderTransform = new MEDIA.RotateTransform(ang, ratio, ratio)
+        };
+            pg.Points.Add(new System.Windows.Point(0, 0));
+            pg.Points.Add(new System.Windows.Point(half_size, 0));
+            pg.Points.Add(new System.Windows.Point(half_size, 50));
+            pg.Points.Add(new System.Windows.Point(0, 50));
+            can.Children.Add(pg);
 
             if (!_circlebehindthearrow)
             {
@@ -197,30 +222,6 @@ namespace Gauge_Generator
 
         public override void DrawOverlay(ref Canvas can, bool HQmode, int size, double alpha)
         {
-            //int half_size = size / 2;
-            //Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource._circlecenter_x, RangeSource._circlecenter_y);
-            //c = Global.GetOffsetPoint(c, half_size * RangeSource._circleradius, _circleoffset_x, _circleoffset_y);
-            //double circle1 = Math.Max(0.0, _distancefromcenter - _weight) * RangeSource._circleradius * half_size;
-            //double circle2 = _distancefromcenter * RangeSource._circleradius * half_size;
-            //double minangle = 0;
-            //double maxangle = 0;
-            //if (!_manualangle)
-            //{
-            //    minangle = (_rangemin - RangeSource._rangestartvalue) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle + RangeSource._anglestart;
-            //    maxangle = (_rangemax - RangeSource._rangestartvalue) / (double)(RangeSource._rangeendvalue - RangeSource._rangestartvalue) * RangeSource._openingangle + RangeSource._anglestart;
-            //}
-            //Shape s1 = Global.DrawLine(ref can,
-            //                           c,
-            //                           Global.GetPointOnCircle(c, circle2, _manualangle ? _anglestart : minangle),
-            //                           5,
-            //                           Global.Overlay1);
-            //Shape s2 = Global.DrawLine(ref can,
-            //                           c,
-            //                           Global.GetPointOnCircle(c, circle2, _manualangle ? _anglestart + _openingangle : maxangle),
-            //                           5,
-            //                           Global.Overlay1);
-            //Global.AddOpacityAnimation(s1);
-            //Global.AddOpacityAnimation(s2);
             base.DrawOverlay(ref can, HQmode, size, alpha);
         }
     }
