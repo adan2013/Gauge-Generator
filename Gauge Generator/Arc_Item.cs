@@ -44,7 +44,7 @@ namespace Gauge_Generator
             get { return TranslateValue(_distancefromcenter); }
             set { _distancefromcenter = ValidateDouble(value, Global.MIN_DOUBLE_VALUE, 1); }
         }
-        [Description("False = Numeric range; True = Manual angle"), Category("Arc")]
+        [Description("False = Numeric range; True = Manual angle"), Category("Range")]
         public bool ManualAngle
         {
             get { return _manualangle; }
@@ -112,7 +112,7 @@ namespace Gauge_Generator
             _anglestart = 0;
             _openingangle = 90;
             _color = MEDIA.Colors.Red;
-            _weight = 0.2;
+            _weight = 0.08;
             ValidateWithSource();
             base.LoadDefaultValues();
         }

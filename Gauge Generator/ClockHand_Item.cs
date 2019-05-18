@@ -31,8 +31,9 @@ namespace Gauge_Generator
         {
             Normal = 0,
             Rounded,
-            SmallArrow,
-            Arrow
+            ShortArrow,
+            LongArrow,
+            SoftArrow
         }
 
         //PROPERTIES
@@ -222,13 +223,22 @@ namespace Gauge_Generator
                         pg.Points.Add(new System.Windows.Point(p.X, p.Y));
                     }
                     break;
-                case ClockHandType.SmallArrow:
+                case ClockHandType.ShortArrow:
                     pg.Points.Add(new System.Windows.Point(c.X + _p_length * RangeSource._circleradius * half_size, c.Y + _thickness * half_size / 2));
                     pg.Points.Add(new System.Windows.Point(c.X + _p_length * RangeSource._circleradius * half_size + _thickness * half_size / 2, c.Y));
                     pg.Points.Add(new System.Windows.Point(c.X + _p_length * RangeSource._circleradius * half_size, c.Y - _thickness * half_size / 2));
                     break;
-                case ClockHandType.Arrow:
+                case ClockHandType.LongArrow:
                     pg.Points.Add(new System.Windows.Point(c.X + _p_length * RangeSource._circleradius * half_size, c.Y));
+                    break;
+                case ClockHandType.SoftArrow:
+                    Point rc_sa = new Point((int)(c.X + _p_length * RangeSource._circleradius * half_size), c.Y);
+                    int rc_lod_sa = Global.GetLoD(true, _thickness * half_size / 6, 180);
+                    for (int i = rc_lod_sa; i >= 0; i--)
+                    {
+                        Point p = Global.GetPointOnCircle(rc_sa, _thickness * half_size / 6, i / (double)rc_lod_sa * 180 - 90);
+                        pg.Points.Add(new System.Windows.Point(p.X, p.Y));
+                    }
                     break;
             }
             can.Children.Add(pg);
