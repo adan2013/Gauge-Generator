@@ -42,13 +42,19 @@ namespace Gauge_Generator
         [Description("Base layer object (read only)"), Category("Basics"), Browsable(false)]
         public Range_Item RangeSource { get; private set; }
 
+        [Description("Visibility"), Category("Basics"), Browsable(false)]
+        public bool Visible { get; set; }
+
         //VIRTUAL METHODS
         virtual public void SetRangeSource(Range_Item obj)
         {
             RangeSource = obj;
         }
 
-        virtual public void LoadDefaultValues() { }
+        virtual public void LoadDefaultValues()
+        {
+            Visible = true;
+        }
 
         virtual public void ValidateWithSource() { }
         
@@ -56,6 +62,7 @@ namespace Gauge_Generator
         {
             Label = name;
             RangeSource = original.RangeSource;
+            Visible = original.Visible;
         }
 
         virtual public void DrawLayer(ref Canvas can, bool HQmode, int size) { }

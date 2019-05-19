@@ -43,11 +43,12 @@ namespace Gauge_Generator
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //TODO diagnostic code
-            //Global.project.layers.Add(new ClockHand_Item());
-            //Global.project.layers.Add(new Range_Item());
-            //Global.project.layers[0].SetRangeSource((Range_Item)Global.project.layers[1]);
+            Global.project.layers.Add(new NumericScale_Item());
+            Global.project.layers.Add(new Range_Item());
+            Global.project.layers[0].SetRangeSource((Range_Item)Global.project.layers[1]);
             //Global.EditingLayer = Global.project.layers[0];
             //Global.SetSidebar(Global.SidebarPages.Editor);
+            Global.SetSidebar(Global.SidebarPages.Layers);
         }
     }
 }

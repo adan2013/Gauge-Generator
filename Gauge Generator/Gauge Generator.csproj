@@ -177,5 +177,9 @@
     <Resource Include="Images\numeric_scale.png" />
     <Resource Include="Images\numeric_scale_big.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\hidden.png" />
+    <Resource Include="Images\visible.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

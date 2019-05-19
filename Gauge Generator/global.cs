@@ -76,6 +76,10 @@ namespace Gauge_Generator
                     return typeof(Range_Item);
             }
         }
+        public static string[] Visibility = {
+            "pack://application:,,,/Images/hidden.png",
+            "pack://application:,,,/Images/visible.png"
+        };
         public static string[] LayerNames = {
             "Range",
             "Linear Scale",

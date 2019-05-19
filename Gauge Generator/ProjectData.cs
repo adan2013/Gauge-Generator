@@ -82,6 +82,10 @@ namespace Gauge_Generator
                     if (BringToFront && layers[i] == Global.EditingLayer) continue;
                     if (layers[i].RangeSource == Global.EditingLayer) continue;
                 }
+                else
+                {
+                    if (!layers[i].Visible) continue;
+                }
                 layers[i].DrawLayer(ref pnl, HQmode, size);
             }
             if (BringToFront && Global.EditingLayer != null) Global.EditingLayer.DrawLayer(ref pnl, HQmode, size);

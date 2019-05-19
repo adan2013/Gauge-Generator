@@ -31,25 +31,63 @@ namespace Gauge_Generator
             layers_view.Items.Clear();
             foreach(Layer i in Global.project.layers)
             {
-                ListBoxItem item = new ListBoxItem();
-                StackPanel spnl = new StackPanel();
-                Image img = new Image();
-                TextBlock tblock = new TextBlock();
-                spnl.Orientation = Orientation.Horizontal;
-                img.Width = 40;
-                img.Height = 40;
-                img.Source = new BitmapImage(new Uri(Global.LayerSmallImages[(int)Global.GetLayerType(i)]));
-                img.Margin = new Thickness(3, 3, 10, 3);
-                tblock.VerticalAlignment = VerticalAlignment.Center;
-                tblock.Text = i.Label;
-                tblock.FontSize = 16;
-                tblock.FontFamily = new FontFamily("Segoe UI");
+                Grid gr = new Grid()
+                {
+                    Width = 280
+                };
+                StackPanel spnl = new StackPanel
+                {
+                    Orientation = Orientation.Horizontal
+                };
+                Image img = new Image
+                {
+                    Width = 40,
+                    Height = 40,
+                    Source = new BitmapImage(new Uri(Global.LayerSmallImages[(int)Global.GetLayerType(i)])),
+                    Margin = new Thickness(3, 3, 10, 3)
+                };
+                TextBlock tblock = new TextBlock
+                {
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Text = i.Label,
+                    FontSize = 16,
+                    FontFamily = new FontFamily("Segoe UI")
+                };
+                Image vsw = new Image
+                {
+                    Width = 24,
+                    Height = 24,
+                    Source = new BitmapImage(new Uri(Global.Visibility[i.Visible ? 1 : 0])),
+                    Margin = new Thickness(8, 8, 8, 8),
+                    Cursor = Cursors.Hand,
+                    Tag = i
+                };
+                vsw.MouseDown += Vsw_MouseDown;
                 spnl.Children.Add(img);
                 spnl.Children.Add(tblock);
-                layers_view.Items.Add(spnl);
+                gr.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(240) });
+                gr.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(40) });
+                spnl.SetValue(Grid.ColumnProperty, 0);
+                vsw.SetValue(Grid.ColumnProperty, 1);
+                gr.Children.Add(spnl);
+                gr.Children.Add(vsw);
+                layers_view.Items.Add(gr);
             }
             layers_view.SelectedIndex = index;
             Global.RefreshScreen();
+        }
+
+        private void Vsw_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(e.LeftButton == MouseButtonState.Pressed)
+            {
+                Image s = (Image)sender;
+                Layer l = (Layer)s.Tag;
+                l.Visible = !l.Visible;
+                s.Source = new BitmapImage(new Uri(Global.Visibility[l.Visible ? 1 : 0]));
+                Global.RefreshScreen();
+                e.Handled = true;
+            }
         }
 
         private void New_layer_btn(object sender, RoutedEventArgs e)
@@ -153,6 +191,7 @@ namespace Gauge_Generator
 
         private void Layers_view_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if (e.OriginalSource is Image img && img.Tag is Layer) return;
             Global.EditingLayer = Global.project.layers[layers_view.SelectedIndex];
             Global.SetSidebar(Global.SidebarPages.Editor);
         }
