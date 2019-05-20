@@ -24,6 +24,7 @@ namespace Gauge_Generator
         public List<Layer> layers = new List<Layer>();
 
         //PROPERTIES
+        [Description(""), Category("Export")]
         public int ImageSize
         {
             get { return _imagesize; }
@@ -36,8 +37,11 @@ namespace Gauge_Generator
                 }
             }
         }
+        [Description(""), Category("Background")]
         public Color BackgroundColor { get; set; }
+        [Description(""), Category("Background")]
         public Color ForegroundColor { get; set; }
+        [Description(""), Category("Background")]
         public bool RoundForeground { get; set; }
 
         [Browsable(false)]

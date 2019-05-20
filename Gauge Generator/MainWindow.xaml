@@ -30,10 +30,10 @@
                 </Border>
             </Border>
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button IsEnabled="False" Content="New" ToolTip="New project"></Button>
-                <Button IsEnabled="False" Content="Open" ToolTip="Open project"></Button>
-                <Button IsEnabled="False" Content="Save" ToolTip="Save project data"></Button>
-                <Button IsEnabled="False" Content="SaveAs" ToolTip="Save project data to new file"></Button>
+                <Button Click="Button_New" Content="New" ToolTip="New project"></Button>
+                <Button Click="Button_Open" Content="Open" ToolTip="Open project"></Button>
+                <Button Click="Button_Save" Content="Save" ToolTip="Save project data"></Button>
+                <Button Click="Button_SaveAs" Content="SaveAs" ToolTip="Save project data to new file"></Button>
                 <Button IsEnabled="False" Content="Export" ToolTip="Export to PNG  image"></Button>
                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
                 <Button IsEnabled="False" Content="Doc" ToolTip="Show documentation"></Button>

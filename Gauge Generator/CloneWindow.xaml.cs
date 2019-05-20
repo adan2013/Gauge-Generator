@@ -47,7 +47,7 @@ namespace Gauge_Generator
             if (LayerIndex >= 0)
             {
                 Layer l = Global.project.layers[LayerIndex];
-                lbl_description.Text = "Name: " + l.Label + "\nType: " + l.GetType().ToString();
+                lbl_description.Text = "Name: " + l.Label + "\nType: " + Global.LayerNames[(int)Global.GetLayerType(l)];
                 txt_name.Text = l.Label + "_Clone";
                 txt_name.Focus();
                 txt_name.SelectionStart = 0;

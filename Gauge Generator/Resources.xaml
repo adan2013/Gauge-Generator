@@ -8,7 +8,7 @@
         <Setter Property="Margin" Value="2, 0, 2, 0" />
         <Setter Property="Width" Value="40px" />
         <Setter Property="Height" Value="40px" />
-
+        
     </Style>
 
     <!--SCROLLBARS-->
@@ -84,6 +84,50 @@
                             <Setter TargetName="PageDown" Property="Command" Value="ScrollBar.PageLeftCommand" />
                             <Setter TargetName="PageUp" Property="Command" Value="ScrollBar.PageRightCommand" />
                         </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--LISTBOX-->
+    <Style TargetType="{x:Type ListBoxItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border x:Name="Bd"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="true">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Selector.IsSelectionActive"
+                                            Value="False" />
+                                <Condition Property="IsSelected"
+                                            Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background"
+                                    TargetName="Bd"
+                                    Value="#fffafad2" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Selector.IsSelectionActive"
+                                            Value="True" />
+                                <Condition Property="IsSelected"
+                                            Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background"
+                                    TargetName="Bd"
+                                    Value="#fffafad2" />
+                        </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

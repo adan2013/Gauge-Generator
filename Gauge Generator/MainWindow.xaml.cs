@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MEDIA = System.Windows.Media;
+using DataManagementSystem;
+using Microsoft.Win32;
 
 namespace Gauge_Generator
 {
@@ -22,6 +24,9 @@ namespace Gauge_Generator
     /// </summary>
     public partial class MainWindow : Window
     {
+        const string DMS_ID = "GaugeGen";
+        DMS<ProjectData> dms = new DMS<ProjectData>(DMS_ID, ref Global.project, "");
+
         public MainWindow()
         {
             InitializeComponent();
@@ -49,6 +54,71 @@ namespace Gauge_Generator
             //Global.EditingLayer = Global.project.layers[0];
             //Global.SetSidebar(Global.SidebarPages.Editor);
             //Global.SetSidebar(Global.SidebarPages.Layers);
+        }
+
+        public void LoadProject(string path, bool tempfile)
+        {
+            dms = new DMS<ProjectData>(DMS_ID, ref Global.project, path);
+            if (path != "" && System.IO.File.Exists(path))
+            {
+                if(tempfile)
+                {
+                    dms.LoadFileAndClearPath();
+                }
+                else
+                {
+                    dms.LoadFromSource();
+                }
+            }
+            Global.EditingLayer = null;
+            Global.SetSidebar(Global.SidebarPages.Layers);
+        }
+
+        private void Button_New(object sender, RoutedEventArgs e)
+        {
+            if(dms != null && dms.FileChanged)
+            {
+                if (MessageBox.Show("The current project has unsaved changes. Do you want to continue?", "Unsaved changes", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.Yes) != MessageBoxResult.Yes) return;
+            }
+            LoadProject("", false);
+        }
+
+        private void Button_Open(object sender, RoutedEventArgs e)
+        {
+            if (dms != null && dms.FileChanged)
+            {
+                if (MessageBox.Show("The current project has unsaved changes. Do you want to continue?", "Unsaved changes", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.Yes) != MessageBoxResult.Yes) return;
+            }
+            OpenFileDialog opn = new OpenFileDialog
+            {
+                Multiselect = false,
+                Filter = "Gauge Generator Project (*.ggp)|*.ggp"
+            };
+            if ((bool)opn.ShowDialog()) LoadProject(opn.FileName, false);
+        }
+
+        private void Button_Save(object sender, RoutedEventArgs e)
+        {
+            if(dms.PathToFile == "")
+            {
+                Button_SaveAs(sender, new RoutedEventArgs());
+            }
+            else
+            {
+                if (!dms.SaveChanges()) MessageBox.Show("File error. The project has not been saved", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+            }
+        }
+
+        private void Button_SaveAs(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sve = new SaveFileDialog
+            {
+                Filter = "Gauge Generator Project (*.ggp)|*.ggp"
+            };
+            if((bool)sve.ShowDialog())
+            {
+                if (!dms.SaveAs(sve.FileName)) MessageBox.Show("File error. The project has not been saved", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+            }
         }
     }
 }
