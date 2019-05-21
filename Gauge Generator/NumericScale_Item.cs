@@ -17,7 +17,6 @@ namespace Gauge_Generator
         //CONSTS
         const int DEFAULT_STEP_PARTS = 10;
 
-        //PRIVATE VARIABLES
         public int _rangemin;
         public int _rangemax;
         public int _rangestep;
@@ -29,7 +28,7 @@ namespace Gauge_Generator
         public bool _bold;
         public bool _italic;
         public bool _underline;
-        public MEDIA.Color _fontcolor;
+        public string _fontcolor;
         public bool _rotated;
 
         //PROPERTIES
@@ -90,8 +89,8 @@ namespace Gauge_Generator
         [Description("Font color"), Category("Font")]
         public MEDIA.Color FontColor
         {
-            get { return _fontcolor; }
-            set { _fontcolor = ValidateColor(value, false); }
+            get { return StringToMediaColor(_fontcolor); }
+            set { _fontcolor = MediaColorToString(value, false); }
         }
         [Description("Font size"), Category("Font")]
         public double FontSize
@@ -138,7 +137,7 @@ namespace Gauge_Generator
             _scalemultiplier = 1;
             _rounding = 0;
             _distancefromcenter = 0.85;
-            _fontcolor = MEDIA.Colors.White;
+            _fontcolor = "#FFFFFFFF";
             _fontsize = 0.1;
             _fontfamily = Global.DEFAULT_FONT;
             _bold = false;
@@ -204,7 +203,7 @@ namespace Gauge_Generator
                                       _italic,
                                       _underline,
                                       s,
-                                      _fontcolor,
+                                      StringToMediaColor(_fontcolor),
                                       _rotated ? ang + 90 : 0);
                 }
             }

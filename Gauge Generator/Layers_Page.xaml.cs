@@ -86,6 +86,7 @@ namespace Gauge_Generator
                 l.Visible = !l.Visible;
                 s.Source = new BitmapImage(new Uri(Global.Visibility[l.Visible ? 1 : 0]));
                 Global.RefreshScreen();
+                Global.dms.CheckChanges();
                 e.Handled = true;
             }
         }
@@ -106,6 +107,7 @@ namespace Gauge_Generator
                 }
                 w.Close();
                 Global.LastEditedLayer = 0;
+                Global.dms.CheckChanges();
             }
             else
             {
@@ -133,6 +135,7 @@ namespace Gauge_Generator
             {
                 Global.project.layers.RemoveAt(layers_view.SelectedIndex);
                 Reload_Layers_List(-1);
+                Global.dms.CheckChanges();
             }
         }
 
@@ -150,6 +153,7 @@ namespace Gauge_Generator
                 {
                     Global.EditingLayer = Global.project.layers[layers_view.SelectedIndex];
                     Global.SetSidebar(Global.SidebarPages.Editor);
+                    Global.dms.CheckChanges();
                 }
                 cw.Close();
             }
@@ -164,6 +168,7 @@ namespace Gauge_Generator
                 Global.project.layers.RemoveAt(i);
                 Global.project.layers.Insert(i - 1, temp);
                 Reload_Layers_List(i - 1);
+                Global.dms.CheckChanges();
             }
         }
 
@@ -176,6 +181,7 @@ namespace Gauge_Generator
                 Global.project.layers.RemoveAt(i);
                 Global.project.layers.Insert(i + 1, temp);
                 Reload_Layers_List(i + 1);
+                Global.dms.CheckChanges();
             }
         }
 

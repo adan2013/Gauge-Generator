@@ -24,18 +24,16 @@ namespace Gauge_Generator
     /// </summary>
     public partial class MainWindow : Window
     {
-        const string DMS_ID = "GaugeGen";
-        DMS<ProjectData> dms = new DMS<ProjectData>(DMS_ID, ref Global.project, "");
-
         public MainWindow()
         {
             InitializeComponent();
+            Global.dms.FileUpdated += Global.FU_DMS;
             Global.SetSidebarObject(sidebar_frame, sidebar_title);
             Global.SetSidebar(Global.SidebarPages.Layers);
             Global.ScreenCanvas = preview;
             MEDIA.Animation.Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(MEDIA.Animation.Timeline), new FrameworkPropertyMetadata { DefaultValue = 15 });
         }
-
+        
         private void Preview_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             double w = e.NewSize.Width - 20;
@@ -56,36 +54,18 @@ namespace Gauge_Generator
             //Global.SetSidebar(Global.SidebarPages.Layers);
         }
 
-        public void LoadProject(string path, bool tempfile)
-        {
-            dms = new DMS<ProjectData>(DMS_ID, ref Global.project, path);
-            if (path != "" && System.IO.File.Exists(path))
-            {
-                if(tempfile)
-                {
-                    dms.LoadFileAndClearPath();
-                }
-                else
-                {
-                    dms.LoadFromSource();
-                }
-            }
-            Global.EditingLayer = null;
-            Global.SetSidebar(Global.SidebarPages.Layers);
-        }
-
         private void Button_New(object sender, RoutedEventArgs e)
         {
-            if(dms != null && dms.FileChanged)
+            if(Global.dms != null && Global.dms.FileChanged)
             {
                 if (MessageBox.Show("The current project has unsaved changes. Do you want to continue?", "Unsaved changes", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.Yes) != MessageBoxResult.Yes) return;
             }
-            LoadProject("", false);
+            Global.LoadProject("", false);
         }
 
         private void Button_Open(object sender, RoutedEventArgs e)
         {
-            if (dms != null && dms.FileChanged)
+            if (Global.dms != null && Global.dms.FileChanged)
             {
                 if (MessageBox.Show("The current project has unsaved changes. Do you want to continue?", "Unsaved changes", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.Yes) != MessageBoxResult.Yes) return;
             }
@@ -94,18 +74,19 @@ namespace Gauge_Generator
                 Multiselect = false,
                 Filter = "Gauge Generator Project (*.ggp)|*.ggp"
             };
-            if ((bool)opn.ShowDialog()) LoadProject(opn.FileName, false);
+            if ((bool)opn.ShowDialog()) Global.LoadProject(opn.FileName, false);
         }
 
         private void Button_Save(object sender, RoutedEventArgs e)
         {
-            if(dms.PathToFile == "")
+            if(Global.dms.PathToFile == "")
             {
                 Button_SaveAs(sender, new RoutedEventArgs());
             }
             else
             {
-                if (!dms.SaveChanges()) MessageBox.Show("File error. The project has not been saved", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                if (!Global.dms.FileChanged) return;
+                if (!Global.dms.SaveChanges()) MessageBox.Show("File error. The project has not been saved", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
             }
         }
 
@@ -117,7 +98,7 @@ namespace Gauge_Generator
             };
             if((bool)sve.ShowDialog())
             {
-                if (!dms.SaveAs(sve.FileName)) MessageBox.Show("File error. The project has not been saved", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                if (!Global.dms.SaveAs(sve.FileName)) MessageBox.Show("File error. The project has not been saved", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
             }
         }
     }

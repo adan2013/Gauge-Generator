@@ -17,13 +17,12 @@ namespace Gauge_Generator
         //CONSTS
         const int DEFAULT_STEP_PARTS = 10;
 
-        //PRIVATE VARIABLES
         public double _fontsize;
         public string _fontfamily;
         public bool _bold;
         public bool _italic;
         public bool _underline;
-        public MEDIA.Color _fontcolor;
+        public string _fontcolor;
         public double _position_x;
         public double _position_y;
         public int _angle;
@@ -33,8 +32,8 @@ namespace Gauge_Generator
         [Description("Font color"), Category("Font")]
         public MEDIA.Color FontColor
         {
-            get { return _fontcolor; }
-            set { _fontcolor = ValidateColor(value, false); }
+            get { return StringToMediaColor(_fontcolor); }
+            set { _fontcolor = MediaColorToString(value, false); }
         }
         [Description("Font size"), Category("Font")]
         public double FontSize
@@ -99,7 +98,7 @@ namespace Gauge_Generator
         //METHODS
         public override void LoadDefaultValues()
         {
-            _fontcolor = MEDIA.Colors.White;
+            _fontcolor = "#FFFFFFFF";
             _fontsize = 0.1;
             _fontfamily = Global.DEFAULT_FONT;
             _bold = false;
@@ -143,7 +142,7 @@ namespace Gauge_Generator
                                     _italic,
                                     _underline,
                                     _text,
-                                    _fontcolor,
+                                    StringToMediaColor(_fontcolor),
                                     _angle);
             }
             base.DrawLayer(ref can, HQmode, size);

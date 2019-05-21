@@ -24,6 +24,7 @@ namespace Gauge_Generator
         {
             InitializeComponent();
             prop_grid.SelectedObject = Global.project;
+            Global.RefreshScreen();
         }
 
         private void Close_btn(object sender, RoutedEventArgs e)
@@ -34,7 +35,7 @@ namespace Gauge_Generator
         private void Prop_grid_PropertyValueChanged(object sender, Xceed.Wpf.Toolkit.PropertyGrid.PropertyValueChangedEventArgs e)
         {
             Global.RefreshScreen();
-            System.Diagnostics.Debug.WriteLine("SIZE: {0}", Global.project.ImageSize);
+            Global.dms.CheckChanges();
         }
     }
 }

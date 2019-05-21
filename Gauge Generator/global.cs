@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Shapes;
 using System.Windows.Controls;
 using MEDIA = System.Windows.Media;
+using DataManagementSystem;
 
 namespace Gauge_Generator
 {
@@ -18,6 +19,7 @@ namespace Gauge_Generator
         public const int MIN_RANGE_VALUE = -500;
         public const int MAX_RANGE_VALUE = 500;
         public const int MAX_LAYERS = 30;
+        public const string DMS_ID = "GaugeGen";
 
         public const int ARC_LOD_LQ = 20;
         public const int ARC_LOD_HQ = 4;
@@ -27,6 +29,7 @@ namespace Gauge_Generator
         public static Color Overlay1 { get { return Color.FromArgb(255, 66, 105, 165); } }
         
         public static ProjectData project = new ProjectData();
+        public static DMS<ProjectData> dms = new DMS<ProjectData>(DMS_ID, ref project, "");
 
         public static Canvas ScreenCanvas;
         public static Layer EditingLayer;
@@ -343,6 +346,36 @@ namespace Gauge_Generator
                 AutoReverse = true
             };
             obj.BeginAnimation(System.Windows.UIElement.OpacityProperty, da);
+        }
+
+        #endregion
+
+        #region "DMS"
+
+        public static void FU_DMS(ref ProjectData obj)
+        {
+            project = obj;
+            SetSidebar(Sidebar);
+        }
+
+        public static void LoadProject(string path, bool tempfile)
+        {
+            EditingLayer = null;
+            SetSidebar(SidebarPages.Layers);
+            dms.FileUpdated -= FU_DMS;
+            dms = new DMS<ProjectData>(DMS_ID, ref project, path);
+            dms.FileUpdated += FU_DMS;
+            if (path != "" && System.IO.File.Exists(path))
+            {
+                if (tempfile)
+                {
+                    dms.LoadFileAndClearPath();
+                }
+                else
+                {
+                    dms.LoadFromSource();
+                }
+            }
         }
 
         #endregion

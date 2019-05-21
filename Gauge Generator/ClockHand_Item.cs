@@ -14,15 +14,14 @@ namespace Gauge_Generator
     [Serializable()]
     class ClockHand_Item : Layer
     {
-        //PRIVATE VARIABLES
         public double _n_length;
         public double _thickness;
-        public MEDIA.Color _n_color;
+        public string _n_color;
         public double _p_length;
-        public MEDIA.Color _p_color;
+        public string _p_color;
         public ClockHandType _endtype;
         public double _circlesize;
-        public MEDIA.Color _circlecolor;
+        public string _circlecolor;
         public bool _circlebehindthearrow;
         public int _value;
         public int _angle;
@@ -53,8 +52,8 @@ namespace Gauge_Generator
         [Description("Color of negative part of clock hand"), Category("Beginning of clock hand")]
         public MEDIA.Color N_Color
         {
-            get { return _n_color; }
-            set { _n_color = ValidateColor(value, false); }
+            get { return StringToMediaColor(_n_color); }
+            set { _n_color = MediaColorToString(value, false); }
         }
         [Description("Length of positive part of clock hand"), Category("End of clock hand")]
         public double P_Length
@@ -71,8 +70,8 @@ namespace Gauge_Generator
         [Description("Color of positive part of clock hand"), Category("End of clock hand")]
         public MEDIA.Color P_Color
         {
-            get { return _p_color; }
-            set { _p_color = ValidateColor(value, false); }
+            get { return StringToMediaColor(_p_color); }
+            set { _p_color = MediaColorToString(value, false); }
         }
         [Description("Size of center circle"), Category("Circle")]
         public double CircleSize
@@ -83,8 +82,8 @@ namespace Gauge_Generator
         [Description("Color of the circle"), Category("Circle")]
         public MEDIA.Color CircleColor
         {
-            get { return _circlecolor; }
-            set { _circlecolor = ValidateColor(value, true); }
+            get { return StringToMediaColor(_circlecolor); }
+            set { _circlecolor = MediaColorToString(value, true); }
         }
         [Description("False = Circle of clock hand is on top; True = Clock hand is on top"), Category("Circle")]
         public bool CircleBehindTheArrow
@@ -125,12 +124,12 @@ namespace Gauge_Generator
         {
             _n_length = 0.2;
             _thickness = 0.03;
-            _n_color = MEDIA.Colors.DarkGray;
+            _n_color = "#FFA9A9A9";
             _p_length = 0.9;
             _endtype = ClockHandType.Normal;
-            _p_color = MEDIA.Colors.White;
+            _p_color = "#FFFFFFFF";
             _circlesize = 0.08;
-            _circlecolor = MEDIA.Colors.DarkGray;
+            _circlecolor = "#FFA9A9A9";
             _circlebehindthearrow = false;
             _value = 0;
             _angle = 0;
@@ -182,7 +181,7 @@ namespace Gauge_Generator
                 Global.FillCircle(ref can,
                               c,
                               (int)Math.Round(half_size * _circlesize),
-                              Color.FromArgb(_circlecolor.A, _circlecolor.R, _circlecolor.G, _circlecolor.B));
+                              StringToDrawingColor(_circlecolor));
             }
 
             double ratio = _n_length / (_n_length + _p_length);
@@ -198,10 +197,10 @@ namespace Gauge_Generator
                 StartPoint = new System.Windows.Point(0, 0),
                 EndPoint = new System.Windows.Point(1, 0)
             };
-            lgb.GradientStops.Add(new MEDIA.GradientStop(_n_color, 0));
-            lgb.GradientStops.Add(new MEDIA.GradientStop(_n_color, ratio));
-            lgb.GradientStops.Add(new MEDIA.GradientStop(_p_color, ratio));
-            lgb.GradientStops.Add(new MEDIA.GradientStop(_p_color, 1));
+            lgb.GradientStops.Add(new MEDIA.GradientStop(StringToMediaColor(_n_color), 0));
+            lgb.GradientStops.Add(new MEDIA.GradientStop(StringToMediaColor(_n_color), ratio));
+            lgb.GradientStops.Add(new MEDIA.GradientStop(StringToMediaColor(_p_color), ratio));
+            lgb.GradientStops.Add(new MEDIA.GradientStop(StringToMediaColor(_p_color), 1));
             Polygon pg = new Polygon
             {
                 Fill = lgb,
@@ -249,7 +248,7 @@ namespace Gauge_Generator
                 Global.FillCircle(ref can,
                               c,
                               (int)Math.Round(half_size * _circlesize),
-                              Color.FromArgb(_circlecolor.A, _circlecolor.R, _circlecolor.G, _circlecolor.B));
+                              StringToDrawingColor(_circlecolor));
             }
             base.DrawLayer(ref can, HQmode, size);
         }

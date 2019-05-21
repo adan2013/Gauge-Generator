@@ -14,7 +14,6 @@ namespace Gauge_Generator
     [Serializable()]
     class Arc_Item : Layer
     {
-        //PRIVATE VARIABLES
         public double _circleoffset_x;
         public double _circleoffset_y;
         public double _distancefromcenter;
@@ -23,7 +22,7 @@ namespace Gauge_Generator
         public int _rangemax;
         public int _anglestart;
         public int _openingangle;
-        public MEDIA.Color _color;
+        public string _color;
         public double _weight;
 
         //PROPERTIES
@@ -86,8 +85,8 @@ namespace Gauge_Generator
         [Description("Color of the arc"), Category("Arc")]
         public MEDIA.Color Color
         {
-            get { return _color; }
-            set { _color = ValidateColor(value, true); }
+            get { return StringToMediaColor(_color); }
+            set { _color = MediaColorToString(value, true); }
         }
         [Description("Arc weight"), Category("Arc")]
         public double Weight
@@ -112,7 +111,7 @@ namespace Gauge_Generator
             _rangemax = 100;
             _anglestart = 0;
             _openingangle = 90;
-            _color = MEDIA.Colors.DarkGoldenrod;
+            _color = "#FFB8860B";
             _weight = 0.08;
             ValidateWithSource();
             base.LoadDefaultValues();
@@ -172,7 +171,7 @@ namespace Gauge_Generator
                                     _manualangle ? _openingangle : (int)Math.Round(maxangle - minangle),
                                     circle1,
                                     circle2,
-                                    System.Drawing.Color.FromArgb(_color.A, _color.R, _color.G, _color.B));
+                                    StringToDrawingColor(_color));
             base.DrawLayer(ref can, HQmode, size);
         }
 

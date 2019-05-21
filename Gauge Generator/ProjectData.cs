@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows.Media;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Shapes;
+using MEDIA = System.Windows.Media;
 
 namespace Gauge_Generator
 {
@@ -17,11 +17,11 @@ namespace Gauge_Generator
         public delegate void d_ImageSizeChanged(int newSize);
         public event d_ImageSizeChanged ImageSizeChanged;
 
-        //PRIVATE
-        int _imagesize = 300;
-
-        //PUBLIC
         public List<Layer> layers = new List<Layer>();
+        public int _imagesize = 300;
+        public string _backgroundcolor;
+        public string _foregroundcolor;
+        public bool _roundforeground;
 
         //PROPERTIES
         [Description(""), Category("Export")]
@@ -38,11 +38,23 @@ namespace Gauge_Generator
             }
         }
         [Description(""), Category("Background")]
-        public Color BackgroundColor { get; set; }
+        public MEDIA.Color BackgroundColor
+        {
+            get { return Layer.StringToMediaColor(_backgroundcolor); }
+            set { _backgroundcolor = Layer.MediaColorToString(value, false); }
+        }
         [Description(""), Category("Background")]
-        public Color ForegroundColor { get; set; }
+        public MEDIA.Color ForegroundColor
+        {
+            get { return Layer.StringToMediaColor(_foregroundcolor); }
+            set { _foregroundcolor = Layer.MediaColorToString(value, false); }
+        }
         [Description(""), Category("Background")]
-        public bool RoundForeground { get; set; }
+        public bool RoundForeground
+        {
+            get { return _roundforeground; }
+            set { _roundforeground = value; }
+        }
 
         [Browsable(false)]
         public bool ShowOnlyThisLayer { get; set; }
@@ -53,8 +65,8 @@ namespace Gauge_Generator
 
         public ProjectData()
         {
-            BackgroundColor = Colors.Transparent;
-            ForegroundColor = Colors.Black;
+            BackgroundColor = MEDIA.Colors.Transparent;
+            ForegroundColor = MEDIA.Colors.Black;
             RoundForeground = true;
         }
 
@@ -64,10 +76,10 @@ namespace Gauge_Generator
             //background
             if (RoundForeground)
             {
-                pnl.Background = new SolidColorBrush(BackgroundColor);
+                pnl.Background = new MEDIA.SolidColorBrush(BackgroundColor);
                 Ellipse el = new Ellipse
                 {
-                    Fill = new SolidColorBrush(ForegroundColor),
+                    Fill = new MEDIA.SolidColorBrush(ForegroundColor),
                     Width = size,
                     Height = size
                 };
@@ -75,7 +87,7 @@ namespace Gauge_Generator
             }
             else
             {
-                pnl.Background = new SolidColorBrush(ForegroundColor);
+                pnl.Background = new MEDIA.SolidColorBrush(ForegroundColor);
             }
             //layers
             for(int i = layers.Count - 1; i >= 0; i--)

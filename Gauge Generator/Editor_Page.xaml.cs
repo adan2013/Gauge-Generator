@@ -57,7 +57,11 @@ namespace Gauge_Generator
         {
             foreach(Layer i in Global.project.layers)
             {
-                if (i.RangeSource == Global.EditingLayer) i.ValidateWithSource();
+                if (i.RangeSource == Global.EditingLayer)
+                {
+                    i.ValidateWithSource();
+                    Global.dms.CheckChanges();
+                }
             }
             Global.EditingLayer = null;
             Global.SetSidebar(Global.SidebarPages.Layers);
@@ -66,6 +70,7 @@ namespace Gauge_Generator
         private void Prop_grid_PropertyValueChanged(object sender, Xceed.Wpf.Toolkit.PropertyGrid.PropertyValueChangedEventArgs e)
         {
             Global.RefreshScreen();
+            Global.dms.CheckChanges();
         }
 
         private void Reset_Click(object sender, RoutedEventArgs e)
@@ -76,6 +81,7 @@ namespace Gauge_Generator
                 prop_grid.SelectedObject = null;
                 prop_grid.SelectedObject = Global.EditingLayer;
                 Global.RefreshScreen();
+                Global.dms.CheckChanges();
             }
         }
 
@@ -86,6 +92,7 @@ namespace Gauge_Generator
             Global.project.BringToFront = (bool)BringToFront.IsChecked;
             Global.project.HideOverlay = (bool)HideOverlay.IsChecked;
             Global.RefreshScreen();
+            Global.dms.CheckChanges();
         }
     }
 }

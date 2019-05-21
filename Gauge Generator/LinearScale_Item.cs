@@ -17,7 +17,6 @@ namespace Gauge_Generator
         //CONSTS
         const int DEFAULT_STEP_PARTS = 10;
 
-        //PRIVATE VARIABLES
         public int _rangemin;
         public int _rangemax;
         public int _rangestep;
@@ -25,7 +24,7 @@ namespace Gauge_Generator
         public double _distancefromcenter;
         public double _linelength;
         public bool _drawarconedge;
-        public MEDIA.Color _linecolor;
+        public string _linecolor;
 
         //PROPERTIES
         [Description("Initial value of the visible scale"), Category("Range")]
@@ -85,8 +84,8 @@ namespace Gauge_Generator
         [Description("Line color"), Category("Lines")]
         public MEDIA.Color LineColor
         {
-            get { return _linecolor; }
-            set { _linecolor = ValidateColor(value, false); }
+            get { return StringToMediaColor(_linecolor); }
+            set { _linecolor = MediaColorToString(value, false); }
         }
 
         public LinearScale_Item()
@@ -104,7 +103,7 @@ namespace Gauge_Generator
             _distancefromcenter = 0.95;
             _linelength = 0.05;
             _drawarconedge = false;
-            _linecolor = MEDIA.Colors.White;
+            _linecolor = "#FFFFFFFF";
             ValidateWithSource();
             base.LoadDefaultValues();
         }
@@ -160,7 +159,7 @@ namespace Gauge_Generator
                                             Math.Round(circle1),
                                             Math.Round(circle2),
                                             weight,
-                                            Color.FromArgb(_linecolor.A, _linecolor.R, _linecolor.G, _linecolor.B),
+                                            StringToDrawingColor(_linecolor),
                                             _rangemin,
                                             _rangemax,
                                             _rangestep
@@ -175,7 +174,7 @@ namespace Gauge_Generator
                                         Global.GetPointOnCircle(c, circle1, ang),
                                         Global.GetPointOnCircle(c, circle2, ang),
                                         weight,
-                                        Color.FromArgb(_linecolor.A, _linecolor.R, _linecolor.G, _linecolor.B));
+                                        StringToDrawingColor(_linecolor));
                     }
                 }
             }

@@ -14,7 +14,6 @@ namespace Gauge_Generator
     [Serializable()]
     public class Range_Item : Layer
     {
-        //PRIVATE VARIABLES
         public double _circlecenter_x;
         public double _circlecenter_y;
         public double _circleradius;
@@ -25,7 +24,7 @@ namespace Gauge_Generator
         public double _clockhandsoffset_x;
         public double _clockhandsoffset_y;
         public double _clockhandspointsize;
-        public MEDIA.Color _clockhandspointcolor;
+        public string _clockhandspointcolor;
 
         //PROPERTIES
         [Description("X coordinate of the center of circle"), Category("Circle position")]
@@ -99,8 +98,8 @@ namespace Gauge_Generator
         [Description("Color of dot for clock hands"), Category("Clock hands")]
         public MEDIA.Color ClockHandsPointColor
         {
-            get { return _clockhandspointcolor; }
-            set { _clockhandspointcolor = ValidateColor(value, true); }
+            get { return StringToMediaColor(_clockhandspointcolor); }
+            set { _clockhandspointcolor = MediaColorToString(value, true); }
         }
 
         public Range_Item()
@@ -121,7 +120,7 @@ namespace Gauge_Generator
             _clockhandsoffset_x = 0;
             _clockhandsoffset_y = 0;
             _clockhandspointsize = 0.01;
-            _clockhandspointcolor = MEDIA.Colors.White;
+            _clockhandspointcolor = "#FFFFFFFF";
             base.LoadDefaultValues();
         }
 
@@ -149,7 +148,7 @@ namespace Gauge_Generator
             Global.FillCircle(ref can,
                               Global.GetOffsetPoint(c, half_size * _circleradius, _clockhandsoffset_x, _clockhandsoffset_y),
                               (int)(_clockhandspointsize * size),
-                              Color.FromArgb(_clockhandspointcolor.A, _clockhandspointcolor.R, _clockhandspointcolor.G, _clockhandspointcolor.B));
+                              StringToDrawingColor(_clockhandspointcolor));
             base.DrawLayer(ref can, HQmode, size);
         }
 

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.ComponentModel;
 using System.Windows.Controls;
+using MEDIA = System.Windows.Media;
 
 namespace Gauge_Generator
 {
     [Serializable()]
     public class Layer
     {
-        //PRIVATE VARIABLES
         public string _label = "New Layer";
 
         //PROPERTIES
@@ -70,20 +70,21 @@ namespace Gauge_Generator
 
         virtual public void DrawOverlay(ref Canvas can, bool HQmode, int size, double alpha) { }
 
-        //VALIDATION
-        protected double TranslateValue(double value)
+        #region "VALIDATION"
+
+        public static double TranslateValue(double value)
         {
             return Math.Round(value * 100, 1);
         }
 
-        protected int ValidateInt(int val, int min, int max)
+        public static int ValidateInt(int val, int min, int max)
         {
             if (val < min) return min;
             if (val > max) return max;
             return val;
         }
 
-        protected double ValidateDouble(double val, double min, double max, bool translatevalue = true)
+        public static double ValidateDouble(double val, double min, double max, bool translatevalue = true)
         {
             if (translatevalue) val = val / 100;
             if (val < min) return min;
@@ -91,27 +92,38 @@ namespace Gauge_Generator
             return val;
         }
 
-        protected string ValidateString(string val, int length, bool removeSpaces = false)
+        public static string ValidateString(string val, int length, bool removeSpaces = false)
         {
             if (val.Length > length) val = val.Substring(0, length);
             if (removeSpaces) val.Replace(" ", "");
             return val;
         }
 
-        protected System.Windows.Media.Color ValidateColor(System.Windows.Media.Color c, bool removeAlpha)
+        public static string MediaColorToString(MEDIA.Color c, bool removeAlpha)
         {
-            if (removeAlpha) c.A = 255;
-            return c;
+            return string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", removeAlpha ? 255 : c.A, c.R, c.G, c.B);
         }
 
-        protected string ValidateFontFamily(string val)
+        public static MEDIA.Color StringToMediaColor(string c)
+        {
+            return (MEDIA.Color)MEDIA.ColorConverter.ConvertFromString(c);
+        }
+
+        public static Color StringToDrawingColor(string c)
+        {
+            return ColorTranslator.FromHtml(c);
+        }
+
+        public static string ValidateFontFamily(string val)
         {
             try
             {
                 FontFamily test = new FontFamily(val);
                 if (test.Name == val) return val;
-            } catch { }
+            }
+            catch { }
             return Global.DEFAULT_FONT;
         }
+        #endregion
     }
 }
