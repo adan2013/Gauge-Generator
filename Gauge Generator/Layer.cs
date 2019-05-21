@@ -9,6 +9,7 @@ using System.Windows.Controls;
 
 namespace Gauge_Generator
 {
+    [Serializable()]
     public class Layer
     {
         //PRIVATE VARIABLES

@@ -11,6 +11,7 @@ using MEDIA = System.Windows.Media;
 
 namespace Gauge_Generator
 {
+    [Serializable()]
     public class LinearScale_Item : Layer
     {
         //CONSTS
