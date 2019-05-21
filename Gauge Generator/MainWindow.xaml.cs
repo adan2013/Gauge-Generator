@@ -27,9 +27,7 @@ namespace Gauge_Generator
         public MainWindow()
         {
             InitializeComponent();
-            Global.dms.FileUpdated += Global.FU_DMS;
             Global.SetSidebarObject(sidebar_frame, sidebar_title);
-            Global.SetSidebar(Global.SidebarPages.Layers);
             Global.ScreenCanvas = preview;
             MEDIA.Animation.Timeline.DesiredFrameRateProperty.OverrideMetadata(typeof(MEDIA.Animation.Timeline), new FrameworkPropertyMetadata { DefaultValue = 15 });
         }
@@ -45,6 +43,9 @@ namespace Gauge_Generator
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Global.FileStateChanged += FSC;
+            Global.LoadProject("", false);
+            FSC(false, "");
             //TODO diagnostic code
             //Global.project.layers.Add(new NumericScale_Item());
             //Global.project.layers.Add(new Range_Item());
@@ -54,11 +55,54 @@ namespace Gauge_Generator
             //Global.SetSidebar(Global.SidebarPages.Layers);
         }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if(Global.dms.FileChanged)
+            {
+                switch(MessageBox.Show("The current project has unsaved changes. Do you want to save them?", "Unsaved changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation, MessageBoxResult.Yes))
+                {
+                    case MessageBoxResult.Yes:
+                        Button_Save(sender, new RoutedEventArgs());
+                        break;
+                    case MessageBoxResult.No:
+                        //ok
+                        break;
+                    default:
+                        e.Cancel = true;
+                        break;
+                }
+            }
+        }
+
+        private void FSC(bool changes, string path)
+        {
+            string s = changes ? "* " : "";
+            if(path == "")
+            {
+                s += "Empty project";
+            }
+            else
+            {
+                try { s += new System.IO.FileInfo(path).Name; } catch { }
+            }
+            Title = s + " - Gauge Generator";
+        }
+
         private void Button_New(object sender, RoutedEventArgs e)
         {
             if(Global.dms != null && Global.dms.FileChanged)
             {
-                if (MessageBox.Show("The current project has unsaved changes. Do you want to continue?", "Unsaved changes", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.Yes) != MessageBoxResult.Yes) return;
+                switch (MessageBox.Show("The current project has unsaved changes. Do you want to save them?", "Unsaved changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation, MessageBoxResult.Yes))
+                {
+                    case MessageBoxResult.Yes:
+                        Button_Save(sender, new RoutedEventArgs());
+                        break;
+                    case MessageBoxResult.No:
+                        //ok
+                        break;
+                    default:
+                        return;
+                }
             }
             Global.LoadProject("", false);
         }
@@ -67,7 +111,17 @@ namespace Gauge_Generator
         {
             if (Global.dms != null && Global.dms.FileChanged)
             {
-                if (MessageBox.Show("The current project has unsaved changes. Do you want to continue?", "Unsaved changes", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.Yes) != MessageBoxResult.Yes) return;
+                switch (MessageBox.Show("The current project has unsaved changes. Do you want to save them?", "Unsaved changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation, MessageBoxResult.Yes))
+                {
+                    case MessageBoxResult.Yes:
+                        Button_Save(sender, new RoutedEventArgs());
+                        break;
+                    case MessageBoxResult.No:
+                        //ok
+                        break;
+                    default:
+                        return;
+                }
             }
             OpenFileDialog opn = new OpenFileDialog
             {
@@ -86,6 +140,13 @@ namespace Gauge_Generator
             else
             {
                 if (!Global.dms.FileChanged) return;
+                if (Global.Sidebar == Global.SidebarPages.Editor)
+                {
+                    foreach (Layer i in Global.project.layers)
+                    {
+                        if (i.RangeSource == Global.EditingLayer) i.ValidateWithSource();
+                    }
+                }
                 if (!Global.dms.SaveChanges()) MessageBox.Show("File error. The project has not been saved", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
             }
         }
@@ -98,6 +159,13 @@ namespace Gauge_Generator
             };
             if((bool)sve.ShowDialog())
             {
+                if (Global.Sidebar == Global.SidebarPages.Editor)
+                {
+                    foreach (Layer i in Global.project.layers)
+                    {
+                        if (i.RangeSource == Global.EditingLayer) i.ValidateWithSource();
+                    }
+                }
                 if (!Global.dms.SaveAs(sve.FileName)) MessageBox.Show("File error. The project has not been saved", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
             }
         }

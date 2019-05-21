@@ -102,12 +102,12 @@ namespace Gauge_Generator
                 w.ShowDialog();
                 if(w.DialogResult.HasValue && w.DialogResult.Value)
                 {
+                    Global.dms.CheckChanges();
                     Global.EditingLayer = Global.project.layers[0];
                     Global.SetSidebar(Global.SidebarPages.Editor);
                 }
                 w.Close();
                 Global.LastEditedLayer = 0;
-                Global.dms.CheckChanges();
             }
             else
             {

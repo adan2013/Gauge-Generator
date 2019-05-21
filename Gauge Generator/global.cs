@@ -25,15 +25,20 @@ namespace Gauge_Generator
         public const int ARC_LOD_HQ = 4;
         public const int DURATION_ALPHA_OVERLAY = 1600;
         public const double MIN_ALPHA_OVERLAY = 0.1;
+        
         public const double MAX_ALPHA_OVERLAY = 0.6;
         public static Color Overlay1 { get { return Color.FromArgb(255, 66, 105, 165); } }
         
         public static ProjectData project = new ProjectData();
-        public static DMS<ProjectData> dms = new DMS<ProjectData>(DMS_ID, ref project, "");
+        public static DMS<ProjectData> dms;
 
         public static Canvas ScreenCanvas;
         public static Layer EditingLayer;
         public static int LastEditedLayer = -1;
+
+        //EVENTS
+        public delegate void FileStateChangedDelegate(bool changes, string path);
+        public static event FileStateChangedDelegate FileStateChanged;
 
         #region "CONFIG"
 
@@ -352,6 +357,11 @@ namespace Gauge_Generator
 
         #region "DMS"
 
+        public static void FSC_DMS(bool newvalue)
+        {
+            FileStateChanged?.Invoke(newvalue, dms.PathToFile);
+        }
+
         public static void FU_DMS(ref ProjectData obj)
         {
             project = obj;
@@ -362,9 +372,15 @@ namespace Gauge_Generator
         {
             EditingLayer = null;
             SetSidebar(SidebarPages.Layers);
-            dms.FileUpdated -= FU_DMS;
+            if(dms != null)
+            {
+                dms.FileUpdated -= FU_DMS;
+                dms.FileStatusChanged -= FSC_DMS;
+            }
+            project = new ProjectData();
             dms = new DMS<ProjectData>(DMS_ID, ref project, path);
             dms.FileUpdated += FU_DMS;
+            dms.FileStatusChanged += FSC_DMS;
             if (path != "" && System.IO.File.Exists(path))
             {
                 if (tempfile)
@@ -375,6 +391,10 @@ namespace Gauge_Generator
                 {
                     dms.LoadFromSource();
                 }
+            }
+            else
+            {
+                SetSidebar(SidebarPages.Layers);
             }
         }
 
