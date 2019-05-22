@@ -197,9 +197,12 @@ namespace Gauge_Generator
 
         private void Layers_view_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (e.OriginalSource is Image img && img.Tag is Layer) return;
-            Global.EditingLayer = Global.project.layers[layers_view.SelectedIndex];
-            Global.SetSidebar(Global.SidebarPages.Editor);
+            if (layers_view.SelectedIndex >= 0)
+            {
+                if (e.OriginalSource is Image img && img.Tag is Layer) return;
+                Global.EditingLayer = Global.project.layers[layers_view.SelectedIndex];
+                Global.SetSidebar(Global.SidebarPages.Editor);
+            }
         }
 
         private void Open_proj_settings(object sender, RoutedEventArgs e)

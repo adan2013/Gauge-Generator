@@ -4,10 +4,31 @@
     <!--BUTTONS-->
     <Style TargetType="Button">
         <Setter Property="BorderBrush" Value="Gray" />
-        <Setter Property="Background" Value="#FAFAFA" />
-        <Setter Property="Margin" Value="2, 0, 2, 0" />
+        <Setter Property="Background" Value="White" />
+        <Setter Property="Margin" Value="3, 0, 3, 0" />
         <Setter Property="Width" Value="40px" />
         <Setter Property="Height" Value="40px" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border CornerRadius="8" Background="{TemplateBinding Background}" BorderThickness="1" BorderBrush="#FF999999">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="{TemplateBinding Opacity}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#FFE8DF8A"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="#FFA0A0A0"/>
+                <Setter Property="Foreground" Value="#FFE6E6E6"/>
+                <Setter Property="Cursor" Value="None" />
+                <Setter Property="Opacity" Value="0.6" />
+            </Trigger>
+        </Style.Triggers>
         
     </Style>
 

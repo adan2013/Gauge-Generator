@@ -8,6 +8,7 @@ using System.Windows.Shapes;
 using System.Windows.Controls;
 using MEDIA = System.Windows.Media;
 using DataManagementSystem;
+using System.Windows.Media.Imaging;
 
 namespace Gauge_Generator
 {
@@ -403,6 +404,30 @@ namespace Gauge_Generator
         public static void RefreshScreen()
         {
             if (ScreenCanvas != null) project.DrawProject(ref ScreenCanvas, false, (int)ScreenCanvas.Width);
+        }
+
+        public static bool ExportToPNG(string path)
+        {
+            try
+            {
+                Canvas can = new Canvas
+                {
+                    Background = MEDIA.Brushes.White,
+                    Width = project.ImageSize,
+                    Height = project.ImageSize
+                };
+                project.DrawProject(ref can, true, project.ImageSize);
+                RenderTargetBitmap renderBitmap = new RenderTargetBitmap((int)can.Width, (int)can.Height, 96d, 96d, MEDIA.PixelFormats.Pbgra32);
+                can.Measure(new System.Windows.Size((int)can.Width, (int)can.Height));
+                can.Arrange(new System.Windows.Rect(new System.Windows.Size((int)can.Width, (int)can.Height)));
+                renderBitmap.Render(can);
+                PngBitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+                using (System.IO.FileStream file = System.IO.File.Create(path)) encoder.Save(file);
+                if (project.OpenImage) System.Diagnostics.Process.Start(path);
+            }
+            catch { return false; }
+            return true;
         }
 
         public static Point GetPointOnCircle(Point center, double radius, double angle)

@@ -169,5 +169,39 @@ namespace Gauge_Generator
                 if (!Global.dms.SaveAs(sve.FileName)) MessageBox.Show("File error. The project has not been saved", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
             }
         }
+
+        private void Button_Export(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sve = new SaveFileDialog
+            {
+                Filter = "PNG Image (*.png)|*.png"
+            };
+            if ((bool)sve.ShowDialog())
+            {
+                if (Global.Sidebar == Global.SidebarPages.Editor)
+                {
+                    foreach (Layer i in Global.project.layers)
+                    {
+                        if (i.RangeSource == Global.EditingLayer) i.ValidateWithSource();
+                    }
+                }
+                if (!Global.ExportToPNG(sve.FileName)) MessageBox.Show("File error. The image has not been generated", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+            }
+        }
+
+        private void Button_About(object sender, RoutedEventArgs e)
+        {
+            AboutWindow w = new AboutWindow
+            {
+                Owner = Application.Current.MainWindow
+            };
+            w.ShowDialog();
+            w.Close();
+        }
+
+        private void Button_Doc(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start((string)((Button)sender).Tag);
+        }
     }
 }

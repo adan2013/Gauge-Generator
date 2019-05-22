@@ -18,6 +18,7 @@ namespace Gauge_Generator
         public event d_ImageSizeChanged ImageSizeChanged;
 
         public List<Layer> layers = new List<Layer>();
+        public bool _openimage = false;
         public int _imagesize = 300;
         public string _backgroundcolor;
         public string _foregroundcolor;
@@ -25,16 +26,21 @@ namespace Gauge_Generator
 
         //PROPERTIES
         [Description(""), Category("Export")]
+        public bool OpenImage
+        {
+            get { return _openimage; }
+            set { _openimage = value; }
+        }
+        [Description(""), Category("Export")]
         public int ImageSize
         {
             get { return _imagesize; }
             set
             {
-                if(value >= 300 && value <= 1000)
-                {
-                    _imagesize = value;
-                    ImageSizeChanged?.Invoke(value);
-                }
+                if (value < 100) value = 100;
+                if (value > 2000) value = 2000;
+                _imagesize = value;
+                ImageSizeChanged?.Invoke(value);
             }
         }
         [Description(""), Category("Background")]

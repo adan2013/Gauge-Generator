@@ -1,0 +1,39 @@
+﻿<Window x:Class="Gauge_Generator.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gauge_Generator"
+        mc:Ignorable="d"
+        Title="About Gauge Generator" Height="320" Width="350"  WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Loaded="Window_Loaded" Background="#fcfcfc">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100px" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30px" />
+                <RowDefinition Height="30px" />
+                <RowDefinition Height="30px" />
+                <RowDefinition Height="30px" />
+                <RowDefinition Height="30px" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Column="0" Grid.Row="0" Margin="0, 0, 5, 0" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Text="Name:" />
+            <TextBlock Grid.Column="0" Grid.Row="1" Margin="0, 0, 5, 0" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Text="Version:" />
+            <TextBlock Grid.Column="0" Grid.Row="2" Margin="0, 0, 5, 0" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Text="Author:" />
+            <TextBlock Grid.Column="0" Grid.Row="3" Margin="0, 0, 5, 0" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Text="GitHub:" />
+            <TextBlock Grid.Column="0" Grid.Row="4" Margin="0, 0, 5, 0" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Text="Online documentation:" />
+            
+            <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Gauge Generator" />
+            <TextBlock Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" x:Name="lbl_version" />
+            <TextBlock Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="adan2013" />
+            <TextBlock Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Blue" TextDecorations="Underline" Cursor="Hand" MouseDown="TextBlock_MouseDown" Tag="https://github.com/adan2013/Gauge-Generator" Text="adan2013/Gauge-Generator" />
+            <TextBlock Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Blue" TextDecorations="Underline" Cursor="Hand" MouseDown="TextBlock_MouseDown" Tag="https://adan2013.github.io/Gauge-Generator/" Text="adan2013.github.io" />
+        </Grid>
+    </Grid>
+</Window>

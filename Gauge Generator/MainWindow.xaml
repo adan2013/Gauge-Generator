@@ -34,10 +34,12 @@
                 <Button Click="Button_Open" Content="Open" ToolTip="Open project"></Button>
                 <Button Click="Button_Save" Content="Save" ToolTip="Save project data"></Button>
                 <Button Click="Button_SaveAs" Content="SaveAs" ToolTip="Save project data to new file"></Button>
-                <Button IsEnabled="False" Content="Export" ToolTip="Export to PNG  image"></Button>
+                <Button IsEnabled="False" Content="Import" ToolTip="Import layers from other project"></Button>
+                <Button Click="Button_Export" Content="Export" ToolTip="Export to PNG image"></Button>
                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                <Button IsEnabled="False" Content="Doc" ToolTip="Show documentation"></Button>
-                <Button IsEnabled="False" Content="Info" ToolTip="Get more information about this application"></Button>
+                <Button IsEnabled="False" Content="Home" ToolTip="Show home screen"></Button>
+                <Button Tag="https://adan2013.github.io/Gauge-Generator/" Click="Button_Doc" Content="Doc" ToolTip="Show documentation"></Button>
+                <Button Click="Button_About" Content="About" ToolTip="Get more information about this application"></Button>
             </StackPanel>
         </Grid>
     </Grid>
