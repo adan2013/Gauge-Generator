@@ -191,5 +191,25 @@
     <Resource Include="Images\hidden.png" />
     <Resource Include="Images\visible.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\arrowdown.png" />
+    <Resource Include="Icons\arrowup.png" />
+    <Resource Include="Icons\book.png" />
+    <Resource Include="Icons\cancel.png" />
+    <Resource Include="Icons\copy.png" />
+    <Resource Include="Icons\export.png" />
+    <Resource Include="Icons\home.png" />
+    <Resource Include="Icons\import.png" />
+    <Resource Include="Icons\info.png" />
+    <Resource Include="Icons\new.png" />
+    <Resource Include="Icons\ok.png" />
+    <Resource Include="Icons\open.png" />
+    <Resource Include="Icons\plus.png" />
+    <Resource Include="Icons\reset.png" />
+    <Resource Include="Icons\save.png" />
+    <Resource Include="Icons\saveas.png" />
+    <Resource Include="Icons\settings.png" />
+    <Resource Include="Icons\trash.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

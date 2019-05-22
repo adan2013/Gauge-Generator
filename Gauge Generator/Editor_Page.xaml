@@ -6,21 +6,25 @@
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       xmlns:local="clr-namespace:Gauge_Generator"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="350"
+      d:DesignHeight="450" d:DesignWidth="370"
       Title="Property Editor">
     <Grid x:Name="main_grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="60px" />
-            <RowDefinition Height="60px" />
+            <RowDefinition Height="70px" />
         </Grid.RowDefinitions>
         <xctk:PropertyGrid Grid.Row="0" Margin="15, 20, 15, 5" x:Name="prop_grid" ShowSortOptions="False" ShowTitle="False" PropertyValueChanged="Prop_grid_PropertyValueChanged"/>
         <Border x:Name="hiddenMSG" Grid.Row="1" Margin="15, 8" Background="LightGoldenrodYellow" CornerRadius="8">
             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="WrapWithOverflow" Text="Layers associated with this range were hidden during the edition. Return to the list of layers to refresh preview" />
         </Border>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Close" ToolTip="Close this editor" Click="Close_btn"></Button>
-            <Button Content="Reset" ToolTip="Reset all properties to default values" Click="Reset_Click"></Button>
+            <Button ToolTip="Close this editor" Click="Close_btn">
+                <Image Source="pack://application:,,,/Icons/cancel.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+            </Button>
+            <Button ToolTip="Reset all properties to default values" Click="Reset_Click">
+                <Image Source="pack://application:,,,/Icons/reset.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+            </Button>
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
             <StackPanel VerticalAlignment="Center">
                 <CheckBox Margin="1" Checked="EditorModificatorsChanged" Unchecked="EditorModificatorsChanged" x:Name="ShowOnlyThis" Content="Display only this layer" />

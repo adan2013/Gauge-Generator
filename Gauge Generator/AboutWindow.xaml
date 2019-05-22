@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gauge_Generator"
         mc:Ignorable="d"
-        Title="About Gauge Generator" Height="320" Width="350"  WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Loaded="Window_Loaded" Background="#fcfcfc">
+        Title="About Gauge Generator" Height="320" Width="380"  WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Loaded="Window_Loaded" Background="#fcfcfc">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100px" />

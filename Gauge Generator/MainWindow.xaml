@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gauge_Generator"
         mc:Ignorable="d"
-        Title="Gauge Generator" Height="500" Width="900" MinWidth="900" MinHeight="500" WindowState="Maximized" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="Gauge Generator" Height="500" Width="950" MinWidth="950" MinHeight="500" WindowState="Maximized" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350px"/>
+            <ColumnDefinition Width="370px"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" Background="#ababab">
@@ -22,7 +22,7 @@
         <Grid Grid.Column="1" Background="#cfcfcf">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="60px" />
+                <RowDefinition Height="70px" />
             </Grid.RowDefinitions>
             <Border Margin="40" BorderBrush="Black" MaxWidth="800" MaxHeight="800">
                 <Border ClipToBounds="True" SizeChanged="Preview_SizeChanged" Padding="10">
@@ -30,16 +30,34 @@
                 </Border>
             </Border>
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Click="Button_New" Content="New" ToolTip="New project"></Button>
-                <Button Click="Button_Open" Content="Open" ToolTip="Open project"></Button>
-                <Button Click="Button_Save" Content="Save" ToolTip="Save project data"></Button>
-                <Button Click="Button_SaveAs" Content="SaveAs" ToolTip="Save project data to new file"></Button>
-                <Button IsEnabled="False" Content="Import" ToolTip="Import layers from other project"></Button>
-                <Button Click="Button_Export" Content="Export" ToolTip="Export to PNG image"></Button>
+                <Button Click="Button_New" ToolTip="New project">
+                    <Image Source="pack://application:,,,/Icons/new.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                </Button>
+                <Button Click="Button_Open" ToolTip="Open project">
+                    <Image Source="pack://application:,,,/Icons/open.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                </Button>
+                <Button Click="Button_Save" ToolTip="Save project data">
+                    <Image Source="pack://application:,,,/Icons/save.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                </Button>
+                <Button Click="Button_SaveAs" ToolTip="Save project data to new file">
+                    <Image Source="pack://application:,,,/Icons/saveas.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                </Button>
+                <Button IsEnabled="False" ToolTip="Import layers from other project">
+                    <Image Source="pack://application:,,,/Icons/import.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                </Button>
+                <Button Click="Button_Export" ToolTip="Export to PNG image">
+                    <Image Source="pack://application:,,,/Icons/export.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                </Button>
                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                <Button IsEnabled="False" Content="Home" ToolTip="Show home screen"></Button>
-                <Button Tag="https://adan2013.github.io/Gauge-Generator/" Click="Button_Doc" Content="Doc" ToolTip="Show documentation"></Button>
-                <Button Click="Button_About" Content="About" ToolTip="Get more information about this application"></Button>
+                <Button IsEnabled="False" ToolTip="Show home screen">
+                    <Image Source="pack://application:,,,/Icons/home.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                </Button>
+                <Button Tag="https://adan2013.github.io/Gauge-Generator/" Click="Button_Doc" ToolTip="Show documentation">
+                    <Image Source="pack://application:,,,/Icons/book.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                </Button>
+                <Button Click="Button_About" ToolTip="Get more information about this application">
+                    <Image Source="pack://application:,,,/Icons/info.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                </Button>
             </StackPanel>
         </Grid>
     </Grid>

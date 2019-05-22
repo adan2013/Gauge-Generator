@@ -33,7 +33,7 @@ namespace Gauge_Generator
             {
                 Grid gr = new Grid()
                 {
-                    Width = 280
+                    Width = 300
                 };
                 StackPanel spnl = new StackPanel
                 {
@@ -65,7 +65,7 @@ namespace Gauge_Generator
                 vsw.MouseDown += Vsw_MouseDown;
                 spnl.Children.Add(img);
                 spnl.Children.Add(tblock);
-                gr.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(240) });
+                gr.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(260) });
                 gr.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(40) });
                 spnl.SetValue(Grid.ColumnProperty, 0);
                 vsw.SetValue(Grid.ColumnProperty, 1);

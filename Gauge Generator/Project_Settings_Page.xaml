@@ -6,16 +6,18 @@
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       xmlns:local="clr-namespace:Gauge_Generator"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="350"
+      d:DesignHeight="450" d:DesignWidth="370"
       Title="Project settings">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="60px" />
+            <RowDefinition Height="70px" />
         </Grid.RowDefinitions>
         <xctk:PropertyGrid Grid.Row="0" Margin="15, 20, 15, 5" x:Name="prop_grid" ShowSortOptions="False" ShowTitle="False" PropertyValueChanged="Prop_grid_PropertyValueChanged"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Close" ToolTip="Close this settings" Click="Close_btn"></Button>
+            <Button ToolTip="Close this settings" Click="Close_btn">
+                <Image Source="pack://application:,,,/Icons/cancel.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+            </Button>
         </StackPanel>
     </Grid>
 </Page>

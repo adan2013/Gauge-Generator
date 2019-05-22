@@ -5,24 +5,36 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Gauge_Generator"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="350"
+      d:DesignHeight="450" d:DesignWidth="370"
       Title="Layers list">
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="60px" />
+            <RowDefinition Height="70px" />
         </Grid.RowDefinitions>
         <ListBox Grid.Row="0" Margin="15, 20, 15, 5" Background="#B6B6B6" x:Name="layers_view" SelectionChanged="Layers_view_SelectionChanged" MouseDoubleClick="Layers_view_MouseDoubleClick">
         </ListBox>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="New" ToolTip="Create new layer" Click="New_layer_btn"></Button>
-            <Button Content="Proj" ToolTip="Change settings project" Click="Open_proj_settings"></Button>
+            <Button ToolTip="Create new layer" Click="New_layer_btn">
+                <Image Source="pack://application:,,,/Icons/plus.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+            </Button>
+            <Button ToolTip="Change settings project" Click="Open_proj_settings">
+                <Image Source="pack://application:,,,/Icons/settings.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+            </Button>
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-            <Button IsEnabled="False" x:Name="del_btn" Content="Del" ToolTip="Delete selected layer" Click="Delete_layer_btn"></Button>
-            <Button IsEnabled="False" x:Name="clone_btn" Content="Clone" ToolTip="Create a clone of selected layer" Click="Clone_layer_btn"></Button>
-            <Button IsEnabled="False" x:Name="up_btn" Content="Up" ToolTip="Move up selected layer" Click="Moveup_layer_btn"></Button>
-            <Button IsEnabled="False" x:Name="dn_btn" Content="Dn" ToolTip="Move down selected layer" Click="Movedn_layer_btn"></Button>
+            <Button IsEnabled="False" x:Name="del_btn" ToolTip="Delete selected layer" Click="Delete_layer_btn">
+                <Image Source="pack://application:,,,/Icons/trash.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+            </Button>
+            <Button IsEnabled="False" x:Name="clone_btn" ToolTip="Create a clone of selected layer" Click="Clone_layer_btn">
+                <Image Source="pack://application:,,,/Icons/copy.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+            </Button>
+            <Button IsEnabled="False" x:Name="up_btn" ToolTip="Move up selected layer" Click="Moveup_layer_btn">
+                <Image Source="pack://application:,,,/Icons/arrowup.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+            </Button>
+            <Button IsEnabled="False" x:Name="dn_btn" ToolTip="Move down selected layer" Click="Movedn_layer_btn">
+                <Image Source="pack://application:,,,/Icons/arrowdown.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+            </Button>
         </StackPanel>
     </Grid>
 </Page>

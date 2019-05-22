@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gauge_Generator"
         mc:Ignorable="d"
-        Title="New item" MinHeight="450" MinWidth="600" Height="450" Width="600" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Background="#cfcfcf">
+        Title="New item" MinHeight="460" MinWidth="600" Height="460" Width="600" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Background="#cfcfcf">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="100px" />
-            <RowDefinition Height="50px" />
+            <RowDefinition Height="70px" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -43,8 +43,12 @@
             </StackPanel>
         </Grid>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="OK" ToolTip="Create a new item" x:Name="ok_btn" Click="Ok_btn_Click"></Button>
-            <Button Content="Cancel" ToolTip="Cancel operation" Click="Cancel_btn"></Button>
+            <Button ToolTip="Create a new item" x:Name="ok_btn" Click="Ok_btn_Click">
+                <Image Source="pack://application:,,,/Icons/ok.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+            </Button>
+            <Button ToolTip="Cancel operation" Click="Cancel_btn">
+                <Image Source="pack://application:,,,/Icons/cancel.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+            </Button>
         </StackPanel>
     </Grid>
 </Window>
