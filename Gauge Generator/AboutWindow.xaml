@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gauge_Generator"
         mc:Ignorable="d"
-        Title="About Gauge Generator" Height="320" Width="380"  WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Loaded="Window_Loaded" Background="#fcfcfc">
+        Title="About Gauge Generator" Height="300" Width="380"  WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Loaded="Window_Loaded" Background="#ececec">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100px" />
+            <RowDefinition Height="80px" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <Image Source="pack://application:,,,/Images/logo_about.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />

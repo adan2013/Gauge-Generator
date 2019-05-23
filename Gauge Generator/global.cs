@@ -17,9 +17,9 @@ namespace Gauge_Generator
         public const string DEFAULT_FONT = "Arial";
         public const double MIN_DOUBLE_VALUE = 0.2;
         public const double MAX_DOUBLE_VALUE = 0.8;
-        public const int MIN_RANGE_VALUE = -500;
-        public const int MAX_RANGE_VALUE = 500;
-        public const int MAX_LAYERS = 30;
+        public const int MIN_RANGE_VALUE = -1000;
+        public const int MAX_RANGE_VALUE = 1000;
+        public const int MAX_LAYERS = 40;
         public const string DMS_ID = "GaugeGen";
 
         public const int ARC_LOD_LQ = 20;

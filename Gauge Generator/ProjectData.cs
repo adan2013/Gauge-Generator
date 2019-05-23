@@ -19,7 +19,7 @@ namespace Gauge_Generator
 
         public List<Layer> layers = new List<Layer>();
         public bool _openimage = false;
-        public int _imagesize = 300;
+        public int _imagesize = 600;
         public string _backgroundcolor;
         public string _foregroundcolor;
         public bool _roundforeground;
