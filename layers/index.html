@@ -130,7 +130,7 @@
             <div class="section">
               
                 <h1 id="layer-structure">Layer structure</h1>
-<p>A whole process of creating clock face is based on layer mechanics well know from graphic programs such as Gimp or Photoshop. In this application, there are many types of layers that add different objects to the project. By modifying properties ang changing they order you can create a lot of complex clock faces.</p>
+<p>The whole process of creating a clock face is based on layer mechanics well known from graphic programs, such as Gimp or Photoshop. In this application, there are many types of layers that add different objects to the project. By modifying properties and changing layers' order you can create a lot of complex clock faces.</p>
 <h1 id="percentage-values">Percentage values</h1>
 <p>Numerical parameters in property editor are mostly based on percentages. It makes the sizes of the objects they describe are scaled to the size of the final raster graphics. For example:</p>
 <ul>
@@ -139,57 +139,57 @@
 </ul>
 <h2 id="range">Range</h2>
 <p><img alt="Range item" src="../img/preview-range.png" /></p>
-<p>"Range" type is the most important object and MUST be added first to the project. It is used to define position and size of the clock face. In addition, its task is to define the range of values that will be used by the clock we create.</p>
-<p>Why it must be defined first? When creating other types of layers, the application requires selecting the range to which the object will belong. The "Range" element is a common element connecting all layers belonging to one clock.</p>
+<p>"Range" type is the most important object and MUST be added first to the project. It is used for define position and size of the clock face. In addition, its task is to determine the range of values that will be use by the clock which we create.</p>
+<p>Why it must be defined first? While creating other types of layers, the application requires selection the range which the object belongs. The "Range" element is a common element connecting all layers belonging to one clock.</p>
 <p>Parameters of the "Range" layer:</p>
 <ul>
 <li><strong>Circle position</strong><ul>
-<li>CircleCenter_X <em>&lt;-100; 100&gt;</em> - horizontal position of clock face</li>
-<li>CircleCenter_Y <em>&lt;-100; 100&gt;</em> - vertical position of clock face</li>
-<li>CircleRadius <em>&lt;20; 100&gt;</em> - radius of clock face
+<li>CircleCenter_X <em>&lt;-100; 100&gt;</em> - horizontal position of the clock face</li>
+<li>CircleCenter_Y <em>&lt;-100; 100&gt;</em> - vertical position of the clock face</li>
+<li>CircleRadius <em>&lt;20; 100&gt;</em> - radius of the clock face
 <br /></li>
 </ul>
 </li>
 <li><strong>Clock hands</strong><ul>
-<li>ClockHandsOffset_X <em>&lt;-80; 80&gt;</em> - horizontal offset of clock hands hook</li>
-<li>ClockHandsOffset_Y <em>&lt;-80; 80&gt;</em> - vertical offset of clock hands hook</li>
-<li>ClockHandsPointColor - dot color of clock hands hook</li>
-<li>ClockHandsPointSize &lt;1; 5&gt; - dot size of clock hands hook
+<li>ClockHandsOffset_X <em>&lt;-80; 80&gt;</em> - horizontal offset of the clock hands hook</li>
+<li>ClockHandsOffset_Y <em>&lt;-80; 80&gt;</em> - vertical offset of the clock hands hook</li>
+<li>ClockHandsPointColor - color of the clock hands hook's dot</li>
+<li>ClockHandsPointSize &lt;1; 5&gt; - size of the clock hands hook's dot
 <br /></li>
 </ul>
 </li>
 <li><strong>Range</strong><ul>
 <li>AngleStart <em>&lt;0; 360&gt;</em> - range start angle</li>
 <li>OpeningAngle <em>&lt;-360; 360&gt;</em> - opening angle of range (negative value means counter-clockwise)</li>
-<li>RangeEndValue <em>&lt;-1000; 1000&gt;</em> - maximum value of scale</li>
-<li>RangeStartValue <em>&lt;-1000; 1000&gt;</em> - minimum value of scale</li>
+<li>RangeEndValue <em>&lt;-1000; 1000&gt;</em> - the maximum value of the scale</li>
+<li>RangeStartValue <em>&lt;-1000; 1000&gt;</em> - the  minimum value of the scale</li>
 </ul>
 </li>
 </ul>
 <h2 id="linear-scale">Linear Scale</h2>
 <p><img alt="Linear Scale item" src="../img/preview-ls.png" /></p>
-<p>"Linear Scale" type is used to generate the radial lines on the basis of the range of values from "Range" layer. In parameters, you can specify the initial value, end value and scale step. The type also allows you to draw an arc on the whole range.</p>
+<p>Type "Linear Scale" is used for generate the radial lines on the basis of the range of values from "Range" layer. In parameters, you can specify the initial value, end value and scale step. The type also allows you to draw an arc on the whole range.</p>
 <p>Parameters of the "Linear Scale" layer:</p>
 <ul>
 <li><strong>Lines</strong><ul>
-<li>DistanceFromCenter <em>&lt;20; 95&gt;</em> - distance between center of clock face and end of lines</li>
-<li>LineColor - color of lines</li>
-<li>LineLength <em>&lt;2; 100&gt;</em> - distance between center of clock face and start of lines</li>
+<li>DistanceFromCenter <em>&lt;20; 95&gt;</em> - distance between the center of the clock face and the end of lines</li>
+<li>LineColor - color of the lines</li>
+<li>LineLength <em>&lt;2; 100&gt;</em> - distance between the center of the clock face and the start of lines</li>
 <li>LineThickness <em>&lt;2; 5&gt;</em> - line thickness
 <br /></li>
 </ul>
 </li>
 <li><strong>Range</strong><ul>
 <li>DrawArcOnEdge - draw arc connecting all lines</li>
-<li>RangeMax <em>&lt;-1000; 1000&gt;</em> - maximum value of scale</li>
-<li>RangeMin <em>&lt;-1000; 1000&gt;</em> - minimum value of scale</li>
-<li>RangeStep <em>&lt;1; 1000&gt;</em> - jump of values between lines</li>
+<li>RangeMax <em>&lt;-1000; 1000&gt;</em> - the maximum value of the scale</li>
+<li>RangeMin <em>&lt;-1000; 1000&gt;</em> - the  minimum value of the scale</li>
+<li>RangeStep <em>&lt;1; 1000&gt;</em> - jump of values between the lines</li>
 </ul>
 </li>
 </ul>
 <h2 id="numeric-scale">Numeric Scale</h2>
 <p><img alt="Numeric Scale item" src="../img/preview-ns.png" /></p>
-<p>"Numeric Scale" type is used to generate a numerical scale based on the range of values from "Range" layer. In parameters, you can specify the initial value, end value and scale step.</p>
+<p>Type "Numeric Scale" is used for generate a numerical scale based on the range of values from "Range" layer. In parameters, you can specify the initial value, the end value and the scale step.</p>
 <p>Parameters of the "Numeric Scale" layer:</p>
 <ul>
 <li><strong>Font</strong><ul>
@@ -203,17 +203,17 @@
 </ul>
 </li>
 <li><strong>Position</strong><ul>
-<li>DistanceFromCenter <em>&lt;20; 100&gt;</em> - distance between center of clock face and labels</li>
-<li>Rotated - tilt the labels to the center of clock face
+<li>DistanceFromCenter <em>&lt;20; 100&gt;</em> - distance between the center of the clock face and the labels</li>
+<li>Rotated - tilt the labels to the center of the clock face
 <br /></li>
 </ul>
 </li>
 <li><strong>Range</strong><ul>
-<li>RangeMax <em>&lt;-1000; 1000&gt;</em> - maximum value of scale</li>
-<li>RangeMin <em>&lt;-1000; 1000&gt;</em> - minimum value of scale</li>
-<li>RangeStep <em>&lt;1; 1000&gt;</em> - jump of values between labels</li>
+<li>RangeMax <em>&lt;-1000; 1000&gt;</em> - the maximum value of the scale</li>
+<li>RangeMin <em>&lt;-1000; 1000&gt;</em> - the minimum value of the scale</li>
+<li>RangeStep <em>&lt;1; 1000&gt;</em> - jump of values between the labels</li>
 <li>Rounding <em>&lt;0; 2&gt;</em> - number of leading zeros</li>
-<li>ScaleMultiplier <em>&lt;0.01; 100&gt;</em> - scale multiplier that allows you to change values of scale</li>
+<li>ScaleMultiplier <em>&lt;0.01; 100&gt;</em> - scale multiplier that allows you to change values of the scale</li>
 </ul>
 </li>
 </ul>
@@ -235,18 +235,18 @@
 </li>
 <li><strong>Position</strong><ul>
 <li>Angle <em>&lt;-360; 360&gt;</em> - rotation angle</li>
-<li>Position_X <em>&lt;-100; 100&gt;</em> - horizontal offset of label</li>
-<li>Position_Y <em>&lt;-100; 100&gt;</em> - vertical offset of label</li>
+<li>Position_X <em>&lt;-100; 100&gt;</em> - horizontal offset of the label</li>
+<li>Position_Y <em>&lt;-100; 100&gt;</em> - vertical offset of the label</li>
 </ul>
 </li>
 </ul>
 <h2 id="arc">Arc</h2>
 <p><img alt="Arc item" src="../img/preview-arc.png" /></p>
-<p>"Arc" type allows you to add the arc which can be used to check dangerous ranges of values. You can do it manually by giving the absolute angle or value from "Range" layer.</p>
+<p>"Arc" type allows you to add the arc which can be used for check dangerous ranges of values. You can do it manually by giving the absolute angle or value from "Range" layer.</p>
 <p>Parameters of the "Arc" layer:</p>
 <ul>
 <li><strong>Arc</strong><ul>
-<li>Color - color of arc</li>
+<li>Color - color of the arc</li>
 <li>ManualAngle - range switch (false - range min/max; true - manual angle)</li>
 <li>Weight <em>&lt;1; 100&gt;</em> - arc thickness
 <br /></li>
@@ -273,14 +273,14 @@
 <p>Parameters of the "Clock hand" layer:</p>
 <ul>
 <li><strong>Beginning of clock hand</strong><ul>
-<li>N_Color - color of negative part of clock hand</li>
-<li>N_Length <em>&lt;0; 50&gt;</em> - length of negative part of clock hand</li>
+<li>N_Color - color of negative part of the clock hand</li>
+<li>N_Length <em>&lt;0; 50&gt;</em> - length of negative part of the clock hand</li>
 <li>Thickness <em>&lt;1; 10&gt;</em> - clock hand thickness
 <br /></li>
 </ul>
 </li>
 <li><strong>Circle</strong><ul>
-<li>CircleBehindTheArrow - circle above or below the clock hand</li>
+<li>CircleBehindTheArrow - circle above or below the the clock hand</li>
 <li>CircleColor - color of center circle</li>
 <li>CircleSize <em>&lt;1, 10&gt;</em> - size of center circle
 <br /></li>
@@ -288,8 +288,8 @@
 </li>
 <li><strong>End of clock hand</strong><ul>
 <li>EndType - type of arrow</li>
-<li>P_Color - color of positive part of clock hand</li>
-<li>P_Length <em>&lt;20; 100&gt;</em> - length of positive part of clock hand
+<li>P_Color - color of positive part of the clock hand</li>
+<li>P_Length <em>&lt;20; 100&gt;</em> - length of positive part of the clock hand
 <br /></li>
 </ul>
 </li>
@@ -300,7 +300,7 @@
 </ul>
 </li>
 </ul>
-<p>Appearance of individual types of clock hand (EndType parameter):</p>
+<p>The appearance of individual types of the clock hands (EndType parameter):</p>
 <p>galeria galeria galeria galeria galeria</p>
               
             </div>
