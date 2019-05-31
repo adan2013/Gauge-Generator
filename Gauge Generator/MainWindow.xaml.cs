@@ -205,5 +205,34 @@ namespace Gauge_Generator
         {
             System.Diagnostics.Process.Start((string)((Button)sender).Tag);
         }
+
+        private void Button_Import(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog opn = new OpenFileDialog
+            {
+                Multiselect = false,
+                Filter = "Gauge Generator Project (*.ggp)|*.ggp"
+            };
+            if ((bool)opn.ShowDialog())
+            {
+                if (Global.Sidebar == Global.SidebarPages.Editor)
+                {
+                    foreach (Layer i in Global.project.layers)
+                    {
+                        if (i.RangeSource == Global.EditingLayer) i.ValidateWithSource();
+                    }
+                }
+                ImportWindow w = new ImportWindow
+                {
+                    Owner = Application.Current.MainWindow,
+                    projectpath = opn.FileName
+                };
+                if((bool)w.ShowDialog())
+                {
+
+                }
+                w.Close();
+            }
+        }
     }
 }

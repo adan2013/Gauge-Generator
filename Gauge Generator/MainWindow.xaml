@@ -42,7 +42,7 @@
                 <Button Click="Button_SaveAs" ToolTip="Save project data to new file">
                     <Image Source="pack://application:,,,/Icons/saveas.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
                 </Button>
-                <Button IsEnabled="False" ToolTip="Import layers from other project">
+                <Button Click="Button_Import" ToolTip="Import layers from other project">
                     <Image Source="pack://application:,,,/Icons/import.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
                 </Button>
                 <Button Click="Button_Export" ToolTip="Export to PNG image">

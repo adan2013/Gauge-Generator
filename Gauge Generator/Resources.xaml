@@ -30,7 +30,7 @@
                 <Setter Property="Opacity" Value="0.6" />
             </Trigger>
         </Style.Triggers>
-        
+
     </Style>
 
     <!--SCROLLBARS-->
@@ -53,7 +53,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!--ScrollBars-->
     <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
         <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
@@ -149,6 +149,15 @@
                             <Setter Property="Background"
                                     TargetName="Bd"
                                     Value="#FF94D3E6" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver"
+                                            Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background"
+                                    TargetName="Bd"
+                                    Value="#FFACD9E6" />
                         </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

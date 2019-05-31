@@ -85,6 +85,10 @@ namespace Gauge_Generator
                     return typeof(Range_Item);
             }
         }
+        public static string[] CheckboxState = {
+            "pack://application:,,,/Icons/unchecked.png",
+            "pack://application:,,,/Icons/checked.png",
+        };
         public static string[] Visibility = {
             "pack://application:,,,/Images/hidden.png",
             "pack://application:,,,/Images/visible.png"

@@ -76,7 +76,7 @@ namespace Gauge_Generator
             RoundForeground = true;
         }
 
-        public void DrawProject(ref Canvas pnl, bool HQmode, int size)
+        public void DrawProject(ref Canvas pnl, bool HQmode, int size, bool ignoremodificators = false, List<Layer> showonlythis = null)
         {
             pnl.Children.Clear();
             //background
@@ -98,21 +98,31 @@ namespace Gauge_Generator
             //layers
             for(int i = layers.Count - 1; i >= 0; i--)
             {
-                if(Global.EditingLayer != null)
+                if(ignoremodificators)
                 {
-                    if (ShowOnlyThisLayer && layers[i] != Global.EditingLayer) continue;
-                    if (BringToFront && layers[i] == Global.EditingLayer) continue;
-                    if (layers[i].RangeSource == Global.EditingLayer) continue;
+                    if (showonlythis != null && !showonlythis.Contains(layers[i])) continue;
                 }
                 else
                 {
-                    if (!layers[i].Visible) continue;
+                    if (Global.EditingLayer != null)
+                    {
+                        if (ShowOnlyThisLayer && layers[i] != Global.EditingLayer) continue;
+                        if (BringToFront && layers[i] == Global.EditingLayer) continue;
+                        if (layers[i].RangeSource == Global.EditingLayer) continue;
+                    }
+                    else
+                    {
+                        if (!layers[i].Visible) continue;
+                    }
                 }
                 layers[i].DrawLayer(ref pnl, HQmode, size);
             }
-            if (BringToFront && Global.EditingLayer != null) Global.EditingLayer.DrawLayer(ref pnl, HQmode, size);
-            //overlay
-            if (Global.EditingLayer != null && (Global.EditingLayer is Range_Item || !HideOverlay)) Global.EditingLayer.DrawOverlay(ref pnl, HQmode, size, 1);
+            if(!ignoremodificators)
+            {
+                if (BringToFront && Global.EditingLayer != null) Global.EditingLayer.DrawLayer(ref pnl, HQmode, size);
+                //overlay
+                if (Global.EditingLayer != null && (Global.EditingLayer is Range_Item || !HideOverlay)) Global.EditingLayer.DrawOverlay(ref pnl, HQmode, size, 1);
+            }
         }
     }
 }

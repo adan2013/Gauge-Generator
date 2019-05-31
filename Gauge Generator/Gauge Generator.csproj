@@ -85,6 +85,9 @@
     <Compile Include="Editor_Page.xaml.cs">
       <DependentUpon>Editor_Page.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ImportWindow.xaml.cs">
+      <DependentUpon>ImportWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Label_Item.cs" />
     <Compile Include="LinearScale_Item.cs" />
     <Compile Include="NewItemWindow.xaml.cs">
@@ -104,6 +107,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Editor_Page.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ImportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -213,6 +220,16 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\logo_about.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\checked.png" />
+    <Resource Include="Icons\unchecked.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\checkall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\eye.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
