@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="adan2013">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Interface - Gauge Generator</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link href="../extra.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Interface";
+    var mkdocs_page_input_path = "interface.md";
+    var mkdocs_page_url = "/Gauge-Generator/interface/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Gauge Generator</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Interface</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#main-interface">Main interface</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#sidebar">Sidebar</a></li>
+        
+            <li><a class="toctree-l3" href="#live-preview">Live preview</a></li>
+        
+            <li><a class="toctree-l3" href="#new-item-window">New item window</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../layers/">Layer types</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../examples/">Examples</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Gauge Generator</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Interface</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/adan2013/Gauge-Generator/edit/master/docs/interface.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="main-interface">Main interface</h1>
+<p><img alt="Gauge Generator interface" src="../img/full-interface.png" /></p>
+<p>Main interface consists of two parts. On the left side is located multifunctional sidebar. It contains a list of created objects in opened project or property editor (more information below). On the right side is located a live preview and number of buttons allowing manipulation of the project file.</p>
+<h2 id="sidebar">Sidebar</h2>
+<p>Sidebar can display a three different screens:</p>
+<ul>
+<li>List of layers in project,</li>
+<li>Property layer editor,</li>
+<li>Project settings editor.</li>
+</ul>
+<h3 id="layers-list">Layers list</h3>
+<p><img alt="Layer buttons" src="../img/layerbuttons.png" /></p>
+<p>The default screen of sidebar it's a list of layers. At the bottom of the screen are located a buttons:</p>
+<ul>
+<li><strong>New layer</strong> - opens a new item windows,</li>
+<li><strong>Project settings</strong> - opens an editor of project settings,</li>
+<li><strong>Delete a layer</strong> - deletes a selected value,</li>
+<li><strong>Clone a layer</strong> - clones a selected value,</li>
+<li><strong>Move up/down</strong> - changes the order of layers in the project.</li>
+</ul>
+<p>Double-clicking on the item in list of layers opens a property layer editor. Eye icons allows you to control the visibility of specific layers.</p>
+<h3 id="project-editor">Project editor</h3>
+<p>Clicking button with a gear opens an editor of the project settings. You can change there a color of background or clock face. You can also change a size of generated PNG image in export. To return to the previous screen use the button with the X letter.</p>
+<h3 id="layer-editor">Layer editor</h3>
+<p><img alt="Overlay modificators" src="../img/overlaymod.png" /></p>
+<p>After creating a new layer sidebar opens a property editor. Editor allows you to adjust parameters to your needs. At the bottom of the screen are located a reset button and list of preview modificators:</p>
+<ul>
+<li><strong>Display only this layer</strong> - hides all layers except edited layer,</li>
+<li><strong>Bring to front this layer</strong> - displays the edited layer at the top of the project,</li>
+<li><strong>Hide the overlay</strong> - hides a pulsing graphic overlay visible on the preview.</li>
+</ul>
+<h2 id="live-preview">Live preview</h2>
+<p><img alt="Project buttons" src="../img/projectbuttons.png" /></p>
+<p>A large part of right side of main window application consist a live preview. It reflects the current state of the list of layers with their visibility (eye button). At below is located a bar with the following buttons:</p>
+<ul>
+<li>Open a new project,</li>
+<li>Open a project from file,</li>
+<li>Save changes in project,</li>
+<li>Save project to new file,</li>
+<li>Import layers from another project,</li>
+<li>Export project to PNG image file,</li>
+<li>Open "Welcome screen",</li>
+<li>Open this documentation in web browser,</li>
+<li>Show more information about this application.</li>
+</ul>
+<h2 id="new-item-window">New item window</h2>
+<p><img alt="New item window" src="../img/newitemwindow.png" /></p>
+<p>To create a new layer use the plus button below the list of layers. This will open the new item window and then:</p>
+<ol>
+<li>Choose a layer type using list with colorful squares (short description of selected type shows on the right side of this window),</li>
+<li>Give a name that describes its task,</li>
+<li>Select a "Range Source" - the layer of "Range" type (more information on <a href="../layers/">"Layer types"</a> page),</li>
+<li>Click an OK button at bottom of the window.</li>
+</ol>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../layers/" class="btn btn-neutral float-right" title="Layer types">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/adan2013/Gauge-Generator/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../layers/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

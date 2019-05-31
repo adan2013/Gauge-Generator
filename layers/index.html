@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="adan2013">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Layer types - Gauge Generator</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link href="../extra.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Layer types";
+    var mkdocs_page_input_path = "layers.md";
+    var mkdocs_page_url = "/Gauge-Generator/layers/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Gauge Generator</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../interface/">Interface</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Layer types</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#layer-structure">Layer structure</a></li>
+    
+
+    <li class="toctree-l2"><a href="#percentage-values">Percentage values</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#range">Range</a></li>
+        
+            <li><a class="toctree-l3" href="#linear-scale">Linear Scale</a></li>
+        
+            <li><a class="toctree-l3" href="#numeric-scale">Numeric Scale</a></li>
+        
+            <li><a class="toctree-l3" href="#label">Label</a></li>
+        
+            <li><a class="toctree-l3" href="#arc">Arc</a></li>
+        
+            <li><a class="toctree-l3" href="#clock-hand">Clock Hand</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../examples/">Examples</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Gauge Generator</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Layer types</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/adan2013/Gauge-Generator/edit/master/docs/layers.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="layer-structure">Layer structure</h1>
+<p>A whole process of creating clock face is based on layer mechanics well know from graphic programs such as Gimp or Photoshop. In this application, there are many types of layers that add different objects to the project. By modifying properties ang changing they order you can create a lot of complex clock faces.</p>
+<h1 id="percentage-values">Percentage values</h1>
+<p>Numerical parameters in property editor are mostly based on percentages. It makes the sizes of the objects they describe are scaled to the size of the final raster graphics. For example:</p>
+<ul>
+<li>50 in a circle radius property means 50% of the half width of the final graphic.</li>
+<li>-40 in an offset X property means shift to the left by 40% of the half width of the final graphics.</li>
+</ul>
+<h2 id="range">Range</h2>
+<p><img alt="Range item" src="../img/preview-range.png" /></p>
+<p>"Range" type is the most important object and MUST be added first to the project. It is used to define position and size of the clock face. In addition, its task is to define the range of values that will be used by the clock we create.</p>
+<p>Why it must be defined first? When creating other types of layers, the application requires selecting the range to which the object will belong. The "Range" element is a common element connecting all layers belonging to one clock.</p>
+<p>Parameters of the "Range" layer:</p>
+<ul>
+<li><strong>Circle position</strong><ul>
+<li>CircleCenter_X <em>&lt;-100; 100&gt;</em> - horizontal position of clock face</li>
+<li>CircleCenter_Y <em>&lt;-100; 100&gt;</em> - vertical position of clock face</li>
+<li>CircleRadius <em>&lt;20; 100&gt;</em> - radius of clock face
+<br /></li>
+</ul>
+</li>
+<li><strong>Clock hands</strong><ul>
+<li>ClockHandsOffset_X <em>&lt;-80; 80&gt;</em> - horizontal offset of clock hands hook</li>
+<li>ClockHandsOffset_Y <em>&lt;-80; 80&gt;</em> - vertical offset of clock hands hook</li>
+<li>ClockHandsPointColor - dot color of clock hands hook</li>
+<li>ClockHandsPointSize &lt;1; 5&gt; - dot size of clock hands hook
+<br /></li>
+</ul>
+</li>
+<li><strong>Range</strong><ul>
+<li>AngleStart <em>&lt;0; 360&gt;</em> - range start angle</li>
+<li>OpeningAngle <em>&lt;-360; 360&gt;</em> - opening angle of range (negative value means counter-clockwise)</li>
+<li>RangeEndValue <em>&lt;-1000; 1000&gt;</em> - maximum value of scale</li>
+<li>RangeStartValue <em>&lt;-1000; 1000&gt;</em> - minimum value of scale</li>
+</ul>
+</li>
+</ul>
+<h2 id="linear-scale">Linear Scale</h2>
+<p><img alt="Linear Scale item" src="../img/preview-ls.png" /></p>
+<p>"Linear Scale" type is used to generate the radial lines on the basis of the range of values from "Range" layer. In parameters, you can specify the initial value, end value and scale step. The type also allows you to draw an arc on the whole range.</p>
+<p>Parameters of the "Linear Scale" layer:</p>
+<ul>
+<li><strong>Lines</strong><ul>
+<li>DistanceFromCenter <em>&lt;20; 95&gt;</em> - distance between center of clock face and end of lines</li>
+<li>LineColor - color of lines</li>
+<li>LineLength <em>&lt;2; 100&gt;</em> - distance between center of clock face and start of lines</li>
+<li>LineThickness <em>&lt;2; 5&gt;</em> - line thickness
+<br /></li>
+</ul>
+</li>
+<li><strong>Range</strong><ul>
+<li>DrawArcOnEdge - draw arc connecting all lines</li>
+<li>RangeMax <em>&lt;-1000; 1000&gt;</em> - maximum value of scale</li>
+<li>RangeMin <em>&lt;-1000; 1000&gt;</em> - minimum value of scale</li>
+<li>RangeStep <em>&lt;1; 1000&gt;</em> - jump of values between lines</li>
+</ul>
+</li>
+</ul>
+<h2 id="numeric-scale">Numeric Scale</h2>
+<p><img alt="Numeric Scale item" src="../img/preview-ns.png" /></p>
+<p>"Numeric Scale" type is used to generate a numerical scale based on the range of values from "Range" layer. In parameters, you can specify the initial value, end value and scale step.</p>
+<p>Parameters of the "Numeric Scale" layer:</p>
+<ul>
+<li><strong>Font</strong><ul>
+<li>Bold - font modifier: bold</li>
+<li>FontColor - color of font</li>
+<li>FontFamily - name of font family</li>
+<li>FontSize <em>&lt;5; 20&gt;</em> - font size</li>
+<li>Italic - font modifier: italic</li>
+<li>Underline - font modifier: underline
+<br /></li>
+</ul>
+</li>
+<li><strong>Position</strong><ul>
+<li>DistanceFromCenter <em>&lt;20; 100&gt;</em> - distance between center of clock face and labels</li>
+<li>Rotated - tilt the labels to the center of clock face
+<br /></li>
+</ul>
+</li>
+<li><strong>Range</strong><ul>
+<li>RangeMax <em>&lt;-1000; 1000&gt;</em> - maximum value of scale</li>
+<li>RangeMin <em>&lt;-1000; 1000&gt;</em> - minimum value of scale</li>
+<li>RangeStep <em>&lt;1; 1000&gt;</em> - jump of values between labels</li>
+<li>Rounding <em>&lt;0; 2&gt;</em> - number of leading zeros</li>
+<li>ScaleMultiplier <em>&lt;0.01; 100&gt;</em> - scale multiplier that allows you to change values of scale</li>
+</ul>
+</li>
+</ul>
+<h2 id="label">Label</h2>
+<p><img alt="Label item" src="../img/preview-lbl.png" /></p>
+<p>"Label" type allows you to add a simple text label.</p>
+<p>Parameters of the "Label" layer:</p>
+<ul>
+<li><strong>Font</strong><ul>
+<li>Bold - font modifier: bold</li>
+<li>FontColor - color of font</li>
+<li>FontFamily - name of font family</li>
+<li>FontSize <em>&lt;5; 20&gt;</em> - font size</li>
+<li>Italic - font modifier: italic</li>
+<li>Text - displayed text</li>
+<li>Underline - font modifier: underline
+<br /></li>
+</ul>
+</li>
+<li><strong>Position</strong><ul>
+<li>Angle <em>&lt;-360; 360&gt;</em> - rotation angle</li>
+<li>Position_X <em>&lt;-100; 100&gt;</em> - horizontal offset of label</li>
+<li>Position_Y <em>&lt;-100; 100&gt;</em> - vertical offset of label</li>
+</ul>
+</li>
+</ul>
+<h2 id="arc">Arc</h2>
+<p><img alt="Arc item" src="../img/preview-arc.png" /></p>
+<p>"Arc" type allows you to add the arc which can be used to check dangerous ranges of values. You can do it manually by giving the absolute angle or value from "Range" layer.</p>
+<p>Parameters of the "Arc" layer:</p>
+<ul>
+<li><strong>Arc</strong><ul>
+<li>Color - color of arc</li>
+<li>ManualAngle - range switch (false - range min/max; true - manual angle)</li>
+<li>Weight <em>&lt;1; 100&gt;</em> - arc thickness
+<br /></li>
+</ul>
+</li>
+<li><strong>Position</strong><ul>
+<li>CircleOffset_X <em>&lt;-100; 100&gt;</em> - horizontal offset</li>
+<li>CircleOffset_Y <em>&lt;-100; 100&gt;</em> - vertical offset</li>
+<li>DistanceFromCenter <em>&lt;20; 100&gt;</em> - arc radius
+<br /></li>
+</ul>
+</li>
+<li><strong>Range</strong><ul>
+<li>AngleStart <em>&lt;0; 360&gt;</em> - start angle</li>
+<li>OpeningAngle <em>&lt;-360; 360&gt;</em> - opening angle</li>
+<li>RangeMax <em>&lt;-1000; 1000&gt;</em> - end value of "Range" scale</li>
+<li>RangeMin <em>&lt;-1000; 1000&gt;</em> - start value of "Range" scale</li>
+</ul>
+</li>
+</ul>
+<h2 id="clock-hand">Clock Hand</h2>
+<p><img alt="Clock Hand item" src="../img/preview-ch.png" /></p>
+<p>"Clock Hand" type adds a clock hand to the project.</p>
+<p>Parameters of the "Clock hand" layer:</p>
+<ul>
+<li><strong>Beginning of clock hand</strong><ul>
+<li>N_Color - color of negative part of clock hand</li>
+<li>N_Length <em>&lt;0; 50&gt;</em> - length of negative part of clock hand</li>
+<li>Thickness <em>&lt;1; 10&gt;</em> - clock hand thickness
+<br /></li>
+</ul>
+</li>
+<li><strong>Circle</strong><ul>
+<li>CircleBehindTheArrow - circle above or below the clock hand</li>
+<li>CircleColor - color of center circle</li>
+<li>CircleSize <em>&lt;1, 10&gt;</em> - size of center circle
+<br /></li>
+</ul>
+</li>
+<li><strong>End of clock hand</strong><ul>
+<li>EndType - type of arrow</li>
+<li>P_Color - color of positive part of clock hand</li>
+<li>P_Length <em>&lt;20; 100&gt;</em> - length of positive part of clock hand
+<br /></li>
+</ul>
+</li>
+<li><strong>Range</strong><ul>
+<li>Angle <em>&lt;0; 360&gt;</em> - manual clock hand angle</li>
+<li>ManualAngle - range switch (false - value; true - angle)</li>
+<li>Value <em>&lt;-1000; 1000&gt;</em> - selected value from range source</li>
+</ul>
+</li>
+</ul>
+<p>Appearance of individual types of clock hand (EndType parameter):</p>
+<p>galeria galeria galeria galeria galeria</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../examples/" class="btn btn-neutral float-right" title="Examples">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../interface/" class="btn btn-neutral" title="Interface"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/adan2013/Gauge-Generator/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../interface/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../examples/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>
