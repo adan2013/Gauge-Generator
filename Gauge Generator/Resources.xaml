@@ -21,7 +21,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#FFE8DF8A"/>
+                <Setter Property="Background" Value="#FF94D3E6"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Background" Value="#FFA0A0A0"/>
@@ -137,7 +137,7 @@
                             </MultiTrigger.Conditions>
                             <Setter Property="Background"
                                     TargetName="Bd"
-                                    Value="#fffafad2" />
+                                    Value="#FF94D3E6" />
                         </MultiTrigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
@@ -148,7 +148,7 @@
                             </MultiTrigger.Conditions>
                             <Setter Property="Background"
                                     TargetName="Bd"
-                                    Value="#fffafad2" />
+                                    Value="#FF94D3E6" />
                         </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

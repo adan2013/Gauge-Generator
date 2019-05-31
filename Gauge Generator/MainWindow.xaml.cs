@@ -24,6 +24,8 @@ namespace Gauge_Generator
     /// </summary>
     public partial class MainWindow : Window
     {
+        public string initialproject = "";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -44,7 +46,7 @@ namespace Gauge_Generator
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Global.FileStateChanged += FSC;
-            Global.LoadProject("", false);
+            Global.LoadProject(initialproject, false);
             FSC(false, "");
             //TODO diagnostic code
             //Global.project.layers.Add(new NumericScale_Item());

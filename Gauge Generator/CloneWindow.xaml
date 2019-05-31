@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gauge_Generator"
         mc:Ignorable="d"
-        Title="Clone" Height="250" Width="350" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Background="#cfcfcf">
+        Title="Clone" Height="260" Width="350" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Background="#cfcfcf">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="90px" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="50px" />
+            <RowDefinition Height="70px" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
             <TextBlock TextWrapping="WrapWithOverflow" FontSize="24px" FontWeight="Bold" Margin="8, 8, 8, 8">Clone</TextBlock>
@@ -22,8 +22,12 @@
             <Label Content="Layer must have a name!" x:Name="lbl_err_name" Foreground="#DD0000" />
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="OK" ToolTip="Clone layer" x:Name="ok_btn" Click="Ok_btn_Click"></Button>
-            <Button Content="Cancel" ToolTip="Cancel operation" Click="Cancel_btn"></Button>
+            <Button ToolTip="Clone layer" x:Name="ok_btn" Click="Ok_btn_Click">
+                <Image Source="pack://application:,,,/Icons/ok.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+            </Button>
+            <Button ToolTip="Cancel operation" Click="Cancel_btn">
+                <Image Source="pack://application:,,,/Icons/cancel.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+            </Button>
         </StackPanel>
     </Grid>
 </Window>
