@@ -405,9 +405,19 @@ namespace Gauge_Generator
 
         #endregion
 
-        public static void RefreshScreen()
+        public static void RefreshScreen(List<Layer> display = null)
         {
-            if (ScreenCanvas != null) project.DrawProject(ref ScreenCanvas, false, (int)ScreenCanvas.Width);
+            if (ScreenCanvas != null)
+            {
+                if (display == null)
+                {
+                    project.DrawProject(ref ScreenCanvas, false, (int)ScreenCanvas.Width);
+                }
+                else
+                {
+                    project.DrawProject(ref ScreenCanvas, false, (int)ScreenCanvas.Width, true, display);
+                }
+            }
         }
 
         public static bool ExportToPNG(string path)

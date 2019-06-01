@@ -20,6 +20,8 @@ namespace Gauge_Generator
     /// </summary>
     public partial class Layers_Page : Page
     {
+        bool highlight = false;
+
         public Layers_Page()
         {
             InitializeComponent();
@@ -28,12 +30,13 @@ namespace Gauge_Generator
 
         private void Reload_Layers_List(int index)
         {
+            highlight = false;
             layers_view.Items.Clear();
             foreach(Layer i in Global.project.layers)
             {
-                Grid gr = new Grid()
+                ListBoxItem itm = new ListBoxItem
                 {
-                    Width = 300
+                    Tag = i
                 };
                 StackPanel spnl = new StackPanel
                 {
@@ -51,7 +54,8 @@ namespace Gauge_Generator
                     VerticalAlignment = VerticalAlignment.Center,
                     Text = i.Label,
                     FontSize = 16,
-                    FontFamily = new FontFamily("Segoe UI")
+                    FontFamily = new FontFamily("Segoe UI"),
+                    Width = 220
                 };
                 Image vsw = new Image
                 {
@@ -62,19 +66,35 @@ namespace Gauge_Generator
                     Cursor = Cursors.Hand,
                     Tag = i
                 };
+                itm.MouseMove += ItemMouseMove;
+                itm.MouseLeave += ItemMouseLeave;
                 vsw.MouseDown += Vsw_MouseDown;
                 spnl.Children.Add(img);
                 spnl.Children.Add(tblock);
-                gr.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(260) });
-                gr.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(40) });
-                spnl.SetValue(Grid.ColumnProperty, 0);
-                vsw.SetValue(Grid.ColumnProperty, 1);
-                gr.Children.Add(spnl);
-                gr.Children.Add(vsw);
-                layers_view.Items.Add(gr);
+                spnl.Children.Add(vsw);
+                itm.Content = spnl;
+                layers_view.Items.Add(itm);
             }
             layers_view.SelectedIndex = index;
             Global.RefreshScreen();
+        }
+
+        private void ItemMouseLeave(object sender, MouseEventArgs e)
+        {
+            Global.RefreshScreen();
+        }
+
+        private void ItemMouseMove(object sender, MouseEventArgs e)
+        {
+            if(e.GetPosition((ListBoxItem)sender).X < 43)
+            {
+                Global.RefreshScreen(new List<Layer>() { (Layer)((ListBoxItem)sender).Tag });
+                highlight = true;
+            }
+            else
+            {
+                if (highlight) Global.RefreshScreen();
+            }
         }
 
         private void Vsw_MouseDown(object sender, MouseButtonEventArgs e)
@@ -197,6 +217,7 @@ namespace Gauge_Generator
 
         private void Layers_view_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if (e.LeftButton != MouseButtonState.Pressed) return;
             if (layers_view.SelectedIndex >= 0)
             {
                 if (e.OriginalSource is Image img && img.Tag is Layer) return;
