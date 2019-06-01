@@ -48,7 +48,7 @@ namespace Gauge_Generator
             foreach (Layer i in proj.layers)
             {
                 if (i is Range_Item) continue;
-                Border br = new Border
+                ListBoxItem itm = new ListBoxItem
                 {
                     Tag = i
                 };
@@ -85,10 +85,10 @@ namespace Gauge_Generator
                 chkbox.SetValue(Grid.ColumnProperty, 1);
                 gr.Children.Add(spnl);
                 gr.Children.Add(chkbox);
-                br.MouseEnter += MouseEnterItem;
-                br.MouseLeave += MouseLeaveItem;
-                br.Child = gr;
-                lst.Items.Add(br);
+                itm.MouseEnter += MouseEnterItem;
+                itm.MouseLeave += MouseLeaveItem;
+                itm.Content = gr;
+                lst.Items.Add(itm);
             }
         }
 
@@ -99,7 +99,7 @@ namespace Gauge_Generator
 
         private void MouseEnterItem(object sender, MouseEventArgs e)
         {
-            RefreshPreview(new List<Layer>() { (Layer)((Border)sender).Tag });
+            RefreshPreview(new List<Layer>() { (Layer)((ListBoxItem)sender).Tag });
         }
 
         private void FU(ref ProjectData obj)

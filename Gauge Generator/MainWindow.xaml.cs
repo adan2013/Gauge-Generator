@@ -14,7 +14,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MEDIA = System.Windows.Media;
-using DataManagementSystem;
 using Microsoft.Win32;
 
 namespace Gauge_Generator
@@ -24,8 +23,6 @@ namespace Gauge_Generator
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string initialproject = "";
-
         public MainWindow()
         {
             InitializeComponent();
@@ -46,8 +43,7 @@ namespace Gauge_Generator
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Global.FileStateChanged += FSC;
-            Global.LoadProject(initialproject, false);
-            FSC(false, "");
+            if (Global.dms == null) LoadData("", false);
             //TODO diagnostic code
             //Global.project.layers.Add(new NumericScale_Item());
             //Global.project.layers.Add(new Range_Item());
@@ -55,6 +51,12 @@ namespace Gauge_Generator
             //Global.EditingLayer = Global.project.layers[0];
             //Global.SetSidebar(Global.SidebarPages.Editor);
             //Global.SetSidebar(Global.SidebarPages.Layers);
+        }
+
+        public void LoadData(string path, bool tempfile)
+        {
+            Global.LoadProject(path, tempfile);
+            FSC(tempfile, tempfile ? "" : path);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

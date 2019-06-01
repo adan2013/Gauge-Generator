@@ -78,6 +78,7 @@ namespace Gauge_Generator
 
         public void DrawProject(ref Canvas pnl, bool HQmode, int size, bool ignoremodificators = false, List<Layer> showonlythis = null)
         {
+            if (size <= 0) return;
             pnl.Children.Clear();
             //background
             if (RoundForeground)

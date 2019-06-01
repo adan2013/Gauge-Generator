@@ -1,6 +1,6 @@
 # Welcome to Gauge Generator
 
-Gauge Generator it's a free application allowing generating different types of analog clock face. This is a full online documentation containing tips and examples of projects. Select the next page from menu on the left side of this website.
+Gauge Generator is a free application which allows generate different types of analog clock face. Here is the full online documentation containing tips and examples of projects. Select the next page from menu on the left side of this website.
 
 ## Instalation
 

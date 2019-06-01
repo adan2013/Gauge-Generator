@@ -16,7 +16,7 @@ namespace Gauge_Generator
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             MainWindow w = new MainWindow();
-            if (e.Args.Length > 0) w.initialproject = e.Args[0];
+            if (e.Args.Length > 0) w.LoadData(e.Args[0], false);
             w.Show();
         }
     }
