@@ -4,7 +4,7 @@ Gauge Generator is a free application which allows generate different types of a
 
 ## Documentation
 
-More information about the application, together with examples of work you can find [here](https://github.com/adan2013/Gauge-Generator).
+More information about the application, together with examples of work you can find [here](https://adan2013.github.io/Gauge-Generator).
 
 ## Instalation
 
