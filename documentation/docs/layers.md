@@ -159,4 +159,4 @@ Parameters of the "Clock hand" layer:
 
 The appearance of individual types of the clock hands (EndType parameter):
 
-galeria galeria galeria galeria galeria
+![Clock Hand types](img/CH_types.png)
