@@ -10,19 +10,21 @@ More information about the application, together with examples of work you can f
 
 1. Go to [releases page in GitHub](https://github.com/adan2013/Gauge-Generator/releases)
 2. Download ZIP file of the newest version
-<br />
-![GitHub Releases](documentation/docs/img/githubreleases.jpg)
+
+![GitHub Releases](img/githubreleases.jpg)
+
 3. Unzip downloaded file by using an application such as WinRAR or 7-Zip
-<br />
-![Unzip file](documentation/docs/img/unzip.jpg)
+
+![Unzip file](img/unzip.jpg)
+
 4. Run the file with the `.exe` extension
-<br />
-![Run exe](documentation/docs/img/runexe.jpg)
+
+![Run exe](img/runexe.jpg)
 
 ## Screenshots
 
-![Gauge Generator application](documentation/docs/img/full-interface.png)
+![Gauge Generator application](img/full-interface.png)
 
-![Gauge Generator application](documentation/docs/img/newitemwindow.png)
+![Gauge Generator application](img/newitemwindow.png)
 
-![Gauge Generator application](documentation/docs/img/preview-ch.png)
+![Gauge Generator application](img/preview-ch.png)
