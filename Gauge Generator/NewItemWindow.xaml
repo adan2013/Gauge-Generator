@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gauge_Generator"
         mc:Ignorable="d"
-        Title="New item" MinHeight="460" MinWidth="600" Height="460" Width="600" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Background="#cfcfcf">
+        Title="New item" MinHeight="475" MinWidth="600" Height="475" Width="600" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Background="#cfcfcf">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

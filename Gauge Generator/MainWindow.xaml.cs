@@ -45,12 +45,12 @@ namespace Gauge_Generator
             Global.FileStateChanged += FSC;
             if (Global.dms == null) LoadData("", false);
             //TODO diagnostic code
-            Global.project.layers.Add(new Ellipse_Item());
-            Global.project.layers.Add(new Range_Item());
-            Global.project.layers[0].SetRangeSource((Range_Item)Global.project.layers[1]);
-            Global.EditingLayer = Global.project.layers[0];
-            Global.SetSidebar(Global.SidebarPages.Editor);
-            Global.SetSidebar(Global.SidebarPages.Layers);
+            //Global.project.layers.Add(new Rectangle_Item());
+            //Global.project.layers.Add(new Range_Item());
+            //Global.project.layers[0].SetRangeSource((Range_Item)Global.project.layers[1]);
+            //Global.EditingLayer = Global.project.layers[0];
+            //Global.SetSidebar(Global.SidebarPages.Editor);
+            //Global.SetSidebar(Global.SidebarPages.Layers);
         }
 
         public void LoadData(string path, bool tempfile)
