@@ -78,6 +78,7 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Arc_Item.cs" />
+    <Compile Include="Ellipse_Item.cs" />
     <Compile Include="ClockHand_Item.cs" />
     <Compile Include="CloneWindow.xaml.cs">
       <DependentUpon>CloneWindow.xaml</DependentUpon>
@@ -230,6 +231,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\eye.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ellipse.png" />
+    <Resource Include="Images\ellipse_big.png" />
+    <Resource Include="Images\rectangle.png" />
+    <Resource Include="Images\rectangle_big.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -50,7 +50,8 @@ namespace Gauge_Generator
             NumericScale,
             Label,
             Arc,
-            ClockHand
+            ClockHand,
+            Ellipse
         }
         public static LayersType GetLayerType(Layer obj)
         {
@@ -60,6 +61,7 @@ namespace Gauge_Generator
             if (obj is Label_Item) return LayersType.Label;
             if (obj is Arc_Item) return LayersType.Arc;
             if (obj is ClockHand_Item) return LayersType.ClockHand;
+            if (obj is Ellipse_Item) return LayersType.Ellipse;
             //TODO other types
             return LayersType.Range;
         }
@@ -80,6 +82,8 @@ namespace Gauge_Generator
                     return typeof(Arc_Item);
                 case LayersType.ClockHand:
                     return typeof(ClockHand_Item);
+                case LayersType.Ellipse:
+                    return typeof(Ellipse_Item);
                 //TODO other types
                 default:
                     return typeof(Range_Item);
@@ -99,7 +103,8 @@ namespace Gauge_Generator
             "Numeric Scale",
             "Label",
             "Arc",
-            "Clock Hand"
+            "Clock Hand",
+            "Ellipse"
         };
         public static string[] LayerDescriptions = {
             "Basic element defining size and range of values. It is required by other elements (layers)",
@@ -107,7 +112,8 @@ namespace Gauge_Generator
             "Element generates a visible clock scale consisting of numerical values",
             "Element generates a custom text label",
             "Element generates a colorful arc. For example, to mark a dangerous range of values",
-            "Element generates a clock hand"
+            "Element generates a clock hand",
+            "Element generates a simple ellipse"
         };
         public static string[] LayerBigImages = {
             "pack://application:,,,/Images/range_item_big.png",
@@ -115,7 +121,8 @@ namespace Gauge_Generator
             "pack://application:,,,/Images/numeric_scale_big.png",
             "pack://application:,,,/Images/label_big.png",
             "pack://application:,,,/Images/arc_big.png",
-            "pack://application:,,,/Images/clock_hand_big.png"
+            "pack://application:,,,/Images/clock_hand_big.png",
+            "pack://application:,,,/Images/ellipse_big.png"
         };
         public static string[] LayerSmallImages = {
             "pack://application:,,,/Images/range_item.png",
@@ -123,7 +130,8 @@ namespace Gauge_Generator
             "pack://application:,,,/Images/numeric_scale.png",
             "pack://application:,,,/Images/label.png",
             "pack://application:,,,/Images/arc.png",
-            "pack://application:,,,/Images/clock_hand.png"
+            "pack://application:,,,/Images/clock_hand.png",
+            "pack://application:,,,/Images/ellipse.png"
         };
 
         #endregion
