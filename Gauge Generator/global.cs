@@ -90,8 +90,8 @@ namespace Gauge_Generator
             "pack://application:,,,/Icons/checked.png",
         };
         public static string[] Visibility = {
-            "pack://application:,,,/Images/hidden.png",
-            "pack://application:,,,/Images/visible.png"
+            "pack://application:,,,/Icons/hidden.png",
+            "pack://application:,,,/Icons/visible.png"
         };
         public static string[] LayerNames = {
             "Range",
