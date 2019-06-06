@@ -49,7 +49,7 @@
                     <Image Source="pack://application:,,,/Icons/export.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
                 </Button>
                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-                <Button IsEnabled="False" ToolTip="Show home screen">
+                <Button Click="Button_Home" ToolTip="Show home screen">
                     <Image Source="pack://application:,,,/Icons/home.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
                 </Button>
                 <Button Tag="https://adan2013.github.io/Gauge-Generator/" Click="Button_Doc" ToolTip="Show documentation">

@@ -236,5 +236,15 @@ namespace Gauge_Generator
                 w.Close();
             }
         }
+
+        private void Button_Home(object sender, RoutedEventArgs e)
+        {
+            HomeWindow w = new HomeWindow()
+            {
+                Owner = this
+            };
+            w.ShowDialog();
+            w.Close();
+        }
     }
 }

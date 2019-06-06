@@ -86,6 +86,9 @@
     <Compile Include="Editor_Page.xaml.cs">
       <DependentUpon>Editor_Page.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HomeWindow.xaml.cs">
+      <DependentUpon>HomeWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ImportWindow.xaml.cs">
       <DependentUpon>ImportWindow.xaml</DependentUpon>
     </Compile>
@@ -109,6 +112,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Editor_Page.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HomeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -238,6 +245,10 @@
     <Resource Include="Images\ellipse_big.png" />
     <Resource Include="Images\rectangle.png" />
     <Resource Include="Images\rectangle_big.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\internet.png" />
+    <Resource Include="Icons\play.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

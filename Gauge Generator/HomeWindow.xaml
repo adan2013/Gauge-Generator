@@ -1,0 +1,131 @@
+﻿<Window x:Class="Gauge_Generator.HomeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gauge_Generator"
+        mc:Ignorable="d"
+        Title="Welcome" Height="490" Width="830"  WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Background="#ececec">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="110px" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 10 0 0">
+                <Button Click="NewButton" ToolTip="New project" Width="120" Height="80">
+                    <StackPanel>
+                        <Image Source="pack://application:,,,/Icons/new.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                        <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">New project</Label>
+                    </StackPanel>
+                </Button>
+                <Button Click="OpenButton" ToolTip="Open project" Width="120" Height="80">
+                    <StackPanel>
+                        <Image Source="pack://application:,,,/Icons/open.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                        <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Open project</Label>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <!--RECENT PROJECT-->
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40px" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" BorderThickness="0 0 0 3" Margin="8 0" BorderBrush="Black">
+                    <Label FontFamily="Segoe UI" FontSize="20" FontWeight="Bold">Recent projects</Label>
+                </Border>
+                <StackPanel Grid.Row="1" Margin="10">
+                    <!--RECENT LIST-->
+                    <Button Width="300" Height="60" Click="RecentClick" Tag="0">
+                        <DockPanel Width="280">
+                            <Image Source="pack://application:,,,/Icons/play.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                            <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold" x:Name="recent0">Empty slot</Label>
+                        </DockPanel>
+                    </Button>
+                    <Button Width="300" Height="60" Click="RecentClick" Tag="1">
+                        <DockPanel Width="280">
+                            <Image Source="pack://application:,,,/Icons/play.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                            <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold" x:Name="recent1">Empty slot</Label>
+                        </DockPanel>
+                    </Button>
+                    <Button Width="300" Height="60" Click="RecentClick" Tag="2">
+                        <DockPanel Width="280">
+                            <Image Source="pack://application:,,,/Icons/play.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                            <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold" x:Name="recent2">Empty slot</Label>
+                        </DockPanel>
+                    </Button>
+                    <Button Width="300" Height="60" Click="RecentClick" Tag="3">
+                        <DockPanel Width="280">
+                            <Image Source="pack://application:,,,/Icons/play.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                            <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold" x:Name="recent3">Empty slot</Label>
+                        </DockPanel>
+                    </Button>
+                    <!--RECENT LIST-->
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <!--EXAMPLES-->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40px" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" BorderThickness="0 0 0 3" Margin="8 0" BorderBrush="Black">
+                <Label FontFamily="Segoe UI" FontSize="20" FontWeight="Bold">Example projects</Label>
+            </Border>
+            <StackPanel Grid.Row="1" Margin="10">
+                <WrapPanel>
+                    <!--EXAMPLES-->
+                    <Button Width="150" Height="150" IsEnabled="False">
+                        <StackPanel>
+                            <Image Source="pack://application:,,,/Icons/cancel.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                            <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>
+                        </StackPanel>
+                    </Button>
+                    <Button Width="150" Height="150" IsEnabled="False">
+                        <StackPanel>
+                            <Image Source="pack://application:,,,/Icons/cancel.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                            <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>
+                        </StackPanel>
+                    </Button>
+                    <Button Width="150" Height="150" IsEnabled="False">
+                        <StackPanel>
+                            <Image Source="pack://application:,,,/Icons/cancel.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                            <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>
+                        </StackPanel>
+                    </Button>
+                    <Button Width="150" Height="150" IsEnabled="False">
+                        <StackPanel>
+                            <Image Source="pack://application:,,,/Icons/cancel.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                            <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>
+                        </StackPanel>
+                    </Button>
+                    <Button Width="150" Height="150" IsEnabled="False">
+                        <StackPanel>
+                            <Image Source="pack://application:,,,/Icons/cancel.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                            <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>
+                        </StackPanel>
+                    </Button>
+                    <Button Width="150" Height="150" IsEnabled="False">
+                        <StackPanel>
+                            <Image Source="pack://application:,,,/Icons/cancel.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                            <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>
+                        </StackPanel>
+                    </Button>
+                    <!--EXAMPLES-->
+                </WrapPanel>
+                <Button Click="TutorialsButton" Width="462" Height="60" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="pack://application:,,,/Icons/internet.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                        <Label Margin="5 0 0 0" FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Show video tutorials</Label>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
