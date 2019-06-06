@@ -23,6 +23,7 @@ namespace Gauge_Generator
         public HomeWindow()
         {
             InitializeComponent();
+            LoadRecentProjects();
         }
 
         private void NewButton(object sender, RoutedEventArgs e)
@@ -49,10 +50,40 @@ namespace Gauge_Generator
         {
             System.Diagnostics.Process.Start("https://adan2013.github.io/Gauge-Generator/examples/");
         }
+        
+        private void LoadRecentProjects()
+        {
+            recent0.Content = "Empty slot";
+            recent1.Content = "Empty slot";
+            recent2.Content = "Empty slot";
+            recent3.Content = "Empty slot";
+            List<string> l = Global.rp_container.GetItems();
+            if (l.Count > 0) recent0.Content = new System.IO.FileInfo(l[0]).Name;
+            if (l.Count > 1) recent1.Content = new System.IO.FileInfo(l[1]).Name;
+            if (l.Count > 2) recent2.Content = new System.IO.FileInfo(l[2]).Name;
+            if (l.Count > 3) recent3.Content = new System.IO.FileInfo(l[3]).Name;
+        }
 
         private void RecentClick(object sender, RoutedEventArgs e)
         {
-
+            int number = Convert.ToInt32(((Button)sender).Tag);
+            List<string> l = Global.rp_container.GetItems();
+            if (number < l.Count)
+            {
+                if (System.IO.File.Exists(l[number]))
+                {
+                    ((MainWindow)Owner).LoadData(l[number], false);
+                    DialogResult = true;
+                }
+                else
+                {
+                    MessageBox.Show("Project file not found! The position will be deleted", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Global.rp_container.DeleteItem(number);
+                    Global.rp.CheckChanges();
+                    Global.rp.SaveChanges();
+                    LoadRecentProjects();
+                }
+            }
         }
     }
 }

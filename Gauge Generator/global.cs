@@ -32,6 +32,8 @@ namespace Gauge_Generator
         
         public static ProjectData project = new ProjectData();
         public static DMS<ProjectData> dms;
+        public static RecentProjects rp_container = new RecentProjects();
+        public static DMS<RecentProjects> rp;
 
         public static Canvas ScreenCanvas;
         public static Layer EditingLayer;
@@ -416,6 +418,13 @@ namespace Gauge_Generator
             else
             {
                 SetSidebar(SidebarPages.Layers);
+            }
+            //RECENT PROJECTS
+            if (!tempfile)
+            {
+                rp_container.AddItem(path);
+                rp.CheckChanges();
+                rp.SaveChanges();
             }
         }
 

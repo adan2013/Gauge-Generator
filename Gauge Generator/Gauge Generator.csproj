@@ -102,6 +102,7 @@
       <DependentUpon>Project_Settings_Page.xaml</DependentUpon>
     </Compile>
     <Compile Include="Range_Item.cs" />
+    <Compile Include="RecentProjects.cs" />
     <Compile Include="Rectangle_Item.cs" />
     <Page Include="AboutWindow.xaml">
       <SubType>Designer</SubType>
