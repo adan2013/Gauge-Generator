@@ -73,7 +73,7 @@ namespace Gauge_Generator
         public double DistanceFromCenter
         {
             get { return TranslateValue(_distancefromcenter); }
-            set { _distancefromcenter = ValidateDouble(value, Global.MIN_DOUBLE_VALUE, 0.95); }
+            set { _distancefromcenter = ValidateDouble(value, Global.MIN_DOUBLE_VALUE, 1); }
         }
         [Description("Line length"), Category("Lines")]
         public double LineLength

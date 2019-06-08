@@ -34,8 +34,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.6568543"
-     inkscape:cx="248.37724"
-     inkscape:cy="1085.0479"
+     inkscape:cx="244.75332"
+     inkscape:cy="1086.9924"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -55,7 +55,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -73,7 +73,7 @@
            height="484.28571"
            x="58.57143"
            y="72.519684" /></flowRegion><flowPara
-         id="flowPara821"></flowPara></flowRoot>    <text
+         id="flowPara821" /></flowRoot>    <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:'Sui Generis Light';-inkscape-font-specification:'Sui Generis Light, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        x="13.566669"
@@ -248,8 +248,9 @@
     <g
        id="g1186"
        transform="translate(33.58448,-35.070521)"
-       inkscape:export-xdpi="694.38715"
-       inkscape:export-ydpi="694.38715">
+       inkscape:export-xdpi="474.98007"
+       inkscape:export-ydpi="474.98007"
+       inkscape:export-filename="C:\Users\adan2013\Desktop\text829-7-4.png">
       <path
          d="m 47.436733,39.359982 0.248822,-0.179661 0.5,0.5 -0.748822,0.665217 z m -6.998633,4.967221 0.5,0.5 -0.526179,2.254319 -0.518119,-0.521071 z m 6.751521,2.801981 h -1.74625 c 0.222452,-0.588945 -0.43694,-0.01494 -0.751419,-0.01058 h -3.513667 c -0.515055,0 -0.934861,-0.176389 -1.259417,-0.529166 -0.3175,-0.359833 -0.47625,-0.811389 -0.47625,-1.354667 0,-0.183445 0.01764,-0.373945 0.05292,-0.5715 l 0.645583,-3.037417 c 0.148167,-0.677333 0.486833,-1.255888 1.016,-1.735666 0.536223,-0.479778 1.107723,-0.719667 1.7145,-0.719667 l 4.813934,0.0098 -0.433917,2.032 -4.813933,-0.0098 c -0.09878,-2.01e-4 -0.194028,0.04233 -0.28575,0.127 -0.09172,0.07761 -0.148167,0.176389 -0.169334,0.296333 l -0.656166,3.037417 c -0.02117,0.119945 -0.0035,0.22225 0.05292,0.306917 0.05645,0.07761 0.134058,0.116416 0.232834,0.116416 h 3.333749 c 0.232833,0 0.465667,-0.105833 0.6985,-0.3175 0.521086,-0.583369 0.509632,-0.684479 -0.169333,-0.656163 h -1.640416 l 0.423333,-2.00025 h 4.0005 z"
          style="fill:#999999;fill-opacity:1;fill-rule:nonzero;stroke-width:0.26458332"
@@ -288,8 +289,9 @@
     <g
        id="g1213"
        transform="translate(34.24824,-34.532641)"
-       inkscape:export-xdpi="694.38715"
-       inkscape:export-ydpi="694.38715">
+       inkscape:export-xdpi="474.98007"
+       inkscape:export-ydpi="474.98007"
+       inkscape:export-filename="C:\Users\adan2013\Desktop\text829-7-4.png">
       <path
          id="path1188"
          style="fill:#999999;fill-opacity:1;fill-rule:nonzero;stroke-width:0.26458332"
@@ -326,8 +328,9 @@
        x="63.912582"
        y="14.290697"
        id="text829-7-4"
-       inkscape:export-xdpi="694.38715"
-       inkscape:export-ydpi="694.38715"><tspan
+       inkscape:export-xdpi="474.98007"
+       inkscape:export-ydpi="474.98007"
+       inkscape:export-filename="C:\Users\adan2013\Desktop\text829-7-4.png"><tspan
          sodipodi:role="line"
          id="tspan827-9-5"
          x="63.912582"

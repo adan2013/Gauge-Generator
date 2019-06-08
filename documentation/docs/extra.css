@@ -1,4 +1,4 @@
-.wy-nav-content img {
+.wy-nav-content img:not([src*="borderoff"]) {
     margin: 8px 0 12px 10px;
     border: 10px rgb(224, 216, 216) solid;
     max-width: 540px;

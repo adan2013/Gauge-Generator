@@ -14,26 +14,27 @@ namespace Gauge_Generator
     [Serializable()]
     class Ellipse_Item : Layer
     {
-        public double _circleoffset_x;
-        public double _circleoffset_y;
+        public double _centeroffset_x;
+        public double _centeroffset_y;
         public double _width;
         public double _height;
         public string _color;
         public string _bordercolor;
         public double _borderthickness;
+        public int _angle;
 
         //PROPERTIES
         [Description("X coordinate of the center of ellipse"), Category("Position")]
-        public double CircleOffset_X
+        public double CenterOffset_X
         {
-            get { return TranslateValue(_circleoffset_x); }
-            set { _circleoffset_x = ValidateDouble(value, -1, 1); }
+            get { return TranslateValue(_centeroffset_x); }
+            set { _centeroffset_x = ValidateDouble(value, -1, 1); }
         }
         [Description("Y coordinate of the center of ellipse"), Category("Position")]
-        public double CircleOffset_Y
+        public double CenterOffset_Y
         {
-            get { return TranslateValue(_circleoffset_y); }
-            set { _circleoffset_y = ValidateDouble(value, -1, 1); }
+            get { return TranslateValue(_centeroffset_y); }
+            set { _centeroffset_y = ValidateDouble(value, -1, 1); }
         }
         [Description("Width of the ellipse"), Category("Position")]
         public double Width
@@ -65,6 +66,12 @@ namespace Gauge_Generator
             get { return TranslateValue(_borderthickness); }
             set { _borderthickness = ValidateDouble(value, 0, 0.25); }
         }
+        [Description("Rotation angle"), Category("Ellipse")]
+        public int Angle
+        {
+            get { return _angle; }
+            set { _angle = ValidateInt(value, -360, 360); }
+        }
 
         public Ellipse_Item()
         {
@@ -74,13 +81,14 @@ namespace Gauge_Generator
         //METHODS
         public override void LoadDefaultValues()
         {
-            _circleoffset_x = 0;
-            _circleoffset_y = 0;
+            _centeroffset_x = 0;
+            _centeroffset_y = 0;
             _width = 0.5;
             _height = 0.5;
             _color = "#FFFFFFFF";
             _bordercolor = "#FFC8C8C8";
             _borderthickness = 0;
+            _angle = 0;
             base.LoadDefaultValues();
         }
 
@@ -88,20 +96,21 @@ namespace Gauge_Generator
         {
             base.CloneCreator(original, name);
             Ellipse_Item o = (Ellipse_Item)original;
-            _circleoffset_x = o._circleoffset_x;
-            _circleoffset_y = o._circleoffset_y;
+            _centeroffset_x = o._centeroffset_x;
+            _centeroffset_y = o._centeroffset_y;
             _width = o._width;
             _height = o._height;
             _color = o._color;
             _bordercolor = o._bordercolor;
             _borderthickness = o._borderthickness;
+            _angle = o._angle;
         }
         
         public override void DrawLayer(ref Canvas can, bool HQmode, int size)
         {
             int half_size = size / 2;
             Point c = Global.GetOffsetPoint(new Point(half_size, half_size), half_size, RangeSource._circlecenter_x, RangeSource._circlecenter_y);
-            c = Global.GetOffsetPoint(c, half_size * RangeSource._circleradius, _circleoffset_x, _circleoffset_y);
+            c = Global.GetOffsetPoint(c, half_size * RangeSource._circleradius, _centeroffset_x, _centeroffset_y);
             Ellipse el = new Ellipse()
             {
                 Margin = new System.Windows.Thickness(c.X - _width / 2 * size, c.Y - _height / 2 * size, 0, 0),
@@ -111,6 +120,7 @@ namespace Gauge_Generator
                 StrokeThickness = _borderthickness * half_size,
                 Stroke = new MEDIA.SolidColorBrush(StringToMediaColor(_bordercolor))
             };
+            if (_angle != 0) el.RenderTransform = new MEDIA.RotateTransform(_angle, el.Width / 2, el.Height / 2);
             can.Children.Add(el);
             base.DrawLayer(ref can, HQmode, size);
         }

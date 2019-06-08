@@ -8,7 +8,7 @@ More information about the application, together with examples of work you can f
 
 ## Instalation
 
-1. Go to [releases page in GitHub](https://github.com/adan2013/Gauge-Generator/releases)
+1. Go to [releases page on GitHub](https://github.com/adan2013/Gauge-Generator/releases)
 2. Download ZIP file of the newest version
 
 ![GitHub Releases](img/githubreleases.jpg)
@@ -21,10 +21,6 @@ More information about the application, together with examples of work you can f
 
 ![Run exe](img/runexe.jpg)
 
-## Screenshots
+5. The application is ready for use
 
 ![Gauge Generator application](img/full-interface.png)
-
-![Gauge Generator application](img/newitemwindow.png)
-
-![Gauge Generator application](img/preview-ch.png)

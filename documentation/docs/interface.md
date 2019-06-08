@@ -24,7 +24,9 @@ The default screen of sidebar is the list of layers. At the bottom of the screen
 * **Clone a layer** - clones a selected value,
 * **Move up/down** - changes the order of layers in the project.
 
-Double-clicking on the item on the list of layers opens the property layer editor. Eye icons allows you to control the visibility of specific layers.
+Double-clicking on the item on the list of layers opens the property layer editor. Eye icons allows you to control the visibility of specific layers. Hovering the mouse cursor over the layer icon will allow you to quickly preview the layer - only it will be visible in the preview on the right side of application.
+
+![Quick preview](img/quickpreview.png)
 
 ### Project editor
 
@@ -56,7 +58,7 @@ A large part of right side of main window application consist a live preview. It
 * Open this documentation in a web browser,
 * Show more information about this application.
 
-## New item window
+# New item window
 
 ![New item window](img/newitemwindow.png)
 
@@ -66,3 +68,15 @@ To create a new layer use the plus button below the list of layers. It opens the
 2. Give a name that describes layer's task,
 3. Select a "Range Source" - the layer of "Range" type (more information on ["Layer types"](layers.md) page),
 4. Click the OK button at bottom of the window.
+
+# Import window
+
+![Import window](img/import1.png)
+
+The import window allows you to move layers from the project file to the currently opened work. After selecting the file mark the interesting layers. Hovering over items immediately launches a quick view of each of them. There is no "Range" layers on the list. They will be automatically added to the project if they are required. You can see this by using the counter at the bottom of the window. Holding the button with the eye icon you can preview all the layers you marked.
+
+![Import window](img/import2.png)
+
+# Welcome screen
+
+After launching, the application opens the welcome screen. Here, you can create a new project, open an existing one from a file or select one from the "recent project" list. On the right you can use the sample works created by me or open one of the video tutorials.

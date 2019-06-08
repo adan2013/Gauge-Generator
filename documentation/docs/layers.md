@@ -45,7 +45,7 @@ Type "Linear Scale" is used for generate the radial lines on the basis of the ra
 Parameters of the "Linear Scale" layer:
 
 * **Lines**
-    * DistanceFromCenter *<20; 95>* - distance between the center of the clock face and the end of lines
+    * DistanceFromCenter *<20; 100>* - distance between the center of the clock face and the end of lines
     * LineColor - color of the lines
     * LineLength *<2; 100>* - distance between the center of the clock face and the start of lines
     * LineThickness *<2; 5>* - line thickness
@@ -160,3 +160,43 @@ Parameters of the "Clock hand" layer:
 The appearance of individual types of the clock hands (EndType parameter):
 
 ![Clock Hand types](img/CH_types.png)
+
+## Ellipse
+
+![Ellipse item](img/preview-ellipse.png)
+
+"Ellipse" type adds ellipse with or without border to the project.
+
+Parameters of the "Ellipse" layer:
+
+* **Ellipse**
+    * Angle *<-360; 360>* - rotation angle
+    * BorderColor - color of border
+    * BorderThickness *<0; 25>* - border thickness (0 - border hidden)
+    * Color - color of ellipse
+<br />
+* **Position**
+    * CenterOffset_X *<-100; 100>* - horizontal offset
+    * CenterOffset_Y *<-100; 100>* - vertical offset
+    * Height *<5; 100>* - height of the ellipse
+    * Width *<5; 100>* - height of the ellipse
+
+## Rectangle
+
+![Rectangle item](img/preview-rectangle.png)
+
+"Rectangle" type adds rectangle with or without border to the project.
+
+Parameters of the "Rectangle" layer:
+
+* **Position**
+    * CenterOffset_X *<-100; 100>* - horizontal offset
+    * CenterOffset_Y *<-100; 100>* - vertical offset
+    * Height *<5; 100>* - height of the rectangle
+    * Width *<5; 100>* - height of the rectangle
+<br />
+* **Rectangle**
+    * Angle *<-360; 360>* - rotation angle
+    * BorderColor - color of border
+    * BorderThickness *<0; 25>* - border thickness (0 - border hidden)
+    * Color - color of rectangle
