@@ -43,7 +43,7 @@ namespace Gauge_Generator
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Global.FileStateChanged += FSC;
-            if (Global.dms == null) LoadData("", false);
+            if (Global.dms == null) Global.LoadProject("", false);
             //TODO diagnostic code
             //Global.project.layers.Add(new Rectangle_Item());
             //Global.project.layers.Add(new Range_Item());
@@ -51,12 +51,6 @@ namespace Gauge_Generator
             //Global.EditingLayer = Global.project.layers[0];
             //Global.SetSidebar(Global.SidebarPages.Editor);
             //Global.SetSidebar(Global.SidebarPages.Layers);
-        }
-
-        public void LoadData(string path, bool tempfile)
-        {
-            Global.LoadProject(path, tempfile);
-            FSC(tempfile, tempfile ? "" : path);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -78,7 +72,7 @@ namespace Gauge_Generator
             }
         }
 
-        private void FSC(bool changes, string path)
+        public void FSC(bool changes, string path)
         {
             string s = changes ? "* " : "";
             if(path == "")
@@ -170,7 +164,16 @@ namespace Gauge_Generator
                         if (i.RangeSource == Global.EditingLayer) i.ValidateWithSource();
                     }
                 }
-                if (!Global.dms.SaveAs(sve.FileName)) MessageBox.Show("File error. The project has not been saved", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                if (Global.dms.SaveAs(sve.FileName))
+                {
+                    Global.rp_container.AddItem(sve.FileName);
+                    Global.rp.CheckChanges();
+                    Global.rp.SaveChanges();
+                }
+                else
+                { 
+                    MessageBox.Show("File error. The project has not been saved", "Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+                }
             }
         }
 
@@ -197,7 +200,7 @@ namespace Gauge_Generator
         {
             AboutWindow w = new AboutWindow
             {
-                Owner = Application.Current.MainWindow
+                Owner = Global.mainwindowobj
             };
             w.ShowDialog();
             w.Close();
@@ -226,7 +229,7 @@ namespace Gauge_Generator
                 }
                 ImportWindow w = new ImportWindow
                 {
-                    Owner = Application.Current.MainWindow,
+                    Owner = Global.mainwindowobj,
                     projectpath = opn.FileName
                 };
                 if((bool)w.ShowDialog())

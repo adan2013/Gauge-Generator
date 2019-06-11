@@ -117,7 +117,7 @@ namespace Gauge_Generator
             {
                 NewItemWindow w = new NewItemWindow
                 {
-                    Owner = Application.Current.MainWindow
+                    Owner = Global.mainwindowobj
                 };
                 w.ShowDialog();
                 if(w.DialogResult.HasValue && w.DialogResult.Value)
@@ -165,7 +165,7 @@ namespace Gauge_Generator
             {
                 CloneWindow cw = new CloneWindow
                 {
-                    Owner = Application.Current.MainWindow,
+                    Owner = Global.mainwindowobj,
                     LayerIndex = layers_view.SelectedIndex
                 };
                 cw.ShowDialog();

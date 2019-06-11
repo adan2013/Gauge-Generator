@@ -28,7 +28,7 @@ namespace Gauge_Generator
 
         private void NewButton(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Owner).LoadData("", false);
+            Global.LoadProject("", false);
             DialogResult = true;
         }
 
@@ -41,7 +41,7 @@ namespace Gauge_Generator
             };
             if ((bool)opn.ShowDialog())
             {
-                ((MainWindow)Owner).LoadData(opn.FileName, false);
+                Global.LoadProject(opn.FileName, false);
                 DialogResult = true;
             }
         }
@@ -72,7 +72,7 @@ namespace Gauge_Generator
             {
                 if (System.IO.File.Exists(l[number]))
                 {
-                    ((MainWindow)Owner).LoadData(l[number], false);
+                    Global.LoadProject(l[number], false);
                     DialogResult = true;
                 }
                 else

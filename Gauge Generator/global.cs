@@ -19,7 +19,7 @@ namespace Gauge_Generator
         public const double MAX_DOUBLE_VALUE = 0.8;
         public const int MIN_RANGE_VALUE = -1000;
         public const int MAX_RANGE_VALUE = 1000;
-        public const int MAX_LAYERS = 40;
+        public const int MAX_LAYERS = 80;
         public const string DMS_ID = "GaugeGen";
 
         public const int ARC_LOD_LQ = 20;
@@ -29,7 +29,9 @@ namespace Gauge_Generator
         
         public const double MAX_ALPHA_OVERLAY = 0.6;
         public static Color Overlay1 { get { return Color.FromArgb(255, 66, 105, 165); } }
-        
+
+        public static System.Windows.Window mainwindowobj;
+
         public static ProjectData project = new ProjectData();
         public static DMS<ProjectData> dms;
         public static RecentProjects rp_container = new RecentProjects();
@@ -419,6 +421,9 @@ namespace Gauge_Generator
             {
                 SetSidebar(SidebarPages.Layers);
             }
+            //TITLE BAR
+            if(mainwindowobj != null) ((MainWindow)mainwindowobj).FSC(tempfile, tempfile ? "" : path);
+
             //RECENT PROJECTS
             if (!tempfile)
             {

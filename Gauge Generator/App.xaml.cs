@@ -37,7 +37,8 @@ namespace Gauge_Generator
 #endif
 
             MainWindow w = new MainWindow();
-            if (e.Args.Length > 0) w.LoadData(e.Args[0], false);
+            Global.mainwindowobj = w;
+            if (e.Args.Length > 0) Global.LoadProject(e.Args[0], false);
             w.Show();
 
 #if !DEBUG
