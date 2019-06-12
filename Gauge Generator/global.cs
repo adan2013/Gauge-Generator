@@ -68,7 +68,6 @@ namespace Gauge_Generator
             if (obj is ClockHand_Item) return LayersType.ClockHand;
             if (obj is Ellipse_Item) return LayersType.Ellipse;
             if (obj is Rectangle_Item) return LayersType.Rectangle;
-            //TODO other types
             return LayersType.Range;
         }
 
@@ -92,7 +91,6 @@ namespace Gauge_Generator
                     return typeof(Ellipse_Item);
                 case LayersType.Rectangle:
                     return typeof(Rectangle_Item);
-                //TODO other types
                 default:
                     return typeof(Range_Item);
             }

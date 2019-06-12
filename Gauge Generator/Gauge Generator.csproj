@@ -187,6 +187,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Examples\example1.ggp" />
+    <EmbeddedResource Include="Examples\example2.ggp" />
+    <EmbeddedResource Include="Examples\example3.ggp" />
+    <EmbeddedResource Include="Examples\example4.ggp" />
+    <EmbeddedResource Include="Examples\example5.ggp" />
+    <EmbeddedResource Include="Examples\example6.ggp" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -266,6 +272,14 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="splash_screen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Examples\icon1.png" />
+    <Resource Include="Examples\icon2.png" />
+    <Resource Include="Examples\icon3.png" />
+    <Resource Include="Examples\icon4.png" />
+    <Resource Include="Examples\icon5.png" />
+    <Resource Include="Examples\icon6.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

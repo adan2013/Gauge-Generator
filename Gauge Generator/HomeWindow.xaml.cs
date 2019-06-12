@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,17 @@ namespace Gauge_Generator
     /// </summary>
     public partial class HomeWindow : Window
     {
+
+        string[] examplepath =
+        {
+            "Gauge_Generator.Examples.example1.ggp",
+            "Gauge_Generator.Examples.example2.ggp",
+            "Gauge_Generator.Examples.example3.ggp",
+            "Gauge_Generator.Examples.example4.ggp",
+            "Gauge_Generator.Examples.example5.ggp",
+            "Gauge_Generator.Examples.example6.ggp"
+        };
+
         public HomeWindow()
         {
             InitializeComponent();
@@ -70,7 +82,7 @@ namespace Gauge_Generator
             List<string> l = Global.rp_container.GetItems();
             if (number < l.Count)
             {
-                if (System.IO.File.Exists(l[number]))
+                if (File.Exists(l[number]))
                 {
                     Global.LoadProject(l[number], false);
                     DialogResult = true;
@@ -84,6 +96,22 @@ namespace Gauge_Generator
                     LoadRecentProjects();
                 }
             }
+        }
+
+        private void OpenExample(object sender, RoutedEventArgs e)
+        {
+            int number = Convert.ToInt32(((Button)sender).Tag);
+            string file = Environment.GetFolderPath(Environment.SpecialFolder.Templates) + "\\gg_exaple.ggp";
+            try
+            {
+                Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(examplepath[number]);
+                FileStream fileStream = new FileStream(file, FileMode.Create);
+                for (int i = 0; i < stream.Length; i++) fileStream.WriteByte((byte)stream.ReadByte());
+                fileStream.Close();
+                Global.LoadProject(file, true);
+                DialogResult = true;
+            }
+            catch { MessageBox.Show("Example file error", "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation); }
         }
     }
 }

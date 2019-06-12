@@ -44,13 +44,6 @@ namespace Gauge_Generator
         {
             Global.FileStateChanged += FSC;
             if (Global.dms == null) Global.LoadProject("", false);
-            //TODO diagnostic code
-            //Global.project.layers.Add(new Rectangle_Item());
-            //Global.project.layers.Add(new Range_Item());
-            //Global.project.layers[0].SetRangeSource((Range_Item)Global.project.layers[1]);
-            //Global.EditingLayer = Global.project.layers[0];
-            //Global.SetSidebar(Global.SidebarPages.Editor);
-            //Global.SetSidebar(Global.SidebarPages.Layers);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

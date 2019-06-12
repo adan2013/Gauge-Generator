@@ -79,4 +79,6 @@ The import window allows you to move layers from the project file to the current
 
 # Welcome screen
 
+![Welcome screen](img/welcomescreen.png)
+
 After launching, the application opens the welcome screen. Here, you can create a new project, open an existing one from a file or select one from the "recent project" list. On the right you can use the sample works created by me or open one of the video tutorials.

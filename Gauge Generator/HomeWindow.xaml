@@ -81,40 +81,40 @@
             <StackPanel Grid.Row="1" Margin="10">
                 <WrapPanel>
                     <!--EXAMPLES-->
-                    <Button Width="150" Height="150" IsEnabled="False">
+                    <Button Width="150" Height="150" Click="OpenExample" Tag="0">
                         <StackPanel>
-                            <Image Source="pack://application:,,,/Icons/cancel.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
-                            <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>
+                            <Image Source="pack://application:,,,/Examples/icon1.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                            <!--<Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>-->
                         </StackPanel>
                     </Button>
-                    <Button Width="150" Height="150" IsEnabled="False">
+                    <Button Width="150" Height="150" Click="OpenExample" Tag="1">
                         <StackPanel>
-                            <Image Source="pack://application:,,,/Icons/cancel.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
-                            <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>
+                            <Image Source="pack://application:,,,/Examples/icon2.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                            <!--<Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>-->
                         </StackPanel>
                     </Button>
-                    <Button Width="150" Height="150" IsEnabled="False">
+                    <Button Width="150" Height="150" Click="OpenExample" Tag="2">
                         <StackPanel>
-                            <Image Source="pack://application:,,,/Icons/cancel.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
-                            <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>
+                            <Image Source="pack://application:,,,/Examples/icon3.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                            <!--<Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>-->
                         </StackPanel>
                     </Button>
-                    <Button Width="150" Height="150" IsEnabled="False">
+                    <Button Width="150" Height="150" Click="OpenExample" Tag="3">
                         <StackPanel>
-                            <Image Source="pack://application:,,,/Icons/cancel.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
-                            <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>
+                            <Image Source="pack://application:,,,/Examples/icon4.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                            <!--<Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>-->
                         </StackPanel>
                     </Button>
-                    <Button Width="150" Height="150" IsEnabled="False">
+                    <Button Width="150" Height="150" Click="OpenExample" Tag="4">
                         <StackPanel>
-                            <Image Source="pack://application:,,,/Icons/cancel.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
-                            <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>
+                            <Image Source="pack://application:,,,/Examples/icon5.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                            <!--<Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>-->
                         </StackPanel>
                     </Button>
-                    <Button Width="150" Height="150" IsEnabled="False">
+                    <Button Width="150" Height="150" Click="OpenExample" Tag="5">
                         <StackPanel>
-                            <Image Source="pack://application:,,,/Icons/cancel.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
-                            <Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>
+                            <Image Source="pack://application:,,,/Examples/icon6.png" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased" />
+                            <!--<Label FontFamily="Segoe UI" FontSize="14" FontWeight="Bold">Coming soon</Label>-->
                         </StackPanel>
                     </Button>
                     <!--EXAMPLES-->
