@@ -45,7 +45,7 @@ namespace Gauge_Generator
             splash.Close();
 #endif
 
-            if (Global.dms.PathToFile == "")
+            if (Global.dms == null || Global.dms.PathToFile == "")
             {
                 HomeWindow h = new HomeWindow()
                 {
