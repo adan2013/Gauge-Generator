@@ -58,7 +58,7 @@ web/
     layers/                     # domena i implementacje warstw
       core/
       range/
-      linear-scale/
+      tick-scale/
       numeric-scale/
       label/
       arc/
@@ -124,10 +124,11 @@ projektowych na skróty.
    Library oraz bibliotekę ikon SVG. Nie dodawać narzędzia E2E.
 4. Utworzyć routing `/`, `/app`, `/app/help`; dodać provider store i provider
    i18n.
-5. Zapisać `docs/architecture.md`, `docs/json-format.md` i `docs/decisions.md`.
-   Przenieść do nich decyzje z analizy zamiast kopiować kod starego programu.
-6. Skonfigurować CI: lint, typecheck, testy jednostkowe i build. Nie dodawać
-   jobu E2E.
+5. Zapisać `docs/architecture.md`, `docs/json-format.md` i
+   `ai-handoff/DECISIONS.md`. Przenieść do nich decyzje z analizy zamiast
+   kopiować kod starego programu.
+6. Skonfigurować lokalny pre-commit gate `pnpm verify` (lint, typecheck i testy
+   jednostkowe). CI pozostaje poza obecnym zakresem; nie dodawać jobu E2E.
 
 **Weryfikacja:** `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` są
 zielone; `/`, `/app` i `/app/help` działają, a wyświetlany tekst pochodzi z
@@ -151,7 +152,7 @@ angielskich kluczy tłumaczeń.
    Oba widoki mają pełnoszerokie `Back to layers`; Project settings jest
    otwierane wyłącznie z widoku Layers i zawiera rozmiar canvasu oraz snapping.
    W Project settings strzałka powrotu jest skierowana w prawo. W nagłówku
-   Nagłówek Layers zawiera cichą akcję `Projects` z ikoną ustawień oraz
+   Nagłówek Layers zawiera cichą akcję `Project` z ikoną ustawień oraz
    akcentowy przycisk `+ Layer`; oba przyciski zachowują widoczne etykiety.
    Widok Layers ma dwie niezależne, wyraźnie rozdzielone sekcje: najpierw
    wizualne Layers, potem Ranges. Ranges tworzy się i edytuje wyłącznie w
@@ -160,13 +161,16 @@ angielskich kluczy tłumaczeń.
    wykorzystuje resztę miejsca i przewija się niezależnie.
 5. Po prawej umieścić responsywny kontener preview SVG. Zaimplementować pusty
    ekran dla projektu bez warstw z akcjami Create first Range i Browse examples.
+   Ekrany powitalne zachowują stały kwadratowy frame; właściwy preview SVG
+   odzwierciedla proporcje canvasu projektu i zawsze mieści cały canvas w
+   dostępnym obszarze, bez zoomowania lub przesuwania.
 6. Dodać podstawową dostępność: widoczny focus, etykiety kontrolek, tab order,
    obsługę dialogu i tekstowe etykiety ikon.
 
 **Weryfikacja:** test ręczny w desktopie i w wąskiej szerokości: toolbar się nie
 łamie, sidebar poprawnie animuje przejście, powrót zamyka properties, a pusty
 stan prowadzi do Range/Examples. Zrzut porównawczy należy dodać do
-`../ai-handoff/implementation-evidence/`.
+`ai-handoff/implementation-evidence/`.
 
 ### Etap 2 — kontrakt danych, domena i podstawowy store
 
@@ -175,7 +179,9 @@ stan prowadzi do Range/Examples. Zrzut porównawczy należy dodać do
 1. Zdefiniować Zod `ProjectSchema` z niezależnymi kolekcjami `layers` i
    `ranges`, versioned discriminated union dla wizualnych warstw i serializację
    bez właściwości UI. Walidować wymagane, niepuste po trimie nazwy obu typów
-   obiektów.
+   obiektów oraz wszystkie granice liczbowe. Kontrolki UI ograniczają już
+   wpisywane wartości do własnych `min`/`max`, lecz Zod pozostaje
+   autorytatywną walidacją importu i stanu projektu.
 2. Utworzyć klasy `Layer` i `Range` oraz kontrakty
    `RenderContext`, `EditingOverlayContext`, `LayerHandle` i `PointerInput`.
 3. Dodać geometrię w mm: transformacje, kąty, value↔angle, ograniczanie,
@@ -199,6 +205,9 @@ odrzucenie złego `rangeId`, limit historii, undo/redo, przeliczenia mm i snap
 1. Dodać Range jako pierwszy typ niezależnej kolekcji `ranges`: tworzenie,
    edytowalna nazwa, środek, promień, początek i rozwarcie kąta, wartości skali, pivot
    wskazówki oraz `scaleDefinition`.
+   Definicje parametrów numerycznych (min/max/krok) należą do edytowanego
+   obiektu domenowego; UI jedynie je renderuje, bez stałych zależnych od
+   prototypowego canvasu.
 2. Stworzyć jego właściwości w grupach oraz nie-wizualną miniaturę/badge z
    zakresem, łukiem i metadanymi. Range nie udaje finalnie rysowanej warstwy.
 3. Dodać overlay Range: środek, promień, start/end łuku i pivot; uchwyty mają
@@ -216,14 +225,15 @@ zmienić promień uchwytem, co aktualizuje formularz i cofa się jednym Undo.
 Nie można usunąć Range po dodaniu zależności (przypadek testowy przygotować
 już teraz). Miniatura odświeża się dopiero po Back to layers.
 
-### Etap 4 — Linear Scale i Numeric Scale
+### Etap 4 — Tick Scale i Numeric Scale
 
 **Cel:** uruchomić właściwy dial i wspólną definicję skali.
 
-1. Dodać `LinearScaleLayer`, następnie `NumericScaleLayer`, oba z obowiązkowym
+1. Dodać `TickScaleLayer`, następnie `NumericScaleLayer`, oba z obowiązkowym
    wyborem Range po nazwie.
-2. Implementować liniową definicję skali wspólną z Range oraz kreski, łuk
-   krawędziowy, formatowanie etykiet, mnożnik i style web-safe fontów.
+2. Implementować kreski Tick Scale oraz formatowanie etykiet Numeric Scale,
+   oba korzystające z definicji mapowania należącej do Range; dodać łuk
+   krawędziowy, mnożnik i style web-safe fontów.
 3. Dodać przełączniki Linear / Logarithmic / Custom Curve. Dla logarytmu
    walidować dodatni zakres i podstawę; dla zmiany trybu wymagającej resetu
    danych pokazywać potwierdzenie.

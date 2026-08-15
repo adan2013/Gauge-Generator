@@ -13,7 +13,7 @@ assetami nowej aplikacji i nie należy ich publikować ani kopiować do jej UI.
 | `reference-images/legacy-layer-actions.png` | akcje listy warstw | baza dla visibility, clone, delete i reorder |
 | `reference-images/legacy-project-actions.png` | akcje projektu | baza funkcjonalna, nie wizualna, dla toolbaru |
 | `reference-images/legacy-range-preview.png` | właściwości Range | Range jest kontekstem, a nie finalnym elementem renderu |
-| `reference-images/legacy-linear-scale-preview.png` | kreski skali | referencja funkcji Linear Scale |
+| `reference-images/legacy-linear-scale-preview.png` | kreski skali | referencja funkcji Tick Scale |
 | `reference-images/legacy-numeric-scale-preview.png` | liczby skali | referencja funkcji Numeric Scale |
 | `reference-images/legacy-clock-hand-preview.png` | wskazówkę | referencja parametrów Clock Hand |
 | `reference-images/legacy-arc-preview.png` | strefę łukową | referencja parametrów Arc |

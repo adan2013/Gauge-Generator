@@ -1,0 +1,41 @@
+import { describe, expect, it } from "vitest";
+import { createProject, createRange, createTickScaleLayer } from "@/features/project/factories/project-factories";
+import { ProjectSchema, validateProject } from "./project-dto";
+import { PROJECT_VALIDATION_CODES } from "./project-validation-codes";
+
+describe("ProjectSchema", () => {
+  it("round-trips a project with independent Range and visual-layer collections", () => {
+    const range = createRange();
+    const project = createProject({ ranges: [range], layers: [createTickScaleLayer(range.id)] });
+    const result = validateProject(JSON.parse(JSON.stringify(project)));
+
+    expect(result.issues).toEqual([]);
+    expect(ProjectSchema.parse(result.data)).toEqual(project);
+  });
+
+  it("rejects negative canvas dimensions and blank object names", () => {
+    const project = createProject({ canvas: { widthMm: -1, heightMm: 120, background: "#FFFFFF" } });
+    expect(validateProject(project).issues).not.toEqual([]);
+    expect(validateProject(createProject({ ranges: [createRange({ name: "   " })] })).issues).not.toEqual([]);
+  });
+
+  it("requires the Range center to be on canvas but permits its radius to extend beyond it", () => {
+    expect(validateProject(createProject({ ranges: [createRange({ radius: 500 })] })).issues).toEqual([]);
+    expect(validateProject(createProject({ ranges: [createRange({ centerX: 121 })] })).issues[0]?.code).toBe(PROJECT_VALIDATION_CODES.rangeCenterOutsideCanvas);
+  });
+
+  it("rejects a visual layer whose source Range is missing", () => {
+    const project = createProject({ layers: [createTickScaleLayer(crypto.randomUUID())] });
+    expect(validateProject(project).issues[0]?.code).toBe(PROJECT_VALIDATION_CODES.missingRangeReference);
+  });
+
+  it("keeps the value-mapping mode on Range, not on a visual Tick Scale", () => {
+    const range = createRange({ scaleDefinition: { mode: "logarithmic", start: 1, end: 100, base: 10 } });
+    const layer = createTickScaleLayer(range.id);
+    const project = createProject({ ranges: [range], layers: [layer] });
+
+    expect(validateProject(project).data?.ranges[0].scaleDefinition.mode).toBe("logarithmic");
+    const invalidLayerProject: unknown = { ...project, layers: [{ ...layer, scaleDefinition: range.scaleDefinition }] };
+    expect(validateProject(invalidLayerProject).issues).not.toEqual([]);
+  });
+});

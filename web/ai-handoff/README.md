@@ -8,7 +8,13 @@ Ten katalog skraca wejście kolejnego agenta AI w projekt. Najpierw przeczytaj:
    bramki weryfikacyjne;
 3. `DECISIONS.md` i `REFERENCE_ASSETS.md` — zwięzły kontekst pracy.
 
-## Status początkowy
+## Current status
+
+Stage 1 UI shell and stage 2 data/store foundation are complete. The next
+vertical slice is stage 3: Range SVG rendering, its badge, editing overlay, and
+direct manipulation.
+
+## Initial repository context
 
 Nowa aplikacja jest zainicjalizowanym starterem Next.js w katalogu `web/` (ten
 katalog). Katalog rodzeństwa `../pc-legacy/` zawiera legacy WPF wyłącznie jako

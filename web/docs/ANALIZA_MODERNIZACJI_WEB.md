@@ -45,8 +45,9 @@ Najważniejszy typ to **Range**. Definiuje pozycję i promień tarczy oraz
 przeliczenie wartości na kąt. Projekt może zawierać wiele niezależnych Range,
 a tym samym wiele tarcz na tym samym prostokątnym płótnie.
 
-Warstwa jest albo Range, albo warstwą zależną od Range. Tak jak w oryginalnym
-projekcie, każdy typ poza Range wymaga pola rangeId: pobiera z nim środek,
+W pierwowzorze Range był traktowany jak warstwa, ale nowa aplikacja przechowuje
+Range w osobnej kolekcji `ranges`; kolekcja `layers` zawiera wyłącznie warstwy
+wizualne. Każdy typ wizualny wymaga pola rangeId: pobiera z nim środek,
 promień, kierunek oraz mapowanie wartości na kąt. Dotyczy to także Label,
 Ellipse i Rectangle, dzięki czemu pozycjonowanie pozostaje przewidywalne.
 Range nie może zostać usunięty, dopóki istnieje warstwa zależna od jego id.
@@ -92,7 +93,7 @@ Maksimum to 80 warstw.
 | Typ | Przeznaczenie | Najważniejsze opcje |
 | --- | --- | --- |
 | Range | Kontekst tarczy i skali | środek, promień, początkowy kąt, rozwarcie także ujemne, min./max. wartości, punkt osi wskazówki |
-| Linear Scale | Promieniowe kreski i opcjonalny łuk | min./max./krok, odległość od środka, długość/grubość/kolor |
+| Tick Scale | Promieniowe kreski i opcjonalny łuk | odległość od środka, długość/grubość/kolor; korzysta z mapowania Range |
 | Numeric Scale | Liczby na skali | min./max./krok, mnożnik, format, odległość, obrót, font i styl |
 | Label | Dowolny napis | tekst, X/Y, obrót, font, kolor, pogrubienie/kursywa/podkreślenie |
 | Arc | Kolorowy pas, np. strefa ostrzegawcza | zakres wartości lub ręczny kąt, przesunięcie, promień, szerokość, kolor |
@@ -134,7 +135,7 @@ bez kopiowania nazw czy domyślnych wartości.
 | handPivotSize | number | promień punktu osi (1–5%) |
 | handPivotColor | kolor | kolor punktu osi |
 
-### Linear Scale
+### Tick Scale
 
 | Właściwość | Typ | Opis / zakres |
 | --- | --- | --- |
@@ -238,7 +239,7 @@ w interfejsie, np. 50% promienia aktywnego Range. UI od razu przelicza je na
 mm i zapisuje wynik w mm. Renderer SVG używa wspólnego układu współrzędnych
 viewBox wyrażonego w mm.
 
-Skala jest niezależnym obiektem domenowym współdzielonym przez Linear Scale,
+Skala jest niezależnym obiektem domenowym współdzielonym przez Tick Scale,
 Numeric Scale i Clock Hand:
 
 | Tryb | Dane | Znaczenie |
@@ -537,7 +538,7 @@ podziale kodu domenowego na features:
 
 | Poziom | Przykłady w aplikacji |
 | --- | --- |
-| Atoms | Button, IconButton, Tooltip, TextInput, NumberInput, RangeSlider, Switch, Select, ColorInput, FormLabel, Divider |
+| Atoms | ActionButton, Tooltip, TextInput, NumberInput, RangeSlider, Switch, Select, ColorInput, FormLabel, Divider |
 | Molecules | FieldRow, NumberField, ColorField, LayerListItem, ToolbarAction, PropertyGroupHeader |
 | Organisms | ActionToolbar, SidebarSlider, LayersView, PropertiesView, LayerForm, SvgPreview, ExportPdfDialog, HelpNavigation |
 | Templates | EditorTemplate, HelpTemplate, LandingTemplate |
@@ -566,8 +567,8 @@ panelu, nie trafiają do historii.
 
 Należy unikać komponentów z wieloma flagami boolean, np. Button z propsami
 isCompact, isDanger, isIconOnly i isToolbar. Zamiast tego stosujemy jawne,
-małe warianty oraz kompozycję: PrimaryButton, DangerButton, ToolbarButton i
-IconButton. Struktura ma być przekazywana jako children, a nie przez propsy
+małe warianty oraz kompozycję: PrimaryButton, DangerButton i ToolbarButton.
+Struktura ma być przekazywana jako children, a nie przez propsy
 renderHeader lub renderFooter. Dla React 19 ref jest zwykłym propem - nie
 stosujemy forwardRef.
 
@@ -686,7 +687,7 @@ jest to płatność, tracking ani wymagany element użycia aplikacji.
 | Etykieta EN | Akcja |
 | --- | --- |
 | Add layer | otwiera wybór typu warstwy oraz formularz jej utworzenia |
-| Project settings | otwiera ustawienia płótna i eksportu |
+| Project settings | otwiera ustawienia projektu: płótno i snapping |
 | Delete layer | usuwa zaznaczoną warstwę po potwierdzeniu; blokuje usunięcie używanego Range |
 | Duplicate layer | tworzy kopię zaznaczonej warstwy z nową nazwą i identyfikatorem |
 | Move layer up | przesuwa warstwę wyżej w kolejności nakładania |
@@ -777,18 +778,17 @@ abstract class Layer {
   ): Layer;
 }
 
-abstract class RangeLayer extends Layer {
-  abstract readonly rangeId: string;
+class Range {
+  // niezależny kontekst geometrii i skali, nie jest wizualną Layer
 }
 
-class Range extends Layer {}
-class LinearScale extends RangeLayer {}
-class NumericScale extends RangeLayer {}
-class Label extends RangeLayer {}
-class Arc extends RangeLayer {}
-class ClockHand extends RangeLayer {}
-class Ellipse extends RangeLayer {}
-class Rectangle extends RangeLayer {}
+class TickScale extends Layer {}
+class NumericScale extends Layer {}
+class Label extends Layer {}
+class Arc extends Layer {}
+class ClockHand extends Layer {}
+class Ellipse extends Layer {}
+class Rectangle extends Layer {}
 ```
 
 Instancje klas nie powinny być zapisywane przez JSON.stringify bezpośrednio.
@@ -817,11 +817,11 @@ type GaugeProject = {
     roundForeground: boolean;
   };
   layers: LayerDto[];
+  ranges: RangeDto[];
   extensions?: Record<string, unknown>;
 };
 
 type BaseLayer = { id: string; name: string; visible: boolean };
-type RangeLayer = BaseLayer & { type: 'range' /* geometria i skala */ };
 type DependentLayer = BaseLayer & { rangeId: string };
 ```
 
@@ -840,7 +840,7 @@ migrację, a Zod nadal wykrywa literówki i uszkodzone dane.
 
 ```ts
 const layerSchema = z.discriminatedUnion('type', [
-  rangeSchema, linearScaleSchema, numericScaleSchema, labelSchema,
+  rangeSchema, tickScaleSchema, numericScaleSchema, labelSchema,
   arcSchema, clockHandSchema, ellipseSchema, rectangleSchema,
 ]);
 
@@ -882,7 +882,7 @@ Minimalny zestaw interaktywnych nakładek:
 | Warstwa | Uchwyty na podglądzie |
 | --- | --- |
 | Range | środek, promień, początek i koniec kąta zakresu, punkt osi wskazówki |
-| Linear Scale / Numeric Scale | granice widocznego zakresu, promień oraz długość kresek/pozycję etykiet |
+| Tick Scale / Numeric Scale | granice widocznego zakresu, promień oraz długość kresek/pozycję etykiet |
 | Arc | środek, promień, początek i koniec łuku |
 | Clock Hand | obrót/wartość wskazówki, długość końca dodatniego i punkt osi |
 | Label | pozycja i obrót |
@@ -917,7 +917,7 @@ pipeline'u E2E w MVP.
 W repozytorium należy utworzyć wspólne narzędzia testowe:
 
 - factory createProject z sensownym domyślnym prostokątnym płótnem;
-- fabryki createRange, createLinearScale, createClockHand i pozostałych warstw,
+- fabryki createRange, createTickScale, createClockHand i pozostałych warstw,
   przyjmujące tylko właściwości zmieniane w danym teście;
 - builder createEditorState, createTestStore oraz renderEditor, który
   automatycznie owija widok w ReduxProvider, lokalizację i wymagane contexty;
@@ -958,7 +958,7 @@ Każdy kolejny krok obejmuje jeden typ warstwy: model, formularz, SVG,
 nakładkę edycyjną, miniaturę, walidację Zod, testy oraz przykład workbench.
 Kolejność zwiększa złożoność stopniowo:
 
-1. Linear Scale;
+1. Tick Scale;
 2. Numeric Scale;
 3. Label;
 4. Arc;
@@ -969,7 +969,7 @@ Kolejność zwiększa złożoność stopniowo:
 Po każdym kroku należy ocenić ergonomię parametrów i w razie potrzeby
 skorygować model, formularze oraz wspólne abstrakcje zanim powstanie kolejna
 warstwa. Skale logarytmiczne i custom curve rozwijają wspólny moduł skali przy
-wdrażaniu Linear Scale oraz Numeric Scale.
+wdrażaniu Tick Scale oraz Numeric Scale.
 
 ### Etap 3 — dopracowanie i wydanie
 

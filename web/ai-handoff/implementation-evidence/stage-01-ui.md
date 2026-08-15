@@ -17,7 +17,8 @@
   prototype collections for them: a Range is created only through the Ranges
   flow, while Add layer requires a Range and creates a visual-layer record with
   a `rangeId` reference.
-- Reusable `ActionButton` atom and `StatusMessage` molecule.
+- Reusable `ActionButton` atom plus `StatusMessage` and `FieldRow` molecules.
+  `FieldRow` is now used by the prototype text, number, and range controls.
 - Unit-test foundation: Vitest, React Testing Library, test setup, and tests
   covering sidebar navigation, value controls, and Layers/Ranges separation.
 

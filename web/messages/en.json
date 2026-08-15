@@ -15,18 +15,34 @@
     "title": "Learn the editor",
     "description": "The full in-app guide will grow alongside the available layers.",
     "sections": {
-      "gettingStarted": { "title": "Getting started", "description": "Create a Range or open an example to begin." },
-      "interface": { "title": "Interface", "description": "Use Layers to navigate and Properties to edit a layer." },
-      "layers": { "title": "Layers", "description": "Ranges define the coordinate and scale context for a gauge." },
-      "projects": { "title": "Projects", "description": "Projects are versioned JSON files validated before import." },
-      "examples": { "title": "Examples", "description": "Examples provide ready-to-edit starting points." }
+      "gettingStarted": {
+        "title": "Getting started",
+        "description": "Create a Range or open an example to begin."
+      },
+      "interface": {
+        "title": "Interface",
+        "description": "Use Layers to navigate and Properties to edit a layer."
+      },
+      "layers": {
+        "title": "Layers",
+        "description": "Ranges define the coordinate and scale context for a gauge."
+      },
+      "projects": {
+        "title": "Projects",
+        "description": "Projects are versioned JSON files validated before import."
+      },
+      "examples": {
+        "title": "Examples",
+        "description": "Examples provide ready-to-edit starting points."
+      }
     }
   },
   "Editor": {
     "brand": "Gauge Generator Web",
     "status": {
-      "prototype": "Stage 1 interface prototype",
       "placeholder": "{action} is wired as a UI placeholder.",
+      "undo": "Undid the last project change.",
+      "redo": "Redid the project change.",
       "rangeOpened": "Range properties layout opened.",
       "layerOpened": "Layer properties layout opened.",
       "rangeRequired": "Create a Range before adding a visual layer."
@@ -49,7 +65,7 @@
       "sidebarAriaLabel": "Editor sidebar",
       "title": "Layers",
       "visualLayers": "Visual layers",
-      "projectSettings": "Projects",
+      "projectSettings": "Project",
       "addLayer": "Layer",
       "defaultName": "Layer {number}",
       "eyebrow": "Layer",
@@ -57,7 +73,8 @@
       "propertiesTitle": "Layer setup",
       "propertiesDescription": "Visual layer controls will be added with each layer type.",
       "emptyDescription": "Visual layers appear here. Create a Range below before adding one.",
-      "createFirstRange": "Create first Range"
+      "createFirstRange": "Create first Range",
+      "createFirstLayer": "Create first Layer"
     },
     "ranges": {
       "title": "Ranges",
@@ -93,10 +110,15 @@
     },
     "canvas": {
       "ariaLabel": "Canvas preview",
+      "previewAriaLabel": "Gauge preview",
+      "previewDetailsAriaLabel": "Preview details",
+      "zoom": "{value}%",
+      "dimensions": "{width} × {height} mm",
       "emptyTitle": "Your canvas is ready",
       "emptyDescription": "Create your first Range to define a dial, or select one of the starter examples.",
-      "browseExamples": "Browse examples",
-      "dimension": "{width} × {height} {unit}"
+      "rangeReadyTitle": "Your Range is ready",
+      "rangeReadyDescription": "Add a visual layer to start building your gauge.",
+      "browseExamples": "Browse examples"
     },
     "controls": {
       "backToLayers": "Back to layers",
