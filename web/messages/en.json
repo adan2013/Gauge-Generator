@@ -1,0 +1,111 @@
+{
+  "Metadata": {
+    "title": "Gauge Generator Web",
+    "description": "A local vector gauge editor."
+  },
+  "Home": {
+    "eyebrow": "Gauge Generator Web",
+    "title": "Build precise gauges in your browser.",
+    "description": "The editor workspace is ready for its first implementation stage. Create vector-based gauge layouts locally, then save them as JSON.",
+    "openEditor": "Open editor"
+  },
+  "Help": {
+    "backToEditor": "Back to editor",
+    "eyebrow": "Help center",
+    "title": "Learn the editor",
+    "description": "The full in-app guide will grow alongside the available layers.",
+    "sections": {
+      "gettingStarted": { "title": "Getting started", "description": "Create a Range or open an example to begin." },
+      "interface": { "title": "Interface", "description": "Use Layers to navigate and Properties to edit a layer." },
+      "layers": { "title": "Layers", "description": "Ranges define the coordinate and scale context for a gauge." },
+      "projects": { "title": "Projects", "description": "Projects are versioned JSON files validated before import." },
+      "examples": { "title": "Examples", "description": "Examples provide ready-to-edit starting points." }
+    }
+  },
+  "Editor": {
+    "brand": "Gauge Generator Web",
+    "status": {
+      "prototype": "Stage 1 interface prototype",
+      "placeholder": "{action} is wired as a UI placeholder.",
+      "rangeOpened": "Range properties layout opened.",
+      "layerOpened": "Layer properties layout opened.",
+      "rangeRequired": "Create a Range before adding a visual layer."
+    },
+    "toolbar": {
+      "ariaLabel": "Project actions",
+      "newProject": "New project",
+      "open": "Open",
+      "download": "Download",
+      "import": "Import",
+      "export": "Export",
+      "undo": "Undo",
+      "redo": "Redo",
+      "restore": "Restore",
+      "examples": "Examples",
+      "helpCenter": "Help center",
+      "moreActions": "More actions"
+    },
+    "layers": {
+      "sidebarAriaLabel": "Editor sidebar",
+      "title": "Layers",
+      "visualLayers": "Visual layers",
+      "projectSettings": "Projects",
+      "addLayer": "Layer",
+      "defaultName": "Layer {number}",
+      "eyebrow": "Layer",
+      "propertiesAriaLabel": "Layer properties",
+      "propertiesTitle": "Layer setup",
+      "propertiesDescription": "Visual layer controls will be added with each layer type.",
+      "emptyDescription": "Visual layers appear here. Create a Range below before adding one.",
+      "createFirstRange": "Create first Range"
+    },
+    "ranges": {
+      "title": "Ranges",
+      "type": "Range",
+      "defaultName": "Range {number}",
+      "emptyDescription": "Ranges define the position, radius, and value range used by visual layers.",
+      "add": "Add Range"
+    },
+    "projectSettings": {
+      "ariaLabel": "Project settings",
+      "eyebrow": "Project",
+      "title": "Project settings",
+      "description": "Canvas dimensions are project data. Snapping is a local editor preference.",
+      "canvas": "Canvas",
+      "width": "Width",
+      "height": "Height",
+      "snapping": "Snapping",
+      "enableSnapping": "Enable snapping",
+      "distanceIncrement": "Distance increment",
+      "angleIncrement": "Angle increment"
+    },
+    "range": {
+      "ariaLabel": "Layer properties",
+      "eyebrow": "Range",
+      "title": "Range setup",
+      "description": "This preview establishes the grouped property controls for the next stage.",
+      "position": "Position",
+      "centerX": "Center X",
+      "centerY": "Center Y",
+      "scale": "Scale",
+      "radius": "Radius",
+      "openingAngle": "Opening angle"
+    },
+    "canvas": {
+      "ariaLabel": "Canvas preview",
+      "emptyTitle": "Your canvas is ready",
+      "emptyDescription": "Create your first Range to define a dial, or select one of the starter examples.",
+      "browseExamples": "Browse examples",
+      "dimension": "{width} × {height} {unit}"
+    },
+    "controls": {
+      "backToLayers": "Back to layers",
+      "identity": "Identity",
+      "name": "Name",
+      "adjust": "Adjust {label}",
+      "millimeters": "mm",
+      "degrees": "°",
+      "unavailable": "—"
+    }
+  }
+}
