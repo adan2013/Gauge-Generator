@@ -34,6 +34,10 @@ Keep those documents current. Put completed-stage evidence in
 - Use TypeScript, React 19, App Router, Tailwind v4, Redux Toolkit, Zod, and
   `next-intl`. Keep app code in `web/`.
 - Use `cn()` from `lib/cn.ts` for every combined or conditional Tailwind class.
+- Use the shared Radix-based `Tooltip` and root `TooltipProvider` for icon-only
+  controls and contextual hints; never add native HTML `title` tooltips. The
+  default delay is global, while controls requiring immediate feedback pass an
+  explicit `delayDuration={0}`.
 - Prettier enforces a 100-character print width (`pnpm format`). When a long
   Tailwind `className` would harm readability, split its semantic groups across
   lines with `cn("layout …", "visual …", "interaction …")`; never use string
@@ -41,6 +45,10 @@ Keep those documents current. Put completed-stage evidence in
 - Each public UI component has a kebab-case directory with its colocated unit
   test. Use Atomic Design for presentational UI; keep domain/state/serialization
   in `features/`, `store/`, and `lib/`.
+- Property forms compose `FieldRow` with the shared `TextPropertyRow`,
+  `RangePropertyRow`, `SelectPropertyRow`, `ColorPropertyRow`, and
+  `BooleanPropertyRow`. Add a control there before introducing another field
+  type; do not recreate controls or their interaction styling inside a panel.
 - Prefer composable APIs over boolean-prop proliferation.
 - Destructive actions use the root-mounted `ConfirmationProvider` and its
   promise-based `useConfirmation().confirm(request)` API. Keep modal mounting,
@@ -98,6 +106,11 @@ Keep those documents current. Put completed-stage evidence in
   lower. SVG rendering must therefore emit visual layers in reverse list order.
 - Hovering a visual-layer thumbnail temporarily isolates that layer in the
   preview. It must not alter selection, sidebar mode, project data, or history.
+- Layer Properties exposes editor-wide preview modifiers: isolate the edited
+  layer, temporarily bring it to the front, and show or hide its editing overlay.
+  live in `editorSlice`, persist while changing layers during the session, and
+  never enter project JSON or history. Reset restores only the selected layer's
+  visual defaults while preserving its identity, name, visibility, and source Range.
 - A Range center must stay on the canvas. Its radius may extend beyond a nearby
   edge, but must be from 5 mm to half the canvas's longest edge.
 - Tick Scale spatial limits derive from its source Range: offset keeps its
@@ -133,6 +146,9 @@ Keep those documents current. Put completed-stage evidence in
   while canvas dimensions are project data.
 - Use `dnd-kit` for visual-layer ordering; rely on its sortable motion rather
   than adding a separate drop-target indicator.
+- The Layers browser duplicates a visual layer immediately above its source
+  (the preceding, visually higher index), with a fresh ID and a `_Copy` name
+  suffix. It is a project mutation and therefore participates in Undo/Redo.
 - The initial store state in `NODE_ENV=development` uses a deterministic Apple
   Clock workbench project with one Range and two Tick Scale layers. Production and
   explicit New project flows remain empty.

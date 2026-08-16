@@ -3,11 +3,17 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 export type SidebarMode = "layers" | "properties" | "project-settings";
 export type EditorSelection = { collection: "layers" | "ranges"; id: string } | null;
 export type AutosaveStatus = "idle" | "saved" | "error";
+export type LayerPreviewModifiers = {
+  showOnlySelectedLayer: boolean;
+  bringSelectedLayerToFront: boolean;
+  showEditingOverlay: boolean;
+};
 
 type EditorState = {
   sidebarMode: SidebarMode;
   selectedObject: EditorSelection;
   hoveredLayerId: string | null;
+  layerPreviewModifiers: LayerPreviewModifiers;
   snapping: { enabled: boolean; distanceMm: number; angleDegrees: number };
   autosaveStatus: AutosaveStatus;
 };
@@ -16,6 +22,11 @@ const initialState: EditorState = {
   sidebarMode: "layers",
   selectedObject: null,
   hoveredLayerId: null,
+  layerPreviewModifiers: {
+    showOnlySelectedLayer: false,
+    bringSelectedLayerToFront: false,
+    showEditingOverlay: true,
+  },
   snapping: { enabled: true, distanceMm: 2, angleDegrees: 10 },
   autosaveStatus: "idle",
 };
@@ -32,6 +43,9 @@ export const editorSlice = createSlice({
     },
     setHoveredLayerId: (state, action: PayloadAction<string | null>) => {
       state.hoveredLayerId = action.payload;
+    },
+    setLayerPreviewModifiers: (state, action: PayloadAction<LayerPreviewModifiers>) => {
+      state.layerPreviewModifiers = action.payload;
     },
     setSnapping: (state, action: PayloadAction<EditorState["snapping"]>) => {
       state.snapping = action.payload;

@@ -7,6 +7,11 @@ export function createEditorState(
     sidebarMode: "layers",
     selectedObject: null,
     hoveredLayerId: null,
+    layerPreviewModifiers: {
+      showOnlySelectedLayer: false,
+      bringSelectedLayerToFront: false,
+      showEditingOverlay: true,
+    },
     snapping: { enabled: true, distanceMm: 2, angleDegrees: 10 },
     autosaveStatus: "idle",
     ...overrides,

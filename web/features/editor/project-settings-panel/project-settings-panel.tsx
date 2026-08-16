@@ -3,12 +3,12 @@
 import { ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ActionButton } from "@/components/atoms/action-button/action-button";
-import { FieldRow } from "@/components/molecules/field-row/field-row";
+import { BooleanPropertyRow } from "@/components/molecules/boolean-property-row/boolean-property-row";
+import { ColorPropertyRow } from "@/components/molecules/color-property-row/color-property-row";
 import {
   CANVAS_DIMENSION_MAX_MM,
   CANVAS_DIMENSION_MIN_MM,
 } from "@/features/project/project-dto/project-dto";
-import { cn } from "@/lib/cn";
 import {
   PropertyGroup,
   RangePropertyRow,
@@ -94,49 +94,24 @@ export function ProjectSettingsPanel({
             suffix={t("controls.millimeters")}
             value={canvasHeight}
           />
-          <label className="flex items-center justify-between gap-4 py-3 text-sm">
-            <span className="text-muted">{t("projectSettings.transparentBackground")}</span>
-            <input
-              aria-label={t("projectSettings.transparentBackground")}
-              checked={transparentBackground}
-              className="size-4 accent-accent"
-              onChange={(event) => onTransparentBackgroundChange(event.target.checked)}
-              type="checkbox"
-            />
-          </label>
-          <FieldRow htmlFor="canvas-background" label={t("projectSettings.background")}>
-            <span className="flex items-center justify-end gap-2">
-              <input
-                aria-label={t("projectSettings.background")}
-                className="size-9 cursor-pointer rounded border border-border bg-app p-1 disabled:cursor-not-allowed disabled:opacity-40"
-                disabled={transparentBackground}
-                id="canvas-background"
-                onChange={(event) => onBackgroundChange(event.target.value.toUpperCase())}
-                type="color"
-                value={background}
-              />
-              <output
-                className={cn(
-                  "font-mono text-xs text-muted",
-                  transparentBackground && "opacity-40",
-                )}
-              >
-                {background}
-              </output>
-            </span>
-          </FieldRow>
+          <BooleanPropertyRow
+            checked={transparentBackground}
+            label={t("projectSettings.transparentBackground")}
+            onChange={onTransparentBackgroundChange}
+          />
+          <ColorPropertyRow
+            disabled={transparentBackground}
+            label={t("projectSettings.background")}
+            onChange={onBackgroundChange}
+            value={background}
+          />
         </PropertyGroup>
         <PropertyGroup title={t("projectSettings.snapping")}>
-          <label className="flex items-center justify-between gap-4 py-3 text-sm">
-            <span className="text-muted">{t("projectSettings.enableSnapping")}</span>
-            <input
-              aria-label={t("projectSettings.enableSnapping")}
-              checked={snapEnabled}
-              className="size-4 accent-accent"
-              onChange={(event) => onSnapEnabledChange(event.target.checked)}
-              type="checkbox"
-            />
-          </label>
+          <BooleanPropertyRow
+            checked={snapEnabled}
+            label={t("projectSettings.enableSnapping")}
+            onChange={onSnapEnabledChange}
+          />
           <RangePropertyRow
             label={t("projectSettings.distanceIncrement")}
             max={20}

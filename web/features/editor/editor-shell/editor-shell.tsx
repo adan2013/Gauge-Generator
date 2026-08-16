@@ -26,7 +26,11 @@ import {
 import { LayersBrowser } from "@/features/editor/layers-browser/layers-browser";
 import { ProjectSettingsPanel } from "@/features/editor/project-settings-panel/project-settings-panel";
 import { PropertiesPanel } from "@/features/editor/properties-panel/properties-panel";
-import { createRange, createTickScaleLayer } from "@/features/project/factories/project-factories";
+import {
+  createRange,
+  createTickScaleLayer,
+  resetLayerToDefaults,
+} from "@/features/project/factories/project-factories";
 import {
   MAX_RANGES,
   type LayerDto,
@@ -47,9 +51,8 @@ export function EditorShell() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const project = useAppSelector((state) => state.project.current);
-  const { hoveredLayerId, selectedObject, sidebarMode, snapping } = useAppSelector(
-    (state) => state.editor,
-  );
+  const { hoveredLayerId, layerPreviewModifiers, selectedObject, sidebarMode, snapping } =
+    useAppSelector((state) => state.editor);
   const { past, future } = useAppSelector((state) => state.history);
   const t = useTranslations("Editor");
   const [status, setStatus] = useState("");
@@ -130,6 +133,11 @@ export function EditorShell() {
   const updateSelectedLayer = (change: Partial<LayerDto>) => {
     if (selectedLayer) dispatch(projectActions.updateLayer({ ...selectedLayer, ...change }));
   };
+  const resetSelectedLayer = () => {
+    if (!selectedLayer) return;
+    dispatch(projectActions.updateLayer(resetLayerToDefaults(selectedLayer)));
+    setStatus(t("status.layerReset"));
+  };
   const updateCanvas = (change: Partial<typeof project.canvas>) =>
     dispatch(projectActions.setCanvas({ ...project.canvas, ...change }));
   const updateSnapping = (change: Partial<typeof snapping>) =>
@@ -179,6 +187,7 @@ export function EditorShell() {
               onCreateRange={createProjectRange}
               onDeleteLayer={(layerId) => dispatch(projectActions.removeLayer(layerId))}
               onDeleteRange={(rangeId) => dispatch(projectActions.removeRange(rangeId))}
+              onDuplicateLayer={(layerId) => dispatch(projectActions.duplicateLayer(layerId))}
               onHoverLayer={(layerId) => dispatch(editorActions.setHoveredLayerId(layerId))}
               onOpenLayerProperties={openLayerProperties}
               onOpenProjectSettings={() =>
@@ -229,10 +238,15 @@ export function EditorShell() {
               onHistoryTransactionEnd={() => dispatch(completeProjectHistoryTransaction())}
               onHistoryTransactionStart={() => dispatch(beginProjectHistoryTransaction())}
               onLayerChange={updateSelectedLayer}
+              onLayerPreviewModifiersChange={(modifiers) =>
+                dispatch(editorActions.setLayerPreviewModifiers(modifiers))
+              }
               onLayerRangeChange={(rangeId) => updateSelectedLayer({ rangeId })}
               onNameChange={renameSelectedObject}
               onRangeChange={updateSelectedRange}
+              onResetLayer={resetSelectedLayer}
               ranges={project.ranges}
+              layerPreviewModifiers={layerPreviewModifiers}
               selectedLayer={selectedLayer}
               selectedName={selectedName}
               selectedObject={selectedObject}
@@ -251,6 +265,7 @@ export function EditorShell() {
           onRangeInteractionEnd={() => dispatch(completeProjectHistoryTransaction())}
           onRangeInteractionStart={() => dispatch(beginProjectHistoryTransaction())}
           hoveredLayerId={hoveredLayerId}
+          layerPreviewModifiers={layerPreviewModifiers}
           project={project}
           selectedLayer={sidebarMode === "properties" ? selectedLayer : undefined}
           selectedRange={sidebarMode === "properties" ? selectedRange : undefined}

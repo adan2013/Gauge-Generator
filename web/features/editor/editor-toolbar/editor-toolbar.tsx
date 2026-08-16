@@ -5,6 +5,7 @@ import { MoreHorizontal } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ActionButton } from "@/components/atoms/action-button/action-button";
+import { Tooltip } from "@/components/atoms/tooltip/tooltip";
 
 export type EditorToolbarAction = {
   id: string;
@@ -96,10 +97,12 @@ export function EditorToolbar({ actions, onAction, onOpenHelp }: EditorToolbarPr
         ))}
         {overflowActions.length > 0 ? (
           <details className="relative shrink-0">
-            <summary className="flex size-8 cursor-pointer list-none items-center justify-center rounded-md text-muted hover:bg-surface-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus">
-              <MoreHorizontal aria-hidden="true" size={18} />
-              <span className="sr-only">{t("toolbar.moreActions")}</span>
-            </summary>
+            <Tooltip content={t("toolbar.moreActions")}>
+              <summary className="flex size-8 cursor-pointer list-none items-center justify-center rounded-md text-muted hover:bg-surface-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus">
+                <MoreHorizontal aria-hidden="true" size={18} />
+                <span className="sr-only">{t("toolbar.moreActions")}</span>
+              </summary>
+            </Tooltip>
             <div className="absolute right-0 top-10 z-30 flex w-52 flex-col gap-1 rounded-lg border border-border bg-surface p-1.5 shadow-[0_16px_40px_rgba(32,36,43,0.16)]">
               {overflowActions.map((action) => (
                 <ActionButton

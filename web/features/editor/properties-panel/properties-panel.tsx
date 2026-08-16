@@ -3,7 +3,9 @@
 import { ChevronLeft, Layers3 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ActionButton } from "@/components/atoms/action-button/action-button";
-import { FieldRow } from "@/components/molecules/field-row/field-row";
+import { ColorPropertyRow } from "@/components/molecules/color-property-row/color-property-row";
+import { SelectPropertyRow } from "@/components/molecules/select-property-row/select-property-row";
+import { LayerEditorControls } from "@/features/editor/layer-editor-controls/layer-editor-controls";
 import {
   getLinearScalePropertyDefinitions,
   getRangeNumericPropertyDefinitions,
@@ -28,7 +30,7 @@ import type {
   TickScaleLayerDto,
 } from "@/features/project/project-dto/project-dto";
 import { cn } from "@/lib/cn";
-import type { EditorSelection } from "@/store/editor-slice";
+import type { EditorSelection, LayerPreviewModifiers } from "@/store/editor-slice";
 
 export type PropertiesPanelProps = {
   canvas: CanvasDto;
@@ -44,8 +46,11 @@ export type PropertiesPanelProps = {
   onHistoryTransactionStart: () => void;
   onLayerRangeChange: (rangeId: string) => void;
   onLayerChange: (change: Partial<LayerDto>) => void;
+  onLayerPreviewModifiersChange: (modifiers: LayerPreviewModifiers) => void;
   onNameChange: (value: string) => void;
   onRangeChange: (change: Partial<RangeDto>) => void;
+  onResetLayer: () => void;
+  layerPreviewModifiers: LayerPreviewModifiers;
 };
 
 export function PropertiesPanel({
@@ -56,14 +61,17 @@ export function PropertiesPanel({
   onHistoryTransactionStart,
   onLayerRangeChange,
   onLayerChange,
+  onLayerPreviewModifiersChange,
   onNameChange,
   onRangeChange,
+  onResetLayer,
   ranges,
   selectedLayer,
   selectedName,
   selectedObject,
   selectedRange,
   snapping,
+  layerPreviewModifiers,
 }: PropertiesPanelProps) {
   const t = useTranslations("Editor");
   const isRange = selectedObject?.collection !== "layers";
@@ -113,7 +121,7 @@ export function PropertiesPanel({
           variant="quiet"
         />
       </div>
-      <div className="overflow-y-auto p-3">
+      <div className="flex-1 overflow-y-auto p-3">
         {!selectedObject ? (
           <LayerTypePicker onCreateLayer={onCreateLayer} />
         ) : isRange && rangeDefinitions && selectedRange ? (
@@ -157,6 +165,13 @@ export function PropertiesPanel({
           />
         )}
       </div>
+      {selectedLayer ? (
+        <LayerEditorControls
+          modifiers={layerPreviewModifiers}
+          onModifiersChange={onLayerPreviewModifiersChange}
+          onReset={onResetLayer}
+        />
+      ) : null}
     </section>
   );
 }
@@ -320,21 +335,12 @@ function LayerProperties({
           value={selectedName}
         />
         {selectedLayer ? (
-          <FieldRow htmlFor="layer-range" label={t("layers.rangeSource")}>
-            <select
-              aria-label={t("layers.rangeSource")}
-              className="w-full rounded-md border border-border bg-app px-2 py-1.5 text-right text-sm text-ink outline-none focus:border-focus focus:ring-2 focus:ring-focus/30"
-              id="layer-range"
-              onChange={(event) => onLayerRangeChange(event.target.value)}
-              value={selectedLayer.rangeId}
-            >
-              {ranges.map((range) => (
-                <option key={range.id} value={range.id}>
-                  {range.name}
-                </option>
-              ))}
-            </select>
-          </FieldRow>
+          <SelectPropertyRow
+            label={t("layers.rangeSource")}
+            onChange={onLayerRangeChange}
+            options={ranges.map((range) => ({ label: range.name, value: range.id }))}
+            value={selectedLayer.rangeId}
+          />
         ) : null}
       </PropertyGroup>
       {selectedLayer?.type === "tick-scale" ? (
@@ -369,26 +375,13 @@ function LayerProperties({
               t={t}
             />
             {layerColorDefinition ? (
-              <FieldRow
-                htmlFor="tick-scale-color"
+              <ColorPropertyRow
                 label={t(`tickScale.${layerColorDefinition.labelKey}`)}
-              >
-                <span className="flex items-center justify-end gap-2">
-                  <input
-                    aria-label={t(`tickScale.${layerColorDefinition.labelKey}`)}
-                    className="size-9 cursor-pointer rounded border border-border bg-app p-1"
-                    id="tick-scale-color"
-                    onBlur={onHistoryTransactionEnd}
-                    onChange={(event) => onLayerChange({ color: event.target.value.toUpperCase() })}
-                    onFocus={onHistoryTransactionStart}
-                    type="color"
-                    value={layerColorDefinition.value}
-                  />
-                  <output className="font-mono text-xs text-muted">
-                    {layerColorDefinition.value}
-                  </output>
-                </span>
-              </FieldRow>
+                onChange={(color) => onLayerChange({ color })}
+                onInteractionEnd={onHistoryTransactionEnd}
+                onInteractionStart={onHistoryTransactionStart}
+                value={layerColorDefinition.value}
+              />
             ) : null}
           </PropertyGroup>
         </>

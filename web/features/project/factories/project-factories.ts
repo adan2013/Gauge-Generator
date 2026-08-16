@@ -1,5 +1,6 @@
 import { PROJECT_FORMAT, PROJECT_VERSION } from "@/features/project/project-dto/project-dto";
 import type {
+  LayerDto,
   ProjectDto,
   RangeDto,
   TickScaleLayerDto,
@@ -41,6 +42,18 @@ export function createTickScaleLayer(
     color: "#20242B",
     ...overrides,
   };
+}
+
+/** Restores layer-owned visual settings while keeping its project identity and source Range. */
+export function resetLayerToDefaults(layer: LayerDto): LayerDto {
+  switch (layer.type) {
+    case "tick-scale":
+      return createTickScaleLayer(layer.rangeId, {
+        id: layer.id,
+        name: layer.name,
+        visible: layer.visible,
+      });
+  }
 }
 
 export function createProject(overrides: Partial<ProjectDto> = {}): ProjectDto {

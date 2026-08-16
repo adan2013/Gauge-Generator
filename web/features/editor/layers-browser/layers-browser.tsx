@@ -4,9 +4,10 @@ import type { DragEvent as ReactDragEvent } from "react";
 import { DndContext, PointerSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Eye, EyeOff, GripVertical, Layers3, Plus, Settings2, Trash2 } from "lucide-react";
+import { Copy, Eye, EyeOff, GripVertical, Layers3, Plus, Settings2, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ActionButton } from "@/components/atoms/action-button/action-button";
+import { Tooltip } from "@/components/atoms/tooltip/tooltip";
 import { useConfirmation } from "@/components/providers/confirmation-provider/confirmation-provider";
 import { LayerThumbnail } from "@/features/layers/core/layer-thumbnail/layer-thumbnail";
 import {
@@ -23,6 +24,7 @@ export type LayersBrowserProps = {
   ranges: RangeDto[];
   onCreateLayer: () => void;
   onCreateRange: () => void;
+  onDuplicateLayer: (layerId: string) => void;
   onDeleteLayer: (layerId: string) => void;
   onDeleteRange: (rangeId: string) => void;
   onHoverLayer: (layerId: string | null) => void;
@@ -37,6 +39,7 @@ export function LayersBrowser({
   layers,
   onCreateLayer,
   onCreateRange,
+  onDuplicateLayer,
   onDeleteLayer,
   onDeleteRange,
   onHoverLayer,
@@ -149,6 +152,7 @@ export function LayersBrowser({
                       key={layer.id}
                       layer={layer}
                       onDelete={() => void requestLayerDeletion(layer)}
+                      onDuplicate={() => onDuplicateLayer(layer.id)}
                       onEdit={() => onOpenLayerProperties(layer.id)}
                       onHoverChange={onHoverLayer}
                       onNativeDrop={handleNativeLayerDrop}
@@ -205,16 +209,19 @@ export function LayersBrowser({
                           {range.name}
                         </span>
                       </button>
-                      <button
-                        aria-label={deleteLabel}
-                        className="grid size-8 shrink-0 place-items-center rounded-md text-muted hover:bg-accent-subtle hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:cursor-not-allowed disabled:opacity-40"
-                        disabled={!canDelete}
-                        onClick={() => void requestRangeDeletion(range)}
-                        title={deleteLabel}
-                        type="button"
-                      >
-                        <Trash2 aria-hidden="true" size={16} />
-                      </button>
+                      <Tooltip content={deleteLabel}>
+                        <span className="inline-flex">
+                          <button
+                            aria-label={deleteLabel}
+                            className="grid size-8 shrink-0 place-items-center rounded-md text-muted hover:bg-accent-subtle hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:cursor-not-allowed disabled:opacity-40"
+                            disabled={!canDelete}
+                            onClick={() => void requestRangeDeletion(range)}
+                            type="button"
+                          >
+                            <Trash2 aria-hidden="true" size={16} />
+                          </button>
+                        </span>
+                      </Tooltip>
                     </div>
                   </li>
                 );
@@ -238,6 +245,7 @@ export function LayersBrowser({
 function SortableLayerRow({
   layer,
   onDelete,
+  onDuplicate,
   onEdit,
   onNativeDrop,
   onToggleVisibility,
@@ -246,6 +254,7 @@ function SortableLayerRow({
 }: {
   layer: LayerDto;
   onDelete: () => void;
+  onDuplicate: () => void;
   onEdit: () => void;
   onHoverChange: (layerId: string | null) => void;
   onNativeDrop: (event: ReactDragEvent<HTMLLIElement>, targetLayerId: string) => void;
@@ -256,6 +265,12 @@ function SortableLayerRow({
   const { attributes, isDragging, listeners, setNodeRef, transform, transition } = useSortable({
     id: layer.id,
   });
+  const reorderLabel = t("reorderLayer", { name: layer.name });
+  const visibilityLabel = layer.visible
+    ? t("hideLayer", { name: layer.name })
+    : t("showLayer", { name: layer.name });
+  const duplicateLabel = t("duplicateLayer", { name: layer.name });
+  const deleteLabel = t("deleteLayer", { name: layer.name });
   return (
     <li
       className={cn("rounded-lg border border-border bg-app", isDragging && "opacity-50")}
@@ -266,19 +281,23 @@ function SortableLayerRow({
       style={{ transform: CSS.Transform.toString(transform), transition }}
     >
       <div className="flex items-center gap-1 px-1 py-1">
-        <button
-          aria-label={t("reorderLayer", { name: layer.name })}
-          className="grid size-8 shrink-0 touch-none cursor-grab place-items-center rounded-md text-muted hover:bg-surface-subtle hover:text-ink active:cursor-grabbing"
-          onDragStart={(event) => {
-            event.dataTransfer.setData("application/x-gauge-layer", layer.id);
-            event.dataTransfer.setData("text/plain", layer.id);
-          }}
-          type="button"
-          {...attributes}
-          {...listeners}
-        >
-          <GripVertical aria-hidden="true" size={16} />
-        </button>
+        <Tooltip content={reorderLabel}>
+          <span className="inline-flex">
+            <button
+              aria-label={reorderLabel}
+              className="grid size-8 shrink-0 touch-none cursor-grab place-items-center rounded-md text-muted hover:bg-surface-subtle hover:text-ink active:cursor-grabbing"
+              onDragStart={(event) => {
+                event.dataTransfer.setData("application/x-gauge-layer", layer.id);
+                event.dataTransfer.setData("text/plain", layer.id);
+              }}
+              type="button"
+              {...attributes}
+              {...listeners}
+            >
+              <GripVertical aria-hidden="true" size={16} />
+            </button>
+          </span>
+        </Tooltip>
         <span
           onPointerEnter={() => onHoverChange(layer.id)}
           onPointerLeave={() => onHoverChange(null)}
@@ -301,30 +320,40 @@ function SortableLayerRow({
           </span>
           <span className="mt-0.5 block text-xs text-muted">{t("types.tickScale")}</span>
         </button>
-        <button
-          aria-label={
-            layer.visible
-              ? t("hideLayer", { name: layer.name })
-              : t("showLayer", { name: layer.name })
-          }
-          className="grid size-8 shrink-0 place-items-center rounded-md text-muted hover:bg-surface-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
-          onClick={onToggleVisibility}
-          type="button"
-        >
-          {layer.visible ? (
-            <Eye aria-hidden="true" size={16} />
-          ) : (
-            <EyeOff aria-hidden="true" size={16} />
-          )}
-        </button>
-        <button
-          aria-label={t("deleteLayer", { name: layer.name })}
-          className="grid size-8 shrink-0 place-items-center rounded-md text-muted hover:bg-accent-subtle hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
-          onClick={onDelete}
-          type="button"
-        >
-          <Trash2 aria-hidden="true" size={16} />
-        </button>
+        <Tooltip content={visibilityLabel}>
+          <button
+            aria-label={visibilityLabel}
+            className="grid size-8 shrink-0 place-items-center rounded-md text-muted hover:bg-surface-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+            onClick={onToggleVisibility}
+            type="button"
+          >
+            {layer.visible ? (
+              <Eye aria-hidden="true" size={16} />
+            ) : (
+              <EyeOff aria-hidden="true" size={16} />
+            )}
+          </button>
+        </Tooltip>
+        <Tooltip content={duplicateLabel}>
+          <button
+            aria-label={duplicateLabel}
+            className="grid size-8 shrink-0 place-items-center rounded-md text-muted hover:bg-surface-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+            onClick={onDuplicate}
+            type="button"
+          >
+            <Copy aria-hidden="true" size={16} />
+          </button>
+        </Tooltip>
+        <Tooltip content={deleteLabel}>
+          <button
+            aria-label={deleteLabel}
+            className="grid size-8 shrink-0 place-items-center rounded-md text-muted hover:bg-accent-subtle hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+            onClick={onDelete}
+            type="button"
+          >
+            <Trash2 aria-hidden="true" size={16} />
+          </button>
+        </Tooltip>
       </div>
     </li>
   );

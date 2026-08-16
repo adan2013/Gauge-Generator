@@ -16,6 +16,7 @@ describe("LayersBrowser", () => {
         layers={[]}
         onCreateLayer={vi.fn()}
         onCreateRange={vi.fn()}
+        onDuplicateLayer={vi.fn()}
         onDeleteLayer={vi.fn()}
         onDeleteRange={vi.fn()}
         onHoverLayer={vi.fn()}
@@ -35,12 +36,14 @@ describe("LayersBrowser", () => {
     const range = createRange();
     const layer = createTickScaleLayer(range.id, { name: "Major ticks" });
     const onDeleteLayer = vi.fn();
+    const onDuplicateLayer = vi.fn();
     const onHoverLayer = vi.fn();
     renderEditor(
       <LayersBrowser
         layers={[layer]}
         onCreateLayer={vi.fn()}
         onCreateRange={vi.fn()}
+        onDuplicateLayer={onDuplicateLayer}
         onDeleteLayer={onDeleteLayer}
         onDeleteRange={vi.fn()}
         onHoverLayer={onHoverLayer}
@@ -61,5 +64,7 @@ describe("LayersBrowser", () => {
     expect(onHoverLayer).toHaveBeenLastCalledWith(layer.id);
     fireEvent.pointerLeave(screen.getByTestId(`layer-thumbnail-${layer.id}`));
     expect(onHoverLayer).toHaveBeenLastCalledWith(null);
+    fireEvent.click(screen.getByRole("button", { name: "Duplicate Major ticks" }));
+    expect(onDuplicateLayer).toHaveBeenCalledWith(layer.id);
   });
 });

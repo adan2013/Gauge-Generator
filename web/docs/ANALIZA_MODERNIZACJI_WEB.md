@@ -701,17 +701,18 @@ przeciąganiem, ale nie zastępować nim obsługi klawiatury.
 
 ### Edytor warstwy i ustawienia projektu
 
-| Etykieta EN               | Akcja                                                             |
-| ------------------------- | ----------------------------------------------------------------- |
-| Back to layers            | zamyka edytor i wraca do listy warstw                             |
-| Reset layer               | przywraca domyślne właściwości aktualnej warstwy po potwierdzeniu |
-| Show only this layer      | przełącza podgląd ograniczony do aktualnie edytowanej warstwy     |
-| Bring this layer to front | tymczasowo renderuje edytowaną warstwę na wierzchu                |
-| Hide editing overlay      | ukrywa pomocniczą nakładkę zaznaczenia; nie dotyczy Range         |
-| Back to layers (settings) | zamyka ustawienia projektu                                        |
+| Etykieta EN               | Akcja                                                         |
+| ------------------------- | ------------------------------------------------------------- |
+| Back to layers            | zamyka edytor i wraca do listy warstw                         |
+| Reset layer               | przywraca domyślne właściwości wizualne aktualnej warstwy     |
+| Show only this layer      | przełącza podgląd ograniczony do aktualnie edytowanej warstwy |
+| Bring this layer to front | tymczasowo renderuje edytowaną warstwę na wierzchu            |
+| Show editing overlay      | pokazuje pomocniczą nakładkę zaznaczenia; nie dotyczy Range   |
+| Back to layers (settings) | zamyka ustawienia projektu                                    |
 
 Trzy przełączniki podglądu są stanem interfejsu, więc nie powinny być zapisywane
-w JSON-ie projektu.
+w JSON-ie projektu. Pozostają aktywne podczas przełączania między warstwami;
+reset zachowuje identyfikator, nazwę, widoczność oraz wybrany Range warstwy.
 
 ### Dialogi i ekran startowy
 

@@ -15,21 +15,23 @@
   --font-sans: Arial, Helvetica, sans-serif;
 }
 
-* {
-  box-sizing: border-box;
-}
-html {
-  background: var(--color-app);
-}
-body {
-  margin: 0;
-  background: var(--color-app);
-  color: var(--color-ink);
-}
-button,
-input {
-  font: inherit;
-}
-summary::-webkit-details-marker {
-  display: none;
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    background: var(--color-app);
+  }
+  body {
+    margin: 0;
+    background: var(--color-app);
+    color: var(--color-ink);
+  }
+  button,
+  input {
+    font: inherit;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
 }

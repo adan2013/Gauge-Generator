@@ -85,6 +85,22 @@ describe("project store and history", () => {
     ]);
   });
 
+  it("duplicates a layer immediately above its source with a fresh identity", () => {
+    const range = createRange();
+    const first = { ...createTickScaleLayer(range.id), name: "Top" };
+    const second = { ...createTickScaleLayer(range.id), name: "Markers" };
+    const store = createTestStore({
+      project: { current: createProject({ ranges: [range], layers: [first, second] }) },
+    });
+
+    store.dispatch(projectActions.duplicateLayer(second.id));
+
+    const layers = store.getState().project.current.layers;
+    expect(layers.map((layer) => layer.name)).toEqual(["Top", "Markers_Copy", "Markers"]);
+    expect(layers[1]).toMatchObject({ ...second, id: expect.any(String), name: "Markers_Copy" });
+    expect(layers[1].id).not.toBe(second.id);
+  });
+
   it("records project mutations but ignores editor-only state", () => {
     const store = createTestStore();
     store.dispatch(editorActions.setSidebarMode("project-settings"));

@@ -8,9 +8,11 @@ import { createLayerModel } from "@/features/layers/core/layer-registry";
 import { RangeEditingOverlay } from "@/features/layers/range/range-editing-overlay/range-editing-overlay";
 import { TickScaleEditingOverlay } from "@/features/layers/tick-scale/tick-scale-editing-overlay/tick-scale-editing-overlay";
 import type { LayerDto, ProjectDto, RangeDto } from "@/features/project/project-dto/project-dto";
+import type { LayerPreviewModifiers } from "@/store/editor-slice";
 
 type CanvasPreviewProps = {
   hoveredLayerId: string | null;
+  layerPreviewModifiers: LayerPreviewModifiers;
   project: ProjectDto;
   onBrowseExamples: () => void;
   onCreateRange: () => void;
@@ -27,6 +29,7 @@ type CanvasPreviewProps = {
 
 export function CanvasPreview({
   hoveredLayerId,
+  layerPreviewModifiers,
   onBrowseExamples,
   onCreateRange,
   onLayerChange,
@@ -133,7 +136,9 @@ export function CanvasPreview({
               <VisualLayers
                 hoveredLayerId={hoveredLayerId}
                 layers={project.layers}
+                previewModifiers={layerPreviewModifiers}
                 renderContext={renderContext}
+                selectedLayerId={selectedLayer?.id}
               />
               <RangeEditingOverlay
                 canvas={canvas}
@@ -156,9 +161,11 @@ export function CanvasPreview({
               <VisualLayers
                 hoveredLayerId={hoveredLayerId}
                 layers={project.layers}
+                previewModifiers={layerPreviewModifiers}
                 renderContext={renderContext}
+                selectedLayerId={selectedLayer?.id}
               />
-              {selectedLayer?.type === "tick-scale" ? (
+              {selectedLayer?.type === "tick-scale" && layerPreviewModifiers.showEditingOverlay ? (
                 <TickScaleEditingOverlay
                   canvas={canvas}
                   layer={selectedLayer}
@@ -194,17 +201,29 @@ export function CanvasPreview({
 function VisualLayers({
   hoveredLayerId,
   layers,
+  previewModifiers,
   renderContext,
+  selectedLayerId,
 }: {
   hoveredLayerId: string | null;
   layers: LayerDto[];
+  previewModifiers: LayerPreviewModifiers;
   renderContext: { project: ProjectDto; rangeById: ReadonlyMap<string, RangeDto> };
+  selectedLayerId: string | undefined;
 }) {
-  const previewLayers = hoveredLayerId
-    ? layers.filter((layer) => layer.id === hoveredLayerId)
+  const isolatedLayerId =
+    previewModifiers.showOnlySelectedLayer && selectedLayerId ? selectedLayerId : hoveredLayerId;
+  const previewLayers = isolatedLayerId
+    ? layers.filter((layer) => layer.id === isolatedLayerId)
     : layers;
-  return previewLayers
-    .toReversed()
+  const orderedLayers =
+    previewModifiers.bringSelectedLayerToFront && selectedLayerId && !isolatedLayerId
+      ? [
+          ...previewLayers.filter((layer) => layer.id !== selectedLayerId).toReversed(),
+          ...previewLayers.filter((layer) => layer.id === selectedLayerId),
+        ]
+      : previewLayers.toReversed();
+  return orderedLayers
     .map((layer) => ({ id: layer.id, svg: createLayerModel(layer).toSvg(renderContext) }))
     .filter((layer) => layer.svg)
     .map((layer) => <g dangerouslySetInnerHTML={{ __html: layer.svg }} key={layer.id} />);

@@ -30,6 +30,11 @@
     sidebarMode: "layers" | "properties" | "project-settings",
     selectedObject: { collection: "layers" | "ranges"; id: string } | null,
     hoveredLayerId: string | null,
+    layerPreviewModifiers: {
+      showOnlySelectedLayer: boolean,
+      bringSelectedLayerToFront: boolean,
+      showEditingOverlay: boolean
+    },
     snapping: { enabled: boolean; distanceMm: number; angleDegrees: number },
     autosaveStatus: "idle" | "saved" | "error"
   },

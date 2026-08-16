@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { createDevelopmentProject } from "./project-factories";
+import {
+  createDevelopmentProject,
+  createRange,
+  createTickScaleLayer,
+  resetLayerToDefaults,
+} from "./project-factories";
 
 describe("createDevelopmentProject", () => {
   it("provides an Apple Clock workbench with one Range and two Tick Scale layers", () => {
@@ -17,5 +22,28 @@ describe("createDevelopmentProject", () => {
       "Minute markers",
       "Inner hour markers",
     ]);
+  });
+});
+
+describe("resetLayerToDefaults", () => {
+  it("restores visual fields without losing layer identity or its Range", () => {
+    const range = createRange();
+    const layer = createTickScaleLayer(range.id, {
+      color: "#C62828",
+      name: "Custom markers",
+      radiusOffsetMm: -6,
+      valueEnd: 60,
+      visible: false,
+    });
+
+    expect(resetLayerToDefaults(layer)).toMatchObject({
+      id: layer.id,
+      name: "Custom markers",
+      rangeId: range.id,
+      visible: false,
+      color: "#20242B",
+      radiusOffsetMm: 0,
+      valueEnd: 100,
+    });
   });
 });

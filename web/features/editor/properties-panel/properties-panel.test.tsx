@@ -22,10 +22,17 @@ describe("PropertiesPanel", () => {
         onHistoryTransactionEnd={vi.fn()}
         onHistoryTransactionStart={vi.fn()}
         onLayerChange={vi.fn()}
+        onLayerPreviewModifiersChange={vi.fn()}
         onLayerRangeChange={onLayerRangeChange}
         onNameChange={vi.fn()}
         onRangeChange={vi.fn()}
+        onResetLayer={vi.fn()}
         ranges={[first, second]}
+        layerPreviewModifiers={{
+          bringSelectedLayerToFront: false,
+          showEditingOverlay: true,
+          showOnlySelectedLayer: false,
+        }}
         selectedLayer={layer}
         selectedName={layer.name}
         selectedObject={{ collection: "layers", id: layer.id }}
@@ -51,10 +58,17 @@ describe("PropertiesPanel", () => {
         onHistoryTransactionEnd={vi.fn()}
         onHistoryTransactionStart={vi.fn()}
         onLayerChange={onLayerChange}
+        onLayerPreviewModifiersChange={vi.fn()}
         onLayerRangeChange={vi.fn()}
         onNameChange={vi.fn()}
         onRangeChange={vi.fn()}
+        onResetLayer={vi.fn()}
         ranges={[range]}
+        layerPreviewModifiers={{
+          bringSelectedLayerToFront: false,
+          showEditingOverlay: true,
+          showOnlySelectedLayer: false,
+        }}
         selectedLayer={layer}
         selectedName={layer.name}
         selectedObject={{ collection: "layers", id: layer.id }}

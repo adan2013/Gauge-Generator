@@ -5,6 +5,7 @@ import {
 } from "@/features/project/factories/project-factories";
 import { constrainTickScaleToRange } from "@/features/layers/tick-scale/tick-scale-constraints";
 import {
+  MAX_LAYERS,
   validateProject,
   type CanvasDto,
   type LayerDto,
@@ -79,6 +80,20 @@ export const projectSlice = createSlice({
     addLayer: (state, action: PayloadAction<LayerDto>) => {
       commitProjectMutation(state, (project) => {
         project.layers.push(action.payload);
+        return true;
+      });
+    },
+    duplicateLayer: (state, action: PayloadAction<string>) => {
+      commitProjectMutation(state, (project) => {
+        if (project.layers.length >= MAX_LAYERS) return false;
+        const sourceIndex = project.layers.findIndex((layer) => layer.id === action.payload);
+        if (sourceIndex < 0) return false;
+        const sourceLayer = project.layers[sourceIndex];
+        project.layers.splice(sourceIndex, 0, {
+          ...sourceLayer,
+          id: crypto.randomUUID(),
+          name: `${sourceLayer.name}_Copy`,
+        });
         return true;
       });
     },

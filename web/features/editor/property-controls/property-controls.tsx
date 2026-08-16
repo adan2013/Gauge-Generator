@@ -38,7 +38,7 @@ export function TextPropertyRow({
     <FieldRow htmlFor={inputId} label={label}>
       <input
         aria-label={label}
-        className="w-full rounded-md border border-border bg-app px-2 py-1 text-right text-sm text-ink outline-none focus:border-focus focus:ring-2 focus:ring-focus/30"
+        className="h-9 w-full rounded-md border border-border bg-app px-2 text-right text-sm text-ink outline-none focus:border-focus focus:ring-2 focus:ring-focus/30"
         id={inputId}
         onBlur={onInteractionEnd}
         onChange={(event) => onChange(event.target.value)}
