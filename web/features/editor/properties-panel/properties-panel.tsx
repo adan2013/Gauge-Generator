@@ -11,11 +11,22 @@ import {
   type RangeNumericPropertyDefinition,
 } from "@/features/layers/range/range-properties";
 import {
+  getTickScaleColorPropertyDefinition,
+  getTickScaleNumericPropertyDefinitions,
+  type TickScaleColorPropertyDefinition,
+  type TickScaleNumericPropertyDefinition,
+} from "@/features/layers/tick-scale/tick-scale-properties";
+import {
   PropertyGroup,
   RangePropertyRow,
   TextPropertyRow,
 } from "@/features/editor/property-controls/property-controls";
-import type { CanvasDto, LayerDto, RangeDto } from "@/features/project/project-dto/project-dto";
+import type {
+  CanvasDto,
+  LayerDto,
+  RangeDto,
+  TickScaleLayerDto,
+} from "@/features/project/project-dto/project-dto";
 import { cn } from "@/lib/cn";
 import type { EditorSelection } from "@/store/editor-slice";
 
@@ -32,6 +43,7 @@ export type PropertiesPanelProps = {
   onHistoryTransactionEnd: () => void;
   onHistoryTransactionStart: () => void;
   onLayerRangeChange: (rangeId: string) => void;
+  onLayerChange: (change: Partial<LayerDto>) => void;
   onNameChange: (value: string) => void;
   onRangeChange: (change: Partial<RangeDto>) => void;
 };
@@ -43,6 +55,7 @@ export function PropertiesPanel({
   onHistoryTransactionEnd,
   onHistoryTransactionStart,
   onLayerRangeChange,
+  onLayerChange,
   onNameChange,
   onRangeChange,
   ranges,
@@ -73,6 +86,17 @@ export function PropertiesPanel({
       onRangeChange({
         scaleDefinition: { ...selectedRange.scaleDefinition, [definition.key]: Number(value) },
       });
+  };
+  const updateLayerNumber = (definition: TickScaleNumericPropertyDefinition) => (value: string) => {
+    const rawValue = Number(value);
+    const increment = definition.snap === "angle" ? snapping.angleDegrees : snapping.distanceMm;
+    const snappedValue =
+      snapping.enabled && definition.snap !== "none"
+        ? Math.round(rawValue / increment) * increment
+        : rawValue;
+    onLayerChange({
+      [definition.key]: Math.min(definition.max, Math.max(definition.min, snappedValue)),
+    } as Partial<TickScaleLayerDto>);
   };
 
   return (
@@ -107,6 +131,20 @@ export function PropertiesPanel({
           />
         ) : (
           <LayerProperties
+            layerColorDefinition={
+              selectedLayer?.type === "tick-scale"
+                ? getTickScaleColorPropertyDefinition(selectedLayer)
+                : undefined
+            }
+            layerNumericDefinitions={
+              selectedLayer?.type === "tick-scale"
+                ? getTickScaleNumericPropertyDefinitions(
+                    selectedLayer,
+                    ranges.find((range) => range.id === selectedLayer.rangeId),
+                  )
+                : []
+            }
+            onLayerChange={onLayerChange}
             onHistoryTransactionEnd={onHistoryTransactionEnd}
             onHistoryTransactionStart={onHistoryTransactionStart}
             onLayerRangeChange={onLayerRangeChange}
@@ -115,6 +153,7 @@ export function PropertiesPanel({
             selectedLayer={selectedLayer}
             selectedName={selectedName}
             t={t}
+            updateLayerNumber={updateLayerNumber}
           />
         )}
       </div>
@@ -239,6 +278,9 @@ function RangeNumericFields({
 }
 
 function LayerProperties({
+  layerColorDefinition,
+  layerNumericDefinitions,
+  onLayerChange,
   onHistoryTransactionEnd,
   onHistoryTransactionStart,
   onLayerRangeChange,
@@ -247,7 +289,11 @@ function LayerProperties({
   selectedLayer,
   selectedName,
   t,
+  updateLayerNumber,
 }: {
+  layerColorDefinition: TickScaleColorPropertyDefinition | undefined;
+  layerNumericDefinitions: readonly TickScaleNumericPropertyDefinition[];
+  onLayerChange: (change: Partial<LayerDto>) => void;
   onHistoryTransactionEnd: () => void;
   onHistoryTransactionStart: () => void;
   onLayerRangeChange: (rangeId: string) => void;
@@ -256,6 +302,7 @@ function LayerProperties({
   selectedLayer: LayerDto | undefined;
   selectedName: string;
   t: ReturnType<typeof useTranslations>;
+  updateLayerNumber: (definition: TickScaleNumericPropertyDefinition) => (value: string) => void;
 }) {
   return (
     <>
@@ -290,8 +337,97 @@ function LayerProperties({
           </FieldRow>
         ) : null}
       </PropertyGroup>
+      {selectedLayer?.type === "tick-scale" ? (
+        <>
+          <PropertyGroup title={t("tickScale.range")}>
+            <LayerNumericFields
+              definitions={layerNumericDefinitions}
+              group="range"
+              onInteractionEnd={onHistoryTransactionEnd}
+              onInteractionStart={onHistoryTransactionStart}
+              onUpdate={updateLayerNumber}
+              t={t}
+            />
+          </PropertyGroup>
+          <PropertyGroup title={t("tickScale.geometry")}>
+            <LayerNumericFields
+              definitions={layerNumericDefinitions}
+              group="geometry"
+              onInteractionEnd={onHistoryTransactionEnd}
+              onInteractionStart={onHistoryTransactionStart}
+              onUpdate={updateLayerNumber}
+              t={t}
+            />
+          </PropertyGroup>
+          <PropertyGroup title={t("tickScale.ticks")}>
+            <LayerNumericFields
+              definitions={layerNumericDefinitions}
+              group="ticks"
+              onInteractionEnd={onHistoryTransactionEnd}
+              onInteractionStart={onHistoryTransactionStart}
+              onUpdate={updateLayerNumber}
+              t={t}
+            />
+            {layerColorDefinition ? (
+              <FieldRow
+                htmlFor="tick-scale-color"
+                label={t(`tickScale.${layerColorDefinition.labelKey}`)}
+              >
+                <span className="flex items-center justify-end gap-2">
+                  <input
+                    aria-label={t(`tickScale.${layerColorDefinition.labelKey}`)}
+                    className="size-9 cursor-pointer rounded border border-border bg-app p-1"
+                    id="tick-scale-color"
+                    onBlur={onHistoryTransactionEnd}
+                    onChange={(event) => onLayerChange({ color: event.target.value.toUpperCase() })}
+                    onFocus={onHistoryTransactionStart}
+                    type="color"
+                    value={layerColorDefinition.value}
+                  />
+                  <output className="font-mono text-xs text-muted">
+                    {layerColorDefinition.value}
+                  </output>
+                </span>
+              </FieldRow>
+            ) : null}
+          </PropertyGroup>
+        </>
+      ) : null}
     </>
   );
+}
+
+function LayerNumericFields({
+  definitions,
+  group,
+  onInteractionEnd,
+  onInteractionStart,
+  onUpdate,
+  t,
+}: {
+  definitions: readonly TickScaleNumericPropertyDefinition[];
+  group: TickScaleNumericPropertyDefinition["group"];
+  onInteractionEnd: () => void;
+  onInteractionStart: () => void;
+  onUpdate: (definition: TickScaleNumericPropertyDefinition) => (value: string) => void;
+  t: ReturnType<typeof useTranslations>;
+}) {
+  return definitions
+    .filter((definition) => definition.group === group)
+    .map((definition) => (
+      <RangePropertyRow
+        key={definition.key}
+        label={t(`tickScale.${definition.labelKey}`)}
+        max={definition.max}
+        min={definition.min}
+        onChange={onUpdate(definition)}
+        onInteractionEnd={onInteractionEnd}
+        onInteractionStart={onInteractionStart}
+        step={definition.step}
+        suffix={definition.unit === "none" ? "" : t(`controls.${definition.unit}`)}
+        value={String(definition.value)}
+      />
+    ));
 }
 function LayerTypePicker({ onCreateLayer }: { onCreateLayer: (type: "tick-scale") => void }) {
   const t = useTranslations("Editor.layers");

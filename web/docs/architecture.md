@@ -6,7 +6,8 @@
   migrations, import/export serialization, and persistence adapters.
 - `features/layers/` owns React-independent domain abstractions. `Layer` is the
   base class for visual layers; `Range` is a separate domain object and never a
-  visual layer.
+  visual layer. `core/layer-registry.ts` instantiates the appropriate visual
+  layer class for preview and future export.
 - `lib/geometry/` contains pure millimetre, angle, mapping, and snapping math.
 - `store/` owns Redux Toolkit slices, history middleware, typed hooks, and the
   client `StoreProvider`.
@@ -14,7 +15,8 @@
   not serialize projects, calculate geometry, or use ad-hoc object shapes.
 - Edited domain objects expose numeric property definitions (`min`, `max`, and
   `step`) to the UI. This keeps canvas- and layer-dependent limits out of React
-  components; Range derives coordinate bounds from the active canvas.
+  components; Range derives coordinate bounds from the active canvas and Tick
+  Scale derives its minimum radius offset from its source Range.
 - Validation returns a stable `{ code, path }`, never localized text. The UI
   owns translation of an error code through `messages/en.json` when it renders
   an error.

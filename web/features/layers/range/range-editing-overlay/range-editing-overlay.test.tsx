@@ -41,4 +41,30 @@ describe("RangeEditingOverlay", () => {
       screen.getByTestId("range-start-angle-guide").getAttribute("stroke-dasharray"),
     );
   });
+
+  it("renders a full circle as two SVG arcs when the opening angle is 360 degrees", () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={messages}>
+        <svg viewBox="0 0 120 120">
+          <RangeEditingOverlay
+            canvas={{
+              widthMm: 120,
+              heightMm: 120,
+              background: "#FFFFFF",
+              transparentBackground: true,
+            }}
+            onInteractionEnd={() => undefined}
+            onInteractionStart={() => undefined}
+            onRangeChange={() => undefined}
+            range={createRange({ angleStart: 0, openingAngle: 360 })}
+            snapping={{ enabled: true, distanceMm: 2, angleDegrees: 10 }}
+          />
+        </svg>
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByTestId("range-overlay-arc").getAttribute("d")?.match(/ A /g)).toHaveLength(
+      2,
+    );
+  });
 });

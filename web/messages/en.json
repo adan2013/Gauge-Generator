@@ -72,7 +72,7 @@
       "eyebrow": "Layer",
       "propertiesAriaLabel": "Layer properties",
       "propertiesTitle": "Layer setup",
-      "propertiesDescription": "Visual layer controls will be added with each layer type.",
+      "propertiesDescription": "Adjust this visual element and its source Range.",
       "range": "Range",
       "rangeSource": "Source Range",
       "picker": {
@@ -156,6 +156,26 @@
         "angle-end": "{opening}°"
       }
     },
+    "tickScale": {
+      "range": "Visible value range",
+      "geometry": "Geometry",
+      "ticks": "Ticks",
+      "radiusOffset": "Radius offset",
+      "cornerRadius": "Corner radius",
+      "valueStart": "Start value",
+      "valueEnd": "End value",
+      "valueStep": "Value step",
+      "tickLength": "Tick length",
+      "tickWidth": "Tick width",
+      "color": "Color",
+      "overlayAriaLabel": "Tick scale editing overlay",
+      "handles": {
+        "radiusOffset": "Adjust tick radius"
+      },
+      "handleValues": {
+        "radiusOffset": "{value} mm"
+      }
+    },
     "canvas": {
       "ariaLabel": "Canvas preview",
       "previewAriaLabel": "Gauge preview",
@@ -173,6 +193,7 @@
       "adjust": "Adjust {label}",
       "millimeters": "mm",
       "degrees": "°",
+      "percent": "%",
       "unavailable": "—"
     }
   }

@@ -134,14 +134,16 @@ bez kopiowania nazw czy domyślnych wartości.
 
 ### Tick Scale
 
-| Właściwość                    | Typ     | Opis / zakres                               |
-| ----------------------------- | ------- | ------------------------------------------- |
-| rangeMin, rangeMax, rangeStep | integer | fragment skali i krok; krok 1–1000          |
-| drawArcOnEdge                 | boolean | łączy kreski łukiem na zewnętrznej krawędzi |
-| lineThickness                 | number  | grubość kreski (1–5%)                       |
-| distanceFromCenter            | number  | pozycja zewnętrznego końca (20–100%)        |
-| lineLength                    | number  | długość kreski (2–100%)                     |
-| lineColor                     | kolor   | kolor kresek i łuku                         |
+| Właściwość                    | Typ     | Opis / zakres                        |
+| ----------------------------- | ------- | ------------------------------------ |
+| rangeMin, rangeMax, rangeStep | integer | fragment skali i krok; krok 1–1000   |
+| lineThickness                 | number  | grubość kreski (1–5%)                |
+| distanceFromCenter            | number  | pozycja zewnętrznego końca (20–100%) |
+| lineLength                    | number  | długość kreski (2–100%)              |
+| lineColor                     | kolor   | kolor kresek                         |
+
+Linia krawędziowa skali nie należy do Tick Scale. Przy ścieżkach z regulowanym
+zaokrągleniem powinna zostać wprowadzona później jako osobny obiekt wizualny.
 
 ### Numeric Scale
 

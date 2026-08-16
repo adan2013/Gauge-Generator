@@ -221,7 +221,8 @@ odrzucenie złego `rangeId`, limit historii, undo/redo, przeliczenia mm i snap
    Properties (dwuklik także jest wspierany), bez osobnego przycisku ołówka.
    Wiersz pozwala przełączyć widoczność, usunąć warstwę po potwierdzeniu i
    zmienić jej kolejność przez uchwyt drag-and-drop. Hover nad miniaturą visual
-   layer pokaże później tylko daną warstwę wraz z jej kontekstem Range.
+   layer tymczasowo pokazuje w preview tylko daną warstwę, bez zmiany selekcji
+   lub historii.
    Kliknięcie canvasu nie wybiera warstwy.
 6. Po powrocie do Layers overlay znika, a miniatura jest regenerowana.
 
@@ -236,7 +237,9 @@ dopiero po Back to layers.
 **Cel:** uruchomić właściwy dial i wspólną definicję skali.
 
 1. Dodać `TickScaleLayer`, następnie `NumericScaleLayer`, oba z obowiązkowym
-   wyborem Range po nazwie.
+   wyborem Range po nazwie. `TickScaleLayer` jest ukończonym pierwszym slice:
+   ma DTO/Zod/factory, własne definicje pól, renderer SVG, uchwyt promienia,
+   formularz, walidację oraz testy. Następny jest `NumericScaleLayer`.
 2. Implementować kreski Tick Scale oraz formatowanie etykiet Numeric Scale,
    oba korzystające z definicji mapowania należącej do Range; dodać łuk
    krawędziowy, mnożnik i style web-safe fontów.
@@ -282,7 +285,7 @@ i pełen test checklisty. Dopiero wtedy rozpoczyna się następna warstwa.
 3. Dodać katalog Examples jako statyczne, walidowane JSON-y. Wybranie przykładu
    ładuje jego kopię do bieżącego store, nie zmienia pliku źródłowego.
 4. Tylko w `NODE_ENV=development` uruchamiać fabrykę projektu roboczego: jeden
-   Range oraz trzy warstwy Tick Scale. Następnie rozwinąć ją do `Layer workbench`,
+   Range oraz dwie warstwy Tick Scale. Następnie rozwinąć ją do `Layer workbench`,
    zasilanego przez `ACTIVE_WORKBENCH_LAYER`. Dane muszą przechodzić Zod i nie
    mogą wejść do produkcji.
 5. Dodać mini-wiki wewnątrz `/app/help`: Getting started, interface, layers,

@@ -21,6 +21,7 @@ describe("PropertiesPanel", () => {
         onCreateLayer={vi.fn()}
         onHistoryTransactionEnd={vi.fn()}
         onHistoryTransactionStart={vi.fn()}
+        onLayerChange={vi.fn()}
         onLayerRangeChange={onLayerRangeChange}
         onNameChange={vi.fn()}
         onRangeChange={vi.fn()}
@@ -36,5 +37,34 @@ describe("PropertiesPanel", () => {
       target: { value: second.id },
     });
     expect(onLayerRangeChange).toHaveBeenCalledWith(second.id);
+  });
+
+  it("shows a Tick Scale color preview together with its hexadecimal value", () => {
+    const range = createRange();
+    const layer = createTickScaleLayer(range.id, { color: "#C62828" });
+    const onLayerChange = vi.fn();
+    renderEditor(
+      <PropertiesPanel
+        canvas={createProject().canvas}
+        onBack={vi.fn()}
+        onCreateLayer={vi.fn()}
+        onHistoryTransactionEnd={vi.fn()}
+        onHistoryTransactionStart={vi.fn()}
+        onLayerChange={onLayerChange}
+        onLayerRangeChange={vi.fn()}
+        onNameChange={vi.fn()}
+        onRangeChange={vi.fn()}
+        ranges={[range]}
+        selectedLayer={layer}
+        selectedName={layer.name}
+        selectedObject={{ collection: "layers", id: layer.id }}
+        selectedRange={undefined}
+        snapping={{ angleDegrees: 10, distanceMm: 2, enabled: true }}
+      />,
+    );
+
+    expect(screen.getByText("#C62828")).toBeTruthy();
+    fireEvent.change(screen.getByLabelText("Color"), { target: { value: "#a61f1f" } });
+    expect(onLayerChange).toHaveBeenCalledWith({ color: "#A61F1F" });
   });
 });

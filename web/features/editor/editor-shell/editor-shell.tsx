@@ -47,7 +47,9 @@ export function EditorShell() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const project = useAppSelector((state) => state.project.current);
-  const { selectedObject, sidebarMode, snapping } = useAppSelector((state) => state.editor);
+  const { hoveredLayerId, selectedObject, sidebarMode, snapping } = useAppSelector(
+    (state) => state.editor,
+  );
   const { past, future } = useAppSelector((state) => state.history);
   const t = useTranslations("Editor");
   const [status, setStatus] = useState("");
@@ -177,6 +179,7 @@ export function EditorShell() {
               onCreateRange={createProjectRange}
               onDeleteLayer={(layerId) => dispatch(projectActions.removeLayer(layerId))}
               onDeleteRange={(rangeId) => dispatch(projectActions.removeRange(rangeId))}
+              onHoverLayer={(layerId) => dispatch(editorActions.setHoveredLayerId(layerId))}
               onOpenLayerProperties={openLayerProperties}
               onOpenProjectSettings={() =>
                 dispatch(editorActions.setSidebarMode("project-settings"))
@@ -190,6 +193,7 @@ export function EditorShell() {
                 if (layer)
                   dispatch(projectActions.updateLayer({ ...layer, visible: !layer.visible }));
               }}
+              project={project}
               ranges={project.ranges}
             />
           }
@@ -224,6 +228,7 @@ export function EditorShell() {
               onCreateLayer={createLayer}
               onHistoryTransactionEnd={() => dispatch(completeProjectHistoryTransaction())}
               onHistoryTransactionStart={() => dispatch(beginProjectHistoryTransaction())}
+              onLayerChange={updateSelectedLayer}
               onLayerRangeChange={(rangeId) => updateSelectedLayer({ rangeId })}
               onNameChange={renameSelectedObject}
               onRangeChange={updateSelectedRange}
@@ -237,13 +242,17 @@ export function EditorShell() {
           }
         />
         <CanvasPreview
-          canvas={project.canvas}
-          hasRange={project.ranges.length > 0}
           onBrowseExamples={() => announce(t("toolbar.examples"))}
           onCreateRange={createProjectRange}
+          onLayerChange={(layer) => dispatch(projectActions.updateLayer(layer))}
+          onLayerInteractionEnd={() => dispatch(completeProjectHistoryTransaction())}
+          onLayerInteractionStart={() => dispatch(beginProjectHistoryTransaction())}
           onRangeChange={(range) => dispatch(projectActions.updateRange(range))}
           onRangeInteractionEnd={() => dispatch(completeProjectHistoryTransaction())}
           onRangeInteractionStart={() => dispatch(beginProjectHistoryTransaction())}
+          hoveredLayerId={hoveredLayerId}
+          project={project}
+          selectedLayer={sidebarMode === "properties" ? selectedLayer : undefined}
           selectedRange={sidebarMode === "properties" ? selectedRange : undefined}
           snapping={snapping}
         />

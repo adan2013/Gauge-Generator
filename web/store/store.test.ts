@@ -28,6 +28,47 @@ describe("project store and history", () => {
     expect(store.getState().project.current.ranges).toHaveLength(1);
   });
 
+  it("constrains dependent Tick Scale geometry when its Range radius is reduced", () => {
+    const range = createRange({ radius: 48 });
+    const layer = createTickScaleLayer(range.id, {
+      radiusOffsetMm: 40,
+      tickLengthMm: 50,
+      tickWidthMm: 8,
+    });
+    const store = createTestStore({
+      project: { current: createProject({ ranges: [range], layers: [layer] }) },
+    });
+
+    store.dispatch(projectActions.updateRange({ ...range, radius: 20 }));
+
+    expect(store.getState().project.current.layers[0]).toMatchObject({
+      radiusOffsetMm: 20,
+      tickLengthMm: 40,
+      tickWidthMm: 8,
+    });
+  });
+
+  it("constrains dependent Tick Scale values when the source Range values change", () => {
+    const range = createRange();
+    const layer = createTickScaleLayer(range.id, { valueStart: 20, valueEnd: 100, valueStep: 10 });
+    const store = createTestStore({
+      project: { current: createProject({ ranges: [range], layers: [layer] }) },
+    });
+
+    store.dispatch(
+      projectActions.updateRange({
+        ...range,
+        scaleDefinition: { mode: "linear", start: 30, end: 70 },
+      }),
+    );
+
+    expect(store.getState().project.current.layers[0]).toMatchObject({
+      valueStart: 30,
+      valueEnd: 70,
+      valueStep: 10,
+    });
+  });
+
   it("reorders only visual layers while preserving the topmost index convention", () => {
     const range = createRange();
     const first = { ...createTickScaleLayer(range.id), name: "Top" };

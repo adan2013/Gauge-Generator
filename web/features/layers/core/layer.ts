@@ -47,7 +47,7 @@ export abstract class Layer<TDto extends LayerDto = LayerDto> {
 
   abstract getNumericPropertyDefinitions(
     context: RenderContext,
-  ): Readonly<Record<string, NumericPropertyDefinition>>;
+  ): readonly NumericPropertyDefinition[];
   abstract validate(context: RenderContext): ValidationIssue[];
   abstract toSvg(context: RenderContext): string;
   abstract toEditingOverlay(context: EditingOverlayContext): string;

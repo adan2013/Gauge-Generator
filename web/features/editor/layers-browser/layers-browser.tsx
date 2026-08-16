@@ -8,20 +8,24 @@ import { Eye, EyeOff, GripVertical, Layers3, Plus, Settings2, Trash2 } from "luc
 import { useTranslations } from "next-intl";
 import { ActionButton } from "@/components/atoms/action-button/action-button";
 import { useConfirmation } from "@/components/providers/confirmation-provider/confirmation-provider";
+import { LayerThumbnail } from "@/features/layers/core/layer-thumbnail/layer-thumbnail";
 import {
   MAX_RANGES,
   type LayerDto,
+  type ProjectDto,
   type RangeDto,
 } from "@/features/project/project-dto/project-dto";
 import { cn } from "@/lib/cn";
 
 export type LayersBrowserProps = {
   layers: LayerDto[];
+  project: ProjectDto;
   ranges: RangeDto[];
   onCreateLayer: () => void;
   onCreateRange: () => void;
   onDeleteLayer: (layerId: string) => void;
   onDeleteRange: (rangeId: string) => void;
+  onHoverLayer: (layerId: string | null) => void;
   onOpenLayerProperties: (layerId: string) => void;
   onOpenProjectSettings: () => void;
   onOpenRangeProperties: (rangeId: string) => void;
@@ -35,11 +39,13 @@ export function LayersBrowser({
   onCreateRange,
   onDeleteLayer,
   onDeleteRange,
+  onHoverLayer,
   onOpenLayerProperties,
   onOpenProjectSettings,
   onOpenRangeProperties,
   onReorderLayer,
   onToggleLayerVisibility,
+  project,
   ranges,
 }: LayersBrowserProps) {
   const t = useTranslations("Editor.layers");
@@ -144,8 +150,10 @@ export function LayersBrowser({
                       layer={layer}
                       onDelete={() => void requestLayerDeletion(layer)}
                       onEdit={() => onOpenLayerProperties(layer.id)}
+                      onHoverChange={onHoverLayer}
                       onNativeDrop={handleNativeLayerDrop}
                       onToggleVisibility={() => onToggleLayerVisibility(layer.id)}
+                      project={project}
                     />
                   ))}
                 </ul>
@@ -233,12 +241,16 @@ function SortableLayerRow({
   onEdit,
   onNativeDrop,
   onToggleVisibility,
+  onHoverChange,
+  project,
 }: {
   layer: LayerDto;
   onDelete: () => void;
   onEdit: () => void;
+  onHoverChange: (layerId: string | null) => void;
   onNativeDrop: (event: ReactDragEvent<HTMLLIElement>, targetLayerId: string) => void;
   onToggleVisibility: () => void;
+  project: ProjectDto;
 }) {
   const t = useTranslations("Editor.layers");
   const { attributes, isDragging, listeners, setNodeRef, transform, transition } = useSortable({
@@ -267,6 +279,12 @@ function SortableLayerRow({
         >
           <GripVertical aria-hidden="true" size={16} />
         </button>
+        <span
+          onPointerEnter={() => onHoverChange(layer.id)}
+          onPointerLeave={() => onHoverChange(null)}
+        >
+          <LayerThumbnail layer={layer} project={project} />
+        </span>
         <button
           aria-label={t("editLayer", { name: layer.name })}
           className="min-w-0 flex-1 rounded-md px-2 py-1 text-left hover:bg-surface-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"

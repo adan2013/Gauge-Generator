@@ -1,11 +1,16 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { createRange, createTickScaleLayer } from "@/features/project/factories/project-factories";
+import {
+  createProject,
+  createRange,
+  createTickScaleLayer,
+} from "@/features/project/factories/project-factories";
 import { renderEditor } from "@/test/render-editor";
 import { LayersBrowser } from "./layers-browser";
 
 describe("LayersBrowser", () => {
   it("shows the separated Range count", () => {
+    const range = createRange();
     renderEditor(
       <LayersBrowser
         layers={[]}
@@ -13,12 +18,14 @@ describe("LayersBrowser", () => {
         onCreateRange={vi.fn()}
         onDeleteLayer={vi.fn()}
         onDeleteRange={vi.fn()}
+        onHoverLayer={vi.fn()}
         onOpenLayerProperties={vi.fn()}
         onOpenProjectSettings={vi.fn()}
         onOpenRangeProperties={vi.fn()}
         onReorderLayer={vi.fn()}
         onToggleLayerVisibility={vi.fn()}
-        ranges={[createRange()]}
+        project={createProject({ ranges: [range] })}
+        ranges={[range]}
       />,
     );
     expect(screen.getByText("1 / 5")).toBeTruthy();
@@ -28,6 +35,7 @@ describe("LayersBrowser", () => {
     const range = createRange();
     const layer = createTickScaleLayer(range.id, { name: "Major ticks" });
     const onDeleteLayer = vi.fn();
+    const onHoverLayer = vi.fn();
     renderEditor(
       <LayersBrowser
         layers={[layer]}
@@ -35,11 +43,13 @@ describe("LayersBrowser", () => {
         onCreateRange={vi.fn()}
         onDeleteLayer={onDeleteLayer}
         onDeleteRange={vi.fn()}
+        onHoverLayer={onHoverLayer}
         onOpenLayerProperties={vi.fn()}
         onOpenProjectSettings={vi.fn()}
         onOpenRangeProperties={vi.fn()}
         onReorderLayer={vi.fn()}
         onToggleLayerVisibility={vi.fn()}
+        project={createProject({ layers: [layer], ranges: [range] })}
         ranges={[range]}
       />,
     );
@@ -47,5 +57,9 @@ describe("LayersBrowser", () => {
     expect(onDeleteLayer).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "Delete" }));
     await waitFor(() => expect(onDeleteLayer).toHaveBeenCalledWith(layer.id));
+    fireEvent.pointerEnter(screen.getByTestId(`layer-thumbnail-${layer.id}`));
+    expect(onHoverLayer).toHaveBeenLastCalledWith(layer.id);
+    fireEvent.pointerLeave(screen.getByTestId(`layer-thumbnail-${layer.id}`));
+    expect(onHoverLayer).toHaveBeenLastCalledWith(null);
   });
 });

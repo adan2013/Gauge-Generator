@@ -1,5 +1,9 @@
 import { PROJECT_FORMAT, PROJECT_VERSION } from "@/features/project/project-dto/project-dto";
-import type { LayerDto, ProjectDto, RangeDto } from "@/features/project/project-dto/project-dto";
+import type {
+  ProjectDto,
+  RangeDto,
+  TickScaleLayerDto,
+} from "@/features/project/project-dto/project-dto";
 
 const DEFAULT_TIMESTAMP = "2026-01-01T00:00:00.000Z";
 
@@ -17,13 +21,24 @@ export function createRange(overrides: Partial<RangeDto> = {}): RangeDto {
   };
 }
 
-export function createTickScaleLayer(rangeId: string, overrides: Partial<LayerDto> = {}): LayerDto {
+export function createTickScaleLayer(
+  rangeId: string,
+  overrides: Partial<TickScaleLayerDto> = {},
+): TickScaleLayerDto {
   return {
     id: crypto.randomUUID(),
     name: "Tick scale",
     visible: true,
     rangeId,
     type: "tick-scale",
+    valueStart: 0,
+    valueEnd: 100,
+    valueStep: 10,
+    tickLengthMm: 4,
+    tickWidthMm: 0.6,
+    radiusOffsetMm: 0,
+    cornerRadiusPercent: 50,
+    color: "#20242B",
     ...overrides,
   };
 }
@@ -42,13 +57,41 @@ export function createProject(overrides: Partial<ProjectDto> = {}): ProjectDto {
 
 /** A predictable populated document for manual development of visual layers. */
 export function createDevelopmentProject(): ProjectDto {
-  const range = createRange({ name: "Development range" });
+  const range = createRange({
+    name: "Apple Clock range",
+    angleStart: 0,
+    openingAngle: 360,
+    radius: 48,
+    scaleDefinition: { mode: "linear", start: 0, end: 60 },
+  });
   return createProject({
+    meta: {
+      title: "Apple Clock workbench",
+      createdAt: DEFAULT_TIMESTAMP,
+      updatedAt: DEFAULT_TIMESTAMP,
+    },
     ranges: [range],
     layers: [
-      createTickScaleLayer(range.id, { name: "Tick Scale 1" }),
-      createTickScaleLayer(range.id, { name: "Tick Scale 2" }),
-      createTickScaleLayer(range.id, { name: "Tick Scale 3" }),
+      createTickScaleLayer(range.id, {
+        name: "Minute markers",
+        radiusOffsetMm: 0,
+        valueStart: 0,
+        valueEnd: 60,
+        valueStep: 1,
+        tickLengthMm: 1.7,
+        tickWidthMm: 0.45,
+        cornerRadiusPercent: 22,
+      }),
+      createTickScaleLayer(range.id, {
+        name: "Inner hour markers",
+        radiusOffsetMm: -8,
+        valueStart: 0,
+        valueEnd: 60,
+        valueStep: 5,
+        tickLengthMm: 2.5,
+        tickWidthMm: 0.8,
+        cornerRadiusPercent: 26,
+      }),
     ],
   });
 }

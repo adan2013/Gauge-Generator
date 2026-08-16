@@ -54,12 +54,19 @@ const LayerBaseSchema = z
   })
   .strict();
 
-// This minimal discriminated union establishes the JSON contract. `tick-scale`
-// is a visual renderer; its source Range owns linear/logarithmic/custom value
-// mapping. Its renderer and complete parameter set arrive in stage 4.
-export const LayerSchema = z.discriminatedUnion("type", [
-  LayerBaseSchema.extend({ type: z.literal("tick-scale") }).strict(),
-]);
+const TickScaleLayerSchema = LayerBaseSchema.extend({
+  type: z.literal("tick-scale"),
+  valueStart: z.number(),
+  valueEnd: z.number(),
+  valueStep: z.number().positive(),
+  tickLengthMm: z.number().min(0.2).max(50),
+  tickWidthMm: z.number().min(0.1).max(10),
+  radiusOffsetMm: z.number().min(-500).max(500),
+  cornerRadiusPercent: z.number().min(0).max(50),
+  color: HexColorSchema,
+}).strict();
+
+export const LayerSchema = z.discriminatedUnion("type", [TickScaleLayerSchema]);
 
 export const CanvasSchema = z
   .object({
@@ -91,6 +98,7 @@ export const ProjectSchema = z
 export type ScaleDefinitionDto = z.infer<typeof ScaleDefinitionSchema>;
 export type RangeDto = z.infer<typeof RangeSchema>;
 export type LayerDto = z.infer<typeof LayerSchema>;
+export type TickScaleLayerDto = Extract<LayerDto, { type: "tick-scale" }>;
 export type CanvasDto = z.infer<typeof CanvasSchema>;
 export type ProjectDto = z.infer<typeof ProjectSchema>;
 
@@ -130,6 +138,51 @@ export function validateProject(project: unknown): {
         path: `layers.${layer.id}.rangeId`,
         code: PROJECT_VALIDATION_CODES.missingRangeReference,
       });
+    const sourceRange = parsed.data.ranges.find((range) => range.id === layer.rangeId);
+    if (layer.type === "tick-scale" && sourceRange) {
+      const effectiveRadiusMm = sourceRange.radius + layer.radiusOffsetMm;
+      if (effectiveRadiusMm <= 0)
+        issues.push({
+          path: `layers.${layer.id}.radiusOffsetMm`,
+          code: PROJECT_VALIDATION_CODES.tickScaleRadiusNonPositive,
+        });
+      if (layer.radiusOffsetMm > sourceRange.radius)
+        issues.push({
+          path: `layers.${layer.id}.radiusOffsetMm`,
+          code: PROJECT_VALIDATION_CODES.tickScaleRadiusOffsetOutsideRange,
+        });
+      if (layer.tickLengthMm > effectiveRadiusMm)
+        issues.push({
+          path: `layers.${layer.id}.tickLengthMm`,
+          code: PROJECT_VALIDATION_CODES.tickScaleLengthOutsideRadius,
+        });
+      if (layer.tickWidthMm > layer.tickLengthMm)
+        issues.push({
+          path: `layers.${layer.id}.tickWidthMm`,
+          code: PROJECT_VALIDATION_CODES.tickScaleWidthExceedsLength,
+        });
+      const scaleValues =
+        sourceRange.scaleDefinition.mode === "custom"
+          ? sourceRange.scaleDefinition.points.map((point) => point.value)
+          : [sourceRange.scaleDefinition.start, sourceRange.scaleDefinition.end];
+      const scaleMinimum = Math.min(...scaleValues);
+      const scaleMaximum = Math.max(...scaleValues);
+      if (layer.valueStart < scaleMinimum || layer.valueEnd > scaleMaximum)
+        issues.push({
+          path: `layers.${layer.id}`,
+          code: PROJECT_VALIDATION_CODES.tickScaleValueOutsideRange,
+        });
+      if (layer.valueStart > layer.valueEnd)
+        issues.push({
+          path: `layers.${layer.id}.valueStart`,
+          code: PROJECT_VALIDATION_CODES.tickScaleValueStartAfterEnd,
+        });
+      if (Math.floor((layer.valueEnd - layer.valueStart) / layer.valueStep) + 1 > 200)
+        issues.push({
+          path: `layers.${layer.id}.valueStep`,
+          code: PROJECT_VALIDATION_CODES.tickScaleTooManyMarks,
+        });
+    }
   }
 
   for (const range of parsed.data.ranges) {

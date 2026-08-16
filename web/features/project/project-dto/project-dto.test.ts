@@ -73,7 +73,7 @@ describe("ProjectSchema", () => {
     const range = createRange({
       scaleDefinition: { mode: "logarithmic", start: 1, end: 100, base: 10 },
     });
-    const layer = createTickScaleLayer(range.id);
+    const layer = createTickScaleLayer(range.id, { valueStart: 1, valueEnd: 100, valueStep: 10 });
     const project = createProject({ ranges: [range], layers: [layer] });
 
     expect(validateProject(project).data?.ranges[0].scaleDefinition.mode).toBe("logarithmic");
@@ -82,5 +82,17 @@ describe("ProjectSchema", () => {
       layers: [{ ...layer, scaleDefinition: range.scaleDefinition }],
     };
     expect(validateProject(invalidLayerProject).issues).not.toEqual([]);
+  });
+
+  it("rejects a Tick Scale whose radius offset would create a non-positive rendered radius", () => {
+    const range = createRange({ radius: 20 });
+    const layer = createTickScaleLayer(range.id, { radiusOffsetMm: -20 });
+
+    expect(
+      validateProject(createProject({ ranges: [range], layers: [layer] })).issues,
+    ).toContainEqual({
+      path: `layers.${layer.id}.radiusOffsetMm`,
+      code: PROJECT_VALIDATION_CODES.tickScaleRadiusNonPositive,
+    });
   });
 });

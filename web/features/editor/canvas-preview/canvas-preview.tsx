@@ -4,34 +4,50 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { BookOpen, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ActionButton } from "@/components/atoms/action-button/action-button";
+import { createLayerModel } from "@/features/layers/core/layer-registry";
 import { RangeEditingOverlay } from "@/features/layers/range/range-editing-overlay/range-editing-overlay";
-import type { CanvasDto, RangeDto } from "@/features/project/project-dto/project-dto";
+import { TickScaleEditingOverlay } from "@/features/layers/tick-scale/tick-scale-editing-overlay/tick-scale-editing-overlay";
+import type { LayerDto, ProjectDto, RangeDto } from "@/features/project/project-dto/project-dto";
 
 type CanvasPreviewProps = {
-  canvas: CanvasDto;
-  hasRange: boolean;
+  hoveredLayerId: string | null;
+  project: ProjectDto;
   onBrowseExamples: () => void;
   onCreateRange: () => void;
+  onLayerChange: (layer: LayerDto) => void;
+  onLayerInteractionEnd: () => void;
+  onLayerInteractionStart: () => void;
   onRangeChange: (range: RangeDto) => void;
   onRangeInteractionEnd: () => void;
   onRangeInteractionStart: () => void;
+  selectedLayer: LayerDto | undefined;
   selectedRange: RangeDto | undefined;
   snapping: { enabled: boolean; distanceMm: number; angleDegrees: number };
 };
 
 export function CanvasPreview({
-  canvas,
-  hasRange,
+  hoveredLayerId,
   onBrowseExamples,
   onCreateRange,
+  onLayerChange,
+  onLayerInteractionEnd,
+  onLayerInteractionStart,
   onRangeChange,
   onRangeInteractionEnd,
   onRangeInteractionStart,
+  project,
+  selectedLayer,
   selectedRange,
   snapping,
 }: CanvasPreviewProps) {
   const t = useTranslations("Editor");
+  const { canvas } = project;
   const { heightMm: canvasHeight, widthMm: canvasWidth } = canvas;
+  const hasRange = project.ranges.length > 0;
+  const renderContext = {
+    project,
+    rangeById: new Map(project.ranges.map((range) => [range.id, range])),
+  };
   const viewportRef = useRef<HTMLDivElement>(null);
   const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
   const showWelcome = !hasRange && !selectedRange;
@@ -114,6 +130,11 @@ export function CanvasPreview({
               viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
               xmlns="http://www.w3.org/2000/svg"
             >
+              <VisualLayers
+                hoveredLayerId={hoveredLayerId}
+                layers={project.layers}
+                renderContext={renderContext}
+              />
               <RangeEditingOverlay
                 canvas={canvas}
                 onInteractionEnd={onRangeInteractionEnd}
@@ -131,7 +152,24 @@ export function CanvasPreview({
               role="img"
               viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
               xmlns="http://www.w3.org/2000/svg"
-            />
+            >
+              <VisualLayers
+                hoveredLayerId={hoveredLayerId}
+                layers={project.layers}
+                renderContext={renderContext}
+              />
+              {selectedLayer?.type === "tick-scale" ? (
+                <TickScaleEditingOverlay
+                  canvas={canvas}
+                  layer={selectedLayer}
+                  onInteractionEnd={onLayerInteractionEnd}
+                  onInteractionStart={onLayerInteractionStart}
+                  onLayerChange={onLayerChange}
+                  project={project}
+                  snapping={snapping}
+                />
+              ) : null}
+            </svg>
           ) : null}
         </div>
       </div>
@@ -151,4 +189,23 @@ export function CanvasPreview({
       </p>
     </section>
   );
+}
+
+function VisualLayers({
+  hoveredLayerId,
+  layers,
+  renderContext,
+}: {
+  hoveredLayerId: string | null;
+  layers: LayerDto[];
+  renderContext: { project: ProjectDto; rangeById: ReadonlyMap<string, RangeDto> };
+}) {
+  const previewLayers = hoveredLayerId
+    ? layers.filter((layer) => layer.id === hoveredLayerId)
+    : layers;
+  return previewLayers
+    .toReversed()
+    .map((layer) => ({ id: layer.id, svg: createLayerModel(layer).toSvg(renderContext) }))
+    .filter((layer) => layer.svg)
+    .map((layer) => <g dangerouslySetInnerHTML={{ __html: layer.svg }} key={layer.id} />);
 }

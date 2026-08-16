@@ -4,6 +4,13 @@ export const PROJECT_VALIDATION_CODES = {
   missingRangeReference: "project.validation.missingRangeReference",
   rangeCenterOutsideCanvas: "project.validation.rangeCenterOutsideCanvas",
   rangeRadiusOutsideCanvasLimit: "project.validation.rangeRadiusOutsideCanvasLimit",
+  tickScaleRadiusNonPositive: "project.validation.tickScaleRadiusNonPositive",
+  tickScaleRadiusOffsetOutsideRange: "project.validation.tickScaleRadiusOffsetOutsideRange",
+  tickScaleLengthOutsideRadius: "project.validation.tickScaleLengthOutsideRadius",
+  tickScaleWidthExceedsLength: "project.validation.tickScaleWidthExceedsLength",
+  tickScaleValueOutsideRange: "project.validation.tickScaleValueOutsideRange",
+  tickScaleValueStartAfterEnd: "project.validation.tickScaleValueStartAfterEnd",
+  tickScaleTooManyMarks: "project.validation.tickScaleTooManyMarks",
   scaleStartEqualsEnd: "project.validation.scaleStartEqualsEnd",
   customScaleNotMonotonic: "project.validation.customScaleNotMonotonic",
 } as const;

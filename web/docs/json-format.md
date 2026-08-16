@@ -27,11 +27,20 @@ required `rangeId`, which must reference an item in `ranges`. A Range has no
 final SVG representation. Every object has a stable UUID and a non-empty,
 user-editable `name`.
 
-The current supported visual discriminant is `tick-scale`, establishing the
-reference contract for the later tick-scale vertical slice. It has no final
-renderer yet. It never controls whether values are linear, logarithmic, or
-custom: that mapping belongs to its referenced Range. New layer types will
-extend the strict Zod discriminated union in their own implementation stage.
+The currently supported visual discriminant is `tick-scale`. It renders radial
+marks over the referenced Range arc and has these required fields:
+`valueStart`, `valueEnd`, positive `valueStep`, `tickLengthMm` (at least 0.2
+mm), `tickWidthMm` (at least 0.1 mm), `radiusOffsetMm`,
+`cornerRadiusPercent` (0–50), and hexadecimal `color`. Visible values must be
+within the source Range and produce at most 200 marks. At 50%, Tick Scale follows
+the familiar circular Range; reducing the corner radius makes it follow a
+rounded square inscribed in that Range. The spatial limits are dynamic: its
+effective radius is the Range radius plus offset and must stay between 0.2 mm
+and twice the Range radius; tick length cannot exceed that effective radius, and
+tick width cannot exceed tick length. A Range update clamps dependent Tick Scale
+values. Tick positions use the linear, logarithmic, or custom mapping belonging
+to the source Range. New layer types will extend the strict Zod discriminated
+union in their own implementation stage.
 
 Every physical value is a number in millimetres. Angles are degrees. Range
 stores `centerX`, `centerY`, `radius`, `angleStart`, `openingAngle`, and

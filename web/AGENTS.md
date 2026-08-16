@@ -96,8 +96,23 @@ Keep those documents current. Put completed-stage evidence in
   independently at bottom-right.
 - Layer index `0` is the topmost visual layer; higher indexes are progressively
   lower. SVG rendering must therefore emit visual layers in reverse list order.
+- Hovering a visual-layer thumbnail temporarily isolates that layer in the
+  preview. It must not alter selection, sidebar mode, project data, or history.
 - A Range center must stay on the canvas. Its radius may extend beyond a nearby
   edge, but must be from 5 mm to half the canvas's longest edge.
+- Tick Scale spatial limits derive from its source Range: offset keeps its
+  effective radius between 0.2 mm and twice the Range radius, tick length does
+  not exceed that effective radius, and tick width does not exceed tick length.
+  Reducing a Range clamps dependent Tick Scale geometry in the same project
+  mutation.
+- Tick Scale has a `cornerRadiusPercent` path parameter: `50` is a circle;
+  lower values form an inscribed rounded square. It is layer-owned, while the
+  Range still supplies centre, scale span, and base size.
+- Tick Scale defines its own visible `valueStart`, `valueEnd`, and positive
+  `valueStep`, constrained to its source Range's mapping domain. It renders at
+  most 200 marks and derives each position through that Range's mapping.
+- An edge line must be a future independent visual layer, not a Tick Scale
+  option; that keeps it compatible with adjustable path rounding.
 - Canvas background is project data. `transparentBackground` defaults to `true`;
   while enabled, the saved background color is retained but not rendered.
 
@@ -118,8 +133,8 @@ Keep those documents current. Put completed-stage evidence in
   while canvas dimensions are project data.
 - Use `dnd-kit` for visual-layer ordering; rely on its sortable motion rather
   than adding a separate drop-target indicator.
-- The initial store state in `NODE_ENV=development` uses a deterministic
-  workbench project with one Range and three Tick Scale layers. Production and
+- The initial store state in `NODE_ENV=development` uses a deterministic Apple
+  Clock workbench project with one Range and two Tick Scale layers. Production and
   explicit New project flows remain empty.
 
 ## Quality and future slices

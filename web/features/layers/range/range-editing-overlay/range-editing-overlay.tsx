@@ -30,11 +30,18 @@ export function RangeEditingOverlay({
   const radius = handles.find((handle) => handle.id === "radius")!.point;
   const largeArc = Math.abs(range.openingAngle) > 180 ? 1 : 0;
   const sweep = range.openingAngle >= 0 ? 1 : 0;
-  const arcPath = `M ${start.x} ${start.y} A ${range.radius} ${range.radius} 0 ${largeArc} ${sweep} ${end.x} ${end.y}`;
+  const isFullCircle = Math.abs(range.openingAngle) === 360;
+  const midpoint = isFullCircle
+    ? pointAtAngle(range.centerX, range.centerY, range.radius, range.angleStart + 180)
+    : undefined;
+  const arcPath = isFullCircle
+    ? `M ${start.x} ${start.y} A ${range.radius} ${range.radius} 0 0 ${sweep} ${midpoint!.x} ${midpoint!.y} A ${range.radius} ${range.radius} 0 0 ${sweep} ${end.x} ${end.y}`
+    : `M ${start.x} ${start.y} A ${range.radius} ${range.radius} 0 ${largeArc} ${sweep} ${end.x} ${end.y}`;
 
   return (
     <g aria-label={t("overlayAriaLabel")} data-testid="range-editing-overlay">
       <path
+        data-testid="range-overlay-arc"
         d={arcPath}
         fill="none"
         pointerEvents="none"
@@ -113,4 +120,9 @@ export function RangeEditingOverlay({
 
 function formatValue(value: number): string {
   return Number.isInteger(value) ? String(value) : value.toFixed(1);
+}
+
+function pointAtAngle(centerX: number, centerY: number, radius: number, angle: number) {
+  const radians = (angle * Math.PI) / 180;
+  return { x: centerX + radius * Math.cos(radians), y: centerY + radius * Math.sin(radians) };
 }
