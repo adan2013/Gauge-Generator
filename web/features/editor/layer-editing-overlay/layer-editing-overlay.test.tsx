@@ -1,0 +1,35 @@
+import { screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import {
+  createNumericScaleLayer,
+  createProject,
+  createRange,
+  createTickScaleLayer,
+} from "@/features/project/factories/project-factories";
+import { renderEditor } from "@/test/render-editor";
+import { LayerEditingOverlay } from "./layer-editing-overlay";
+
+describe("LayerEditingOverlay", () => {
+  const range = createRange();
+  const baseProps = {
+    canvas: createProject().canvas,
+    onInteractionEnd: vi.fn(),
+    onInteractionStart: vi.fn(),
+    onLayerChange: vi.fn(),
+    project: createProject({ ranges: [range] }),
+    snapping: { angleDegrees: 10, distanceMm: 2, enabled: true },
+  };
+
+  it.each([
+    ["tick-scale", createTickScaleLayer(range.id), "tick-scale-editing-overlay"],
+    ["numeric-scale", createNumericScaleLayer(range.id), "numeric-scale-editing-overlay"],
+  ] as const)("selects the %s overlay from the registry", (_, layer, testId) => {
+    renderEditor(
+      <svg>
+        <LayerEditingOverlay {...baseProps} layer={layer} />
+      </svg>,
+    );
+
+    expect(screen.getByTestId(testId)).toBeTruthy();
+  });
+});

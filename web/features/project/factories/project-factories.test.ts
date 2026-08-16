@@ -1,27 +1,52 @@
 import { describe, expect, it } from "vitest";
 import {
   createDevelopmentProject,
+  createLayerFromType,
+  createNumericScaleLayer,
   createRange,
   createTickScaleLayer,
   resetLayerToDefaults,
 } from "./project-factories";
 
 describe("createDevelopmentProject", () => {
-  it("provides an Apple Clock workbench with one Range and two Tick Scale layers", () => {
+  it("provides an Apple Clock workbench with Tick Scale and Numeric Scale layers", () => {
     const project = createDevelopmentProject();
 
     expect(project.ranges).toHaveLength(1);
-    expect(project.layers).toHaveLength(2);
-    expect(
-      project.layers.every(
-        (layer) => layer.type === "tick-scale" && layer.rangeId === project.ranges[0].id,
-      ),
-    ).toBe(true);
-    expect(project.ranges[0]).toMatchObject({ angleStart: 0, openingAngle: 360, radius: 48 });
+    expect(project.layers).toHaveLength(3);
+    expect(project.layers.every((layer) => layer.rangeId === project.ranges[0].id)).toBe(true);
+    expect(project.ranges[0]).toMatchObject({
+      angleStart: 270,
+      openingAngle: 360,
+      radius: 48,
+    });
+    expect(project.canvas).toMatchObject({ background: "#FFFFFF", transparentBackground: false });
+    expect(project.layers.filter((layer) => layer.type === "tick-scale")).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ cornerRadiusPercent: 30, color: "#C4C4C4" }),
+        expect.objectContaining({ cornerRadiusPercent: 30, color: "#3F3F3F" }),
+      ]),
+    );
     expect(project.layers.map((layer) => layer.name)).toEqual([
-      "Minute markers",
       "Inner hour markers",
+      "Minute markers",
+      "Cardinal hour labels",
     ]);
+  });
+});
+
+describe("createLayerFromType", () => {
+  it("creates a visual layer from its registered type", () => {
+    const range = createRange();
+
+    expect(createLayerFromType("tick-scale", range.id)).toMatchObject({
+      rangeId: range.id,
+      type: "tick-scale",
+    });
+    expect(createLayerFromType("numeric-scale", range.id)).toMatchObject({
+      rangeId: range.id,
+      type: "numeric-scale",
+    });
   });
 });
 
@@ -44,6 +69,19 @@ describe("resetLayerToDefaults", () => {
       color: "#20242B",
       radiusOffsetMm: 0,
       valueEnd: 100,
+    });
+  });
+
+  it("restores Numeric Scale settings without losing identity or its Range", () => {
+    const range = createRange();
+    const layer = createNumericScaleLayer(range.id, { name: "Labels", fontSizeMm: 8, bold: true });
+
+    expect(resetLayerToDefaults(layer)).toMatchObject({
+      id: layer.id,
+      name: "Labels",
+      rangeId: range.id,
+      fontSizeMm: 3,
+      bold: false,
     });
   });
 });

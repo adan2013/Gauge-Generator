@@ -80,10 +80,12 @@
         "eyebrow": "New layer",
         "title": "Choose a layer type",
         "description": "Select the visual element you want to add to this gauge.",
-        "tickScaleDescription": "Draw radial tick marks using the selected Range."
+        "tickScaleDescription": "Draw radial tick marks using the selected Range.",
+        "numericScaleDescription": "Draw value labels using the selected Range."
       },
       "types": {
-        "tickScale": "Tick scale"
+        "tickScale": "Tick scale",
+        "numericScale": "Numeric scale"
       },
       "editLayer": "Edit {name}",
       "deleteLayer": "Delete {name}",
@@ -180,6 +182,27 @@
       "handleValues": {
         "radiusOffset": "{value} mm"
       }
+    },
+    "numericScale": {
+      "range": "Visible value range",
+      "geometry": "Geometry",
+      "font": "Font",
+      "valueStart": "Start value",
+      "valueEnd": "End value",
+      "valueStep": "Value step",
+      "scaleMultiplier": "Value multiplier",
+      "decimalPlaces": "Decimal places",
+      "radiusOffset": "Radius offset",
+      "fontSize": "Font size",
+      "fontFamily": "Font family",
+      "bold": "Bold",
+      "italic": "Italic",
+      "underline": "Underline",
+      "rotated": "Rotate text",
+      "color": "Color",
+      "overlayAriaLabel": "Numeric scale editing overlay",
+      "handles": { "radiusOffset": "Adjust label radius" },
+      "handleValues": { "radiusOffset": "{value} mm" }
     },
     "layerEditor": {
       "reset": "Reset layer",

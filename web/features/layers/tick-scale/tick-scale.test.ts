@@ -99,7 +99,7 @@ describe("TickScaleLayer", () => {
     expect(new TickScaleLayer({ ...layer, radiusOffsetMm: -40 }).validate(context)).toEqual([
       {
         path: "radiusOffsetMm",
-        code: "project.validation.tickScaleRadiusNonPositive",
+        code: "project.validation.valueMustBePositive",
       },
     ]);
   });

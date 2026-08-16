@@ -11,6 +11,7 @@ import { Tooltip } from "@/components/atoms/tooltip/tooltip";
 import { useConfirmation } from "@/components/providers/confirmation-provider/confirmation-provider";
 import { LayerThumbnail } from "@/features/layers/core/layer-thumbnail/layer-thumbnail";
 import {
+  LAYER_TYPE,
   MAX_RANGES,
   type LayerDto,
   type ProjectDto,
@@ -271,6 +272,10 @@ function SortableLayerRow({
     : t("showLayer", { name: layer.name });
   const duplicateLabel = t("duplicateLayer", { name: layer.name });
   const deleteLabel = t("deleteLayer", { name: layer.name });
+  const layerTypeLabelKey = {
+    [LAYER_TYPE.tickScale]: "types.tickScale",
+    [LAYER_TYPE.numericScale]: "types.numericScale",
+  } as const;
   return (
     <li
       className={cn("rounded-lg border border-border bg-app", isDragging && "opacity-50")}
@@ -318,7 +323,9 @@ function SortableLayerRow({
           >
             {layer.name}
           </span>
-          <span className="mt-0.5 block text-xs text-muted">{t("types.tickScale")}</span>
+          <span className="mt-0.5 block text-xs text-muted">
+            {t(layerTypeLabelKey[layer.type])}
+          </span>
         </button>
         <Tooltip content={visibilityLabel}>
           <button

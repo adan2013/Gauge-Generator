@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   createProject,
   createRange,
+  createNumericScaleLayer,
   createTickScaleLayer,
 } from "@/features/project/factories/project-factories";
 import { ProjectSchema, validateProject } from "./project-dto";
@@ -84,6 +85,20 @@ describe("ProjectSchema", () => {
     expect(validateProject(invalidLayerProject).issues).not.toEqual([]);
   });
 
+  it("validates Numeric Scale as an independent visual layer tied to a Range", () => {
+    const range = createRange();
+    const layer = createNumericScaleLayer(range.id, { fontSizeMm: 4 });
+
+    expect(validateProject(createProject({ ranges: [range], layers: [layer] })).issues).toEqual([]);
+    expect(
+      validateProject(createProject({ ranges: [range], layers: [{ ...layer, fontSizeMm: 50 }] }))
+        .issues,
+    ).toContainEqual({
+      path: `layers.${layer.id}.fontSizeMm`,
+      code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange,
+    });
+  });
+
   it("rejects a Tick Scale whose radius offset would create a non-positive rendered radius", () => {
     const range = createRange({ radius: 20 });
     const layer = createTickScaleLayer(range.id, { radiusOffsetMm: -20 });
@@ -92,7 +107,7 @@ describe("ProjectSchema", () => {
       validateProject(createProject({ ranges: [range], layers: [layer] })).issues,
     ).toContainEqual({
       path: `layers.${layer.id}.radiusOffsetMm`,
-      code: PROJECT_VALIDATION_CODES.tickScaleRadiusNonPositive,
+      code: PROJECT_VALIDATION_CODES.valueMustBePositive,
     });
   });
 });

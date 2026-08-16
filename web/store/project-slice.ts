@@ -3,7 +3,7 @@ import {
   createDevelopmentProject,
   createProject,
 } from "@/features/project/factories/project-factories";
-import { constrainTickScaleToRange } from "@/features/layers/tick-scale/tick-scale-constraints";
+import { constrainLayerToRange } from "@/features/layers/core/layer-registry";
 import {
   MAX_LAYERS,
   validateProject,
@@ -27,9 +27,8 @@ function commitProjectMutation(state: ProjectState, mutate: (project: ProjectDto
   const candidate = structuredClone(current(state.current));
   if (!mutate(candidate)) return;
   candidate.layers = candidate.layers.map((layer) => {
-    if (layer.type !== "tick-scale") return layer;
     const range = candidate.ranges.find((item) => item.id === layer.rangeId);
-    return range ? constrainTickScaleToRange(layer, range) : layer;
+    return range ? constrainLayerToRange(layer, range) : layer;
   });
   touch(candidate);
   const result = validateProject(candidate);

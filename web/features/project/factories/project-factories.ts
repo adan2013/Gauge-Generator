@@ -1,9 +1,15 @@
-import { PROJECT_FORMAT, PROJECT_VERSION } from "@/features/project/project-dto/project-dto";
+import {
+  LAYER_TYPE,
+  PROJECT_FORMAT,
+  PROJECT_VERSION,
+  type LayerType,
+} from "@/features/project/project-dto/project-dto";
 import type {
   LayerDto,
   ProjectDto,
   RangeDto,
   TickScaleLayerDto,
+  NumericScaleLayerDto,
 } from "@/features/project/project-dto/project-dto";
 
 const DEFAULT_TIMESTAMP = "2026-01-01T00:00:00.000Z";
@@ -31,7 +37,7 @@ export function createTickScaleLayer(
     name: "Tick scale",
     visible: true,
     rangeId,
-    type: "tick-scale",
+    type: LAYER_TYPE.tickScale,
     valueStart: 0,
     valueEnd: 100,
     valueStep: 10,
@@ -44,16 +50,55 @@ export function createTickScaleLayer(
   };
 }
 
+export function createNumericScaleLayer(
+  rangeId: string,
+  overrides: Partial<NumericScaleLayerDto> = {},
+): NumericScaleLayerDto {
+  return {
+    id: crypto.randomUUID(),
+    name: "Numeric scale",
+    visible: true,
+    rangeId,
+    type: LAYER_TYPE.numericScale,
+    valueStart: 0,
+    valueEnd: 100,
+    valueStep: 10,
+    scaleMultiplier: 1,
+    decimalPlaces: 0,
+    radiusOffsetMm: -8,
+    fontSizeMm: 3,
+    fontFamily: "Arial",
+    bold: false,
+    italic: false,
+    underline: false,
+    rotated: false,
+    color: "#20242B",
+    ...overrides,
+  };
+}
+
+const LAYER_FACTORIES = {
+  [LAYER_TYPE.tickScale]: (rangeId: string, overrides: Partial<LayerDto>) =>
+    createTickScaleLayer(rangeId, overrides as never),
+  [LAYER_TYPE.numericScale]: (rangeId: string, overrides: Partial<LayerDto>) =>
+    createNumericScaleLayer(rangeId, overrides as never),
+} satisfies Record<LayerType, (rangeId: string, overrides: Partial<LayerDto>) => LayerDto>;
+
+export function createLayerFromType(
+  type: LayerType,
+  rangeId: string,
+  overrides: Partial<LayerDto> = {},
+): LayerDto {
+  return LAYER_FACTORIES[type](rangeId, overrides);
+}
+
 /** Restores layer-owned visual settings while keeping its project identity and source Range. */
 export function resetLayerToDefaults(layer: LayerDto): LayerDto {
-  switch (layer.type) {
-    case "tick-scale":
-      return createTickScaleLayer(layer.rangeId, {
-        id: layer.id,
-        name: layer.name,
-        visible: layer.visible,
-      });
-  }
+  return createLayerFromType(layer.type, layer.rangeId, {
+    id: layer.id,
+    name: layer.name,
+    visible: layer.visible,
+  });
 }
 
 export function createProject(overrides: Partial<ProjectDto> = {}): ProjectDto {
@@ -72,7 +117,7 @@ export function createProject(overrides: Partial<ProjectDto> = {}): ProjectDto {
 export function createDevelopmentProject(): ProjectDto {
   const range = createRange({
     name: "Apple Clock range",
-    angleStart: 0,
+    angleStart: 270,
     openingAngle: 360,
     radius: 48,
     scaleDefinition: { mode: "linear", start: 0, end: 60 },
@@ -83,27 +128,46 @@ export function createDevelopmentProject(): ProjectDto {
       createdAt: DEFAULT_TIMESTAMP,
       updatedAt: DEFAULT_TIMESTAMP,
     },
+    canvas: {
+      widthMm: 120,
+      heightMm: 120,
+      background: "#FFFFFF",
+      transparentBackground: false,
+    },
     ranges: [range],
     layers: [
+      createTickScaleLayer(range.id, {
+        name: "Inner hour markers",
+        radiusOffsetMm: 0,
+        valueStart: 0,
+        valueEnd: 60,
+        valueStep: 5,
+        tickLengthMm: 7,
+        tickWidthMm: 1.35,
+        cornerRadiusPercent: 30,
+        color: "#3F3F3F",
+      }),
       createTickScaleLayer(range.id, {
         name: "Minute markers",
         radiusOffsetMm: 0,
         valueStart: 0,
         valueEnd: 60,
         valueStep: 1,
-        tickLengthMm: 1.7,
-        tickWidthMm: 0.45,
-        cornerRadiusPercent: 22,
+        tickLengthMm: 2.2,
+        tickWidthMm: 0.55,
+        cornerRadiusPercent: 30,
+        color: "#C4C4C4",
       }),
-      createTickScaleLayer(range.id, {
-        name: "Inner hour markers",
-        radiusOffsetMm: -8,
-        valueStart: 0,
+      createNumericScaleLayer(range.id, {
+        name: "Cardinal hour labels",
+        valueStart: 15,
         valueEnd: 60,
-        valueStep: 5,
-        tickLengthMm: 2.5,
-        tickWidthMm: 0.8,
-        cornerRadiusPercent: 26,
+        valueStep: 15,
+        scaleMultiplier: 1 / 5,
+        radiusOffsetMm: -15,
+        fontSizeMm: 16,
+        bold: true,
+        color: "#3F3F3F",
       }),
     ],
   });

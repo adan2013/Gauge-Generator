@@ -49,6 +49,10 @@ Keep those documents current. Put completed-stage evidence in
   `RangePropertyRow`, `SelectPropertyRow`, `ColorPropertyRow`, and
   `BooleanPropertyRow`. Add a control there before introducing another field
   type; do not recreate controls or their interaction styling inside a panel.
+- Keep layer-owned UI in that layer's directory: its property editor,
+  property definitions, editing overlay, and tests evolve together. Editor
+  shells may select a layer editor through a small registry, but must not grow
+  type-specific forms, render branches, or per-layer update logic.
 - Prefer composable APIs over boolean-prop proliferation.
 - Destructive actions use the root-mounted `ConfirmationProvider` and its
   promise-based `useConfirmation().confirm(request)` API. Keep modal mounting,
@@ -150,8 +154,8 @@ Keep those documents current. Put completed-stage evidence in
   (the preceding, visually higher index), with a fresh ID and a `_Copy` name
   suffix. It is a project mutation and therefore participates in Undo/Redo.
 - The initial store state in `NODE_ENV=development` uses a deterministic Apple
-  Clock workbench project with one Range and two Tick Scale layers. Production and
-  explicit New project flows remain empty.
+  Clock workbench project with one Range, two Tick Scale layers, and one Numeric
+  Scale layer. Production and explicit New project flows remain empty.
 
 ## Quality and future slices
 

@@ -4,9 +4,9 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { BookOpen, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ActionButton } from "@/components/atoms/action-button/action-button";
+import { LayerEditingOverlay } from "@/features/editor/layer-editing-overlay/layer-editing-overlay";
 import { createLayerModel } from "@/features/layers/core/layer-registry";
 import { RangeEditingOverlay } from "@/features/layers/range/range-editing-overlay/range-editing-overlay";
-import { TickScaleEditingOverlay } from "@/features/layers/tick-scale/tick-scale-editing-overlay/tick-scale-editing-overlay";
 import type { LayerDto, ProjectDto, RangeDto } from "@/features/project/project-dto/project-dto";
 import type { LayerPreviewModifiers } from "@/store/editor-slice";
 
@@ -165,8 +165,8 @@ export function CanvasPreview({
                 renderContext={renderContext}
                 selectedLayerId={selectedLayer?.id}
               />
-              {selectedLayer?.type === "tick-scale" && layerPreviewModifiers.showEditingOverlay ? (
-                <TickScaleEditingOverlay
+              {selectedLayer && layerPreviewModifiers.showEditingOverlay ? (
+                <LayerEditingOverlay
                   canvas={canvas}
                   layer={selectedLayer}
                   onInteractionEnd={onLayerInteractionEnd}

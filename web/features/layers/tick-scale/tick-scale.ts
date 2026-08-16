@@ -36,29 +36,25 @@ export class TickScaleLayer extends Layer<TickScaleLayerDto> {
     if (!range) return [{ path: "rangeId", code: PROJECT_VALIDATION_CODES.missingRangeReference }];
     const effectiveRadiusMm = range.radius + this.dto.radiusOffsetMm;
     if (effectiveRadiusMm <= 0)
-      return [
-        { path: "radiusOffsetMm", code: PROJECT_VALIDATION_CODES.tickScaleRadiusNonPositive },
-      ];
+      return [{ path: "radiusOffsetMm", code: PROJECT_VALIDATION_CODES.valueMustBePositive }];
     if (this.dto.radiusOffsetMm > range.radius)
       return [
         {
           path: "radiusOffsetMm",
-          code: PROJECT_VALIDATION_CODES.tickScaleRadiusOffsetOutsideRange,
+          code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange,
         },
       ];
     if (this.dto.tickLengthMm > effectiveRadiusMm)
-      return [
-        { path: "tickLengthMm", code: PROJECT_VALIDATION_CODES.tickScaleLengthOutsideRadius },
-      ];
+      return [{ path: "tickLengthMm", code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange }];
     if (this.dto.tickWidthMm > this.dto.tickLengthMm)
-      return [{ path: "tickWidthMm", code: PROJECT_VALIDATION_CODES.tickScaleWidthExceedsLength }];
+      return [{ path: "tickWidthMm", code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange }];
     const valueBounds = getScaleValueBounds(range);
     if (this.dto.valueStart < valueBounds.min || this.dto.valueEnd > valueBounds.max)
-      return [{ path: "valueStart", code: PROJECT_VALIDATION_CODES.tickScaleValueOutsideRange }];
+      return [{ path: "valueStart", code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange }];
     if (this.dto.valueStart > this.dto.valueEnd)
-      return [{ path: "valueStart", code: PROJECT_VALIDATION_CODES.tickScaleValueStartAfterEnd }];
+      return [{ path: "valueStart", code: PROJECT_VALIDATION_CODES.valueStartAfterEnd }];
     if (getTickScaleMarkCount(this.dto) > 200)
-      return [{ path: "valueStep", code: PROJECT_VALIDATION_CODES.tickScaleTooManyMarks }];
+      return [{ path: "valueStep", code: PROJECT_VALIDATION_CODES.tooManyGeneratedItems }];
     return [];
   }
 

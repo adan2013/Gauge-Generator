@@ -1,5 +1,8 @@
 import { z } from "zod";
+import { getLayerProjectValidationIssues } from "@/features/layers/core/layer-project-validation";
 import { PROJECT_VALIDATION_CODES, type ProjectValidationCode } from "./project-validation-codes";
+export { LAYER_TYPE, type LayerType } from "./layer-type";
+import { LAYER_TYPE } from "./layer-type";
 
 export const PROJECT_FORMAT = "gauge-generator-web" as const;
 export const PROJECT_VERSION = 1 as const;
@@ -55,7 +58,7 @@ const LayerBaseSchema = z
   .strict();
 
 const TickScaleLayerSchema = LayerBaseSchema.extend({
-  type: z.literal("tick-scale"),
+  type: z.literal(LAYER_TYPE.tickScale),
   valueStart: z.number(),
   valueEnd: z.number(),
   valueStep: z.number().positive(),
@@ -66,7 +69,27 @@ const TickScaleLayerSchema = LayerBaseSchema.extend({
   color: HexColorSchema,
 }).strict();
 
-export const LayerSchema = z.discriminatedUnion("type", [TickScaleLayerSchema]);
+const NumericScaleLayerSchema = LayerBaseSchema.extend({
+  type: z.literal(LAYER_TYPE.numericScale),
+  valueStart: z.number(),
+  valueEnd: z.number(),
+  valueStep: z.number().positive(),
+  scaleMultiplier: z.number().gt(0).max(100),
+  decimalPlaces: z.number().int().min(0).max(4),
+  radiusOffsetMm: z.number().min(-500).max(500),
+  fontSizeMm: z.number().min(0.5).max(50),
+  fontFamily: z.enum(["Arial", "Georgia", "Courier New"]),
+  bold: z.boolean(),
+  italic: z.boolean(),
+  underline: z.boolean(),
+  rotated: z.boolean(),
+  color: HexColorSchema,
+}).strict();
+
+export const LayerSchema = z.discriminatedUnion("type", [
+  TickScaleLayerSchema,
+  NumericScaleLayerSchema,
+]);
 
 export const CanvasSchema = z
   .object({
@@ -98,7 +121,8 @@ export const ProjectSchema = z
 export type ScaleDefinitionDto = z.infer<typeof ScaleDefinitionSchema>;
 export type RangeDto = z.infer<typeof RangeSchema>;
 export type LayerDto = z.infer<typeof LayerSchema>;
-export type TickScaleLayerDto = Extract<LayerDto, { type: "tick-scale" }>;
+export type TickScaleLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.tickScale }>;
+export type NumericScaleLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.numericScale }>;
 export type CanvasDto = z.infer<typeof CanvasSchema>;
 export type ProjectDto = z.infer<typeof ProjectSchema>;
 
@@ -139,50 +163,7 @@ export function validateProject(project: unknown): {
         code: PROJECT_VALIDATION_CODES.missingRangeReference,
       });
     const sourceRange = parsed.data.ranges.find((range) => range.id === layer.rangeId);
-    if (layer.type === "tick-scale" && sourceRange) {
-      const effectiveRadiusMm = sourceRange.radius + layer.radiusOffsetMm;
-      if (effectiveRadiusMm <= 0)
-        issues.push({
-          path: `layers.${layer.id}.radiusOffsetMm`,
-          code: PROJECT_VALIDATION_CODES.tickScaleRadiusNonPositive,
-        });
-      if (layer.radiusOffsetMm > sourceRange.radius)
-        issues.push({
-          path: `layers.${layer.id}.radiusOffsetMm`,
-          code: PROJECT_VALIDATION_CODES.tickScaleRadiusOffsetOutsideRange,
-        });
-      if (layer.tickLengthMm > effectiveRadiusMm)
-        issues.push({
-          path: `layers.${layer.id}.tickLengthMm`,
-          code: PROJECT_VALIDATION_CODES.tickScaleLengthOutsideRadius,
-        });
-      if (layer.tickWidthMm > layer.tickLengthMm)
-        issues.push({
-          path: `layers.${layer.id}.tickWidthMm`,
-          code: PROJECT_VALIDATION_CODES.tickScaleWidthExceedsLength,
-        });
-      const scaleValues =
-        sourceRange.scaleDefinition.mode === "custom"
-          ? sourceRange.scaleDefinition.points.map((point) => point.value)
-          : [sourceRange.scaleDefinition.start, sourceRange.scaleDefinition.end];
-      const scaleMinimum = Math.min(...scaleValues);
-      const scaleMaximum = Math.max(...scaleValues);
-      if (layer.valueStart < scaleMinimum || layer.valueEnd > scaleMaximum)
-        issues.push({
-          path: `layers.${layer.id}`,
-          code: PROJECT_VALIDATION_CODES.tickScaleValueOutsideRange,
-        });
-      if (layer.valueStart > layer.valueEnd)
-        issues.push({
-          path: `layers.${layer.id}.valueStart`,
-          code: PROJECT_VALIDATION_CODES.tickScaleValueStartAfterEnd,
-        });
-      if (Math.floor((layer.valueEnd - layer.valueStart) / layer.valueStep) + 1 > 200)
-        issues.push({
-          path: `layers.${layer.id}.valueStep`,
-          code: PROJECT_VALIDATION_CODES.tickScaleTooManyMarks,
-        });
-    }
+    if (sourceRange) issues.push(...getLayerProjectValidationIssues(layer, sourceRange));
   }
 
   for (const range of parsed.data.ranges) {

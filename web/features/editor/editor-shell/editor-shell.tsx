@@ -28,12 +28,13 @@ import { ProjectSettingsPanel } from "@/features/editor/project-settings-panel/p
 import { PropertiesPanel } from "@/features/editor/properties-panel/properties-panel";
 import {
   createRange,
-  createTickScaleLayer,
+  createLayerFromType,
   resetLayerToDefaults,
 } from "@/features/project/factories/project-factories";
 import {
   MAX_RANGES,
   type LayerDto,
+  type LayerType,
   type RangeDto,
 } from "@/features/project/project-dto/project-dto";
 import { cn } from "@/lib/cn";
@@ -96,12 +97,11 @@ export function EditorShell() {
     dispatch(editorActions.setSidebarMode("properties"));
     setStatus(t("status.layerPickerOpened"));
   }
-  function createLayer(type: "tick-scale") {
-    const sourceRange = project.ranges[0];
-    if (!sourceRange || type !== "tick-scale") return;
-    const layer = createTickScaleLayer(sourceRange.id, {
-      name: t("layers.defaultName", { number: project.layers.length + 1 }),
-    });
+  function createLayer(type: LayerType) {
+    const sourceRange = project.ranges.at(-1);
+    if (!sourceRange) return;
+    const name = t("layers.defaultName", { number: project.layers.length + 1 });
+    const layer = createLayerFromType(type, sourceRange.id, { name });
     dispatch(projectActions.addLayer(layer));
     openLayerProperties(layer.id);
   }
@@ -131,7 +131,8 @@ export function EditorShell() {
     if (selectedRange) dispatch(projectActions.updateRange({ ...selectedRange, ...change }));
   };
   const updateSelectedLayer = (change: Partial<LayerDto>) => {
-    if (selectedLayer) dispatch(projectActions.updateLayer({ ...selectedLayer, ...change }));
+    if (!selectedLayer) return;
+    dispatch(projectActions.updateLayer({ ...selectedLayer, ...change } as LayerDto));
   };
   const resetSelectedLayer = () => {
     if (!selectedLayer) return;
