@@ -1,6 +1,8 @@
 import type { NumericPropertyDefinition } from "@/features/layers/core/layer";
 import type { RangeDto, TickScaleLayerDto } from "@/features/project/project-dto/project-dto";
-import { getScaleValueBounds, getTickScaleGeometryBounds } from "./tick-scale-constraints";
+import { getRangeScaleValueBounds } from "@/features/ranges/scale-mapping/scale-mapping";
+import { getTickScaleGeometryBounds } from "./tick-scale-constraints";
+import { TICK_SCALE_LIMITS } from "./tick-scale-limits";
 
 export const TICK_SCALE_NUMERIC_PROPERTY_KEYS = [
   "valueStart",
@@ -37,7 +39,7 @@ export function getTickScaleNumericPropertyDefinitions(
   range: RangeDto | undefined,
 ): readonly TickScaleNumericPropertyDefinition[] {
   const bounds = range ? getTickScaleGeometryBounds(layer, range) : undefined;
-  const valueBounds = range ? getScaleValueBounds(range) : { min: -1_000_000, max: 1_000_000 };
+  const valueBounds = range ? getRangeScaleValueBounds(range) : { min: -1_000_000, max: 1_000_000 };
   return [
     {
       key: "valueStart",
@@ -101,8 +103,8 @@ export function getTickScaleNumericPropertyDefinitions(
       unit: "millimeters",
       snap: "distance",
       value: layer.tickLengthMm,
-      min: 0.2,
-      max: bounds?.maxTickLengthMm ?? 50,
+      min: TICK_SCALE_LIMITS.tickLengthMm.min,
+      max: bounds?.maxTickLengthMm ?? TICK_SCALE_LIMITS.tickLengthMm.max,
       step: 0.1,
     },
     {
@@ -112,8 +114,8 @@ export function getTickScaleNumericPropertyDefinitions(
       unit: "millimeters",
       snap: "none",
       value: layer.tickWidthMm,
-      min: 0.1,
-      max: bounds?.maxTickWidthMm ?? 10,
+      min: TICK_SCALE_LIMITS.tickWidthMm.min,
+      max: bounds?.maxTickWidthMm ?? TICK_SCALE_LIMITS.tickWidthMm.max,
       step: 0.1,
     },
   ];

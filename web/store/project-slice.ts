@@ -6,12 +6,12 @@ import {
 import { constrainLayerToRange } from "@/features/layers/core/layer-registry";
 import {
   MAX_LAYERS,
-  validateProject,
   type CanvasDto,
   type LayerDto,
   type ProjectDto,
   type RangeDto,
 } from "@/features/project/project-dto/project-dto";
+import { validateProject } from "@/features/project/project-dto/project-validation";
 
 type ProjectState = { current: ProjectDto };
 

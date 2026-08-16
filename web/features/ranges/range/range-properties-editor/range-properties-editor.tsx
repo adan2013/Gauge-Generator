@@ -11,7 +11,7 @@ import {
   getRangeNumericPropertyDefinitions,
   type LinearScalePropertyDefinition,
   type RangeNumericPropertyDefinition,
-} from "@/features/layers/range/range-properties";
+} from "@/features/ranges/range/range-properties";
 import type { CanvasDto, RangeDto } from "@/features/project/project-dto/project-dto";
 
 type RangePropertiesEditorProps = {

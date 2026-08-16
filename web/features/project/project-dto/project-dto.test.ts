@@ -5,7 +5,8 @@ import {
   createNumericScaleLayer,
   createTickScaleLayer,
 } from "@/features/project/factories/project-factories";
-import { ProjectSchema, validateProject } from "./project-dto";
+import { ProjectSchema } from "./project-dto";
+import { validateProject } from "./project-validation";
 import { PROJECT_VALIDATION_CODES } from "./project-validation-codes";
 
 describe("ProjectSchema", () => {
@@ -100,6 +101,18 @@ describe("ProjectSchema", () => {
   });
 
   it("rejects a Tick Scale whose radius offset would create a non-positive rendered radius", () => {
+    const range = createRange({ radius: 20 });
+    const layer = createTickScaleLayer(range.id, { radiusOffsetMm: -20 });
+
+    expect(
+      validateProject(createProject({ ranges: [range], layers: [layer] })).issues,
+    ).toContainEqual({
+      path: `layers.${layer.id}.radiusOffsetMm`,
+      code: PROJECT_VALIDATION_CODES.valueMustBePositive,
+    });
+  });
+
+  it("uses each domain object validate method to return JSON paths", () => {
     const range = createRange({ radius: 20 });
     const layer = createTickScaleLayer(range.id, { radiusOffsetMm: -20 });
 

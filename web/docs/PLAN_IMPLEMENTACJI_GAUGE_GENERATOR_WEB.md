@@ -55,9 +55,11 @@ web/
   features/
     editor/                     # use-case edytora, UI i kontroler uchwytów
     project/                    # DTO, Zod, migracje, serializacja, storage
+    ranges/                     # niezależna domena Range i mapowanie wartości
+      range/
+      scale-mapping/
     layers/                     # domena i implementacje warstw
       core/
-      range/
       tick-scale/
       numeric-scale/
       label/

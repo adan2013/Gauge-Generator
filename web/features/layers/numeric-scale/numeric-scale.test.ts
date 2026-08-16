@@ -62,6 +62,12 @@ describe("NumericScaleLayer", () => {
     expect(fields.find((field) => field.key === "fontSizeMm")).toMatchObject({ max: 32 });
   });
 
+  it("never exposes a font-size limit above the DTO maximum", () => {
+    const fields = getNumericScaleNumericPropertyDefinitions(layer, createRange({ radius: 500 }));
+
+    expect(fields.find((field) => field.key === "fontSizeMm")).toMatchObject({ max: 50 });
+  });
+
   it("snaps the label-radius handle and keeps the label circle valid", () => {
     const next = new NumericScaleLayer(layer).applyHandleDrag(
       "radius-offset",

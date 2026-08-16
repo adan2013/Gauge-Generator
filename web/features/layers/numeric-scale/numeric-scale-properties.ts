@@ -1,6 +1,7 @@
 import type { NumericPropertyDefinition } from "@/features/layers/core/layer";
 import type { NumericScaleLayerDto, RangeDto } from "@/features/project/project-dto/project-dto";
-import { getScaleValueBounds } from "@/features/layers/tick-scale/tick-scale-constraints";
+import { getRangeScaleValueBounds } from "@/features/ranges/scale-mapping/scale-mapping";
+import { NUMERIC_SCALE_LIMITS } from "./numeric-scale-limits";
 import { getNumericScaleGeometryBounds } from "./numeric-scale-constraints";
 
 export const NUMERIC_SCALE_NUMERIC_PROPERTY_KEYS = [
@@ -37,7 +38,7 @@ export function getNumericScaleNumericPropertyDefinitions(
   range: RangeDto | undefined,
 ): readonly NumericScaleNumericPropertyDefinition[] {
   const geometry = range ? getNumericScaleGeometryBounds(layer, range) : undefined;
-  const values = range ? getScaleValueBounds(range) : { min: -1_000_000, max: 1_000_000 };
+  const values = range ? getRangeScaleValueBounds(range) : { min: -1_000_000, max: 1_000_000 };
   return [
     {
       key: "valueStart",
@@ -112,8 +113,8 @@ export function getNumericScaleNumericPropertyDefinitions(
       unit: "millimeters",
       snap: "distance",
       value: layer.fontSizeMm,
-      min: 0.5,
-      max: geometry?.maxFontSizeMm ?? 50,
+      min: NUMERIC_SCALE_LIMITS.fontSizeMm.min,
+      max: geometry?.maxFontSizeMm ?? NUMERIC_SCALE_LIMITS.fontSizeMm.max,
       step: 0.1,
     },
   ];

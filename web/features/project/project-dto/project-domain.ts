@@ -1,4 +1,4 @@
-import { Range } from "@/features/layers/range/range";
+import { Range } from "@/features/ranges/range/range";
 import type { LayerDto, ProjectDto } from "./project-dto";
 
 export type ProjectDomain = {

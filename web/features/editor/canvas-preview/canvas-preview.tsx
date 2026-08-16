@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { ActionButton } from "@/components/atoms/action-button/action-button";
 import { LayerEditingOverlay } from "@/features/editor/layer-editing-overlay/layer-editing-overlay";
 import { createLayerModel } from "@/features/layers/core/layer-registry";
-import { RangeEditingOverlay } from "@/features/layers/range/range-editing-overlay/range-editing-overlay";
+import { RangeEditingOverlay } from "@/features/ranges/range/range-editing-overlay/range-editing-overlay";
 import type { LayerDto, ProjectDto, RangeDto } from "@/features/project/project-dto/project-dto";
 import type { LayerPreviewModifiers } from "@/store/editor-slice";
 

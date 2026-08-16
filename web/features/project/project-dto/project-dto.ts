@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { getLayerProjectValidationIssues } from "@/features/layers/core/layer-project-validation";
-import { PROJECT_VALIDATION_CODES, type ProjectValidationCode } from "./project-validation-codes";
+import { NUMERIC_SCALE_LIMITS } from "@/features/layers/numeric-scale/numeric-scale-limits";
+import { TICK_SCALE_LIMITS } from "@/features/layers/tick-scale/tick-scale-limits";
 export { LAYER_TYPE, type LayerType } from "./layer-type";
 import { LAYER_TYPE } from "./layer-type";
 
@@ -62,8 +62,14 @@ const TickScaleLayerSchema = LayerBaseSchema.extend({
   valueStart: z.number(),
   valueEnd: z.number(),
   valueStep: z.number().positive(),
-  tickLengthMm: z.number().min(0.2).max(50),
-  tickWidthMm: z.number().min(0.1).max(10),
+  tickLengthMm: z
+    .number()
+    .min(TICK_SCALE_LIMITS.tickLengthMm.min)
+    .max(TICK_SCALE_LIMITS.tickLengthMm.max),
+  tickWidthMm: z
+    .number()
+    .min(TICK_SCALE_LIMITS.tickWidthMm.min)
+    .max(TICK_SCALE_LIMITS.tickWidthMm.max),
   radiusOffsetMm: z.number().min(-500).max(500),
   cornerRadiusPercent: z.number().min(0).max(50),
   color: HexColorSchema,
@@ -77,7 +83,10 @@ const NumericScaleLayerSchema = LayerBaseSchema.extend({
   scaleMultiplier: z.number().gt(0).max(100),
   decimalPlaces: z.number().int().min(0).max(4),
   radiusOffsetMm: z.number().min(-500).max(500),
-  fontSizeMm: z.number().min(0.5).max(50),
+  fontSizeMm: z
+    .number()
+    .min(NUMERIC_SCALE_LIMITS.fontSizeMm.min)
+    .max(NUMERIC_SCALE_LIMITS.fontSizeMm.max),
   fontFamily: z.enum(["Arial", "Georgia", "Courier New"]),
   bold: z.boolean(),
   italic: z.boolean(),
@@ -126,80 +135,7 @@ export type NumericScaleLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.n
 export type CanvasDto = z.infer<typeof CanvasSchema>;
 export type ProjectDto = z.infer<typeof ProjectSchema>;
 
-export type ProjectValidationIssue = { path: string; code: ProjectValidationCode };
-
 /** A Range may overhang a nearby canvas edge, but its radius stays bounded. */
 export function getRangeRadiusMaximum(canvas: CanvasDto): number {
   return Math.max(canvas.widthMm, canvas.heightMm) / 2;
-}
-
-export function validateProject(project: unknown): {
-  data?: ProjectDto;
-  issues: ProjectValidationIssue[];
-} {
-  const parsed = ProjectSchema.safeParse(project);
-  if (!parsed.success) {
-    return {
-      issues: parsed.error.issues.map((issue) => ({
-        path: issue.path.join("."),
-        code: PROJECT_VALIDATION_CODES.invalidSchema,
-      })),
-    };
-  }
-
-  const issues: ProjectValidationIssue[] = [];
-  const ids = [
-    ...parsed.data.ranges.map((range) => range.id),
-    ...parsed.data.layers.map((layer) => layer.id),
-  ];
-  if (new Set(ids).size !== ids.length)
-    issues.push({ path: "", code: PROJECT_VALIDATION_CODES.duplicateObjectId });
-
-  const rangeIds = new Set(parsed.data.ranges.map((range) => range.id));
-  for (const layer of parsed.data.layers) {
-    if (!rangeIds.has(layer.rangeId))
-      issues.push({
-        path: `layers.${layer.id}.rangeId`,
-        code: PROJECT_VALIDATION_CODES.missingRangeReference,
-      });
-    const sourceRange = parsed.data.ranges.find((range) => range.id === layer.rangeId);
-    if (sourceRange) issues.push(...getLayerProjectValidationIssues(layer, sourceRange));
-  }
-
-  for (const range of parsed.data.ranges) {
-    if (range.centerX > parsed.data.canvas.widthMm)
-      issues.push({
-        path: `ranges.${range.id}.centerX`,
-        code: PROJECT_VALIDATION_CODES.rangeCenterOutsideCanvas,
-      });
-    if (range.centerY > parsed.data.canvas.heightMm)
-      issues.push({
-        path: `ranges.${range.id}.centerY`,
-        code: PROJECT_VALIDATION_CODES.rangeCenterOutsideCanvas,
-      });
-    if (range.radius > getRangeRadiusMaximum(parsed.data.canvas))
-      issues.push({
-        path: `ranges.${range.id}.radius`,
-        code: PROJECT_VALIDATION_CODES.rangeRadiusOutsideCanvasLimit,
-      });
-    const scale = range.scaleDefinition;
-    if (scale.mode !== "custom" && scale.start === scale.end)
-      issues.push({
-        path: `ranges.${range.id}.scaleDefinition`,
-        code: PROJECT_VALIDATION_CODES.scaleStartEqualsEnd,
-      });
-    if (scale.mode === "custom") {
-      for (let index = 1; index < scale.points.length; index += 1) {
-        const previous = scale.points[index - 1];
-        const point = scale.points[index];
-        if (point.value <= previous.value || point.position < previous.position)
-          issues.push({
-            path: `ranges.${range.id}.scaleDefinition.points.${index}`,
-            code: PROJECT_VALIDATION_CODES.customScaleNotMonotonic,
-          });
-      }
-    }
-  }
-
-  return issues.length > 0 ? { issues } : { data: parsed.data, issues: [] };
 }

@@ -1,7 +1,8 @@
 import type { LayerDto, ProjectDto, RangeDto } from "@/features/project/project-dto/project-dto";
+import type { ProjectValidationCode } from "@/features/project/project-dto/project-validation-codes";
 
 export type CanvasPointMm = { x: number; y: number };
-export type ValidationIssue = { path: string; code: string };
+export type ValidationIssue = { path: string; code: ProjectValidationCode };
 export type NumericPropertyDefinition<TKey extends string = string> = {
   key: TKey;
   max: number;

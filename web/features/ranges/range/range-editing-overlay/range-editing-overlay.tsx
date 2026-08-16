@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { LayerHandles } from "@/features/layers/core/layer-handles/layer-handles";
-import { Range } from "@/features/layers/range/range";
+import { Range } from "@/features/ranges/range/range";
 import type { CanvasDto, RangeDto } from "@/features/project/project-dto/project-dto";
 
 type RangeEditingOverlayProps = {

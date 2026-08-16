@@ -7,16 +7,15 @@ import {
   type RenderContext,
   type ValidationIssue,
 } from "@/features/layers/core/layer";
+import { getRangeMappedLayerValidationIssues } from "@/features/layers/core/range-layer-validation";
 import { PROJECT_VALIDATION_CODES } from "@/features/project/project-dto/project-validation-codes";
+import {
+  getScaleValues,
+  valueToNormalizedPosition,
+} from "@/features/ranges/scale-mapping/scale-mapping";
 import type { TickScaleLayerDto } from "@/features/project/project-dto/project-dto";
 import { clamp, normalizeAngle, snapDistanceMm } from "@/lib/geometry/geometry";
-import {
-  getTickScaleGeometryBounds,
-  getScaleValueBounds,
-  getTickScaleMarkCount,
-  getTickScaleValues,
-  valueToNormalizedPosition,
-} from "./tick-scale-constraints";
+import { getTickScaleGeometryBounds } from "./tick-scale-constraints";
 import { getTickScaleNumericPropertyDefinitions } from "./tick-scale-properties";
 
 export class TickScaleLayer extends Layer<TickScaleLayerDto> {
@@ -34,28 +33,19 @@ export class TickScaleLayer extends Layer<TickScaleLayerDto> {
   validate(context: RenderContext): ValidationIssue[] {
     const range = context.rangeById.get(this.dto.rangeId);
     if (!range) return [{ path: "rangeId", code: PROJECT_VALIDATION_CODES.missingRangeReference }];
+    const issues = getRangeMappedLayerValidationIssues(this.dto, range);
     const effectiveRadiusMm = range.radius + this.dto.radiusOffsetMm;
-    if (effectiveRadiusMm <= 0)
-      return [{ path: "radiusOffsetMm", code: PROJECT_VALIDATION_CODES.valueMustBePositive }];
-    if (this.dto.radiusOffsetMm > range.radius)
-      return [
-        {
-          path: "radiusOffsetMm",
-          code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange,
-        },
-      ];
     if (this.dto.tickLengthMm > effectiveRadiusMm)
-      return [{ path: "tickLengthMm", code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange }];
+      issues.push({
+        path: "tickLengthMm",
+        code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange,
+      });
     if (this.dto.tickWidthMm > this.dto.tickLengthMm)
-      return [{ path: "tickWidthMm", code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange }];
-    const valueBounds = getScaleValueBounds(range);
-    if (this.dto.valueStart < valueBounds.min || this.dto.valueEnd > valueBounds.max)
-      return [{ path: "valueStart", code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange }];
-    if (this.dto.valueStart > this.dto.valueEnd)
-      return [{ path: "valueStart", code: PROJECT_VALIDATION_CODES.valueStartAfterEnd }];
-    if (getTickScaleMarkCount(this.dto) > 200)
-      return [{ path: "valueStep", code: PROJECT_VALIDATION_CODES.tooManyGeneratedItems }];
-    return [];
+      issues.push({
+        path: "tickWidthMm",
+        code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange,
+      });
+    return issues;
   }
 
   toSvg(context: RenderContext): string {
@@ -63,7 +53,7 @@ export class TickScaleLayer extends Layer<TickScaleLayerDto> {
     if (!range || !this.dto.visible) return "";
     const radius = range.radius + this.dto.radiusOffsetMm;
     if (radius <= 0) return "";
-    return getTickScaleValues(this.dto, range)
+    return getScaleValues(this.dto, range)
       .map((value) => {
         const angle =
           range.angleStart + range.openingAngle * valueToNormalizedPosition(range, value);

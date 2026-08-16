@@ -6,7 +6,7 @@ import { ActionButton } from "@/components/atoms/action-button/action-button";
 import { LayerEditorControls } from "@/features/editor/layer-editor-controls/layer-editor-controls";
 import { LayerProperties } from "@/features/editor/layer-properties/layer-properties";
 import { LayerTypePicker } from "@/features/editor/layer-type-picker/layer-type-picker";
-import { RangePropertiesEditor } from "@/features/layers/range/range-properties-editor/range-properties-editor";
+import { RangePropertiesEditor } from "@/features/ranges/range/range-properties-editor/range-properties-editor";
 import type {
   CanvasDto,
   LayerDto,

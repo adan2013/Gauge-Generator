@@ -96,11 +96,16 @@ describe("TickScaleLayer", () => {
     );
 
     expect(nextLayer.radiusOffsetMm).toBe(-34);
-    expect(new TickScaleLayer({ ...layer, radiusOffsetMm: -40 }).validate(context)).toEqual([
-      {
-        path: "radiusOffsetMm",
-        code: "project.validation.valueMustBePositive",
-      },
-    ]);
+    expect(new TickScaleLayer({ ...layer, radiusOffsetMm: -40 }).validate(context)).toContainEqual({
+      path: "radiusOffsetMm",
+      code: "project.validation.valueMustBePositive",
+    });
+  });
+
+  it("never exposes a tick-length limit above the DTO maximum", () => {
+    const largeRange = createRange({ radius: 500 });
+    const fields = getTickScaleNumericPropertyDefinitions(layer, largeRange);
+
+    expect(fields.find((field) => field.key === "tickLengthMm")).toMatchObject({ max: 50 });
   });
 });

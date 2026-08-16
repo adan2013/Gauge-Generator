@@ -110,6 +110,20 @@ export class Range {
       issues.push({ path: "centerY", code: PROJECT_VALIDATION_CODES.rangeCenterOutsideCanvas });
     if (this.dto.radius > getRangeRadiusMaximum(context.project.canvas))
       issues.push({ path: "radius", code: PROJECT_VALIDATION_CODES.rangeRadiusOutsideCanvasLimit });
+    const scale = this.dto.scaleDefinition;
+    if (scale.mode !== "custom" && scale.start === scale.end)
+      issues.push({ path: "scaleDefinition", code: PROJECT_VALIDATION_CODES.scaleStartEqualsEnd });
+    if (scale.mode === "custom") {
+      for (let index = 1; index < scale.points.length; index += 1) {
+        const previous = scale.points[index - 1];
+        const point = scale.points[index];
+        if (point.value <= previous.value || point.position < previous.position)
+          issues.push({
+            path: `scaleDefinition.points.${index}`,
+            code: PROJECT_VALIDATION_CODES.customScaleNotMonotonic,
+          });
+      }
+    }
     return issues;
   }
 }

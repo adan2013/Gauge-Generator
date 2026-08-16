@@ -6,18 +6,15 @@ import type {
   ValidationIssue,
 } from "@/features/layers/core/layer";
 import { Layer } from "@/features/layers/core/layer";
+import { getRangeMappedLayerValidationIssues } from "@/features/layers/core/range-layer-validation";
 import { PROJECT_VALIDATION_CODES } from "@/features/project/project-dto/project-validation-codes";
+import {
+  getScaleValues,
+  valueToNormalizedPosition,
+} from "@/features/ranges/scale-mapping/scale-mapping";
 import type { NumericScaleLayerDto } from "@/features/project/project-dto/project-dto";
 import { clamp, normalizeAngle, snapDistanceMm } from "@/lib/geometry/geometry";
-import {
-  getScaleValueBounds,
-  valueToNormalizedPosition,
-} from "@/features/layers/tick-scale/tick-scale-constraints";
-import {
-  getNumericScaleGeometryBounds,
-  getNumericScaleLabelCount,
-  getNumericScaleValues,
-} from "./numeric-scale-constraints";
+import { getNumericScaleGeometryBounds } from "./numeric-scale-constraints";
 import { getNumericScaleNumericPropertyDefinitions } from "./numeric-scale-properties";
 
 export class NumericScaleLayer extends Layer<NumericScaleLayerDto> {
@@ -35,26 +32,14 @@ export class NumericScaleLayer extends Layer<NumericScaleLayerDto> {
   validate(context: RenderContext): ValidationIssue[] {
     const range = context.rangeById.get(this.dto.rangeId);
     if (!range) return [{ path: "rangeId", code: PROJECT_VALIDATION_CODES.missingRangeReference }];
+    const issues = getRangeMappedLayerValidationIssues(this.dto, range);
     const radius = range.radius + this.dto.radiusOffsetMm;
-    if (radius <= 0)
-      return [{ path: "radiusOffsetMm", code: PROJECT_VALIDATION_CODES.valueMustBePositive }];
-    if (this.dto.radiusOffsetMm > range.radius)
-      return [
-        {
-          path: "radiusOffsetMm",
-          code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange,
-        },
-      ];
     if (this.dto.fontSizeMm > radius)
-      return [{ path: "fontSizeMm", code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange }];
-    const values = getScaleValueBounds(range);
-    if (this.dto.valueStart < values.min || this.dto.valueEnd > values.max)
-      return [{ path: "valueStart", code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange }];
-    if (this.dto.valueStart > this.dto.valueEnd)
-      return [{ path: "valueStart", code: PROJECT_VALIDATION_CODES.valueStartAfterEnd }];
-    if (getNumericScaleLabelCount(this.dto) > 200)
-      return [{ path: "valueStep", code: PROJECT_VALIDATION_CODES.tooManyGeneratedItems }];
-    return [];
+      issues.push({
+        path: "fontSizeMm",
+        code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange,
+      });
+    return issues;
   }
 
   toSvg(context: RenderContext): string {
@@ -64,7 +49,7 @@ export class NumericScaleLayer extends Layer<NumericScaleLayerDto> {
     if (radius <= 0) return "";
     const weight = this.dto.bold ? ' font-weight="700"' : "";
     const style = `${this.dto.italic ? ' font-style="italic"' : ""}${this.dto.underline ? ' text-decoration="underline"' : ""}`;
-    return getNumericScaleValues(this.dto, range)
+    return getScaleValues(this.dto, range)
       .map((value) => {
         const angle =
           range.angleStart + range.openingAngle * valueToNormalizedPosition(range, value);

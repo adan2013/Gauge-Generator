@@ -74,6 +74,9 @@ Keep those documents current. Put completed-stage evidence in
 - Projects are versioned, strict JSON DTOs: `format`, `version`, `meta`,
   `canvas`, `layers`, `ranges`, and optional `extensions`. Persist no UI state.
   Validate through Zod, then domain rules; invalid input never replaces a project.
+  Keep `project-dto` limited to the JSON contract. `validateProject` first parses
+  that contract and then calls `Range.validate()` and `Layer.validate()` through
+  the layer registry, prefixing their relative paths for JSON feedback.
 - Physical project data uses millimetres; the default canvas is 120 × 120 mm
   and may be rectangular. Final SVG uses an mm `viewBox`.
 - `ranges` and visual `layers` are separate collections. Both have required,

@@ -1,47 +1,43 @@
 import { PROJECT_VALIDATION_CODES } from "@/features/project/project-dto/project-validation-codes";
-import type { ProjectValidationIssue, RangeDto } from "@/features/project/project-dto/project-dto";
+import type { ValidationIssue } from "@/features/layers/core/layer";
+import {
+  getRangeScaleValueBounds,
+  getScaleItemCount,
+} from "@/features/ranges/scale-mapping/scale-mapping";
+import type { LayerDto, RangeDto } from "@/features/project/project-dto/project-dto";
 
-type RangeMappedLayer = {
-  id: string;
-  radiusOffsetMm: number;
-  valueEnd: number;
-  valueStart: number;
-  valueStep: number;
-};
+type RangeMappedLayer = Pick<LayerDto, "radiusOffsetMm" | "valueEnd" | "valueStart" | "valueStep">;
 
 export function getRangeMappedLayerValidationIssues(
   layer: RangeMappedLayer,
   sourceRange: RangeDto,
-): ProjectValidationIssue[] {
-  const issues: ProjectValidationIssue[] = [];
+): ValidationIssue[] {
   const effectiveRadiusMm = sourceRange.radius + layer.radiusOffsetMm;
+  const issues: ValidationIssue[] = [];
   if (effectiveRadiusMm <= 0)
     issues.push({
-      path: `layers.${layer.id}.radiusOffsetMm`,
+      path: "radiusOffsetMm",
       code: PROJECT_VALIDATION_CODES.valueMustBePositive,
     });
   if (layer.radiusOffsetMm > sourceRange.radius)
     issues.push({
-      path: `layers.${layer.id}.radiusOffsetMm`,
+      path: "radiusOffsetMm",
       code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange,
     });
-  const values =
-    sourceRange.scaleDefinition.mode === "custom"
-      ? sourceRange.scaleDefinition.points.map((point) => point.value)
-      : [sourceRange.scaleDefinition.start, sourceRange.scaleDefinition.end];
-  if (layer.valueStart < Math.min(...values) || layer.valueEnd > Math.max(...values))
+  const valueBounds = getRangeScaleValueBounds(sourceRange);
+  if (layer.valueStart < valueBounds.min || layer.valueEnd > valueBounds.max)
     issues.push({
-      path: `layers.${layer.id}`,
+      path: "valueStart",
       code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange,
     });
   if (layer.valueStart > layer.valueEnd)
     issues.push({
-      path: `layers.${layer.id}.valueStart`,
+      path: "valueStart",
       code: PROJECT_VALIDATION_CODES.valueStartAfterEnd,
     });
-  if (Math.floor((layer.valueEnd - layer.valueStart) / layer.valueStep) + 1 > 200)
+  if (getScaleItemCount(layer) > 200)
     issues.push({
-      path: `layers.${layer.id}.valueStep`,
+      path: "valueStep",
       code: PROJECT_VALIDATION_CODES.tooManyGeneratedItems,
     });
   return issues;
