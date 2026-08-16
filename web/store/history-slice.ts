@@ -3,7 +3,11 @@ import type { ProjectDto } from "@/features/project/project-dto/project-dto";
 
 export const HISTORY_LIMIT = 50;
 
-type HistoryState = { past: ProjectDto[]; future: ProjectDto[]; transactionSnapshot: ProjectDto | null };
+type HistoryState = {
+  past: ProjectDto[];
+  future: ProjectDto[];
+  transactionSnapshot: ProjectDto | null;
+};
 
 const initialState: HistoryState = { past: [], future: [], transactionSnapshot: null };
 

@@ -9,13 +9,20 @@
     "createdAt": "2026-01-01T00:00:00.000Z",
     "updatedAt": "2026-01-01T00:00:00.000Z"
   },
-  "canvas": { "widthMm": 120, "heightMm": 120, "background": "#FFFFFF" },
+  "canvas": {
+    "widthMm": 120,
+    "heightMm": 120,
+    "background": "#FFFFFF",
+    "transparentBackground": true
+  },
   "layers": [],
   "ranges": []
 }
 ```
 
-`layers` and `ranges` are intentionally separate arrays. A visual layer has a
+`transparentBackground` defaults to `true`; while it is true, `background` is
+retained in the JSON but not rendered. `layers` and `ranges` are intentionally
+separate arrays. A visual layer has a
 required `rangeId`, which must reference an item in `ranges`. A Range has no
 final SVG representation. Every object has a stable UUID and a non-empty,
 user-editable `name`.
@@ -26,10 +33,14 @@ renderer yet. It never controls whether values are linear, logarithmic, or
 custom: that mapping belongs to its referenced Range. New layer types will
 extend the strict Zod discriminated union in their own implementation stage.
 
-Every physical value is a number in millimetres. Angles are degrees. The schema
+Every physical value is a number in millimetres. Angles are degrees. Range
+stores `centerX`, `centerY`, `radius`, `angleStart`, `openingAngle`, and
+`scaleDefinition`; it has no pivot field. A Range centre must remain on the
+canvas; radius is from 5 mm to half of the canvas's longest edge. The schema
 rejects unknown fields, invalid UUIDs, blank names, invalid canvas dimensions,
-invalid colors, broken scale definitions, duplicate IDs, and missing `rangeId`
-references. Any semantic format change requires a new version and migration.
+invalid colors, broken scale definitions, duplicate IDs, more than five Ranges,
+and missing `rangeId` references. Any semantic format change requires a new
+version and migration.
 
 Validation results are not persisted in JSON. They use stable error codes, such
 as `project.validation.missingRangeReference`, plus a field path. The UI maps

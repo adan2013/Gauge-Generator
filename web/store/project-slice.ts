@@ -1,10 +1,21 @@
 import { createSlice, current, type PayloadAction } from "@reduxjs/toolkit";
-import { createProject } from "@/features/project/factories/project-factories";
-import { validateProject, type CanvasDto, type LayerDto, type ProjectDto, type RangeDto } from "@/features/project/project-dto/project-dto";
+import {
+  createDevelopmentProject,
+  createProject,
+} from "@/features/project/factories/project-factories";
+import {
+  validateProject,
+  type CanvasDto,
+  type LayerDto,
+  type ProjectDto,
+  type RangeDto,
+} from "@/features/project/project-dto/project-dto";
 
 type ProjectState = { current: ProjectDto };
 
-const initialState: ProjectState = { current: createProject() };
+const initialState: ProjectState = {
+  current: process.env.NODE_ENV === "development" ? createDevelopmentProject() : createProject(),
+};
 
 function touch(project: ProjectDto) {
   project.meta.updatedAt = new Date().toISOString();
@@ -31,10 +42,16 @@ export const projectSlice = createSlice({
       if (result.data) state.current = result.data;
     },
     setCanvas: (state, action: PayloadAction<CanvasDto>) => {
-      commitProjectMutation(state, (project) => { project.canvas = action.payload; return true; });
+      commitProjectMutation(state, (project) => {
+        project.canvas = action.payload;
+        return true;
+      });
     },
     addRange: (state, action: PayloadAction<RangeDto>) => {
-      commitProjectMutation(state, (project) => { project.ranges.push(action.payload); return true; });
+      commitProjectMutation(state, (project) => {
+        project.ranges.push(action.payload);
+        return true;
+      });
     },
     updateRange: (state, action: PayloadAction<RangeDto>) => {
       commitProjectMutation(state, (project) => {
@@ -54,7 +71,10 @@ export const projectSlice = createSlice({
       });
     },
     addLayer: (state, action: PayloadAction<LayerDto>) => {
-      commitProjectMutation(state, (project) => { project.layers.push(action.payload); return true; });
+      commitProjectMutation(state, (project) => {
+        project.layers.push(action.payload);
+        return true;
+      });
     },
     updateLayer: (state, action: PayloadAction<LayerDto>) => {
       commitProjectMutation(state, (project) => {
@@ -74,10 +94,15 @@ export const projectSlice = createSlice({
     },
     reorderLayer: (state, action: PayloadAction<{ layerId: string; targetIndex: number }>) => {
       commitProjectMutation(state, (project) => {
-        const sourceIndex = project.layers.findIndex((layer) => layer.id === action.payload.layerId);
+        const sourceIndex = project.layers.findIndex(
+          (layer) => layer.id === action.payload.layerId,
+        );
         if (sourceIndex < 0) return false;
         const [layer] = project.layers.splice(sourceIndex, 1);
-        const targetIndex = Math.max(0, Math.min(action.payload.targetIndex, project.layers.length));
+        const targetIndex = Math.max(
+          0,
+          Math.min(action.payload.targetIndex, project.layers.length),
+        );
         project.layers.splice(targetIndex, 0, layer);
         return true;
       });

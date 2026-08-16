@@ -24,11 +24,21 @@ export const editorSlice = createSlice({
   name: "editor",
   initialState,
   reducers: {
-    setSidebarMode: (state, action: PayloadAction<SidebarMode>) => { state.sidebarMode = action.payload; },
-    setSelectedObject: (state, action: PayloadAction<EditorSelection>) => { state.selectedObject = action.payload; },
-    setHoveredLayerId: (state, action: PayloadAction<string | null>) => { state.hoveredLayerId = action.payload; },
-    setSnapping: (state, action: PayloadAction<EditorState["snapping"]>) => { state.snapping = action.payload; },
-    setAutosaveStatus: (state, action: PayloadAction<AutosaveStatus>) => { state.autosaveStatus = action.payload; },
+    setSidebarMode: (state, action: PayloadAction<SidebarMode>) => {
+      state.sidebarMode = action.payload;
+    },
+    setSelectedObject: (state, action: PayloadAction<EditorSelection>) => {
+      state.selectedObject = action.payload;
+    },
+    setHoveredLayerId: (state, action: PayloadAction<string | null>) => {
+      state.hoveredLayerId = action.payload;
+    },
+    setSnapping: (state, action: PayloadAction<EditorState["snapping"]>) => {
+      state.snapping = action.payload;
+    },
+    setAutosaveStatus: (state, action: PayloadAction<AutosaveStatus>) => {
+      state.autosaveStatus = action.payload;
+    },
   },
 });
 

@@ -1,6 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { createProject, createRange, createTickScaleLayer } from "@/features/project/factories/project-factories";
-import { beginProjectHistoryTransaction, completeProjectHistoryTransaction, undoProject, redoProject } from "@/store/history-actions";
+import {
+  createProject,
+  createRange,
+  createTickScaleLayer,
+} from "@/features/project/factories/project-factories";
+import {
+  beginProjectHistoryTransaction,
+  completeProjectHistoryTransaction,
+  undoProject,
+  redoProject,
+} from "@/store/history-actions";
 import { editorActions } from "@/store/editor-slice";
 import { projectActions } from "@/store/project-slice";
 import { createEditorState } from "@/test/create-editor-state";
@@ -9,10 +18,30 @@ import { createTestStore } from "@/test/create-test-store";
 describe("project store and history", () => {
   it("does not allow a Range with dependent layers to be removed", () => {
     const range = createRange();
-    const store = createTestStore({ project: { current: createProject({ ranges: [range], layers: [createTickScaleLayer(range.id)] }) } });
+    const store = createTestStore({
+      project: {
+        current: createProject({ ranges: [range], layers: [createTickScaleLayer(range.id)] }),
+      },
+    });
     store.dispatch(projectActions.removeRange(range.id));
 
     expect(store.getState().project.current.ranges).toHaveLength(1);
+  });
+
+  it("reorders only visual layers while preserving the topmost index convention", () => {
+    const range = createRange();
+    const first = { ...createTickScaleLayer(range.id), name: "Top" };
+    const second = { ...createTickScaleLayer(range.id), name: "Bottom" };
+    const store = createTestStore({
+      project: { current: createProject({ ranges: [range], layers: [first, second] }) },
+    });
+
+    store.dispatch(projectActions.reorderLayer({ layerId: second.id, targetIndex: 0 }));
+
+    expect(store.getState().project.current.layers.map((layer) => layer.name)).toEqual([
+      "Bottom",
+      "Top",
+    ]);
   });
 
   it("records project mutations but ignores editor-only state", () => {
@@ -26,7 +55,14 @@ describe("project store and history", () => {
 
   it("rejects an invalid project mutation before it reaches the current project", () => {
     const store = createTestStore();
-    store.dispatch(projectActions.setCanvas({ widthMm: -1, heightMm: 120, background: "#FFFFFF" }));
+    store.dispatch(
+      projectActions.setCanvas({
+        widthMm: -1,
+        heightMm: 120,
+        background: "#FFFFFF",
+        transparentBackground: true,
+      }),
+    );
 
     expect(store.getState().project.current.canvas.widthMm).toBe(120);
     expect(store.getState().history.past).toHaveLength(0);
@@ -46,7 +82,14 @@ describe("project store and history", () => {
   it("retains no more than fifty undo states", () => {
     const store = createTestStore();
     for (let widthMm = 20; widthMm <= 70; widthMm += 1) {
-      store.dispatch(projectActions.setCanvas({ widthMm, heightMm: 120, background: "#FFFFFF" }));
+      store.dispatch(
+        projectActions.setCanvas({
+          widthMm,
+          heightMm: 120,
+          background: "#FFFFFF",
+          transparentBackground: true,
+        }),
+      );
     }
 
     expect(store.getState().history.past).toHaveLength(50);
@@ -55,8 +98,22 @@ describe("project store and history", () => {
   it("records one undo snapshot for a continuous project-control interaction", () => {
     const store = createTestStore();
     store.dispatch(beginProjectHistoryTransaction());
-    store.dispatch(projectActions.setCanvas({ widthMm: 140, heightMm: 120, background: "#FFFFFF" }));
-    store.dispatch(projectActions.setCanvas({ widthMm: 160, heightMm: 120, background: "#FFFFFF" }));
+    store.dispatch(
+      projectActions.setCanvas({
+        widthMm: 140,
+        heightMm: 120,
+        background: "#FFFFFF",
+        transparentBackground: true,
+      }),
+    );
+    store.dispatch(
+      projectActions.setCanvas({
+        widthMm: 160,
+        heightMm: 120,
+        background: "#FFFFFF",
+        transparentBackground: true,
+      }),
+    );
     store.dispatch(completeProjectHistoryTransaction());
 
     expect(store.getState().history.past).toHaveLength(1);
@@ -68,7 +125,10 @@ describe("project store and history", () => {
     const range = createRange();
     const store = createTestStore({
       project: { current: createProject({ ranges: [range] }) },
-      editor: createEditorState({ selectedObject: { collection: "ranges", id: range.id }, sidebarMode: "properties" }),
+      editor: createEditorState({
+        selectedObject: { collection: "ranges", id: range.id },
+        sidebarMode: "properties",
+      }),
     });
 
     store.dispatch(projectActions.removeRange(range.id));

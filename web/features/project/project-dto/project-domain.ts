@@ -13,5 +13,9 @@ export function toDomainProject(project: ProjectDto): ProjectDomain {
 }
 
 export function fromDomainProject(domain: ProjectDomain): ProjectDto {
-  return { ...domain.project, layers: domain.layers, ranges: domain.ranges.map((range) => range.toDto()) };
+  return {
+    ...domain.project,
+    layers: domain.layers,
+    ranges: domain.ranges.map((range) => range.toDto()),
+  };
 }

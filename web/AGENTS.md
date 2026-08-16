@@ -34,10 +34,18 @@ Keep those documents current. Put completed-stage evidence in
 - Use TypeScript, React 19, App Router, Tailwind v4, Redux Toolkit, Zod, and
   `next-intl`. Keep app code in `web/`.
 - Use `cn()` from `lib/cn.ts` for every combined or conditional Tailwind class.
+- Prettier enforces a 100-character print width (`pnpm format`). When a long
+  Tailwind `className` would harm readability, split its semantic groups across
+  lines with `cn("layout …", "visual …", "interaction …")`; never use string
+  concatenation. Run `pnpm format` after such edits; `pnpm verify` checks it.
 - Each public UI component has a kebab-case directory with its colocated unit
   test. Use Atomic Design for presentational UI; keep domain/state/serialization
   in `features/`, `store/`, and `lib/`.
 - Prefer composable APIs over boolean-prop proliferation.
+- Destructive actions use the root-mounted `ConfirmationProvider` and its
+  promise-based `useConfirmation().confirm(request)` API. Keep modal mounting,
+  button labels, and cancellation behavior central; callers own only their
+  translated title, description, and post-confirmation domain action.
 
 ## Product constraints
 
@@ -57,16 +65,26 @@ Keep those documents current. Put completed-stage evidence in
 - Physical project data uses millimetres; the default canvas is 120 × 120 mm
   and may be rectangular. Final SVG uses an mm `viewBox`.
 - `ranges` and visual `layers` are separate collections. Both have required,
-  user-editable names. Each visual layer has a required `rangeId`; a Range
-  cannot be removed while referenced.
+  user-editable names. A project may contain at most five Ranges. Each visual
+  layer has a required `rangeId`; a Range cannot be removed while referenced.
+- Creating a visual layer is a two-step flow: first choose its type in the
+  right-side picker, then create it and open its Properties. Do not create a
+  placeholder layer before that choice.
 - A Range owns geometry and `scaleDefinition` (`linear`, `logarithmic`, or
   `custom`). Visual layers such as Tick Scale and Numeric Scale render using
   that mapping; they never choose its mode.
 - `Layer` is the visual-layer base abstraction; `Range` is separate. Layer
   implementations own final SVG, validation, editing overlay, handles, drag
   behavior, and numeric field definitions. Keep rendering/domain code React-free.
+- SVG editing overlays use shared `LayerHandles` for interactive handle circles,
+  white-backed labels, pointer conversion, and drag lifecycle. Individual layers
+  own only overlay geometry, handles, and label content.
 - Object-owned field definitions provide `min`, `max`, and `step`; UI renders
-  them rather than hardcoding limits. Zod remains authoritative.
+  them rather than hardcoding limits. Definitions also own the stable field key,
+  displayed unit, grouping, current value, and snapping strategy; forms iterate
+  them rather than enumerating object fields inline. Each Range or visual layer
+  owns these declarations in a dedicated adjacent `*-properties.ts` module.
+  Zod remains authoritative.
 - Empty projects prompt for a Range; projects with Range but no visual layer
   prompt for a layer; otherwise show SVG preview. Welcome states use a stable
   square frame; the SVG preview frame reflects the project canvas ratio. Canvas
@@ -78,8 +96,10 @@ Keep those documents current. Put completed-stage evidence in
   independently at bottom-right.
 - Layer index `0` is the topmost visual layer; higher indexes are progressively
   lower. SVG rendering must therefore emit visual layers in reverse list order.
-- Range geometry may extend beyond the canvas; do not add a nearest-edge radius
-  constraint unless the product decision changes.
+- A Range center must stay on the canvas. Its radius may extend beyond a nearby
+  edge, but must be from 5 mm to half the canvas's longest edge.
+- Canvas background is project data. `transparentBackground` defaults to `true`;
+  while enabled, the saved background color is retained but not rendered.
 
 ## Editor state and interaction
 
@@ -96,12 +116,18 @@ Keep those documents current. Put completed-stage evidence in
   systems such as browser APIs, subscriptions, timers, and `localStorage`.
 - Snapping is enabled by default at 2 mm and 10°. It is a local preference,
   while canvas dimensions are project data.
+- Use `dnd-kit` for visual-layer ordering; rely on its sortable motion rather
+  than adding a separate drop-target indicator.
+- The initial store state in `NODE_ENV=development` uses a deterministic
+  workbench project with one Range and three Tick Scale layers. Production and
+  explicit New project flows remain empty.
 
 ## Quality and future slices
 
 - Unit-test each component/module’s critical behaviour with Vitest and React
   Testing Library. Reuse factories, store/render helpers, fixtures, and browser
-  mocks rather than recreating them per test.
+  mocks rather than recreating them per test. Test positive user-visible and
+  domain behaviours, not the absence of controls that should never exist.
 - Add each layer as a vertical slice: DTO/Zod, factory, domain class, form,
   SVG, overlay/handles, thumbnail, example/workbench, and tests.
 - Autosave is `localStorage` only: every three minutes, retain five snapshots.

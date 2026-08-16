@@ -10,19 +10,22 @@ export function createRange(overrides: Partial<RangeDto> = {}): RangeDto {
     centerX: 60,
     centerY: 60,
     radius: 48,
-    angleStart: 0,
-    openingAngle: 240,
-    handOffsetX: 0,
-    handOffsetY: 0,
-    handPivotSize: 2,
-    handPivotColor: "#20242B",
-    scaleDefinition: { mode: "linear", start: 0, end: 100, step: 10 },
+    angleStart: 140,
+    openingAngle: 260,
+    scaleDefinition: { mode: "linear", start: 0, end: 100 },
     ...overrides,
   };
 }
 
 export function createTickScaleLayer(rangeId: string, overrides: Partial<LayerDto> = {}): LayerDto {
-  return { id: crypto.randomUUID(), name: "Tick scale", visible: true, rangeId, type: "tick-scale", ...overrides };
+  return {
+    id: crypto.randomUUID(),
+    name: "Tick scale",
+    visible: true,
+    rangeId,
+    type: "tick-scale",
+    ...overrides,
+  };
 }
 
 export function createProject(overrides: Partial<ProjectDto> = {}): ProjectDto {
@@ -30,9 +33,22 @@ export function createProject(overrides: Partial<ProjectDto> = {}): ProjectDto {
     format: PROJECT_FORMAT,
     version: PROJECT_VERSION,
     meta: { title: "Untitled project", createdAt: DEFAULT_TIMESTAMP, updatedAt: DEFAULT_TIMESTAMP },
-    canvas: { widthMm: 120, heightMm: 120, background: "#FFFFFF" },
+    canvas: { widthMm: 120, heightMm: 120, background: "#FFFFFF", transparentBackground: true },
     layers: [],
     ranges: [],
     ...overrides,
   };
+}
+
+/** A predictable populated document for manual development of visual layers. */
+export function createDevelopmentProject(): ProjectDto {
+  const range = createRange({ name: "Development range" });
+  return createProject({
+    ranges: [range],
+    layers: [
+      createTickScaleLayer(range.id, { name: "Tick Scale 1" }),
+      createTickScaleLayer(range.id, { name: "Tick Scale 2" }),
+      createTickScaleLayer(range.id, { name: "Tick Scale 3" }),
+    ],
+  });
 }

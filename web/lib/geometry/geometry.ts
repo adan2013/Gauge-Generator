@@ -24,6 +24,10 @@ export function valueToNormalizedPosition(value: number, start: number, end: num
   return (value - start) / (end - start);
 }
 
-export function normalizedPositionToAngle(position: number, angleStart: number, openingAngle: number): number {
+export function normalizedPositionToAngle(
+  position: number,
+  angleStart: number,
+  openingAngle: number,
+): number {
   return normalizeAngle(angleStart + openingAngle * position);
 }

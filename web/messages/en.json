@@ -45,6 +45,7 @@
       "redo": "Redid the project change.",
       "rangeOpened": "Range properties layout opened.",
       "layerOpened": "Layer properties layout opened.",
+      "layerPickerOpened": "Choose a layer type.",
       "rangeRequired": "Create a Range before adding a visual layer."
     },
     "toolbar": {
@@ -72,16 +73,43 @@
       "propertiesAriaLabel": "Layer properties",
       "propertiesTitle": "Layer setup",
       "propertiesDescription": "Visual layer controls will be added with each layer type.",
-      "emptyDescription": "Visual layers appear here. Create a Range below before adding one.",
+      "range": "Range",
+      "rangeSource": "Source Range",
+      "picker": {
+        "eyebrow": "New layer",
+        "title": "Choose a layer type",
+        "description": "Select the visual element you want to add to this gauge.",
+        "tickScaleDescription": "Draw radial tick marks using the selected Range."
+      },
+      "types": {
+        "tickScale": "Tick scale"
+      },
+      "editLayer": "Edit {name}",
+      "deleteLayer": "Delete {name}",
+      "hideLayer": "Hide {name}",
+      "showLayer": "Show {name}",
+      "reorderLayer": "Reorder {name}",
+      "emptyDescription": "Add a visual layer to start rendering your gauge.",
       "createFirstRange": "Create first Range",
       "createFirstLayer": "Create first Layer"
     },
     "ranges": {
       "title": "Ranges",
-      "type": "Range",
       "defaultName": "Range {number}",
       "emptyDescription": "Ranges define the position, radius, and value range used by visual layers.",
-      "add": "Add Range"
+      "count": "{current} / {maximum}",
+      "add": "Add Range",
+      "edit": "Edit {name}",
+      "delete": "Delete {name}",
+      "deleteDisabled": "Remove the {count, plural, one {dependent layer} other {# dependent layers}} before deleting this Range."
+    },
+    "confirmation": {
+      "cancel": "Cancel",
+      "deleteLayerDescription": "This will permanently remove {name} from the project.",
+      "deleteLayerTitle": "Delete layer?",
+      "deleteRangeDescription": "This will permanently remove {name} and its value mapping from the project.",
+      "deleteRangeTitle": "Delete Range?",
+      "confirmDelete": "Delete"
     },
     "projectSettings": {
       "ariaLabel": "Project settings",
@@ -91,22 +119,42 @@
       "canvas": "Canvas",
       "width": "Width",
       "height": "Height",
+      "background": "Background",
+      "transparentBackground": "Transparent background",
       "snapping": "Snapping",
       "enableSnapping": "Enable snapping",
       "distanceIncrement": "Distance increment",
       "angleIncrement": "Angle increment"
     },
     "range": {
-      "ariaLabel": "Layer properties",
+      "ariaLabel": "Range properties",
       "eyebrow": "Range",
       "title": "Range setup",
-      "description": "This preview establishes the grouped property controls for the next stage.",
+      "description": "Define the geometry, value mapping, and pivot context shared by visual layers.",
       "position": "Position",
       "centerX": "Center X",
       "centerY": "Center Y",
-      "scale": "Scale",
+      "geometry": "Geometry",
       "radius": "Radius",
-      "openingAngle": "Opening angle"
+      "angleStart": "Start angle",
+      "openingAngle": "Opening angle",
+      "values": "Value mapping",
+      "scaleStart": "Start value",
+      "scaleEnd": "End value",
+      "scaleModeDescription": "The editable curve controls will be introduced with the first scale layer.",
+      "overlayAriaLabel": "Range editing overlay",
+      "handles": {
+        "center": "Move center",
+        "radius": "Adjust radius",
+        "angle-start": "Adjust start angle",
+        "angle-end": "Adjust end angle"
+      },
+      "handleValues": {
+        "center": "{x}; {y}",
+        "radius": "r: {radius} mm",
+        "angle-start": "{start}°",
+        "angle-end": "{opening}°"
+      }
     },
     "canvas": {
       "ariaLabel": "Canvas preview",
@@ -116,8 +164,6 @@
       "dimensions": "{width} × {height} mm",
       "emptyTitle": "Your canvas is ready",
       "emptyDescription": "Create your first Range to define a dial, or select one of the starter examples.",
-      "rangeReadyTitle": "Your Range is ready",
-      "rangeReadyDescription": "Add a visual layer to start building your gauge.",
       "browseExamples": "Browse examples"
     },
     "controls": {

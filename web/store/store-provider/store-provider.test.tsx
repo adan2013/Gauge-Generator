@@ -9,7 +9,11 @@ function ProjectTitle() {
 
 describe("StoreProvider", () => {
   it("provides a fresh empty project to client components", () => {
-    render(<StoreProvider><ProjectTitle /></StoreProvider>);
+    render(
+      <StoreProvider>
+        <ProjectTitle />
+      </StoreProvider>,
+    );
     expect(screen.getByText("Untitled project")).toBeTruthy();
   });
 });

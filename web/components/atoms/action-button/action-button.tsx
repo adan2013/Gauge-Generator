@@ -18,9 +18,28 @@ const variantClasses: Record<ActionButtonVariant, string> = {
   quiet: "text-muted hover:bg-surface-subtle hover:text-ink",
 };
 
-export function ActionButton({ icon: Icon, label, variant = "secondary", trailing, className = "", type = "button", ...props }: ActionButtonProps) {
+export function ActionButton({
+  icon: Icon,
+  label,
+  variant = "secondary",
+  trailing,
+  className = "",
+  type = "button",
+  ...props
+}: ActionButtonProps) {
   return (
-    <button className={cn("inline-flex min-h-9 items-center justify-center gap-2 rounded-lg px-3 text-sm font-medium whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:pointer-events-none disabled:opacity-45", variantClasses[variant], className)} type={type} {...props}>
+    <button
+      className={cn(
+        "inline-flex min-h-8 items-center justify-center gap-1.5 rounded-md px-2.5",
+        "text-sm font-medium whitespace-nowrap transition-colors",
+        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
+        "disabled:pointer-events-none disabled:opacity-45",
+        variantClasses[variant],
+        className,
+      )}
+      type={type}
+      {...props}
+    >
       <Icon aria-hidden="true" size={16} strokeWidth={1.8} />
       <span>{label}</span>
       {trailing}

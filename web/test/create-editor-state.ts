@@ -1,6 +1,8 @@
 import type { RootState } from "@/store/store";
 
-export function createEditorState(overrides: Partial<RootState["editor"]> = {}): RootState["editor"] {
+export function createEditorState(
+  overrides: Partial<RootState["editor"]> = {},
+): RootState["editor"] {
   return {
     sidebarMode: "layers",
     selectedObject: null,

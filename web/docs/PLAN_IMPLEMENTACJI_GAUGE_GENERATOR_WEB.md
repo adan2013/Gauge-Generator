@@ -122,13 +122,14 @@ projektowych na skróty.
    TS jako źródła prawdy, zachować ją jako jedyne źródło tokenów).
 3. Dodać React Redux, Redux Toolkit, Zod, `next-intl`, Vitest, React Testing
    Library oraz bibliotekę ikon SVG. Nie dodawać narzędzia E2E.
-4. Utworzyć routing `/`, `/app`, `/app/help`; dodać provider store i provider
-   i18n.
+4. Utworzyć routing `/`, `/app`, `/app/help`; dodać provider store, i18n oraz
+   rootowy `ConfirmationProvider` dla destrukcyjnych operacji.
 5. Zapisać `docs/architecture.md`, `docs/json-format.md` i
    `ai-handoff/DECISIONS.md`. Przenieść do nich decyzje z analizy zamiast
    kopiować kod starego programu.
-6. Skonfigurować lokalny pre-commit gate `pnpm verify` (lint, typecheck i testy
-   jednostkowe). CI pozostaje poza obecnym zakresem; nie dodawać jobu E2E.
+6. Skonfigurować Prettier (`printWidth: 100`) i lokalny pre-commit gate
+   `pnpm verify` (format check, lint, typecheck i testy jednostkowe). CI
+   pozostaje poza obecnym zakresem; nie dodawać jobu E2E.
 
 **Weryfikacja:** `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` są
 zielone; `/`, `/app` i `/app/help` działają, a wyświetlany tekst pochodzi z
@@ -203,27 +204,32 @@ odrzucenie złego `rangeId`, limit historii, undo/redo, przeliczenia mm i snap
 **Cel:** pierwsza pionowa funkcja działająca od dodania do SVG i historii.
 
 1. Dodać Range jako pierwszy typ niezależnej kolekcji `ranges`: tworzenie,
-   edytowalna nazwa, środek, promień, początek i rozwarcie kąta, wartości skali, pivot
-   wskazówki oraz `scaleDefinition`.
+   edytowalna nazwa, środek, promień, początek i rozwarcie kąta oraz
+   `scaleDefinition`. Range mapuje wartości, ale nie zawiera pivotu ani
+   parametrów wizualnej wskazówki.
    Definicje parametrów numerycznych (min/max/krok) należą do edytowanego
    obiektu domenowego; UI jedynie je renderuje, bez stałych zależnych od
    prototypowego canvasu.
-2. Stworzyć jego właściwości w grupach oraz nie-wizualną miniaturę/badge z
-   zakresem, łukiem i metadanymi. Range nie udaje finalnie rysowanej warstwy.
-3. Dodać overlay Range: środek, promień, start/end łuku i pivot; uchwyty mają
-   minimalny rozmiar ekranowy i etykietę aktualnej wartości.
+2. Stworzyć jego właściwości w grupach. Range nie udaje finalnie rysowanej
+   warstwy ani nie potrzebuje osobnej miniatury/badge w odrębnej sekcji Ranges.
+3. Dodać overlay Range: środek, promień oraz start i rozwarcie łuku; uchwyty
+   mają minimalny rozmiar ekranowy i etykietę aktualnej wartości. Range nie ma
+   uchwytu pivotu.
 4. Wspólny controller obsługuje pointer capture, screen→mm, snapping i commit
    historii po zakończeniu drag.
-5. W Layers panel ma osobne sekcje visual Layers i Ranges. Hover nad miniaturą
-   visual layer pokazuje tylko daną warstwę wraz z jej kontekstem Range.
-   Kliknięcie wybiera wyłącznie z odpowiedniej listy i otwiera Properties;
-   kliknięcie canvasu nie wybiera warstwy.
+5. Panel Layers ma osobne sekcje visual Layers i Ranges. Nazwa wiersza otwiera
+   Properties (dwuklik także jest wspierany), bez osobnego przycisku ołówka.
+   Wiersz pozwala przełączyć widoczność, usunąć warstwę po potwierdzeniu i
+   zmienić jej kolejność przez uchwyt drag-and-drop. Hover nad miniaturą visual
+   layer pokaże później tylko daną warstwę wraz z jej kontekstem Range.
+   Kliknięcie canvasu nie wybiera warstwy.
 6. Po powrocie do Layers overlay znika, a miniatura jest regenerowana.
 
 **Weryfikacja:** użytkownik może stworzyć Range z pustego ekranu, przesunąć i
 zmienić promień uchwytem, co aktualizuje formularz i cofa się jednym Undo.
-Nie można usunąć Range po dodaniu zależności (przypadek testowy przygotować
-już teraz). Miniatura odświeża się dopiero po Back to layers.
+Nie można usunąć Range po dodaniu zależności; niezależne Range i warstwy są
+usuwane dopiero po potwierdzeniu w rootowym dialogu. Miniatura odświeża się
+dopiero po Back to layers.
 
 ### Etap 4 — Tick Scale i Numeric Scale
 
@@ -268,15 +274,17 @@ i pełen test checklisty. Dopiero wtedy rozpoczyna się następna warstwa.
 
 **Cel:** projekt jest praktycznie używalny i bezpieczny lokalnie.
 
-1. Zaimplementować Download JSON, Import JSON (file picker, Zod, migracje,
+1. Zaimplementować Download (JSON), Import JSON (file picker, Zod, migracje,
    raport błędu), New project z ochroną przed utratą zmian oraz Restore.
 2. Dodać autosave co 3 minuty, localStorage, maks. pięć snapshotów, toast i
    testy fake timer/storage. Preferencje snappingu przechowywać lokalnie, ale
    poza JSON-em projektu.
 3. Dodać katalog Examples jako statyczne, walidowane JSON-y. Wybranie przykładu
    ładuje jego kopię do bieżącego store, nie zmienia pliku źródłowego.
-4. Tylko w `NODE_ENV=development` pokazywać `Layer workbench`, zasilany przez
-   `ACTIVE_WORKBENCH_LAYER`. Musi przechodzić Zod i nie może wejść do produkcji.
+4. Tylko w `NODE_ENV=development` uruchamiać fabrykę projektu roboczego: jeden
+   Range oraz trzy warstwy Tick Scale. Następnie rozwinąć ją do `Layer workbench`,
+   zasilanego przez `ACTIVE_WORKBENCH_LAYER`. Dane muszą przechodzić Zod i nie
+   mogą wejść do produkcji.
 5. Dodać mini-wiki wewnątrz `/app/help`: Getting started, interface, layers,
    project JSON i examples.
 
@@ -289,18 +297,18 @@ zachowują się zgodnie z environmentem; wszystkie teksty Help są po angielsku.
 **Cel:** dostarczyć rezultat poza edytorem i zamknąć MVP.
 
 1. Przygotować jeden deterministyczny generator finalnego SVG, wspólny dla
-preview i eksportów; overlay nigdy nie jest eksportowany.
+   preview i eksportów; overlay nigdy nie jest eksportowany.
 2. Dodać Export dialog z sekcjami PNG, SVG i PDF oraz wydzielonym, nieaktywnym
-miejscem na przyszłe Buy me a coffee.
+   miejscem na przyszłe Buy me a coffee.
 3. Eksport SVG zapisuje źródłowy dokument w mm. PNG rasteruje finalny SVG w
-wybranej rozdzielczości. PDF w MVP: jedna strona, automatyczna orientacja A4,
-Fit to page albo Actual size 1:1; bez wielostronicowości i zaawansowanych
-ustawień druku.
+   wybranej rozdzielczości. PDF w MVP: jedna strona, automatyczna orientacja A4,
+   Fit to page albo Actual size 1:1; bez wielostronicowości i zaawansowanych
+   ustawień druku.
 4. Dodać testy jednostkowe generatora SVG oraz testy komponentów z React
    Testing Library dla kluczowych akcji: create Range, add scale, undo/redo,
-   Download JSON i otwarcie Export dialog.
+   Download i otwarcie Export dialog.
 5. Przejść audit: responsywność toolbaru, dostępność klawiatury i kontrastu,
-komunikaty błędów, build produkcyjny oraz kontrola rozmiaru bundle.
+   komunikaty błędów, build produkcyjny oraz kontrola rozmiaru bundle.
 
 **Weryfikacja końcowa:** przykładowy projekt daje spójny preview, SVG, PNG i
 PDF; JSON można pobrać i ponownie zaimportować; brak połączenia z siecią nie

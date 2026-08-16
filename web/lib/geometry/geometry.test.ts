@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { clamp, normalizeAngle, normalizedPositionToAngle, snap, snapAngleDegrees, snapDistanceMm, valueToNormalizedPosition } from "./geometry";
+import {
+  clamp,
+  normalizeAngle,
+  normalizedPositionToAngle,
+  snap,
+  snapAngleDegrees,
+  snapDistanceMm,
+  valueToNormalizedPosition,
+} from "./geometry";
 
 describe("geometry helpers", () => {
   it("clamps values at both inclusive bounds", () => {

@@ -14,16 +14,16 @@ tarcz zegarów analogowych i wskaźników (np. obrotomierzy i prędkościomierzy
 Użytkownik buduje kompozycję z figur, skal, opisów, łuków oraz wskazówek,
 ogląda podgląd na żywo i eksportuje wynik do PNG.
 
-| Obszar | Obecne rozwiązanie |
-| --- | --- |
-| Język i platforma | C#, .NET Framework 4.6.1 |
-| Interfejs | WPF/XAML, jedno okno główne z panelami i modalami |
-| Kontrolki | Extended.Wpf.Toolkit 3.5, w tym PropertyGrid i AvalonDock |
-| Renderowanie | Imperatywne rysowanie kontrolek WPF na Canvas |
-| Eksport | RenderTargetBitmap + PngBitmapEncoder |
-| Format projektu | .ggp obsługiwany przez binarną bibliotekę DataManagementSystem.dll |
-| Licencja | GNU GPL v3 |
-| Ostatni commit | 2019-06-15 |
+| Obszar            | Obecne rozwiązanie                                                 |
+| ----------------- | ------------------------------------------------------------------ |
+| Język i platforma | C#, .NET Framework 4.6.1                                           |
+| Interfejs         | WPF/XAML, jedno okno główne z panelami i modalami                  |
+| Kontrolki         | Extended.Wpf.Toolkit 3.5, w tym PropertyGrid i AvalonDock          |
+| Renderowanie      | Imperatywne rysowanie kontrolek WPF na Canvas                      |
+| Eksport           | RenderTargetBitmap + PngBitmapEncoder                              |
+| Format projektu   | .ggp obsługiwany przez binarną bibliotekę DataManagementSystem.dll |
+| Licencja          | GNU GPL v3                                                         |
+| Ostatni commit    | 2019-06-15                                                         |
 
 Kod aplikacji jest niewielki i ma mało zależności, więc stanowi dobry materiał
 do wyciągnięcia sprawdzonych założeń produktu. Celem nie jest jednak port ani
@@ -37,9 +37,9 @@ określa nakładanie: renderer przechodzi listę od końca, więc warstwa o niż
 indeksie znajduje się wizualnie wyżej. Warstwy można ukrywać, klonować,
 przesuwać, usuwać oraz importować z innego projektu.
 
-MVP zachowuje dokładnie tę płaską kolejność renderowania i przyciski Move up /
-Move down. Nie wprowadzamy jeszcze grupowania ani alternatywnych reguł
-nakładania.
+MVP zachowuje dokładnie tę płaską kolejność renderowania. Kolejność edytuje
+uchwyt drag-and-drop, bez przycisków Move up / Move down. Nie wprowadzamy
+jeszcze grupowania ani alternatywnych reguł nakładania.
 
 Najważniejszy typ to **Range**. Definiuje pozycję i promień tarczy oraz
 przeliczenie wartości na kąt. Projekt może zawierać wiele niezależnych Range,
@@ -90,16 +90,16 @@ Maksimum to 80 warstw.
 
 ## 4. Typy warstw i parametry
 
-| Typ | Przeznaczenie | Najważniejsze opcje |
-| --- | --- | --- |
-| Range | Kontekst tarczy i skali | środek, promień, początkowy kąt, rozwarcie także ujemne, min./max. wartości, punkt osi wskazówki |
-| Tick Scale | Promieniowe kreski i opcjonalny łuk | odległość od środka, długość/grubość/kolor; korzysta z mapowania Range |
-| Numeric Scale | Liczby na skali | min./max./krok, mnożnik, format, odległość, obrót, font i styl |
-| Label | Dowolny napis | tekst, X/Y, obrót, font, kolor, pogrubienie/kursywa/podkreślenie |
-| Arc | Kolorowy pas, np. strefa ostrzegawcza | zakres wartości lub ręczny kąt, przesunięcie, promień, szerokość, kolor |
-| Clock Hand | Wskazówka | wartość lub ręczny kąt, długości/kolory części, grubość, grot, koło osi |
-| Ellipse | Elipsa | środek, rozmiar, obrót, wypełnienie, obrys |
-| Rectangle | Prostokąt | środek, rozmiar, obrót, wypełnienie, obrys |
+| Typ           | Przeznaczenie                         | Najważniejsze opcje                                                                              |
+| ------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Range         | Kontekst tarczy i skali               | środek, promień, początkowy kąt, rozwarcie także ujemne, min./max. wartości, punkt osi wskazówki |
+| Tick Scale    | Promieniowe kreski i opcjonalny łuk   | odległość od środka, długość/grubość/kolor; korzysta z mapowania Range                           |
+| Numeric Scale | Liczby na skali                       | min./max./krok, mnożnik, format, odległość, obrót, font i styl                                   |
+| Label         | Dowolny napis                         | tekst, X/Y, obrót, font, kolor, pogrubienie/kursywa/podkreślenie                                 |
+| Arc           | Kolorowy pas, np. strefa ostrzegawcza | zakres wartości lub ręczny kąt, przesunięcie, promień, szerokość, kolor                          |
+| Clock Hand    | Wskazówka                             | wartość lub ręczny kąt, długości/kolory części, grubość, grot, koło osi                          |
+| Ellipse       | Elipsa                                | środek, rozmiar, obrót, wypełnienie, obrys                                                       |
+| Rectangle     | Prostokąt                             | środek, rozmiar, obrót, wypełnienie, obrys                                                       |
 
 Wskazówka obsługuje pięć zakończeń: zwykłe, zaokrąglone, krótka i długa
 strzałka oraz miękka strzałka. Warstwy zależne od Range ograniczają wartości do
@@ -113,118 +113,114 @@ bez kopiowania nazw czy domyślnych wartości.
 
 ### Wspólne dla każdej warstwy
 
-| Właściwość | Typ | Opis |
-| --- | --- | --- |
-| id | UUID/string | stabilny identyfikator |
-| type | enum | rodzaj warstwy |
-| name | string | nazwa warstwy (obecnie do 25 znaków) |
-| visible | boolean | czy warstwa jest renderowana |
-| rangeId | UUID/string | identyfikator źródłowego Range; nie występuje w warstwie Range |
+| Właściwość | Typ         | Opis                                                           |
+| ---------- | ----------- | -------------------------------------------------------------- |
+| id         | UUID/string | stabilny identyfikator                                         |
+| type       | enum        | rodzaj warstwy                                                 |
+| name       | string      | nazwa warstwy (obecnie do 25 znaków)                           |
+| visible    | boolean     | czy warstwa jest renderowana                                   |
+| rangeId    | UUID/string | identyfikator źródłowego Range; nie występuje w warstwie Range |
 
 ### Range
 
-| Właściwość | Typ | Opis / zakres |
-| --- | --- | --- |
-| centerX, centerY | number | przesunięcie środka tarczy (-100–100%) |
-| radius | number | promień tarczy (20–100%) |
-| angleStart | integer | początkowy kąt skali (0–360°) |
-| openingAngle | integer | rozwarcie skali (-360–360°); ujemne zmienia zwrot |
-| rangeStartValue, rangeEndValue | integer | początek i koniec wartości skali (-1000–1000) |
-| scaleDefinition | obiekt | wspólna definicja mapowania wartości na pozycję: linear, logarithmic albo custom curve |
-| handOffsetX, handOffsetY | number | przesunięcie osi wskazówki (-80–80%) |
-| handPivotSize | number | promień punktu osi (1–5%) |
-| handPivotColor | kolor | kolor punktu osi |
+| Właściwość                     | Typ     | Opis / zakres                                                                                              |
+| ------------------------------ | ------- | ---------------------------------------------------------------------------------------------------------- |
+| centerX, centerY               | number  | przesunięcie środka tarczy (-100–100%)                                                                     |
+| radius                         | number  | promień tarczy (min. 5 mm, maks. połowa dłuższego boku canvasu)                                            |
+| angleStart                     | integer | początkowy kąt skali (0–360°)                                                                              |
+| openingAngle                   | integer | rozwarcie skali (-360–360°); ujemne zmienia zwrot                                                          |
+| rangeStartValue, rangeEndValue | integer | początek i koniec wartości skali (-1000–1000)                                                              |
+| scaleDefinition                | obiekt  | wspólna definicja mapowania wartości na pozycję: linear, logarithmic albo custom curve; bez parametru step |
 
 ### Tick Scale
 
-| Właściwość | Typ | Opis / zakres |
-| --- | --- | --- |
-| rangeMin, rangeMax, rangeStep | integer | fragment skali i krok; krok 1–1000 |
-| drawArcOnEdge | boolean | łączy kreski łukiem na zewnętrznej krawędzi |
-| lineThickness | number | grubość kreski (1–5%) |
-| distanceFromCenter | number | pozycja zewnętrznego końca (20–100%) |
-| lineLength | number | długość kreski (2–100%) |
-| lineColor | kolor | kolor kresek i łuku |
+| Właściwość                    | Typ     | Opis / zakres                               |
+| ----------------------------- | ------- | ------------------------------------------- |
+| rangeMin, rangeMax, rangeStep | integer | fragment skali i krok; krok 1–1000          |
+| drawArcOnEdge                 | boolean | łączy kreski łukiem na zewnętrznej krawędzi |
+| lineThickness                 | number  | grubość kreski (1–5%)                       |
+| distanceFromCenter            | number  | pozycja zewnętrznego końca (20–100%)        |
+| lineLength                    | number  | długość kreski (2–100%)                     |
+| lineColor                     | kolor   | kolor kresek i łuku                         |
 
 ### Numeric Scale
 
-| Właściwość | Typ | Opis / zakres |
-| --- | --- | --- |
-| rangeMin, rangeMax, rangeStep | integer | fragment skali i krok |
-| scaleMultiplier | number | mnożnik wyświetlanej wartości (0,01–100) |
-| rounding | integer | liczba miejsc formatowania (0–2) |
-| distanceFromCenter | number | odległość etykiet od środka (20–100%) |
-| rotated | boolean | obraca napisy zgodnie z pozycją na skali |
-| fontColor | kolor | kolor tekstu |
-| fontSize | number | rozmiar fontu (5–20%) |
-| fontFamily | string | rodzina fontu |
-| bold, italic, underline | boolean | modyfikatory kroju |
+| Właściwość                    | Typ     | Opis / zakres                            |
+| ----------------------------- | ------- | ---------------------------------------- |
+| rangeMin, rangeMax, rangeStep | integer | fragment skali i krok                    |
+| scaleMultiplier               | number  | mnożnik wyświetlanej wartości (0,01–100) |
+| rounding                      | integer | liczba miejsc formatowania (0–2)         |
+| distanceFromCenter            | number  | odległość etykiet od środka (20–100%)    |
+| rotated                       | boolean | obraca napisy zgodnie z pozycją na skali |
+| fontColor                     | kolor   | kolor tekstu                             |
+| fontSize                      | number  | rozmiar fontu (5–20%)                    |
+| fontFamily                    | string  | rodzina fontu                            |
+| bold, italic, underline       | boolean | modyfikatory kroju                       |
 
 ### Label
 
-| Właściwość | Typ | Opis / zakres |
-| --- | --- | --- |
-| text | string | wyświetlany tekst (obecnie do 40 znaków) |
-| positionX, positionY | number | pozycja względem środka Range (-100–100%) |
-| angle | integer | obrót (-360–360°) |
-| fontColor | kolor | kolor tekstu |
-| fontSize | number | rozmiar fontu (5–25%) |
-| fontFamily | string | rodzina fontu |
-| bold, italic, underline | boolean | modyfikatory kroju |
+| Właściwość              | Typ     | Opis / zakres                             |
+| ----------------------- | ------- | ----------------------------------------- |
+| text                    | string  | wyświetlany tekst (obecnie do 40 znaków)  |
+| positionX, positionY    | number  | pozycja względem środka Range (-100–100%) |
+| angle                   | integer | obrót (-360–360°)                         |
+| fontColor               | kolor   | kolor tekstu                              |
+| fontSize                | number  | rozmiar fontu (5–25%)                     |
+| fontFamily              | string  | rodzina fontu                             |
+| bold, italic, underline | boolean | modyfikatory kroju                        |
 
 ### Arc
 
-| Właściwość | Typ | Opis / zakres |
-| --- | --- | --- |
-| circleOffsetX, circleOffsetY | number | przesunięcie środka łuku (-100–100%) |
-| distanceFromCenter | number | zewnętrzny promień (20–100%) |
-| manualAngle | boolean | wybór ręcznego kąta zamiast zakresu wartości |
-| rangeMin, rangeMax | integer | początek i koniec strefy w wartościach Range |
-| angleStart, openingAngle | integer | ręczny początek (0–360°) i rozwarcie (-360–360°) |
-| color | kolor | wypełnienie łuku |
-| weight | number | szerokość pasa (1–100%) |
+| Właściwość                   | Typ     | Opis / zakres                                    |
+| ---------------------------- | ------- | ------------------------------------------------ |
+| circleOffsetX, circleOffsetY | number  | przesunięcie środka łuku (-100–100%)             |
+| distanceFromCenter           | number  | zewnętrzny promień (20–100%)                     |
+| manualAngle                  | boolean | wybór ręcznego kąta zamiast zakresu wartości     |
+| rangeMin, rangeMax           | integer | początek i koniec strefy w wartościach Range     |
+| angleStart, openingAngle     | integer | ręczny początek (0–360°) i rozwarcie (-360–360°) |
+| color                        | kolor   | wypełnienie łuku                                 |
+| weight                       | number  | szerokość pasa (1–100%)                          |
 
 ### Clock Hand
 
-| Właściwość | Typ | Opis / zakres |
-| --- | --- | --- |
-| negativeLength | number | długość części za osią (0–50%) |
-| thickness | number | grubość wskazówki (1–10%) |
-| negativeColor | kolor | kolor części za osią |
-| positiveLength | number | długość części przed osią (20–100%) |
-| positiveColor | kolor | kolor części przed osią |
-| endType | enum | normal, rounded, shortArrow, longArrow, softArrow |
-| circleSize | number | promień koła osi (1–10%) |
-| circleColor | kolor | kolor koła osi |
-| circleBehindArrow | boolean | koło pod wskazówką albo nad nią |
-| manualAngle | boolean | wybór ręcznego kąta zamiast wartości |
-| value | integer | wartość z Range (-1000–1000, ograniczana przez źródło) |
-| angle | integer | ręczny kąt (0–360°) |
+| Właściwość        | Typ     | Opis / zakres                                          |
+| ----------------- | ------- | ------------------------------------------------------ |
+| negativeLength    | number  | długość części za osią (0–50%)                         |
+| thickness         | number  | grubość wskazówki (1–10%)                              |
+| negativeColor     | kolor   | kolor części za osią                                   |
+| positiveLength    | number  | długość części przed osią (20–100%)                    |
+| positiveColor     | kolor   | kolor części przed osią                                |
+| endType           | enum    | normal, rounded, shortArrow, longArrow, softArrow      |
+| circleSize        | number  | promień koła osi (1–10%)                               |
+| circleColor       | kolor   | kolor koła osi                                         |
+| circleBehindArrow | boolean | koło pod wskazówką albo nad nią                        |
+| manualAngle       | boolean | wybór ręcznego kąta zamiast wartości                   |
+| value             | integer | wartość z Range (-1000–1000, ograniczana przez źródło) |
+| angle             | integer | ręczny kąt (0–360°)                                    |
 
 ### Ellipse i Rectangle
 
 Warstwy mają ten sam zestaw właściwości; różni je prymityw SVG.
 
-| Właściwość | Typ | Opis / zakres |
-| --- | --- | --- |
-| centerOffsetX, centerOffsetY | number | przesunięcie środka względem Range (-100–100%) |
-| width, height | number | wymiary (5–100%) |
-| color | kolor | wypełnienie |
-| borderColor | kolor | kolor obrysu |
-| borderThickness | number | grubość obrysu (0–25%; zero ukrywa obrys) |
-| angle | integer | obrót (-360–360°) |
+| Właściwość                   | Typ     | Opis / zakres                                  |
+| ---------------------------- | ------- | ---------------------------------------------- |
+| centerOffsetX, centerOffsetY | number  | przesunięcie środka względem Range (-100–100%) |
+| width, height                | number  | wymiary (5–100%)                               |
+| color                        | kolor   | wypełnienie                                    |
+| borderColor                  | kolor   | kolor obrysu                                   |
+| borderThickness              | number  | grubość obrysu (0–25%; zero ukrywa obrys)      |
+| angle                        | integer | obrót (-360–360°)                              |
 
 ### Ustawienia projektu
 
-| Właściwość | Typ | Opis |
-| --- | --- | --- |
-| canvas.widthMm, canvas.heightMm | number | fizyczne wymiary prostokątnego płótna w milimetrach |
-| canvas.background | kolor | tło obrazu |
-| canvas.foreground | kolor | opcjonalne wypełnienie tarczy lub kadru |
-| canvas.roundForeground | boolean | foreground jako koło albo pełny prostokąt |
-| export.size | integer | bok PNG (100–2000 px w starej aplikacji) |
-| export.svg | boolean | włącza eksport źródłowego SVG jako osobny format wyjściowy |
-| export.pdf.fitMode | enum | fit albo actualSize; zaawansowane opcje PDF są poza MVP |
+| Właściwość                      | Typ     | Opis                                                                      |
+| ------------------------------- | ------- | ------------------------------------------------------------------------- |
+| canvas.widthMm, canvas.heightMm | number  | fizyczne wymiary prostokątnego płótna w milimetrach                       |
+| canvas.background               | kolor   | zapisany kolor tła obrazu, używany tylko przy wyłączonej przezroczystości |
+| canvas.transparentBackground    | boolean | domyślnie `true`; canvas jest wtedy przezroczysty                         |
+| export.size                     | integer | bok PNG (100–2000 px w starej aplikacji)                                  |
+| export.svg                      | boolean | włącza eksport źródłowego SVG jako osobny format wyjściowy                |
+| export.pdf.fitMode              | enum    | fit albo actualSize; zaawansowane opcje PDF są poza MVP                   |
 
 ### Jednostki, skale i snapping
 
@@ -242,11 +238,11 @@ viewBox wyrażonego w mm.
 Skala jest niezależnym obiektem domenowym współdzielonym przez Tick Scale,
 Numeric Scale i Clock Hand:
 
-| Tryb | Dane | Znaczenie |
-| --- | --- | --- |
-| linear | min, max, step | wartość jest równomiernie mapowana na kąt Range |
-| nonlinear | lista punktów value/position | użytkownik ustala krzywą przez przeciąganie punktów na wykresie X/Y |
-| logarithmic | min, max, base | wartość jest mapowana logarytmicznie na pozycję w zakresie |
+| Tryb        | Dane                         | Znaczenie                                                           |
+| ----------- | ---------------------------- | ------------------------------------------------------------------- |
+| linear      | min, max, step               | wartość jest równomiernie mapowana na kąt Range                     |
+| nonlinear   | lista punktów value/position | użytkownik ustala krzywą przez przeciąganie punktów na wykresie X/Y |
+| logarithmic | min, max, base               | wartość jest mapowana logarytmicznie na pozycję w zakresie          |
 
 Warstwy kresek i liczb używają tej samej definicji, więc skala zawsze ma spójne
 znaczniki oraz etykiety. Wskazówka przy skali nieliniowej wylicza pozycję przez
@@ -271,11 +267,11 @@ znaczników i rozsądnej dokładności pozycji.
 
 Nad wykresem są trzy jawne przyciski trybu:
 
-| Przycisk EN | Działanie |
-| --- | --- |
-| Linear | ustawia dwa punkty krańcowe i równomierne mapowanie |
-| Logarithmic | tworzy logarytmiczne mapowanie dla dodatniego zakresu; użytkownik wybiera podstawę |
-| Custom curve | pozwala tworzyć i przeciągać własne punkty na wykresie |
+| Przycisk EN  | Działanie                                                                          |
+| ------------ | ---------------------------------------------------------------------------------- |
+| Linear       | ustawia dwa punkty krańcowe i równomierne mapowanie                                |
+| Logarithmic  | tworzy logarytmiczne mapowanie dla dodatniego zakresu; użytkownik wybiera podstawę |
+| Custom curve | pozwala tworzyć i przeciągać własne punkty na wykresie                             |
 
 Przełączenie na Linear lub Logarithmic jest akcją resetującą krzywą Custom,
 dlatego wymaga potwierdzenia, gdy użytkownik wprowadził własne punkty.
@@ -346,21 +342,21 @@ Rekomendacja: **Next.js (App Router) + TypeScript + React**. W pierwszym
 wydaniu aplikacja nadal może być całkowicie klientowa; Next.js zapewnia jednak
 dobrą strukturę, dokumentację oraz prostą drogę do późniejszego API.
 
-| Warstwa | Propozycja | Powód |
-| --- | --- | --- |
-| Aplikacja | Next.js (App Router) + TypeScript | routing, dokumentacja i gotowość na API |
-| Mini-wiki | widok Help w aplikacji, zasilany statyczną treścią Next.js/MDX | klikalna pomoc dla użytkownika, bez zewnętrznej strony i bez komend deweloperskich |
-| Stylowanie | Tailwind CSS v4, własny theme config | spójne tokeny, responsywne utility classes i brak rozproszonych wartości kolorów |
-| Komponenty | własny Atomic Design, z Radix UI tam gdzie potrzebna jest dostępna prymitywa | spójny interfejs bez narzucania gotowego wyglądu |
-| Stan | Redux Toolkit + React-Redux | centralny, lokalny store projektu z czytelną historią działań |
-| Dane | Zod + JSON Schema | walidacja importu i wersjonowanie |
-| Renderer | SVG jako źródło prawdy, Canvas do PNG | wektorowy podgląd i łatwa kontrola DOM |
-| Eksport PDF | jsPDF + svg2pdf.js | PDF z zachowaniem geometrii wektorowej i skalą wydruku |
-| Eksport SVG | serializacja renderowanego SVG | edytowalny, niezależny od rozdzielczości plik wektorowy |
-| Pliki lokalne | File System Access API z fallbackiem upload/download | otwieranie i zapisywanie plików JSON bez serwera |
-| Lokalizacja | next-intl oraz komunikaty w plikach locale | gotowość na kolejne języki, start wyłącznie z en |
-| Testy | Vitest, React Testing Library, snapshoty SVG/PNG | testy matematyki, UI i regresji bez osobnej warstwy E2E |
-| Dostawa | ESLint, Prettier, GitHub Actions, Vercel lub static export | powtarzalny build |
+| Warstwa       | Propozycja                                                                   | Powód                                                                              |
+| ------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Aplikacja     | Next.js (App Router) + TypeScript                                            | routing, dokumentacja i gotowość na API                                            |
+| Mini-wiki     | widok Help w aplikacji, zasilany statyczną treścią Next.js/MDX               | klikalna pomoc dla użytkownika, bez zewnętrznej strony i bez komend deweloperskich |
+| Stylowanie    | Tailwind CSS v4, własny theme config                                         | spójne tokeny, responsywne utility classes i brak rozproszonych wartości kolorów   |
+| Komponenty    | własny Atomic Design, z Radix UI tam gdzie potrzebna jest dostępna prymitywa | spójny interfejs bez narzucania gotowego wyglądu                                   |
+| Stan          | Redux Toolkit + React-Redux                                                  | centralny, lokalny store projektu z czytelną historią działań                      |
+| Dane          | Zod + JSON Schema                                                            | walidacja importu i wersjonowanie                                                  |
+| Renderer      | SVG jako źródło prawdy, Canvas do PNG                                        | wektorowy podgląd i łatwa kontrola DOM                                             |
+| Eksport PDF   | jsPDF + svg2pdf.js                                                           | PDF z zachowaniem geometrii wektorowej i skalą wydruku                             |
+| Eksport SVG   | serializacja renderowanego SVG                                               | edytowalny, niezależny od rozdzielczości plik wektorowy                            |
+| Pliki lokalne | File System Access API z fallbackiem upload/download                         | otwieranie i zapisywanie plików JSON bez serwera                                   |
+| Lokalizacja   | next-intl oraz komunikaty w plikach locale                                   | gotowość na kolejne języki, start wyłącznie z en                                   |
+| Testy         | Vitest, React Testing Library, snapshoty SVG/PNG                             | testy matematyki, UI i regresji bez osobnej warstwy E2E                            |
+| Dostawa       | ESLint, Prettier, GitHub Actions, Vercel lub static export                   | powtarzalny build                                                                  |
 
 SVG jest lepszym punktem wyjścia niż sam Canvas: aplikacja ma mało, ale
 precyzyjnych figur i tekstów; SVG daje skalowalny podgląd, selekcję elementów i
@@ -414,10 +410,10 @@ jest to jeden, czytelny mechanizm zmiany trybu panelu.
 Pasek ma stałą wysokość, jasne tło i dolną linię oddzielającą go od edytora.
 Każda akcja jest jednym przyciskiem z ikoną oraz angielską etykietą w tym samym
 wierszu, a także z dostępnym tooltipem i aria-label. Kolejność: New project,
-Download JSON, Import, Export, Undo, Redo, Restore, Examples, Help center.
+Open, Download, Import, Export, Undo, Redo, Restore, Examples, Help center.
 
 Przy zmniejszaniu dostępnej szerokości priorytetowo widoczne pozostają New
-project, Download JSON, Export, Undo i Redo. Pozostałe akcje są kolejno
+project, Open, Download, Export, Undo i Redo. Pozostałe akcje są kolejno
 przenoszone do ostatniego
 przycisku **More actions** z ikoną trzech kropek. Menu nie może ukrywać akcji
 bez zapewnienia dostępu klawiaturą. Na bardzo małym ekranie pasek pozostaje
@@ -430,14 +426,13 @@ Lewy panel zawiera nagłówek Layers, przycisk Add layer, przycisk Project
 settings oraz pionową listę warstw. Każdy wiersz zawiera miniaturowy render
 warstwy, nazwę, kolorowy napis typu, przycisk widoczności oraz stan zaznaczenia.
 Miniatura jest generowana z tego samego renderera SVG co podgląd, ale w małym,
-ustandaryzowanym viewBox. Pod listą albo w nagłówku są działania dla
-zaznaczonej warstwy: Delete, Duplicate, Move up i Move down.
+ustandaryzowanym viewBox. Wiersz warstwy zawiera uchwyt drag-and-drop, nazwę,
+typ, widoczność i usunięcie po potwierdzeniu. Duplicate nie jest jeszcze
+częścią MVP.
 
-Range nie ma reprezentacji końcowej widocznej na tarczy, więc jego miniatura
-nie udaje rysunku. Zamiast niej pokazujemy charakterystyczny badge/diagram
-zakresu: łuk z początkiem i końcem, kolor typu oraz metadane, np. 0–100 i
-120°. Dzięki temu Range jest jednoznacznie rozpoznawalny, a równocześnie nie
-wprowadza fałszywej grafiki.
+Range nie ma reprezentacji końcowej widocznej na tarczy. Jest w osobnej sekcji
+Ranges, więc jego wpis listy pozostaje zwarty: nazwa oraz akcje edycji/usuwania,
+bez miniatury lub badge udającego finalny rysunek.
 
 Aktywna warstwa wyróżnia się jasnoczerwonym tłem oraz czerwonym wskaźnikiem po
 lewej, a nie wyłącznie kolorem tekstu. Pozwala to zachować czytelność i
@@ -448,9 +443,9 @@ uruchamiało szybki podgląd tylko tej warstwy; to założenie jest poprawne.
 
 Nowa wersja zachowuje hover preview na miniaturze: tymczasowo renderuje tylko
 daną warstwę i jej zależny Range, aby użytkownik nie tracił kontekstu
-geometrycznego. Kliknięcie wiersza otwiera widok Properties w sliderze.
-Kolejność można później rozszerzyć o drag-and-drop, ale przyciski Move up/down
-pozostają jako podstawowa metoda.
+geometrycznego. Kliknięcie nazwy wiersza otwiera widok Properties w sliderze;
+dwuklik jest również wspierany. Nie ma osobnego przycisku ołówka. Kolejność
+zmienia się przez uchwyt drag-and-drop (`dnd-kit`), bez przycisków Move up/down.
 
 Miniatury nie są widoczne w widoku Properties. Ich render nie musi być
 odświeżany po każdej zmianie formularza ani podczas przeciągania uchwytu;
@@ -467,16 +462,16 @@ domyślnie, gdy zawierają wymagane pola lub błąd walidacji.
 
 Każdy wiersz właściwości ma nazwę po lewej oraz kontrolkę po prawej:
 
-| Typ danych | Kontrolka |
-| --- | --- |
-| string | Text input |
-| liczba całkowita / dziesiętna | Number input z dozwolonym krokiem i ograniczeniami |
-| liczba wygodna do regulacji | Number input + Range slider |
-| kolor | Color picker + pole HEX |
-| boolean | Switch |
-| enum | Select / dropdown |
-| zależność od Range | Select z nazwami dostępnych Range |
-| tekst wielowierszowy w przyszłości | Textarea |
+| Typ danych                         | Kontrolka                                          |
+| ---------------------------------- | -------------------------------------------------- |
+| string                             | Text input                                         |
+| liczba całkowita / dziesiętna      | Number input z dozwolonym krokiem i ograniczeniami |
+| liczba wygodna do regulacji        | Number input + Range slider                        |
+| kolor                              | Color picker + pole HEX                            |
+| boolean                            | Switch                                             |
+| enum                               | Select / dropdown                                  |
+| zależność od Range                 | Select z nazwami dostępnych Range                  |
+| tekst wielowierszowy w przyszłości | Textarea                                           |
 
 Opis właściwości, jednostka, zakres i komunikat walidacji są widoczne przy
 fokusie lub błędzie. Walidacja działa w trakcie edycji, ale nie blokuje wpisania
@@ -498,19 +493,19 @@ jest pierwszym wymaganym krokiem przy budowaniu tarczy.
 
 ### Paleta kolorów - light mode
 
-| Token | Kolor | Zastosowanie |
-| --- | --- | --- |
-| color-app-bg | #F6F7F9 | tło aplikacji i obszaru roboczego |
-| color-surface | #FFFFFF | paski, panele, dialogi i pola formularzy |
-| color-surface-subtle | #F0F2F5 | tło sidebara, grup i stanów hover |
-| color-border | #D8DCE2 | obramowania, separatory i nieaktywne kontrolki |
-| color-text | #20242B | podstawowy tekst i ikony |
-| color-text-muted | #626B77 | opisy, etykiety pomocnicze i metadane |
-| color-accent | #C62828 | główne akcje, fokus, zaznaczenie i aktywne ikony |
-| color-accent-hover | #A61F1F | hover / pressed dla akcentu |
-| color-accent-subtle | #FCE8E8 | tło zaznaczenia i łagodne komunikaty |
-| color-danger | #B42318 | błąd walidacji i akcje destrukcyjne |
-| color-focus-ring | #E57373 | pierścień fokusu klawiatury |
+| Token                | Kolor   | Zastosowanie                                     |
+| -------------------- | ------- | ------------------------------------------------ |
+| color-app-bg         | #F6F7F9 | tło aplikacji i obszaru roboczego                |
+| color-surface        | #FFFFFF | paski, panele, dialogi i pola formularzy         |
+| color-surface-subtle | #F0F2F5 | tło sidebara, grup i stanów hover                |
+| color-border         | #D8DCE2 | obramowania, separatory i nieaktywne kontrolki   |
+| color-text           | #20242B | podstawowy tekst i ikony                         |
+| color-text-muted     | #626B77 | opisy, etykiety pomocnicze i metadane            |
+| color-accent         | #C62828 | główne akcje, fokus, zaznaczenie i aktywne ikony |
+| color-accent-hover   | #A61F1F | hover / pressed dla akcentu                      |
+| color-accent-subtle  | #FCE8E8 | tło zaznaczenia i łagodne komunikaty             |
+| color-danger         | #B42318 | błąd walidacji i akcje destrukcyjne              |
+| color-focus-ring     | #E57373 | pierścień fokusu klawiatury                      |
 
 Czerwień jest zarezerwowana dla znaczących stanów i głównej akcji, a nie dla
 całej dekoracji interfejsu. Kontrast tekstu oraz ikon musi spełniać WCAG AA;
@@ -536,13 +531,13 @@ utilities, np. układu SVG, animacji wysuwania panelu i druku PDF.
 Komponenty interfejsu należy organizować według Atomic Design, przy jednoczesnym
 podziale kodu domenowego na features:
 
-| Poziom | Przykłady w aplikacji |
-| --- | --- |
-| Atoms | ActionButton, Tooltip, TextInput, NumberInput, RangeSlider, Switch, Select, ColorInput, FormLabel, Divider |
-| Molecules | FieldRow, NumberField, ColorField, LayerListItem, ToolbarAction, PropertyGroupHeader |
+| Poziom    | Przykłady w aplikacji                                                                                            |
+| --------- | ---------------------------------------------------------------------------------------------------------------- |
+| Atoms     | ActionButton, Tooltip, TextInput, NumberInput, RangeSlider, Switch, Select, ColorInput, FormLabel, Divider       |
+| Molecules | FieldRow, NumberField, ColorField, LayerListItem, ConfirmationModal, PropertyGroupHeader                         |
 | Organisms | ActionToolbar, SidebarSlider, LayersView, PropertiesView, LayerForm, SvgPreview, ExportPdfDialog, HelpNavigation |
-| Templates | EditorTemplate, HelpTemplate, LandingTemplate |
-| Pages | route /, /app i /app/help |
+| Templates | EditorTemplate, HelpTemplate, LandingTemplate                                                                    |
+| Pages     | route /, /app i /app/help                                                                                        |
 
 Kod domenowy, renderer SVG, klasy Layer, schematy Zod i operacje plikowe żyją
 poza Atomic Design, w modułach features/editor, features/project i lib. Atomy
@@ -555,6 +550,10 @@ Współdzielony kontrakt contextu ma trzy części: state, actions i meta.
 ReduxProvider i adaptery selectorów są jedynymi miejscami wiedzącymi, że stan
 MVP jest realizowany przez Redux Toolkit; komponenty UI korzystają z
 wyspecjalizowanych hooków i kontraktów, nie z implementacji store.
+
+Destrukcyjne akcje korzystają z jednego rootowego `ConfirmationProvider` i
+asynchronicznego `useConfirmation`; wywołujący przekazuje wyłącznie
+przetłumaczony tytuł, opis i akcję wykonywaną po potwierdzeniu.
 
 Store zawiera co najmniej projectSlice, editorSlice oraz historySlice.
 projectSlice przechowuje aktualny DTO projektu, editorSlice stan UI
@@ -664,17 +663,17 @@ z lokalizacji. Import dotyczy wyłącznie nowego JSON-a, nie starszych plików g
 
 ### Główny pasek projektu
 
-| Etykieta EN | Akcja |
-| --- | --- |
-| New project | tworzy pusty projekt; przy niezapisanych zmianach prosi o decyzję |
-| Download JSON | pobiera bieżący, zwalidowany projekt jako plik JSON na komputer |
-| Import | wybiera plik JSON; użytkownik decyduje, czy zastępuje projekt, czy importuje warstwy |
-| Export | otwiera menu lub dialog wyboru PNG, SVG albo PDF |
-| Undo | cofa ostatnią zmianę w historii edytora |
-| Redo | przywraca cofniętą zmianę |
-| Restore | otwiera dialog przywrócenia ostatniego lokalnego autosave |
-| Examples | otwiera katalog predefiniowanych projektów, w tym workbench w development |
-| Help center | otwiera mini-wiki wewnątrz aplikacji |
+| Etykieta EN | Akcja                                                                                |
+| ----------- | ------------------------------------------------------------------------------------ |
+| New project | tworzy pusty projekt; przy niezapisanych zmianach prosi o decyzję                    |
+| Download    | pobiera bieżący, zwalidowany projekt jako plik JSON na komputer                      |
+| Import      | wybiera plik JSON; użytkownik decyduje, czy zastępuje projekt, czy importuje warstwy |
+| Export      | otwiera menu lub dialog wyboru PNG, SVG albo PDF                                     |
+| Undo        | cofa ostatnią zmianę w historii edytora                                              |
+| Redo        | przywraca cofniętą zmianę                                                            |
+| Restore     | otwiera dialog przywrócenia ostatniego lokalnego autosave                            |
+| Examples    | otwiera katalog predefiniowanych projektów, w tym workbench w development            |
+| Help center | otwiera mini-wiki wewnątrz aplikacji                                                 |
 
 Export otwiera duże okno dialogowe zamiast bezpośrednio pobierać plik. Dialog
 ma osobne, czytelne sekcje dla PNG, SVG i PDF, z podglądem właściwych ustawień
@@ -684,15 +683,15 @@ jest to płatność, tracking ani wymagany element użycia aplikacji.
 
 ### Panel warstw
 
-| Etykieta EN | Akcja |
-| --- | --- |
-| Add layer | otwiera wybór typu warstwy oraz formularz jej utworzenia |
-| Project settings | otwiera ustawienia projektu: płótno i snapping |
-| Delete layer | usuwa zaznaczoną warstwę po potwierdzeniu; blokuje usunięcie używanego Range |
-| Duplicate layer | tworzy kopię zaznaczonej warstwy z nową nazwą i identyfikatorem |
-| Move layer up | przesuwa warstwę wyżej w kolejności nakładania |
-| Move layer down | przesuwa warstwę niżej w kolejności nakładania |
-| Toggle layer visibility | ikona przy warstwie; ukrywa lub pokazuje ją na podglądzie |
+| Etykieta EN             | Akcja                                                                        |
+| ----------------------- | ---------------------------------------------------------------------------- |
+| Add layer               | otwiera wybór typu warstwy oraz formularz jej utworzenia                     |
+| Project settings        | otwiera ustawienia projektu: płótno i snapping                               |
+| Delete layer            | usuwa zaznaczoną warstwę po potwierdzeniu; blokuje usunięcie używanego Range |
+| Duplicate layer         | tworzy kopię zaznaczonej warstwy z nową nazwą i identyfikatorem              |
+| Move layer up           | przesuwa warstwę wyżej w kolejności nakładania                               |
+| Move layer down         | przesuwa warstwę niżej w kolejności nakładania                               |
+| Toggle layer visibility | ikona przy warstwie; ukrywa lub pokazuje ją na podglądzie                    |
 
 Kliknięcie warstwy otwiera edytor, a najechanie może uruchamiać szybki podgląd
 tylko tej warstwy. Docelowo przyciski przesuwania można uzupełnić
@@ -700,36 +699,36 @@ przeciąganiem, ale nie zastępować nim obsługi klawiatury.
 
 ### Edytor warstwy i ustawienia projektu
 
-| Etykieta EN | Akcja |
-| --- | --- |
-| Back to layers | zamyka edytor i wraca do listy warstw |
-| Reset layer | przywraca domyślne właściwości aktualnej warstwy po potwierdzeniu |
-| Show only this layer | przełącza podgląd ograniczony do aktualnie edytowanej warstwy |
-| Bring this layer to front | tymczasowo renderuje edytowaną warstwę na wierzchu |
-| Hide editing overlay | ukrywa pomocniczą nakładkę zaznaczenia; nie dotyczy Range |
-| Back to layers (settings) | zamyka ustawienia projektu |
+| Etykieta EN               | Akcja                                                             |
+| ------------------------- | ----------------------------------------------------------------- |
+| Back to layers            | zamyka edytor i wraca do listy warstw                             |
+| Reset layer               | przywraca domyślne właściwości aktualnej warstwy po potwierdzeniu |
+| Show only this layer      | przełącza podgląd ograniczony do aktualnie edytowanej warstwy     |
+| Bring this layer to front | tymczasowo renderuje edytowaną warstwę na wierzchu                |
+| Hide editing overlay      | ukrywa pomocniczą nakładkę zaznaczenia; nie dotyczy Range         |
+| Back to layers (settings) | zamyka ustawienia projektu                                        |
 
 Trzy przełączniki podglądu są stanem interfejsu, więc nie powinny być zapisywane
 w JSON-ie projektu.
 
 ### Dialogi i ekran startowy
 
-| Kontekst | Etykieta EN | Akcja |
-| --- | --- | --- |
-| Create layer | Create | tworzy warstwę po wybraniu typu, nazwy i Range dla warstw zależnych |
-| Create layer | Cancel | zamyka dialog bez zmian |
-| Duplicate layer | Duplicate | zatwierdza utworzenie kopii |
-| Duplicate layer | Cancel | zamyka dialog bez zmian |
-| Import layers | Import selected | dodaje wybrane warstwy |
-| Import layers | Select all / Clear all | zaznacza albo odznacza wszystkie importowalne warstwy |
-| Import layers | Preview selected | chwilowo pokazuje wyłącznie wybrane warstwy |
-| Import layers | Cancel | zamyka dialog bez zmian |
-| Home | New project | rozpoczyna pusty projekt |
-| Home | Open project | wybiera lokalny projekt |
-| Home | Example project | otwiera jeden z przykładowych projektów |
-| Home | Video tutorials | otwiera stronę tutoriali |
-| Help | Back to editor | wraca z mini-wiki do bieżącego projektu bez utraty stanu |
-| Help | Previous / Next | przechodzi między kolejnymi sekcjami mini-wiki |
+| Kontekst        | Etykieta EN            | Akcja                                                               |
+| --------------- | ---------------------- | ------------------------------------------------------------------- |
+| Create layer    | Create                 | tworzy warstwę po wybraniu typu, nazwy i Range dla warstw zależnych |
+| Create layer    | Cancel                 | zamyka dialog bez zmian                                             |
+| Duplicate layer | Duplicate              | zatwierdza utworzenie kopii                                         |
+| Duplicate layer | Cancel                 | zamyka dialog bez zmian                                             |
+| Import layers   | Import selected        | dodaje wybrane warstwy                                              |
+| Import layers   | Select all / Clear all | zaznacza albo odznacza wszystkie importowalne warstwy               |
+| Import layers   | Preview selected       | chwilowo pokazuje wyłącznie wybrane warstwy                         |
+| Import layers   | Cancel                 | zamyka dialog bez zmian                                             |
+| Home            | New project            | rozpoczyna pusty projekt                                            |
+| Home            | Open project           | wybiera lokalny projekt                                             |
+| Home            | Example project        | otwiera jeden z przykładowych projektów                             |
+| Home            | Video tutorials        | otwiera stronę tutoriali                                            |
+| Help            | Back to editor         | wraca z mini-wiki do bieżącego projektu bez utraty stanu            |
+| Help            | Previous / Next        | przechodzi między kolejnymi sekcjami mini-wiki                      |
 
 Wszystkie akcje destrukcyjne i potencjalnie utracone zmiany wymagają
 zlokalizowanego dialogu potwierdzenia: Delete layer, Reset layer, New project,
@@ -771,11 +770,7 @@ abstract class Layer {
   abstract toSvg(context: RenderContext): React.ReactNode;
   abstract toEditingOverlay(context: OverlayContext): React.ReactNode;
   abstract getHandles(context: OverlayContext): OverlayHandle[];
-  abstract applyHandleDrag(
-    handleId: string,
-    pointer: CanvasPointMm,
-    context: DragContext,
-  ): Layer;
+  abstract applyHandleDrag(handleId: string, pointer: CanvasPointMm, context: DragContext): Layer;
 }
 
 class Range {
@@ -802,8 +797,8 @@ zastępuje się stabilnym rangeId.
 
 ```ts
 type GaugeProject = {
-  format: 'gauge-generator';
-  version: 2;
+  format: "gauge-generator-web";
+  version: 1;
   meta: {
     title: string;
     createdAt: string;
@@ -813,8 +808,7 @@ type GaugeProject = {
     widthMm: number;
     heightMm: number;
     background: string;
-    foreground: string;
-    roundForeground: boolean;
+    transparentBackground: boolean;
   };
   layers: LayerDto[];
   ranges: RangeDto[];
@@ -839,18 +833,25 @@ podniesienia version. Dzięki temu stare pliki pozostają możliwe do odczytu pr
 migrację, a Zod nadal wykrywa literówki i uszkodzone dane.
 
 ```ts
-const layerSchema = z.discriminatedUnion('type', [
-  rangeSchema, tickScaleSchema, numericScaleSchema, labelSchema,
-  arcSchema, clockHandSchema, ellipseSchema, rectangleSchema,
+const layerSchema = z.discriminatedUnion("type", [
+  tickScaleSchema,
+  numericScaleSchema,
+  labelSchema,
+  arcSchema,
+  clockHandSchema,
+  ellipseSchema,
+  rectangleSchema,
 ]);
 
-const projectSchema = z.object({
-  format: z.literal('gauge-generator'),
-  version: z.literal(2),
-  canvas: canvasSchema,
-  export: exportSchema,
-  layers: z.array(layerSchema).max(80),
-}).strict();
+const projectSchema = z
+  .object({
+    format: z.literal("gauge-generator-web"),
+    version: z.literal(1),
+    canvas: canvasSchema,
+    layers: z.array(layerSchema).max(80),
+    ranges: z.array(rangeSchema).max(5),
+  })
+  .strict();
 ```
 
 Specyfikacja musi jednoznacznie opisać układ współrzędnych, jednostki, punkt
@@ -879,14 +880,14 @@ podpowiedzi.
 
 Minimalny zestaw interaktywnych nakładek:
 
-| Warstwa | Uchwyty na podglądzie |
-| --- | --- |
-| Range | środek, promień, początek i koniec kąta zakresu, punkt osi wskazówki |
-| Tick Scale / Numeric Scale | granice widocznego zakresu, promień oraz długość kresek/pozycję etykiet |
-| Arc | środek, promień, początek i koniec łuku |
-| Clock Hand | obrót/wartość wskazówki, długość końca dodatniego i punkt osi |
-| Label | pozycja i obrót |
-| Ellipse / Rectangle | pozycja, szerokość, wysokość i obrót |
+| Warstwa                    | Uchwyty na podglądzie                                                       |
+| -------------------------- | --------------------------------------------------------------------------- |
+| Range                      | środek, promień oraz początek i rozwarcie kąta zakresu; Range nie ma pivotu |
+| Tick Scale / Numeric Scale | granice widocznego zakresu, promień oraz długość kresek/pozycję etykiet     |
+| Arc                        | środek, promień, początek i koniec łuku                                     |
+| Clock Hand                 | obrót/wartość wskazówki, długość końca dodatniego i punkt osi               |
+| Label                      | pozycja i obrót                                                             |
+| Ellipse / Rectangle        | pozycja, szerokość, wysokość i obrót                                        |
 
 Przeciągnięcie uchwytu aktualizuje te same właściwości, co formularz w
 sidebarze; obie metody są równoważne. Snapping jest stosowany do każdego
@@ -901,14 +902,14 @@ Testy jednostkowe są tworzone razem z każdym komponentem i modułem domenowym.
 Celem nie jest 100% coverage, tylko sprawdzenie podstawowych zadań, regresji
 i zachowania istotnego dla użytkownika.
 
-| Obszar | Co testujemy |
-| --- | --- |
+| Obszar                  | Co testujemy                                                                 |
+| ----------------------- | ---------------------------------------------------------------------------- |
 | klasy Layer i geometria | walidację, przeliczanie mm/kąt/wartość, SVG i obsługę przeciągnięcia uchwytu |
-| snapping | domyślne 2 mm i 10°, osobne kroki oraz tymczasowe wyłączenie |
-| skale | liniową, logarytmiczną i custom curve, w tym interpolację wskazówki |
-| komponenty atomowe | render, dostępność, kliknięcie, disabled/focus i podstawowe warianty |
-| organizmy UI | wybór warstwy, slider sidebara, edycję właściwości, undo/redo i komunikaty |
-| pliki oraz autosave | parsowanie Zod, błędny JSON, localStorage, fake timers i Restore |
+| snapping                | domyślne 2 mm i 10°, osobne kroki oraz tymczasowe wyłączenie                 |
+| skale                   | liniową, logarytmiczną i custom curve, w tym interpolację wskazówki          |
+| komponenty atomowe      | render, dostępność, kliknięcie, disabled/focus i podstawowe warianty         |
+| organizmy UI            | wybór warstwy, slider sidebara, edycję właściwości, undo/redo i komunikaty   |
+| pliki oraz autosave     | parsowanie Zod, błędny JSON, localStorage, fake timers i Restore             |
 
 Stos narzędzi obejmuje wyłącznie Vitest dla logiki i komponentów oraz React
 Testing Library dla interakcji użytkownika. Nie tworzymy osobnego pakietu ani
@@ -949,8 +950,8 @@ renderowania, walidacji oraz jednego testu uchwytu nakładki.
    sidebara, pusty podgląd SVG i jasny motyw Tailwind.
 2. Zbudować klasy Layer, DTO, Zod, Redux Toolkit store, historię undo/redo,
    autosave localStorage i wspólne fabryki testowe.
-3. Zaimplementować Range jako pierwszy typ warstwy, wraz z miniaturą,
-   nakładką, uchwytami oraz testami.
+3. Zaimplementować Range jako niezależny obiekt mapowania wartości, bez
+   miniatury finalnego SVG, wraz z nakładką, uchwytami oraz testami.
 
 ### Etap 2 — kolejne warstwy, po jednym kroku
 
@@ -973,7 +974,7 @@ wdrażaniu Tick Scale oraz Numeric Scale.
 
 ### Etap 3 — dopracowanie i wydanie
 
-1. Dodać Import i Download JSON, PNG, SVG oraz podstawowy PDF.
+1. Dodać Import, Download (JSON), PNG, SVG oraz podstawowy PDF.
 2. Dopracować responsywność, dostępność i komunikaty walidacyjne.
 3. Rozbudować bibliotekę przykładów i testy regresji dla uzgodnionych zasad.
 4. Udokumentować nowy JSON i publiczne API renderera, a następnie opublikować
@@ -981,19 +982,19 @@ wdrażaniu Tick Scale oraz Numeric Scale.
 
 ## 11. Ryzyka i decyzje
 
-| Temat | Ryzyko | Zalecenie |
-| --- | --- | --- |
-| Granice inspiracji a reużycie | średnie | traktować starszy projekt jako analizę produktu; nowe UI, kod, assety i JSON tworzyć niezależnie |
-| Fonty | średnie | web-safe lub legalnie osadzone fonty i widoczny fallback |
-| Identyczne piksele | średnie | testy z tolerancją, bo WPF i SVG różnie antyaliasują |
-| Modyfikatory podglądu | niskie | zachować jako stan UI, nie serializować do v2 |
-| Backend i współpraca | niskie dla MVP | odłożyć, ale utrzymać model niezależny od UI |
-| Licencja starego repozytorium | średnie | przed użyciem fragmentów kodu lub zasobów ustalić licencję nowego projektu |
+| Temat                         | Ryzyko         | Zalecenie                                                                                        |
+| ----------------------------- | -------------- | ------------------------------------------------------------------------------------------------ |
+| Granice inspiracji a reużycie | średnie        | traktować starszy projekt jako analizę produktu; nowe UI, kod, assety i JSON tworzyć niezależnie |
+| Fonty                         | średnie        | web-safe lub legalnie osadzone fonty i widoczny fallback                                         |
+| Identyczne piksele            | średnie        | testy z tolerancją, bo WPF i SVG różnie antyaliasują                                             |
+| Modyfikatory podglądu         | niskie         | zachować jako stan UI, nie serializować do v2                                                    |
+| Backend i współpraca          | niskie dla MVP | odłożyć, ale utrzymać model niezależny od UI                                                     |
+| Licencja starego repozytorium | średnie        | przed użyciem fragmentów kodu lub zasobów ustalić licencję nowego projektu                       |
 
 ## 12. Zakres sensownego MVP
 
 MVP: osiem typów warstw, wiele Range, podgląd SVG, kolejność/widoczność/
-klonowanie, typowane formularze, Import i Download JSON, localStorage autosave
+klonowanie, typowane formularze, Import i Download (JSON), localStorage autosave
 co 3 minuty z Restore, skale liniowe, logarytmiczne i edytowalne krzywe
 nieliniowe, snapping, interaktywne nakładki edycyjne, PNG, SVG, wektorowy PDF
 w skali, mini-wiki, własne przykłady, undo/redo oraz testy jednostkowe z
