@@ -25,9 +25,14 @@ const props = {
 describe("ProjectSettingsPanel", () => {
   it("clamps canvas dimensions before passing them to the editor", () => {
     renderEditor(<ProjectSettingsPanel {...props} />);
-    fireEvent.change(screen.getByRole("spinbutton", { name: "Width" }), {
+    const input = screen.getByRole("spinbutton", { name: "Width" });
+    fireEvent.focus(input);
+    fireEvent.change(input, {
       target: { value: "-10" },
     });
+    expect(props.onCanvasWidthChange).not.toHaveBeenCalled();
+
+    fireEvent.blur(input);
     expect(props.onCanvasWidthChange).toHaveBeenCalledWith("20");
   });
 });

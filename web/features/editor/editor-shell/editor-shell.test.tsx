@@ -1,12 +1,35 @@
 import { fireEvent, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { createRange } from "@/features/project/factories/project-factories";
+import {
+  createProject,
+  createRange,
+  createTickScaleLayer,
+} from "@/features/project/factories/project-factories";
 import { projectActions } from "@/store/project-slice";
 import { makeStore } from "@/store/store";
 import { renderEditor } from "@/test/render-editor";
 import { EditorShell } from "./editor-shell";
 
 describe("EditorShell", () => {
+  it("warns while editing a Range with linked layers", () => {
+    const range = createRange();
+    const layer = createTickScaleLayer(range.id);
+    const store = makeStore({
+      project: { current: createProject({ ranges: [range], layers: [layer] }) },
+    });
+
+    renderEditor(<EditorShell />, store);
+    fireEvent.click(screen.getByRole("button", { name: `Edit ${range.name}` }));
+
+    const warning = screen
+      .getByText(
+        "Large changes to this Range may automatically adjust the linked layer. Element sizes and visible values may be limited to fit the new Range.",
+      )
+      .closest('[role="status"]');
+    if (!warning) throw new Error("Range dependency warning was not rendered");
+    expect(warning.querySelector("svg")).not.toBeNull();
+  });
+
   it("creates a Range and navigates to its editor", () => {
     renderEditor(<EditorShell />);
     fireEvent.click(screen.getAllByRole("button", { name: "Create first Range" })[0]);

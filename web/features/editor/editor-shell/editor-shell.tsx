@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   BookOpen,
+  CircleCheck,
   Download,
   FileDown,
   FilePlus2,
@@ -10,13 +11,14 @@ import {
   HelpCircle,
   History,
   Redo2,
+  TriangleAlert,
   Undo2,
   Upload,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { StatusMessage } from "@/components/molecules/status-message/status-message";
+import { useStatusMessage } from "@/components/providers/status-message-provider/status-message-provider";
 import { CanvasPreview } from "@/features/editor/canvas-preview/canvas-preview";
 import { EditorSidebar } from "@/features/editor/editor-sidebar/editor-sidebar";
 import {
@@ -56,7 +58,8 @@ export function EditorShell() {
     useAppSelector((state) => state.editor);
   const { past, future } = useAppSelector((state) => state.history);
   const t = useTranslations("Editor");
-  const [status, setStatus] = useState("");
+  const { dismissMessage, showMessage } = useStatusMessage();
+  const rangeWarningIdRef = useRef<number | null>(null);
   const toolbarActions: EditorToolbarAction[] = [
     { id: "newProject", label: t("toolbar.newProject"), icon: FilePlus2 },
     { id: "open", label: t("toolbar.open"), icon: FolderOpen },
@@ -69,16 +72,37 @@ export function EditorShell() {
     { id: "examples", label: t("toolbar.examples"), icon: BookOpen },
     { id: "helpCenter", label: t("toolbar.helpCenter"), icon: HelpCircle },
   ];
-  const announce = (action: string) => setStatus(t("status.placeholder", { action }));
+  function dismissRangeDependencyWarning() {
+    if (rangeWarningIdRef.current === null) return;
+    dismissMessage(rangeWarningIdRef.current);
+    rangeWarningIdRef.current = null;
+  }
+  function showRangeDependencyWarning(rangeId: string, candidateProject = project) {
+    dismissRangeDependencyWarning();
+    const count = candidateProject.layers.filter((layer) => layer.rangeId === rangeId).length;
+    if (count === 0) return;
+    rangeWarningIdRef.current = showMessage({
+      color: "accent",
+      content: t("status.rangeDependencyWarning", { count }),
+      duration: "persistent",
+      icon: TriangleAlert,
+    });
+  }
+  useEffect(
+    () => () => {
+      if (rangeWarningIdRef.current !== null) dismissMessage(rangeWarningIdRef.current);
+    },
+    [dismissMessage],
+  );
   const openRangeProperties = (rangeId: string) => {
+    showRangeDependencyWarning(rangeId);
     dispatch(editorActions.setSelectedObject({ collection: "ranges", id: rangeId }));
     dispatch(editorActions.setSidebarMode("properties"));
-    setStatus(t("status.rangeOpened"));
   };
   const openLayerProperties = (layerId: string) => {
+    dismissRangeDependencyWarning();
     dispatch(editorActions.setSelectedObject({ collection: "layers", id: layerId }));
     dispatch(editorActions.setSidebarMode("properties"));
-    setStatus(t("status.layerOpened"));
   };
   function createProjectRange() {
     if (project.ranges.length >= MAX_RANGES) return;
@@ -90,12 +114,17 @@ export function EditorShell() {
   }
   function openLayerPicker() {
     if (!project.ranges[0]) {
-      setStatus(t("status.rangeRequired"));
+      showMessage({
+        color: "accent",
+        content: t("status.rangeRequired"),
+        duration: 4_000,
+        icon: TriangleAlert,
+      });
       return;
     }
+    dismissRangeDependencyWarning();
     dispatch(editorActions.setSelectedObject(null));
     dispatch(editorActions.setSidebarMode("properties"));
-    setStatus(t("status.layerPickerOpened"));
   }
   function createLayer(type: LayerType) {
     const sourceRange = project.ranges.at(-1);
@@ -137,7 +166,12 @@ export function EditorShell() {
   const resetSelectedLayer = () => {
     if (!selectedLayer) return;
     dispatch(projectActions.updateLayer(resetLayerToDefaults(selectedLayer)));
-    setStatus(t("status.layerReset"));
+    showMessage({
+      color: "neutral",
+      content: t("status.layerReset"),
+      duration: 3_000,
+      icon: CircleCheck,
+    });
   };
   const updateCanvas = (change: Partial<typeof project.canvas>) =>
     dispatch(projectActions.setCanvas({ ...project.canvas, ...change }));
@@ -145,16 +179,23 @@ export function EditorShell() {
     dispatch(editorActions.setSnapping({ ...snapping, ...change }));
   function handleToolbarAction(action: EditorToolbarAction) {
     if (action.id === "undo") {
+      const targetProject = past.at(-1);
       dispatch(undoProject());
-      setStatus(t("status.undo"));
+      if (selectedRange && targetProject?.ranges.some((range) => range.id === selectedRange.id))
+        showRangeDependencyWarning(selectedRange.id, targetProject);
+      else dismissRangeDependencyWarning();
+      showMessage({ content: t("status.undo"), duration: 2_500 });
       return;
     }
     if (action.id === "redo") {
+      const targetProject = future.at(-1);
       dispatch(redoProject());
-      setStatus(t("status.redo"));
+      if (selectedRange && targetProject?.ranges.some((range) => range.id === selectedRange.id))
+        showRangeDependencyWarning(selectedRange.id, targetProject);
+      else dismissRangeDependencyWarning();
+      showMessage({ content: t("status.redo"), duration: 2_500 });
       return;
     }
-    announce(action.label);
   }
 
   return (
@@ -191,9 +232,10 @@ export function EditorShell() {
               onDuplicateLayer={(layerId) => dispatch(projectActions.duplicateLayer(layerId))}
               onHoverLayer={(layerId) => dispatch(editorActions.setHoveredLayerId(layerId))}
               onOpenLayerProperties={openLayerProperties}
-              onOpenProjectSettings={() =>
-                dispatch(editorActions.setSidebarMode("project-settings"))
-              }
+              onOpenProjectSettings={() => {
+                dismissRangeDependencyWarning();
+                dispatch(editorActions.setSidebarMode("project-settings"));
+              }}
               onOpenRangeProperties={openRangeProperties}
               onReorderLayer={(layerId, targetIndex) =>
                 dispatch(projectActions.reorderLayer({ layerId, targetIndex }))
@@ -216,7 +258,10 @@ export function EditorShell() {
               canvasWidth={String(project.canvas.widthMm)}
               distanceSnap={String(snapping.distanceMm)}
               onAngleSnapChange={(value) => updateSnapping({ angleDegrees: Number(value) })}
-              onBack={() => dispatch(editorActions.setSidebarMode("layers"))}
+              onBack={() => {
+                dismissRangeDependencyWarning();
+                dispatch(editorActions.setSidebarMode("layers"));
+              }}
               onBackgroundChange={(value) => updateCanvas({ background: value })}
               onCanvasHeightChange={(value) => updateCanvas({ heightMm: Number(value) })}
               onCanvasWidthChange={(value) => updateCanvas({ widthMm: Number(value) })}
@@ -234,7 +279,10 @@ export function EditorShell() {
           properties={
             <PropertiesPanel
               canvas={project.canvas}
-              onBack={() => dispatch(editorActions.setSidebarMode("layers"))}
+              onBack={() => {
+                dismissRangeDependencyWarning();
+                dispatch(editorActions.setSidebarMode("layers"));
+              }}
               onCreateLayer={createLayer}
               onHistoryTransactionEnd={() => dispatch(completeProjectHistoryTransaction())}
               onHistoryTransactionStart={() => dispatch(beginProjectHistoryTransaction())}
@@ -257,7 +305,7 @@ export function EditorShell() {
           }
         />
         <CanvasPreview
-          onBrowseExamples={() => announce(t("toolbar.examples"))}
+          onBrowseExamples={() => undefined}
           onCreateRange={createProjectRange}
           onLayerChange={(layer) => dispatch(projectActions.updateLayer(layer))}
           onLayerInteractionEnd={() => dispatch(completeProjectHistoryTransaction())}
@@ -273,7 +321,6 @@ export function EditorShell() {
           snapping={snapping}
         />
       </section>
-      <StatusMessage>{status}</StatusMessage>
     </main>
   );
 }

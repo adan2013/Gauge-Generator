@@ -79,7 +79,7 @@ export function CanvasPreview({
   return (
     <section
       aria-label={t("canvas.ariaLabel")}
-      className="relative flex min-w-0 flex-1 overflow-hidden p-6 sm:p-10"
+      className="relative flex min-w-0 flex-1 overflow-hidden px-6 pt-6 pb-20 sm:px-10 sm:pt-10 sm:pb-24"
     >
       <div className="flex size-full min-h-0 min-w-0 items-center justify-center" ref={viewportRef}>
         <div

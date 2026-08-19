@@ -54,3 +54,15 @@ The history middleware observes successful actions in the `project/` namespace
 instead of a duplicated action list. Controls that produce a stream of changes
 use a begin/complete transaction: the store updates for live preview throughout
 the interaction, but history records its initial project only once at the end.
+
+## Status messages
+
+Corner messages are owned by the root `StatusMessageProvider` and opened through
+`useStatusMessage()`. A request supplies `content`, an optional `color` and icon,
+and `duration` as milliseconds or `"persistent"`. Timed operation feedback may
+stack alongside persistent contextual warnings. Callers retain the returned id
+when they need to dismiss a persistent message.
+
+Routine navigation does not produce messages. Use timed messages for meaningful
+operation results and validation guidance; reserve persistent messages for
+context that remains relevant until the user leaves that context.

@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { ConfirmationProvider } from "@/components/providers/confirmation-provider/confirmation-provider";
+import { StatusMessageProvider } from "@/components/providers/status-message-provider/status-message-provider";
 import { TooltipProvider } from "@/components/providers/tooltip-provider/tooltip-provider";
 import { StoreProvider } from "@/store/store-provider/store-provider";
 import "./globals.css";
@@ -19,7 +20,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <NextIntlClientProvider>
           <TooltipProvider>
             <ConfirmationProvider>
-              <StoreProvider>{children}</StoreProvider>
+              <StatusMessageProvider>
+                <StoreProvider>{children}</StoreProvider>
+              </StatusMessageProvider>
             </ConfirmationProvider>
           </TooltipProvider>
         </NextIntlClientProvider>

@@ -40,14 +40,11 @@
   "Editor": {
     "brand": "Gauge Generator Web",
     "status": {
-      "placeholder": "{action} is wired as a UI placeholder.",
       "undo": "Undid the last project change.",
       "redo": "Redid the project change.",
-      "rangeOpened": "Range properties layout opened.",
-      "layerOpened": "Layer properties layout opened.",
       "layerReset": "Layer settings restored to their defaults.",
-      "layerPickerOpened": "Choose a layer type.",
-      "rangeRequired": "Create a Range before adding a visual layer."
+      "rangeRequired": "Create a Range before adding a visual layer.",
+      "rangeDependencyWarning": "Large changes to this Range may automatically adjust {count, plural, one {the linked layer} other {# linked layers}}. Element sizes and visible values may be limited to fit the new Range."
     },
     "toolbar": {
       "ariaLabel": "Project actions",
@@ -225,6 +222,7 @@
       "identity": "Identity",
       "name": "Name",
       "adjust": "Adjust {label}",
+      "pendingCommit": "Press Enter or click outside to apply. Esc cancels.",
       "millimeters": "mm",
       "degrees": "°",
       "percent": "%",
