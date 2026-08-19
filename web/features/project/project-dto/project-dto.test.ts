@@ -73,7 +73,12 @@ describe("ProjectSchema", () => {
 
   it("keeps the value-mapping mode on Range, not on a visual Tick Scale", () => {
     const range = createRange({
-      scaleDefinition: { mode: "logarithmic", start: 1, end: 100, base: 10 },
+      scaleDefinition: {
+        mode: "logarithmic",
+        start: 1,
+        end: 100,
+        detailEmphasis: "low-values",
+      },
     });
     const layer = createTickScaleLayer(range.id, { valueStart: 1, valueEnd: 100, valueStep: 10 });
     const project = createProject({ ranges: [range], layers: [layer] });
@@ -84,6 +89,41 @@ describe("ProjectSchema", () => {
       layers: [{ ...layer, scaleDefinition: range.scaleDefinition }],
     };
     expect(validateProject(invalidLayerProject).issues).not.toEqual([]);
+  });
+
+  it("requires custom-scale endpoints to cover normalized positions zero and one", () => {
+    const range = createRange({
+      scaleDefinition: {
+        mode: "custom",
+        points: [
+          { value: 0, position: 0.1 },
+          { value: 100, position: 0.9 },
+        ],
+      },
+    });
+
+    expect(validateProject(createProject({ ranges: [range] })).issues).toEqual([
+      {
+        path: `ranges.${range.id}.scaleDefinition.points.0.position`,
+        code: PROJECT_VALIDATION_CODES.customScaleEndpointsInvalid,
+      },
+      {
+        path: `ranges.${range.id}.scaleDefinition.points.1.position`,
+        code: PROJECT_VALIDATION_CODES.customScaleEndpointsInvalid,
+      },
+    ]);
+  });
+
+  it("keeps scale bounds ordered when value direction is descending", () => {
+    const range = createRange({
+      valueDirection: "descending",
+      scaleDefinition: { mode: "linear", start: 100, end: 0 },
+    });
+
+    expect(validateProject(createProject({ ranges: [range] })).issues).toContainEqual({
+      path: `ranges.${range.id}.scaleDefinition`,
+      code: PROJECT_VALIDATION_CODES.scaleBoundsNotAscending,
+    });
   });
 
   it("validates Numeric Scale as an independent visual layer tied to a Range", () => {

@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { useState } from "react";
+import { Trash2 } from "lucide-react";
 import { describe, expect, it } from "vitest";
 import messages from "@/messages/en.json";
 import { ConfirmationProvider, useConfirmation } from "./confirmation-provider";
@@ -15,6 +16,7 @@ function ConfirmationTrigger() {
           setResult(
             String(
               await confirm({
+                confirmIcon: Trash2,
                 description: "Remove it permanently.",
                 title: "Remove item?",
                 variant: "danger",

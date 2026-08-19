@@ -8,10 +8,7 @@ import type {
 import { Layer } from "@/features/layers/core/layer";
 import { getRangeMappedLayerValidationIssues } from "@/features/layers/core/range-layer-validation";
 import { PROJECT_VALIDATION_CODES } from "@/features/project/project-dto/project-validation-codes";
-import {
-  getScaleValues,
-  valueToNormalizedPosition,
-} from "@/features/ranges/scale-mapping/scale-mapping";
+import { getScaleDistribution } from "@/features/ranges/scale-mapping/scale-sequence";
 import type { NumericScaleLayerDto } from "@/features/project/project-dto/project-dto";
 import { clamp, normalizeAngle, snapDistanceMm } from "@/lib/geometry/geometry";
 import { getNumericScaleGeometryBounds } from "./numeric-scale-constraints";
@@ -49,10 +46,8 @@ export class NumericScaleLayer extends Layer<NumericScaleLayerDto> {
     if (radius <= 0) return "";
     const weight = this.dto.bold ? ' font-weight="700"' : "";
     const style = `${this.dto.italic ? ' font-style="italic"' : ""}${this.dto.underline ? ' text-decoration="underline"' : ""}`;
-    return getScaleValues(this.dto, range)
-      .map((value) => {
-        const angle =
-          range.angleStart + range.openingAngle * valueToNormalizedPosition(range, value);
+    return getScaleDistribution(this.dto, range)
+      .map(({ angle, value }) => {
         const radians = (normalizeAngle(angle) * Math.PI) / 180;
         const x = range.centerX + Math.cos(radians) * radius;
         const y = range.centerY + Math.sin(radians) * radius;

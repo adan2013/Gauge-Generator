@@ -71,7 +71,7 @@ export function ProjectSettingsPanel({
             variant="quiet"
           />
         </div>
-        <div className="overflow-y-auto p-3">
+        <div className="min-h-0 flex-1 overflow-y-auto p-3 pb-32">
           <p className="text-xs font-semibold uppercase tracking-[0.12em] text-accent">
             {t("projectSettings.eyebrow")}
           </p>

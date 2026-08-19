@@ -1,6 +1,6 @@
 import type { NumericPropertyDefinition } from "@/features/layers/core/layer";
 import type { RangeDto, TickScaleLayerDto } from "@/features/project/project-dto/project-dto";
-import { getRangeScaleValueBounds } from "@/features/ranges/scale-mapping/scale-mapping";
+import { getRangeLayerValuePropertyDefinitions } from "@/features/layers/core/range-layer-properties";
 import { getTickScaleGeometryBounds } from "./tick-scale-constraints";
 import { TICK_SCALE_LIMITS } from "./tick-scale-limits";
 
@@ -39,41 +39,8 @@ export function getTickScaleNumericPropertyDefinitions(
   range: RangeDto | undefined,
 ): readonly TickScaleNumericPropertyDefinition[] {
   const bounds = range ? getTickScaleGeometryBounds(layer, range) : undefined;
-  const valueBounds = range ? getRangeScaleValueBounds(range) : { min: -1_000_000, max: 1_000_000 };
   return [
-    {
-      key: "valueStart",
-      labelKey: "valueStart",
-      group: "range",
-      unit: "none",
-      snap: "none",
-      value: layer.valueStart,
-      min: valueBounds.min,
-      max: layer.valueEnd,
-      step: 1,
-    },
-    {
-      key: "valueEnd",
-      labelKey: "valueEnd",
-      group: "range",
-      unit: "none",
-      snap: "none",
-      value: layer.valueEnd,
-      min: layer.valueStart,
-      max: valueBounds.max,
-      step: 1,
-    },
-    {
-      key: "valueStep",
-      labelKey: "valueStep",
-      group: "range",
-      unit: "none",
-      snap: "none",
-      value: layer.valueStep,
-      min: Number.EPSILON,
-      max: Math.max(Number.EPSILON, layer.valueEnd - layer.valueStart),
-      step: 1,
-    },
+    ...getRangeLayerValuePropertyDefinitions(layer, range),
     {
       key: "radiusOffsetMm",
       labelKey: "radiusOffset",

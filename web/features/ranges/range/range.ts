@@ -111,13 +111,26 @@ export class Range {
     if (this.dto.radius > getRangeRadiusMaximum(context.project.canvas))
       issues.push({ path: "radius", code: PROJECT_VALIDATION_CODES.rangeRadiusOutsideCanvasLimit });
     const scale = this.dto.scaleDefinition;
-    if (scale.mode !== "custom" && scale.start === scale.end)
-      issues.push({ path: "scaleDefinition", code: PROJECT_VALIDATION_CODES.scaleStartEqualsEnd });
+    if (scale.mode !== "custom" && scale.start >= scale.end)
+      issues.push({
+        path: "scaleDefinition",
+        code: PROJECT_VALIDATION_CODES.scaleBoundsNotAscending,
+      });
     if (scale.mode === "custom") {
+      if (scale.points[0]?.position !== 0)
+        issues.push({
+          path: "scaleDefinition.points.0.position",
+          code: PROJECT_VALIDATION_CODES.customScaleEndpointsInvalid,
+        });
+      if (scale.points.at(-1)?.position !== 1)
+        issues.push({
+          path: `scaleDefinition.points.${scale.points.length - 1}.position`,
+          code: PROJECT_VALIDATION_CODES.customScaleEndpointsInvalid,
+        });
       for (let index = 1; index < scale.points.length; index += 1) {
         const previous = scale.points[index - 1];
         const point = scale.points[index];
-        if (point.value <= previous.value || point.position < previous.position)
+        if (point.value <= previous.value || point.position <= previous.position)
           issues.push({
             path: `scaleDefinition.points.${index}`,
             code: PROJECT_VALIDATION_CODES.customScaleNotMonotonic,

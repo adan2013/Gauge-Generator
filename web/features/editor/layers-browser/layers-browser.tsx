@@ -74,6 +74,7 @@ export function LayersBrowser({
   async function requestLayerDeletion(layer: LayerDto) {
     if (
       await confirm({
+        confirmIcon: Trash2,
         description: confirmationT("deleteLayerDescription", { name: layer.name }),
         title: confirmationT("deleteLayerTitle"),
         variant: "danger",
@@ -84,6 +85,7 @@ export function LayersBrowser({
   async function requestRangeDeletion(range: RangeDto) {
     if (
       await confirm({
+        confirmIcon: Trash2,
         description: confirmationT("deleteRangeDescription", { name: range.name }),
         title: confirmationT("deleteRangeTitle"),
         variant: "danger",

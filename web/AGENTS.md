@@ -57,7 +57,8 @@ Keep those documents current. Put completed-stage evidence in
 - Destructive actions use the root-mounted `ConfirmationProvider` and its
   promise-based `useConfirmation().confirm(request)` API. Keep modal mounting,
   button labels, and cancellation behavior central; callers own only their
-  translated title, description, and post-confirmation domain action.
+  translated title, description, confirmation icon, and post-confirmation
+  domain action. `variant` styles the request but never selects its icon.
 
 ## Product constraints
 
@@ -85,9 +86,15 @@ Keep those documents current. Put completed-stage evidence in
 - Creating a visual layer is a two-step flow: first choose its type in the
   right-side picker, then create it and open its Properties. Do not create a
   placeholder layer before that choice.
-- A Range owns geometry and `scaleDefinition` (`linear`, `logarithmic`, or
-  `custom`). Visual layers such as Tick Scale and Numeric Scale render using
-  that mapping; they never choose its mode.
+- A Range owns geometry, `valueDirection` (`ascending` or `descending`), and
+  `scaleDefinition` (`linear`, `logarithmic`, or `custom`). Visual layers such as
+  Tick Scale and Numeric Scale render using that mapping; they never choose its
+  mode or direction. Logarithmic definitions use `detailEmphasis` to give more
+  arc space to either low or high values. Custom has no curve-mirroring option;
+  direction is applied after its canonical increasing point mapping.
+- Scale-domain bounds, Custom point values, and Tick/Numeric visible start, end,
+  and step values are integers. Fractional labels come only from Numeric Scale's
+  `scaleMultiplier` and `decimalPlaces` presentation settings.
 - `Layer` is the visual-layer base abstraction; `Range` is separate. Layer
   implementations own final SVG, validation, editing overlay, handles, drag
   behavior, and numeric field definitions. Keep rendering/domain code React-free.
@@ -156,9 +163,10 @@ Keep those documents current. Put completed-stage evidence in
 - The Layers browser duplicates a visual layer immediately above its source
   (the preceding, visually higher index), with a fresh ID and a `_Copy` name
   suffix. It is a project mutation and therefore participates in Undo/Redo.
-- The initial store state in `NODE_ENV=development` uses a deterministic Apple
-  Clock workbench project with one Range, two Tick Scale layers, and one Numeric
-  Scale layer. Production and explicit New project flows remain empty.
+- The initial store state in `NODE_ENV=development` uses a deterministic
+  logarithmic pressure-gauge workbench (`1..10 bar`) with high-value detail, one
+  Range, two Tick Scale layers, and one Numeric Scale layer. Production and
+  explicit New project flows remain empty.
 
 ## Quality and future slices
 
@@ -166,6 +174,9 @@ Keep those documents current. Put completed-stage evidence in
   Testing Library. Reuse factories, store/render helpers, fixtures, and browser
   mocks rather than recreating them per test. Test positive user-visible and
   domain behaviours, not the absence of controls that should never exist.
+- Do not add regression tests solely to preserve fixes made during active
+  development. Update existing expectations to the current contract and add new
+  coverage only for stable, user-visible or domain-critical behaviour.
 - Add each layer as a vertical slice: DTO/Zod, factory, domain class, form,
   SVG, overlay/handles, thumbnail, example/workbench, and tests.
 - Autosave is `localStorage` only: every three minutes, retain five snapshots.

@@ -143,9 +143,41 @@
       "angleStart": "Start angle",
       "openingAngle": "Opening angle",
       "values": "Value mapping",
+      "scaleMode": "Scale mode",
+      "scaleModes": {
+        "linear": "Linear",
+        "logarithmic": "Logarithmic",
+        "custom": "Custom curve"
+      },
+      "valueDirection": "Value direction",
+      "valueDirections": {
+        "ascending": "Ascending along arc",
+        "descending": "Descending along arc"
+      },
+      "logarithmicDetailEmphasis": "Detail emphasis",
+      "logarithmicDetailEmphases": {
+        "low-values": "Low values (more space)",
+        "high-values": "High values (more space)"
+      },
       "scaleStart": "Start value",
       "scaleEnd": "End value",
-      "scaleModeDescription": "The editable curve controls will be introduced with the first scale layer.",
+      "scaleModeChangeTitle": "Change scale mode?",
+      "scaleModeChangeDescription": "Changing the mode resets all scale values to the defaults for the selected mode and may adjust linked layers.",
+      "scaleModeConfirm": "Change mode",
+      "customCurve": {
+        "ariaLabel": "Custom scale curve editor",
+        "description": "Value runs horizontally and normalized dial position vertically. Values are integers and follow the project distance increment when snapping is enabled; positions use 0.05 increments.",
+        "valueAxis": "Value",
+        "pointValue": "Value (X-axis)",
+        "pointPosition": "Position (Y-axis)",
+        "pointCount": "{count, plural, one {# point} other {# points}}",
+        "addPoint": "Add curve point",
+        "pointsAriaLabel": "Custom curve points",
+        "locked": "Locked",
+        "lockedPoint": "Locked curve point: value {value}, position {position}",
+        "editablePoint": "Curve point: value {value}, position {position}",
+        "removePoint": "Remove point"
+      },
       "overlayAriaLabel": "Range editing overlay",
       "handles": {
         "center": "Move center",

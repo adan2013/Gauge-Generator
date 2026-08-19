@@ -1,9 +1,8 @@
 import { PROJECT_VALIDATION_CODES } from "@/features/project/project-dto/project-validation-codes";
 import type { ValidationIssue } from "@/features/layers/core/layer";
-import {
-  getRangeScaleValueBounds,
-  getScaleItemCount,
-} from "@/features/ranges/scale-mapping/scale-mapping";
+import { MAX_GENERATED_SCALE_ITEMS } from "@/features/ranges/scale-mapping/scale-constants";
+import { getRangeScaleValueBounds } from "@/features/ranges/scale-mapping/scale-mapping";
+import { getScaleItemCount } from "@/features/ranges/scale-mapping/scale-sequence";
 import type { LayerDto, RangeDto } from "@/features/project/project-dto/project-dto";
 
 type RangeMappedLayer = Pick<LayerDto, "radiusOffsetMm" | "valueEnd" | "valueStart" | "valueStep">;
@@ -35,7 +34,7 @@ export function getRangeMappedLayerValidationIssues(
       path: "valueStart",
       code: PROJECT_VALIDATION_CODES.valueStartAfterEnd,
     });
-  if (getScaleItemCount(layer) > 200)
+  if (getScaleItemCount(layer) > MAX_GENERATED_SCALE_ITEMS)
     issues.push({
       path: "valueStep",
       code: PROJECT_VALIDATION_CODES.tooManyGeneratedItems,

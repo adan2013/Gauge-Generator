@@ -9,16 +9,23 @@ import {
 } from "./project-factories";
 
 describe("createDevelopmentProject", () => {
-  it("provides an Apple Clock workbench with Tick Scale and Numeric Scale layers", () => {
+  it("provides a logarithmic pressure-gauge workbench", () => {
     const project = createDevelopmentProject();
 
     expect(project.ranges).toHaveLength(1);
     expect(project.layers).toHaveLength(3);
     expect(project.layers.every((layer) => layer.rangeId === project.ranges[0].id)).toBe(true);
     expect(project.ranges[0]).toMatchObject({
-      angleStart: 270,
-      openingAngle: 360,
-      radius: 48,
+      angleStart: 135,
+      openingAngle: 270,
+      radius: 46,
+      valueDirection: "ascending",
+      scaleDefinition: {
+        mode: "logarithmic",
+        start: 10,
+        end: 100,
+        detailEmphasis: "high-values",
+      },
     });
     expect(project.canvas).toMatchObject({ background: "#FFFFFF", transparentBackground: false });
     expect(project.layers.filter((layer) => layer.type === "tick-scale")).toEqual(
@@ -28,9 +35,9 @@ describe("createDevelopmentProject", () => {
       ]),
     );
     expect(project.layers.map((layer) => layer.name)).toEqual([
-      "Inner hour markers",
-      "Minute markers",
-      "Cardinal hour labels",
+      "Major pressure ticks",
+      "Minor pressure ticks",
+      "Pressure values (bar)",
     ]);
   });
 });

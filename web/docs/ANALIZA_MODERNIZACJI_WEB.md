@@ -130,6 +130,7 @@ bez kopiowania nazw czy domyślnych wartości.
 | angleStart                     | integer | początkowy kąt skali (0–360°)                                                                              |
 | openingAngle                   | integer | rozwarcie skali (-360–360°); ujemne zmienia zwrot                                                          |
 | rangeStartValue, rangeEndValue | integer | początek i koniec wartości skali (-1000–1000)                                                              |
+| valueDirection                 | enum    | ascending albo descending; niezależnie od zwrotu geometrycznego łuku                                       |
 | scaleDefinition                | obiekt  | wspólna definicja mapowania wartości na pozycję: linear, logarithmic albo custom curve; bez parametru step |
 
 ### Tick Scale
@@ -244,7 +245,7 @@ Numeric Scale i Clock Hand:
 | ----------- | ---------------------------- | ------------------------------------------------------------------- |
 | linear      | min, max, step               | wartość jest równomiernie mapowana na kąt Range                     |
 | nonlinear   | lista punktów value/position | użytkownik ustala krzywą przez przeciąganie punktów na wykresie X/Y |
-| logarithmic | min, max, base               | wartość jest mapowana logarytmicznie na pozycję w zakresie          |
+| logarithmic | min, max, detailEmphasis     | logarytm z większą przestrzenią dla niskich albo wysokich wartości  |
 
 Warstwy kresek i liczb używają tej samej definicji, więc skala zawsze ma spójne
 znaczniki oraz etykiety. Wskazówka przy skali nieliniowej wylicza pozycję przez
@@ -264,21 +265,30 @@ widzi bieżącą krzywą i może:
 - zablokować skrajne punkty: minimum = 0 oraz maksimum = 1.
 
 Wykres zachowuje rosnący porządek wartości i pozycji, więc nie pozwala tworzyć
-przecięć ani cofającej się skali. Przeciąganie działa z snappingiem do wartości
-znaczników i rozsądnej dokładności pozycji.
+przecięć ani cofającej się skali. Wartości punktów są zawsze całkowite, a przy
+włączonym snappingu używają projektowego kroku Distance snap. Pozycje zawsze
+używają kroku `0,05`. Przy
+`valueDirection=descending` wykres pokazuje i edytuje efektywne pozycje
+`1 - position`, pozostawiając zapisane punkty w porządku rosnącym. Custom nie ma
+osobnej opcji odbicia kształtu.
 
 Nad wykresem są trzy jawne przyciski trybu:
 
-| Przycisk EN  | Działanie                                                                          |
-| ------------ | ---------------------------------------------------------------------------------- |
-| Linear       | ustawia dwa punkty krańcowe i równomierne mapowanie                                |
-| Logarithmic  | tworzy logarytmiczne mapowanie dla dodatniego zakresu; użytkownik wybiera podstawę |
-| Custom curve | pozwala tworzyć i przeciągać własne punkty na wykresie                             |
+| Przycisk EN  | Działanie                                              |
+| ------------ | ------------------------------------------------------ |
+| Linear       | ustawia dwa punkty krańcowe i równomierne mapowanie    |
+| Logarithmic  | tworzy logarytmiczne mapowanie dla dodatniego zakresu  |
+| Custom curve | pozwala tworzyć i przeciągać własne punkty na wykresie |
 
-Przełączenie na Linear lub Logarithmic jest akcją resetującą krzywą Custom,
-dlatego wymaga potwierdzenia, gdy użytkownik wprowadził własne punkty.
-Custom curve może być uruchomiona z dowolnego trybu; zapisuje wtedy aktualny
-przebieg jako edytowalne punkty. Import CSV nie jest elementem planu.
+Każda zmiana trybu jest akcją destrukcyjną i wymaga potwierdzenia. Wybrany tryb
+otrzymuje własną domyślną definicję; wartości graniczne ani punkty Custom nie są
+przenoszone między trybami. Import CSV nie jest elementem planu.
+Kierunek wartości jest niezależny od trybu i nie jest resetowany. Dla Logarithmic
+pole **Detail emphasis** wybiera, czy więcej miejsca na łuku otrzymują niskie,
+czy wysokie wartości; nazwa nie zależy od ich lewej lub prawej pozycji.
+Granice domeny wszystkich trybów oraz wartości Start/End/Step warstw skali są
+całkowite. Ułamkowe etykiety Numeric Scale powstają wyłącznie przez Value
+multiplier i Decimal places.
 
 Snapping jest domyślnie włączonym ustawieniem edytora i działa podczas
 interaktywnej zmiany pozycji, promienia lub kąta. Domyślne, niezależne kroki

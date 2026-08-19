@@ -41,7 +41,7 @@ export function TickScalePropertiesEditor({
   );
   const color = getTickScaleColorPropertyDefinition(layer);
   const update = (definition: TickScaleNumericPropertyDefinition) => (value: string) => {
-    const raw = Number(value);
+    const raw = definition.integerOnly ? Math.round(Number(value)) : Number(value);
     const increment = definition.snap === "angle" ? snapping.angleDegrees : snapping.distanceMm;
     const next =
       snapping.enabled && definition.snap !== "none"

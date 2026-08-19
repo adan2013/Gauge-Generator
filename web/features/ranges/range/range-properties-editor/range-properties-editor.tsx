@@ -1,18 +1,36 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { RefreshCw } from "lucide-react";
+import { SelectPropertyRow } from "@/components/molecules/select-property-row/select-property-row";
+import { useConfirmation } from "@/components/providers/confirmation-provider/confirmation-provider";
 import {
   PropertyGroup,
   RangePropertyRow,
   TextPropertyRow,
 } from "@/features/editor/property-controls/property-controls";
 import {
-  getLinearScalePropertyDefinitions,
+  getScalePropertyDefinitions,
   getRangeNumericPropertyDefinitions,
-  type LinearScalePropertyDefinition,
+  type ScalePropertyDefinition,
   type RangeNumericPropertyDefinition,
 } from "@/features/ranges/range/range-properties";
-import type { CanvasDto, RangeDto } from "@/features/project/project-dto/project-dto";
+import { CustomScaleEditor } from "@/features/ranges/scale-mapping/custom-scale-editor/custom-scale-editor";
+import {
+  createScaleDefinitionForMode,
+  type ScaleMode,
+} from "@/features/ranges/scale-mapping/scale-definition";
+import type {
+  CanvasDto,
+  RangeDto,
+  ScaleDefinitionDto,
+} from "@/features/project/project-dto/project-dto";
+
+type ValueDirection = RangeDto["valueDirection"];
+type LogarithmicDetailEmphasis = Extract<
+  ScaleDefinitionDto,
+  { mode: "logarithmic" }
+>["detailEmphasis"];
 
 type RangePropertiesEditorProps = {
   canvas: CanvasDto;
@@ -36,8 +54,11 @@ export function RangePropertiesEditor({
   snapping,
 }: RangePropertiesEditorProps) {
   const t = useTranslations("Editor");
+  const { confirm } = useConfirmation();
   const numericDefinitions = getRangeNumericPropertyDefinitions(range, canvas);
-  const linearDefinitions = getLinearScalePropertyDefinitions(range);
+  const scaleDefinitions = getScalePropertyDefinitions(range);
+  const customScaleDefinition =
+    range.scaleDefinition.mode === "custom" ? range.scaleDefinition : undefined;
   const updateNumber = (definition: RangeNumericPropertyDefinition) => (value: string) => {
     const increment = definition.snap === "angle" ? snapping.angleDegrees : snapping.distanceMm;
     const raw = Number(value);
@@ -46,13 +67,36 @@ export function RangePropertiesEditor({
       [definition.key]: Math.min(definition.max, Math.max(definition.min, next)),
     } as Partial<RangeDto>);
   };
-  const updateLinear = (definition: LinearScalePropertyDefinition) => (value: string) => {
-    if (range.scaleDefinition.mode === "linear")
-      onRangeChange({
-        scaleDefinition: { ...range.scaleDefinition, [definition.key]: Number(value) },
-      });
+  const updateScale = (definition: ScalePropertyDefinition) => (value: string) => {
+    const current = range.scaleDefinition;
+    if (current.mode === "custom") return;
+    const next = Math.round(Number(value));
+    onRangeChange({ scaleDefinition: { ...current, [definition.key]: next } });
   };
-  const fields = (group: RangeNumericPropertyDefinition["group"]) =>
+  async function changeScaleMode(mode: string) {
+    if (!isScaleMode(mode)) return;
+    const transition = createScaleDefinitionForMode(range.scaleDefinition, mode);
+    if (
+      transition.requiresConfirmation &&
+      !(await confirm({
+        confirmIcon: RefreshCw,
+        confirmLabel: t("range.scaleModeConfirm"),
+        description: t("range.scaleModeChangeDescription"),
+        title: t("range.scaleModeChangeTitle"),
+      }))
+    )
+      return;
+    onRangeChange({ scaleDefinition: transition.definition });
+  }
+  function changeValueDirection(direction: string) {
+    if (isValueDirection(direction)) onRangeChange({ valueDirection: direction });
+  }
+  function changeLogarithmicDetailEmphasis(detailEmphasis: string) {
+    const current = range.scaleDefinition;
+    if (current.mode !== "logarithmic" || !isLogarithmicDetailEmphasis(detailEmphasis)) return;
+    onRangeChange({ scaleDefinition: { ...current, detailEmphasis } });
+  }
+  const renderNumericFieldsByGroup = (group: RangeNumericPropertyDefinition["group"]) =>
     numericDefinitions
       .filter((definition) => definition.group === group)
       .map((definition) => (
@@ -85,17 +129,62 @@ export function RangePropertiesEditor({
           value={selectedName}
         />
       </PropertyGroup>
-      <PropertyGroup title={t("range.position")}>{fields("position")}</PropertyGroup>
-      <PropertyGroup title={t("range.geometry")}>{fields("geometry")}</PropertyGroup>
+      <PropertyGroup title={t("range.position")}>
+        {renderNumericFieldsByGroup("position")}
+      </PropertyGroup>
+      <PropertyGroup title={t("range.geometry")}>
+        {renderNumericFieldsByGroup("geometry")}
+      </PropertyGroup>
       <PropertyGroup title={t("range.values")}>
-        {range.scaleDefinition.mode === "linear" ? (
-          linearDefinitions.map((definition) => (
+        <SelectPropertyRow
+          label={t("range.scaleMode")}
+          onChange={(mode) => void changeScaleMode(mode)}
+          options={SCALE_MODES.map((mode) => ({
+            label: t(`range.scaleModes.${mode}`),
+            value: mode,
+          }))}
+          value={range.scaleDefinition.mode}
+        />
+        <SelectPropertyRow
+          label={t("range.valueDirection")}
+          onChange={changeValueDirection}
+          options={VALUE_DIRECTIONS.map((direction) => ({
+            label: t(`range.valueDirections.${direction}`),
+            value: direction,
+          }))}
+          value={range.valueDirection}
+        />
+        {range.scaleDefinition.mode === "logarithmic" ? (
+          <SelectPropertyRow
+            label={t("range.logarithmicDetailEmphasis")}
+            onChange={changeLogarithmicDetailEmphasis}
+            options={LOGARITHMIC_DETAIL_EMPHASES.map((detailEmphasis) => ({
+              label: t(`range.logarithmicDetailEmphases.${detailEmphasis}`),
+              value: detailEmphasis,
+            }))}
+            value={range.scaleDefinition.detailEmphasis}
+          />
+        ) : null}
+        {customScaleDefinition ? (
+          <CustomScaleEditor
+            onChange={(points) =>
+              onRangeChange({ scaleDefinition: { ...customScaleDefinition, points } })
+            }
+            onInteractionEnd={onHistoryTransactionEnd}
+            onInteractionStart={onHistoryTransactionStart}
+            points={customScaleDefinition.points}
+            snapEnabled={snapping.enabled}
+            snapValueStep={snapping.distanceMm}
+            valueDirection={range.valueDirection}
+          />
+        ) : (
+          scaleDefinitions.map((definition) => (
             <RangePropertyRow
               key={definition.key}
               label={t(`range.${definition.labelKey}`)}
               max={definition.max}
               min={definition.min}
-              onChange={updateLinear(definition)}
+              onChange={updateScale(definition)}
               onInteractionEnd={onHistoryTransactionEnd}
               onInteractionStart={onHistoryTransactionStart}
               step={definition.step}
@@ -103,10 +192,27 @@ export function RangePropertiesEditor({
               value={String(definition.value)}
             />
           ))
-        ) : (
-          <p className="py-3 text-sm leading-6 text-muted">{t("range.scaleModeDescription")}</p>
         )}
       </PropertyGroup>
     </>
   );
+}
+
+const SCALE_MODES = ["linear", "logarithmic", "custom"] as const satisfies readonly ScaleMode[];
+const VALUE_DIRECTIONS = ["ascending", "descending"] as const satisfies readonly ValueDirection[];
+const LOGARITHMIC_DETAIL_EMPHASES = [
+  "low-values",
+  "high-values",
+] as const satisfies readonly LogarithmicDetailEmphasis[];
+
+function isScaleMode(value: string): value is ScaleMode {
+  return SCALE_MODES.some((mode) => mode === value);
+}
+
+function isValueDirection(value: string): value is ValueDirection {
+  return VALUE_DIRECTIONS.some((direction) => direction === value);
+}
+
+function isLogarithmicDetailEmphasis(value: string): value is LogarithmicDetailEmphasis {
+  return LOGARITHMIC_DETAIL_EMPHASES.some((detailEmphasis) => detailEmphasis === value);
 }

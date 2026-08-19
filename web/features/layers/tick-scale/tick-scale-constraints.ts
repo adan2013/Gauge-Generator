@@ -1,6 +1,6 @@
 import type { RangeDto, TickScaleLayerDto } from "@/features/project/project-dto/project-dto";
 import { clamp } from "@/lib/geometry/geometry";
-import { getRangeScaleValueBounds } from "@/features/ranges/scale-mapping/scale-mapping";
+import { constrainScaleSequenceToRange } from "@/features/ranges/scale-mapping/scale-sequence";
 import { TICK_SCALE_LIMITS } from "./tick-scale-limits";
 
 const minimumEffectiveRadiusMm = TICK_SCALE_LIMITS.tickLengthMm.min;
@@ -25,9 +25,7 @@ export function constrainTickScaleToRange(
   layer: TickScaleLayerDto,
   range: RangeDto,
 ): TickScaleLayerDto {
-  const valueBounds = getRangeScaleValueBounds(range);
-  const valueStart = clamp(layer.valueStart, valueBounds.min, valueBounds.max);
-  const valueEnd = clamp(layer.valueEnd, valueStart, valueBounds.max);
+  const constrainedSequence = constrainScaleSequenceToRange(layer, range);
   const radiusOffsetMm = clamp(
     layer.radiusOffsetMm,
     -range.radius + minimumEffectiveRadiusMm,
@@ -40,9 +38,7 @@ export function constrainTickScaleToRange(
     Math.min(TICK_SCALE_LIMITS.tickLengthMm.max, effectiveRadiusMm),
   );
   return {
-    ...layer,
-    valueStart,
-    valueEnd,
+    ...constrainedSequence,
     radiusOffsetMm,
     tickLengthMm,
     tickWidthMm: clamp(

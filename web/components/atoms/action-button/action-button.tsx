@@ -1,6 +1,6 @@
 "use client";
 
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/cn";
 
@@ -8,6 +8,7 @@ type ActionButtonVariant = "primary" | "secondary" | "quiet";
 type ActionButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   icon: LucideIcon;
   label: string;
+  labelVisibility?: "screen-reader-only" | "visible";
   variant?: ActionButtonVariant;
   trailing?: ReactNode;
 };
@@ -18,16 +19,20 @@ const variantClasses: Record<ActionButtonVariant, string> = {
   quiet: "text-muted hover:bg-surface-subtle hover:text-ink",
 };
 
-export function ActionButton({
-  icon: Icon,
-  label,
-  variant = "secondary",
-  trailing,
-  className = "",
-  type = "button",
-  ...props
-}: ActionButtonProps) {
-  return (
+export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
+  (
+    {
+      icon: Icon,
+      label,
+      labelVisibility = "visible",
+      variant = "secondary",
+      trailing,
+      className = "",
+      type = "button",
+      ...props
+    },
+    ref,
+  ) => (
     <button
       className={cn(
         "inline-flex min-h-8 items-center justify-center gap-1.5 rounded-md px-2.5",
@@ -37,12 +42,17 @@ export function ActionButton({
         variantClasses[variant],
         className,
       )}
+      ref={ref}
       type={type}
       {...props}
     >
       <Icon aria-hidden="true" size={16} strokeWidth={1.8} />
-      <span>{label}</span>
+      <span className={labelVisibility === "screen-reader-only" ? "sr-only" : undefined}>
+        {label}
+      </span>
       {trailing}
     </button>
-  );
-}
+  ),
+);
+
+ActionButton.displayName = "ActionButton";

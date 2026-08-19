@@ -92,6 +92,7 @@ export function TextPropertyRow({
 }
 
 type RangePropertyRowProps = {
+  className?: string;
   label: string;
   max: number;
   min: number;
@@ -103,6 +104,7 @@ type RangePropertyRowProps = {
   onInteractionStart: () => void;
 };
 export function RangePropertyRow({
+  className,
   label,
   max,
   min,
@@ -149,7 +151,7 @@ export function RangePropertyRow({
     onInteractionEnd();
   }
   return (
-    <FieldRow htmlFor={inputId} label={label}>
+    <FieldRow className={className} htmlFor={inputId} label={label}>
       <span className="relative block">
         <input
           aria-describedby={hasPendingChange ? pendingCommit?.hintId : undefined}
@@ -178,6 +180,7 @@ export function RangePropertyRow({
             }
             if (event.key === "Enter" || event.key === "Escape") event.currentTarget.blur();
           }}
+          step={step}
           type="number"
           value={isEditing ? draftValue : value}
         />

@@ -247,10 +247,17 @@ dopiero po Back to layers.
    oba korzystające z definicji mapowania należącej do Range; dodać łuk
    krawędziowy, mnożnik i style web-safe fontów.
 3. Dodać przełączniki Linear / Logarithmic / Custom Curve. Dla logarytmu
-   walidować dodatni zakres i podstawę; dla zmiany trybu wymagającej resetu
-   danych pokazywać potwierdzenie.
+   walidować dodatni zakres; każdą zmianę trybu poprzedzać potwierdzeniem i
+   resetować definicję do wartości domyślnych wybranego trybu. Kierunek wartości
+   utrzymywać niezależnie dla wszystkich trybów, a dla logarytmu pozwolić wskazać
+   przez `Detail emphasis`, czy więcej miejsca otrzymują niskie, czy wysokie
+   wartości.
 4. W Custom Curve zrobić dwuosiowy wykres: dodawanie, drag, usuwanie punktów,
    zablokowane końce min/max oraz monotoniczność X i Y bez przecinania punktów.
+   Wartości utrzymywać jako całkowite i przyciągać zgodnie z projektowym Distance
+   snap, a pozycje ograniczyć do kroku `0,05` w całym edytorze.
+   Kierunek malejący prezentować jako efektywne `1 - position`, bez osobnej opcji
+   odbijania kształtu Custom.
 5. Dodać overlay granic/radiusu tam, gdzie ma sens; nie mnożyć uchwytów, jeśli
    parametr wygodniej i jednoznaczniej edytuje się w formularzu.
 

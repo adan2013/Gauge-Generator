@@ -4,6 +4,7 @@ import type { ProjectValidationCode } from "@/features/project/project-dto/proje
 export type CanvasPointMm = { x: number; y: number };
 export type ValidationIssue = { path: string; code: ProjectValidationCode };
 export type NumericPropertyDefinition<TKey extends string = string> = {
+  integerOnly?: boolean;
   key: TKey;
   max: number;
   min: number;

@@ -10,9 +10,15 @@ Ten katalog skraca wejście kolejnego agenta AI w projekt. Najpierw przeczytaj:
 
 ## Current status
 
-Stage 1 UI shell and stage 2 data/store foundation are complete. The next
-vertical slice is stage 3: Range SVG rendering, its badge, editing overlay, and
-direct manipulation.
+Stages 1–4 are complete: the UI/store foundation, full Range editing flow, Tick
+Scale, Numeric Scale, and the Linear/Logarithmic/Custom Curve mappings are in
+place. Custom Curve has an interactive two-axis editor with locked endpoints,
+monotonic point constraints, integer value snapping, `0.05` position steps, and
+transactional dragging. All scale-domain values are integers; fractional Numeric
+Scale labels are presentation produced by its multiplier and decimal-place
+settings. Curve mapping, visible-sequence generation, Range-bound constraints,
+and ready-to-render angular distribution are shared outside visual layers. The
+next vertical slice is stage 5, starting with the Label layer.
 
 ## Initial repository context
 

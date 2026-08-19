@@ -1,10 +1,12 @@
 "use client";
 
 import { createContext, useContext, useRef, useState, type ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ConfirmationModal } from "@/components/molecules/confirmation-modal/confirmation-modal";
 
 export type ConfirmationRequest = {
+  confirmIcon: LucideIcon;
   confirmLabel?: string;
   description: string;
   title: string;
@@ -33,16 +35,19 @@ export function ConfirmationProvider({ children }: { children: ReactNode }) {
   return (
     <ConfirmationContext.Provider value={{ confirm }}>
       {children}
-      <ConfirmationModal
-        cancelLabel={t("cancel")}
-        confirmLabel={request?.confirmLabel ?? t("confirmDelete")}
-        description={request?.description ?? ""}
-        isOpen={Boolean(request)}
-        onCancel={() => close(false)}
-        onConfirm={() => close(true)}
-        title={request?.title ?? ""}
-        variant={request?.variant}
-      />
+      {request ? (
+        <ConfirmationModal
+          cancelLabel={t("cancel")}
+          confirmIcon={request.confirmIcon}
+          confirmLabel={request.confirmLabel ?? t("confirmDelete")}
+          description={request.description}
+          isOpen
+          onCancel={() => close(false)}
+          onConfirm={() => close(true)}
+          title={request.title}
+          variant={request.variant}
+        />
+      ) : null}
     </ConfirmationContext.Provider>
   );
 }

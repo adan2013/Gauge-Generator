@@ -1,11 +1,13 @@
 "use client";
 
-import { AlertTriangle, Trash2, X } from "lucide-react";
+import { AlertTriangle, X, type LucideIcon } from "lucide-react";
+import { useEffect } from "react";
 import { ActionButton } from "@/components/atoms/action-button/action-button";
 import { cn } from "@/lib/cn";
 
 type ConfirmationModalProps = {
   cancelLabel: string;
+  confirmIcon: LucideIcon;
   confirmLabel: string;
   description: string;
   isOpen: boolean;
@@ -17,6 +19,7 @@ type ConfirmationModalProps = {
 
 export function ConfirmationModal({
   cancelLabel,
+  confirmIcon,
   confirmLabel,
   description,
   isOpen,
@@ -25,6 +28,23 @@ export function ConfirmationModal({
   title,
   variant = "default",
 }: ConfirmationModalProps) {
+  useEffect(() => {
+    if (!isOpen) return;
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.repeat) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onCancel();
+      }
+      if (event.key === "Enter") {
+        event.preventDefault();
+        onConfirm();
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onCancel, onConfirm]);
+
   if (!isOpen) return null;
 
   return (
@@ -58,7 +78,12 @@ export function ConfirmationModal({
         </div>
         <div className="mt-5 flex justify-end gap-2">
           <ActionButton icon={X} label={cancelLabel} onClick={onCancel} variant="quiet" />
-          <ActionButton icon={Trash2} label={confirmLabel} onClick={onConfirm} variant="primary" />
+          <ActionButton
+            icon={confirmIcon}
+            label={confirmLabel}
+            onClick={onConfirm}
+            variant="primary"
+          />
         </div>
       </section>
     </div>

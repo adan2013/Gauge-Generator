@@ -9,10 +9,7 @@ import {
 } from "@/features/layers/core/layer";
 import { getRangeMappedLayerValidationIssues } from "@/features/layers/core/range-layer-validation";
 import { PROJECT_VALIDATION_CODES } from "@/features/project/project-dto/project-validation-codes";
-import {
-  getScaleValues,
-  valueToNormalizedPosition,
-} from "@/features/ranges/scale-mapping/scale-mapping";
+import { getScaleDistribution } from "@/features/ranges/scale-mapping/scale-sequence";
 import type { TickScaleLayerDto } from "@/features/project/project-dto/project-dto";
 import { clamp, normalizeAngle, snapDistanceMm } from "@/lib/geometry/geometry";
 import { getTickScaleGeometryBounds } from "./tick-scale-constraints";
@@ -53,10 +50,8 @@ export class TickScaleLayer extends Layer<TickScaleLayerDto> {
     if (!range || !this.dto.visible) return "";
     const radius = range.radius + this.dto.radiusOffsetMm;
     if (radius <= 0) return "";
-    return getScaleValues(this.dto, range)
-      .map((value) => {
-        const angle =
-          range.angleStart + range.openingAngle * valueToNormalizedPosition(range, value);
+    return getScaleDistribution(this.dto, range)
+      .map(({ angle }) => {
         const outer = pointOnRoundedSquare(
           range.centerX,
           range.centerY,

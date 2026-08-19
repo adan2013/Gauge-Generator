@@ -43,7 +43,7 @@ export function NumericScalePropertiesEditor({
   );
   const color = getNumericScaleColorPropertyDefinition(layer);
   const update = (definition: NumericScaleNumericPropertyDefinition) => (value: string) => {
-    const raw = Number(value);
+    const raw = definition.integerOnly ? Math.round(Number(value)) : Number(value);
     const increment = definition.snap === "angle" ? snapping.angleDegrees : snapping.distanceMm;
     const next =
       snapping.enabled && definition.snap !== "none"

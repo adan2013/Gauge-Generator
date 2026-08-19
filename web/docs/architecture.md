@@ -55,6 +55,49 @@ instead of a duplicated action list. Controls that produce a stream of changes
 use a begin/complete transaction: the store updates for live preview throughout
 the interaction, but history records its initial project only once at the end.
 
+## Scale definitions
+
+A Range owns one scale definition: `linear`, `logarithmic`, or `custom`.
+Switching modes is always destructive: after confirmation, the selected mode
+starts from its own default definition (`0..100` for Linear and Custom, `1..100`
+for Logarithmic). Bounds and custom points are never converted between modes.
+The Range-owned `valueDirection` remains independent and is preserved across
+mode changes. `descending` maps every effective position `p` to `1 - p` without
+changing the ordered value domain or the direction of the geometric arc.
+
+Logarithmic definitions use `detailEmphasis`: `low-values` is the conventional
+logarithmic mapping with more arc space at the low end, while `high-values`
+mirrors the distribution while retaining increasing values and ordered bounds.
+The UI calls this **Detail emphasis**, because it describes which values receive
+more space independently from their left/right placement and value direction.
+
+All scale-domain bounds, Custom point values, and Tick/Numeric visible sequence
+values are integers. Numeric Scale may present fractional labels by multiplying
+those canonical values with `scaleMultiplier` and formatting the result with
+`decimalPlaces`; the presentation does not alter mapping positions.
+
+Scale calculations are split by responsibility under `features/ranges/scale-mapping`:
+`scale-mapping.ts` maps a domain value through the selected curve and value
+direction, while `scale-sequence.ts` generates a bounded visible sequence and
+returns ready-to-render `{ value, position, angle }` distribution items. The
+same sequence module constrains linked layer bounds to the Range domain. Visual
+layers consume that distribution and own only their shape-specific geometry and
+SVG. Shared generation limits live in `scale-constants.ts`; validation and
+rendering import the same constant.
+
+Custom points map an ascending value axis to an ascending normalized-position
+axis. The first and last positions are locked to zero and one at the domain
+boundaries, while their values remain editable. The graph editor constrains
+every inner point strictly between its neighbours on both axes. Point values are
+integers and use the project distance increment while snapping is enabled;
+normalized positions always use a 0.05 increment.
+Zod and domain validation remain authoritative for imported data.
+For descending direction the editor displays and edits effective `1 - p`
+positions, but persists the same canonical increasing points. Custom deliberately
+has no separate curve-mirroring option.
+Adding or removing a point is one project mutation; a pointer drag uses one
+history transaction regardless of the number of live preview updates.
+
 ## Status messages
 
 Corner messages are owned by the root `StatusMessageProvider` and opened through

@@ -1,6 +1,6 @@
 import type { NumericPropertyDefinition } from "@/features/layers/core/layer";
 import type { NumericScaleLayerDto, RangeDto } from "@/features/project/project-dto/project-dto";
-import { getRangeScaleValueBounds } from "@/features/ranges/scale-mapping/scale-mapping";
+import { getRangeLayerValuePropertyDefinitions } from "@/features/layers/core/range-layer-properties";
 import { NUMERIC_SCALE_LIMITS } from "./numeric-scale-limits";
 import { getNumericScaleGeometryBounds } from "./numeric-scale-constraints";
 
@@ -38,41 +38,8 @@ export function getNumericScaleNumericPropertyDefinitions(
   range: RangeDto | undefined,
 ): readonly NumericScaleNumericPropertyDefinition[] {
   const geometry = range ? getNumericScaleGeometryBounds(layer, range) : undefined;
-  const values = range ? getRangeScaleValueBounds(range) : { min: -1_000_000, max: 1_000_000 };
   return [
-    {
-      key: "valueStart",
-      labelKey: "valueStart",
-      group: "range",
-      unit: "none",
-      snap: "none",
-      value: layer.valueStart,
-      min: values.min,
-      max: layer.valueEnd,
-      step: 1,
-    },
-    {
-      key: "valueEnd",
-      labelKey: "valueEnd",
-      group: "range",
-      unit: "none",
-      snap: "none",
-      value: layer.valueEnd,
-      min: layer.valueStart,
-      max: values.max,
-      step: 1,
-    },
-    {
-      key: "valueStep",
-      labelKey: "valueStep",
-      group: "range",
-      unit: "none",
-      snap: "none",
-      value: layer.valueStep,
-      min: Number.EPSILON,
-      max: Math.max(Number.EPSILON, layer.valueEnd - layer.valueStart),
-      step: 1,
-    },
+    ...getRangeLayerValuePropertyDefinitions(layer, range),
     {
       key: "scaleMultiplier",
       labelKey: "scaleMultiplier",
@@ -85,6 +52,7 @@ export function getNumericScaleNumericPropertyDefinitions(
       step: 0.01,
     },
     {
+      integerOnly: true,
       key: "decimalPlaces",
       labelKey: "decimalPlaces",
       group: "range",

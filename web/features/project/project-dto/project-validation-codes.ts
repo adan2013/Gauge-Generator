@@ -8,7 +8,8 @@ export const PROJECT_VALIDATION_CODES = {
   valueOutsideAllowedRange: "project.validation.valueOutsideAllowedRange",
   valueStartAfterEnd: "project.validation.valueStartAfterEnd",
   tooManyGeneratedItems: "project.validation.tooManyGeneratedItems",
-  scaleStartEqualsEnd: "project.validation.scaleStartEqualsEnd",
+  scaleBoundsNotAscending: "project.validation.scaleBoundsNotAscending",
+  customScaleEndpointsInvalid: "project.validation.customScaleEndpointsInvalid",
   customScaleNotMonotonic: "project.validation.customScaleNotMonotonic",
 } as const;
 

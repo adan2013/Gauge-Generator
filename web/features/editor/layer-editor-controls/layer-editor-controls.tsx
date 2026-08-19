@@ -30,6 +30,7 @@ export function LayerEditorControls({
   async function requestReset() {
     if (
       await confirm({
+        confirmIcon: RotateCcw,
         confirmLabel: confirmationT("confirmReset"),
         description: confirmationT("resetLayerDescription"),
         title: confirmationT("resetLayerTitle"),

@@ -19,7 +19,7 @@ export type RangeNumericPropertyDefinition = NumericPropertyDefinition<RangeNume
   labelKey: "angleStart" | "centerX" | "centerY" | "openingAngle" | "radius";
   unit: "degrees" | "millimeters";
 };
-export type LinearScalePropertyDefinition = NumericPropertyDefinition<"end" | "start"> & {
+export type ScalePropertyDefinition = NumericPropertyDefinition<"end" | "start"> & {
   labelKey: "scaleEnd" | "scaleStart";
 };
 
@@ -86,26 +86,28 @@ export function getRangeNumericPropertyDefinitions(
   ];
 }
 
-export function getLinearScalePropertyDefinitions(
-  range: RangeDto,
-): readonly LinearScalePropertyDefinition[] {
-  if (range.scaleDefinition.mode !== "linear") return [];
+export function getScalePropertyDefinitions(range: RangeDto): readonly ScalePropertyDefinition[] {
+  const definition = range.scaleDefinition;
+  if (definition.mode === "custom") return [];
+  const minimum = definition.mode === "logarithmic" ? 1 : -1_000_000;
   return [
     {
+      integerOnly: true,
       key: "start",
       labelKey: "scaleStart",
       snap: "none",
-      value: range.scaleDefinition.start,
-      min: -1_000_000,
-      max: 1_000_000,
+      value: definition.start,
+      min: minimum,
+      max: definition.end,
       step: 1,
     },
     {
+      integerOnly: true,
       key: "end",
       labelKey: "scaleEnd",
       snap: "none",
-      value: range.scaleDefinition.end,
-      min: -1_000_000,
+      value: definition.end,
+      min: definition.start,
       max: 1_000_000,
       step: 1,
     },

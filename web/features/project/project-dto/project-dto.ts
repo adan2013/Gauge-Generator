@@ -10,26 +10,35 @@ export const MAX_LAYERS = 80;
 export const MAX_RANGES = 5;
 export const CANVAS_DIMENSION_MIN_MM = 20;
 export const CANVAS_DIMENSION_MAX_MM = 1_000;
+export const CUSTOM_SCALE_POSITION_STEP = 0.05;
 
 const IdSchema = z.string().uuid();
 const NameSchema = z.string().trim().min(1).max(80);
 const HexColorSchema = z.string().regex(/^#[0-9a-fA-F]{6}$/);
+const ScaleValueSchema = z.number().int();
 
 export const ScaleDefinitionSchema = z.discriminatedUnion("mode", [
-  z.object({ mode: z.literal("linear"), start: z.number(), end: z.number() }).strict(),
+  z.object({ mode: z.literal("linear"), start: ScaleValueSchema, end: ScaleValueSchema }).strict(),
   z
     .object({
       mode: z.literal("logarithmic"),
-      start: z.number().positive(),
-      end: z.number().positive(),
-      base: z.number().gt(1),
+      start: ScaleValueSchema.positive(),
+      end: ScaleValueSchema.positive(),
+      detailEmphasis: z.enum(["low-values", "high-values"]),
     })
     .strict(),
   z
     .object({
       mode: z.literal("custom"),
       points: z
-        .array(z.object({ value: z.number(), position: z.number().min(0).max(1) }).strict())
+        .array(
+          z
+            .object({
+              value: ScaleValueSchema,
+              position: z.number().min(0).max(1).multipleOf(CUSTOM_SCALE_POSITION_STEP),
+            })
+            .strict(),
+        )
         .min(2),
     })
     .strict(),
@@ -44,6 +53,7 @@ export const RangeSchema = z
     radius: z.number().min(5),
     angleStart: z.number().min(0).max(360),
     openingAngle: z.number().min(-360).max(360),
+    valueDirection: z.enum(["ascending", "descending"]),
     scaleDefinition: ScaleDefinitionSchema,
   })
   .strict();
@@ -59,9 +69,9 @@ const LayerBaseSchema = z
 
 const TickScaleLayerSchema = LayerBaseSchema.extend({
   type: z.literal(LAYER_TYPE.tickScale),
-  valueStart: z.number(),
-  valueEnd: z.number(),
-  valueStep: z.number().positive(),
+  valueStart: ScaleValueSchema,
+  valueEnd: ScaleValueSchema,
+  valueStep: ScaleValueSchema.positive(),
   tickLengthMm: z
     .number()
     .min(TICK_SCALE_LIMITS.tickLengthMm.min)
@@ -77,9 +87,9 @@ const TickScaleLayerSchema = LayerBaseSchema.extend({
 
 const NumericScaleLayerSchema = LayerBaseSchema.extend({
   type: z.literal(LAYER_TYPE.numericScale),
-  valueStart: z.number(),
-  valueEnd: z.number(),
-  valueStep: z.number().positive(),
+  valueStart: ScaleValueSchema,
+  valueEnd: ScaleValueSchema,
+  valueStep: ScaleValueSchema.positive(),
   scaleMultiplier: z.number().gt(0).max(100),
   decimalPlaces: z.number().int().min(0).max(4),
   radiusOffsetMm: z.number().min(-500).max(500),

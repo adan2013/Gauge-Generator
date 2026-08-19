@@ -1,6 +1,6 @@
 import type { NumericScaleLayerDto, RangeDto } from "@/features/project/project-dto/project-dto";
 import { clamp } from "@/lib/geometry/geometry";
-import { getRangeScaleValueBounds } from "@/features/ranges/scale-mapping/scale-mapping";
+import { constrainScaleSequenceToRange } from "@/features/ranges/scale-mapping/scale-sequence";
 import { NUMERIC_SCALE_LIMITS } from "./numeric-scale-limits";
 
 const MINIMUM_EFFECTIVE_RADIUS_MM = 0.5;
@@ -22,9 +22,7 @@ export function constrainNumericScaleToRange(
   layer: NumericScaleLayerDto,
   range: RangeDto,
 ): NumericScaleLayerDto {
-  const values = getRangeScaleValueBounds(range);
-  const valueStart = clamp(layer.valueStart, values.min, values.max);
-  const valueEnd = clamp(layer.valueEnd, valueStart, values.max);
+  const constrainedSequence = constrainScaleSequenceToRange(layer, range);
   const radiusOffsetMm = clamp(
     layer.radiusOffsetMm,
     -range.radius + MINIMUM_EFFECTIVE_RADIUS_MM,
@@ -32,9 +30,7 @@ export function constrainNumericScaleToRange(
   );
   const effectiveRadiusMm = range.radius + radiusOffsetMm;
   return {
-    ...layer,
-    valueStart,
-    valueEnd,
+    ...constrainedSequence,
     radiusOffsetMm,
     fontSizeMm: clamp(
       layer.fontSizeMm,
