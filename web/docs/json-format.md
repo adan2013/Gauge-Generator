@@ -31,11 +31,10 @@ The currently supported visual discriminants are `tick-scale` and
 `numeric-scale`. Tick Scale renders radial marks over the referenced Range arc
 and has these required fields:
 `valueStart`, `valueEnd`, positive `valueStep`, `tickLengthMm` (at least 0.2
-mm), `tickWidthMm` (at least 0.1 mm), `radiusOffsetMm`,
-`cornerRadiusPercent` (0–50), and hexadecimal `color`. Visible values must be
-integers within the source Range and produce at most 200 marks. At 50%, Tick Scale follows
-the familiar circular Range; reducing the corner radius makes it follow a
-rounded square inscribed in that Range. The spatial limits are dynamic: its
+mm), `tickWidthMm` (at least 0.1 mm), `radiusOffsetMm`, and hexadecimal `color`.
+Visible values must be integers within the source Range and produce at most 200
+marks. Tick Scale follows the shared path owned by its source Range. The spatial
+limits are dynamic: its
 effective radius is the Range radius plus offset and must stay between 0.2 mm
 and twice the Range radius; tick length cannot exceed that effective radius, and
 tick width cannot exceed tick length. A Range update clamps dependent Tick Scale
@@ -43,18 +42,24 @@ values. Tick positions use the linear, logarithmic, or custom mapping belonging
 to the source Range. Numeric Scale uses the same mapped positions for text and
 stores its integer visible range and positive integer step, radius offset,
 multiplier, decimal places, web-safe font settings, text style flags, and color.
-Fractional Numeric Scale labels are produced only by `scaleMultiplier` and
-`decimalPlaces`; canonical mapped values remain integers. New layer types
+Its labels follow the same Range-owned circular-to-rounded-square path geometry
+as Tick Scale.
+Fractional Numeric Scale labels are produced only by `scaleMultiplier` (from
+`0.01` to `100`) and `decimalPlaces`; canonical mapped values remain integers
+from `-1,000,000` to `1,000,000`. New layer types
 extend the strict Zod discriminated union in their own implementation stage.
 
 Every physical value is a number in millimetres. Angles are degrees. Range
-stores `centerX`, `centerY`, `radius`, `angleStart`, `openingAngle`, and
-`valueDirection` (`ascending` or `descending`) plus `scaleDefinition`; it has no pivot field. A Range centre must remain on the
+stores `centerX`, `centerY`, `radius`, `cornerRadiusPercent` (0–50), `angleStart`,
+`openingAngle`, and `valueDirection` (`ascending` or `descending`) plus
+`scaleDefinition`; it has no pivot field. At 50% the shared path is circular;
+lower values form an inscribed rounded square used by every visual layer. A Range centre must remain on the
 canvas; radius is from 5 mm to half of the canvas's longest edge. The schema
 rejects unknown fields, invalid UUIDs, blank names, invalid canvas dimensions,
 invalid colors, broken scale definitions, duplicate IDs, more than five Ranges,
-and missing `rangeId` references. Any semantic format change requires a new
-version and migration.
+and missing `rangeId` references. The format is development-only and unstable;
+until its explicit stabilization, schema changes update the current contract
+without backward compatibility, migrations, or version bumps.
 
 `scaleDefinition` is a strict discriminated union:
 

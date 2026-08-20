@@ -1,5 +1,6 @@
 import type { LayerDto, ProjectDto, RangeDto } from "@/features/project/project-dto/project-dto";
 import type { ProjectValidationCode } from "@/features/project/project-dto/project-validation-codes";
+import type { EditingOverlayPrimitive } from "@/features/layers/core/editing-overlay-geometry";
 
 export type CanvasPointMm = { x: number; y: number };
 export type ValidationIssue = { path: string; code: ProjectValidationCode };
@@ -13,7 +14,8 @@ export type NumericPropertyDefinition<TKey extends string = string> = {
   value: number;
 };
 export type RenderContext = { project: ProjectDto; rangeById: ReadonlyMap<string, RangeDto> };
-export type EditingOverlayContext = RenderContext & { zoom: number };
+export type EditingOverlayContext = RenderContext;
+export const OVERLAY_INTEGER_INCREMENT = 1;
 export type PointerInput = {
   point: CanvasPointMm;
   shiftKey: boolean;
@@ -47,12 +49,9 @@ export abstract class Layer<TDto extends LayerDto = LayerDto> {
     return this.dto;
   }
 
-  abstract getNumericPropertyDefinitions(
-    context: RenderContext,
-  ): readonly NumericPropertyDefinition[];
   abstract validate(context: RenderContext): ValidationIssue[];
   abstract toSvg(context: RenderContext): string;
-  abstract toEditingOverlay(context: EditingOverlayContext): string;
+  abstract getEditingOverlay(context: EditingOverlayContext): readonly EditingOverlayPrimitive[];
   abstract getHandles(context: EditingOverlayContext): LayerHandle[];
   abstract applyHandleDrag(
     handleId: string,

@@ -35,6 +35,30 @@ describe("EditorShell", () => {
     fireEvent.click(screen.getAllByRole("button", { name: "Create first Range" })[0]);
     expect(screen.getByRole("heading", { name: "Range setup" })).toBeTruthy();
   });
+  it("creates a valid Range and opens its parameters on a 30 by 30 mm canvas", () => {
+    const store = makeStore({
+      project: {
+        current: createProject({
+          canvas: {
+            widthMm: 30,
+            heightMm: 30,
+            background: "#FFFFFF",
+            transparentBackground: true,
+          },
+        }),
+      },
+    });
+    renderEditor(<EditorShell />, store);
+
+    fireEvent.click(screen.getAllByRole("button", { name: "Create first Range" })[0]);
+
+    expect(screen.getByRole("heading", { name: "Range setup" })).toBeTruthy();
+    expect(store.getState().project.current.ranges[0]).toMatchObject({
+      centerX: 15,
+      centerY: 15,
+      radius: 12,
+    });
+  });
   it("navigates from the layer picker to a new layer editor", () => {
     renderEditor(<EditorShell />);
     fireEvent.click(screen.getAllByRole("button", { name: "Create first Range" })[0]);
@@ -60,6 +84,60 @@ describe("EditorShell", () => {
     renderEditor(<EditorShell />);
     fireEvent.click(screen.getByRole("button", { name: "Project" }));
     expect(screen.getByRole("heading", { name: "Project settings" })).toBeTruthy();
+  });
+  it("does not commit an invalid canvas candidate", () => {
+    const range = createRange({ centerX: 60, radius: 40 });
+    const store = makeStore({
+      project: { current: createProject({ ranges: [range] }) },
+    });
+    renderEditor(<EditorShell />, store);
+    fireEvent.click(screen.getByRole("button", { name: "Project" }));
+    const width = screen.getByRole("spinbutton", { name: "Width" });
+
+    fireEvent.focus(width);
+    fireEvent.change(width, { target: { value: "50" } });
+    fireEvent.blur(width);
+
+    expect(store.getState().project.current.canvas.widthMm).toBe(120);
+  });
+  it("explains a rejected domain value in the Range editor", () => {
+    const range = createRange({ scaleDefinition: { mode: "linear", start: 0, end: 100 } });
+    const store = makeStore({
+      project: { current: createProject({ ranges: [range] }) },
+    });
+    renderEditor(<EditorShell />, store);
+    fireEvent.click(screen.getByRole("button", { name: `Edit ${range.name}` }));
+    const endValue = screen.getByRole("spinbutton", { name: "End value" });
+
+    fireEvent.focus(endValue);
+    fireEvent.change(endValue, { target: { value: "0" } });
+    fireEvent.blur(endValue);
+
+    expect(
+      screen.getByText("The scale end value must be greater than its start value."),
+    ).toBeTruthy();
+    expect(store.getState().project.current.ranges[0].scaleDefinition).toEqual({
+      mode: "linear",
+      start: 0,
+      end: 100,
+    });
+  });
+  it("explains a rejected value in a visual-layer editor", () => {
+    const range = createRange();
+    const layer = createTickScaleLayer(range.id, { name: "Major ticks" });
+    const store = makeStore({
+      project: { current: createProject({ ranges: [range], layers: [layer] }) },
+    });
+    renderEditor(<EditorShell />, store);
+    fireEvent.click(screen.getByRole("button", { name: `Edit ${layer.name}` }));
+    const name = screen.getByRole("textbox", { name: "Name" });
+
+    fireEvent.change(name, { target: { value: "" } });
+
+    expect(
+      screen.getByText("The name is required and must contain no more than 80 characters."),
+    ).toBeTruthy();
+    expect(store.getState().project.current.layers[0].name).toBe("Major ticks");
   });
   it("connects toolbar undo and redo to project history", () => {
     const { store } = renderEditor(<EditorShell />);

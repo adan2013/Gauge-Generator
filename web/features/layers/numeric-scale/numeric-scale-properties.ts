@@ -47,8 +47,8 @@ export function getNumericScaleNumericPropertyDefinitions(
       unit: "none",
       snap: "none",
       value: layer.scaleMultiplier,
-      min: 0.01,
-      max: 100,
+      min: NUMERIC_SCALE_LIMITS.scaleMultiplier.min,
+      max: NUMERIC_SCALE_LIMITS.scaleMultiplier.max,
       step: 0.01,
     },
     {

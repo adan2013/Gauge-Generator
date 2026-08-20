@@ -27,6 +27,8 @@ type CanvasPreviewProps = {
   snapping: { enabled: boolean; distanceMm: number; angleDegrees: number };
 };
 
+const CSS_PIXELS_PER_MILLIMETER = 96 / 25.4;
+
 export function CanvasPreview({
   hoveredLayerId,
   layerPreviewModifiers,
@@ -64,6 +66,7 @@ export function CanvasPreview({
     (hasRange || selectedRange) && frameWidth
       ? Math.round((frameWidth / (canvasWidth * (96 / 25.4))) * 100)
       : undefined;
+  const overlayScale = getOverlayDisplayScale(frameWidth, canvasWidth);
   useLayoutEffect(() => {
     function measure() {
       const viewport = viewportRef.current;
@@ -142,6 +145,7 @@ export function CanvasPreview({
               />
               <RangeEditingOverlay
                 canvas={canvas}
+                displayScale={overlayScale}
                 onInteractionEnd={onRangeInteractionEnd}
                 onInteractionStart={onRangeInteractionStart}
                 onRangeChange={onRangeChange}
@@ -168,6 +172,7 @@ export function CanvasPreview({
               {selectedLayer && layerPreviewModifiers.showEditingOverlay ? (
                 <LayerEditingOverlay
                   canvas={canvas}
+                  displayScale={overlayScale}
                   layer={selectedLayer}
                   onInteractionEnd={onLayerInteractionEnd}
                   onInteractionStart={onLayerInteractionStart}
@@ -196,6 +201,13 @@ export function CanvasPreview({
       </p>
     </section>
   );
+}
+
+export function getOverlayDisplayScale(
+  frameWidthPx: number | undefined,
+  canvasWidthMm: number,
+): number {
+  return frameWidthPx ? CSS_PIXELS_PER_MILLIMETER / (frameWidthPx / canvasWidthMm) : 1;
 }
 
 function VisualLayers({

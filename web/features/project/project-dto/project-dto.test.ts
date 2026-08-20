@@ -126,6 +126,22 @@ describe("ProjectSchema", () => {
     });
   });
 
+  it("enforces the scale-value and Numeric Scale multiplier limits used by the editor", () => {
+    const range = createRange({
+      scaleDefinition: { mode: "linear", start: -1_000_001, end: 100 },
+    });
+    const validRange = createRange();
+    const numericScale = createNumericScaleLayer(validRange.id, { scaleMultiplier: 0.001 });
+
+    expect(validateProject(createProject({ ranges: [range] })).issues[0]?.code).toBe(
+      PROJECT_VALIDATION_CODES.invalidSchema,
+    );
+    expect(
+      validateProject(createProject({ ranges: [validRange], layers: [numericScale] })).issues[0]
+        ?.code,
+    ).toBe(PROJECT_VALIDATION_CODES.invalidSchema);
+  });
+
   it("validates Numeric Scale as an independent visual layer tied to a Range", () => {
     const range = createRange();
     const layer = createNumericScaleLayer(range.id, { fontSizeMm: 4 });

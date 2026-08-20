@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { RefreshCw } from "lucide-react";
 import { SelectPropertyRow } from "@/components/molecules/select-property-row/select-property-row";
 import { useConfirmation } from "@/components/providers/confirmation-provider/confirmation-provider";
+import { NumericPropertyFields } from "@/features/editor/numeric-property-fields/numeric-property-fields";
 import {
   PropertyGroup,
   RangePropertyRow,
@@ -59,14 +60,6 @@ export function RangePropertiesEditor({
   const scaleDefinitions = getScalePropertyDefinitions(range);
   const customScaleDefinition =
     range.scaleDefinition.mode === "custom" ? range.scaleDefinition : undefined;
-  const updateNumber = (definition: RangeNumericPropertyDefinition) => (value: string) => {
-    const increment = definition.snap === "angle" ? snapping.angleDegrees : snapping.distanceMm;
-    const raw = Number(value);
-    const next = snapping.enabled ? Math.round(raw / increment) * increment : raw;
-    onRangeChange({
-      [definition.key]: Math.min(definition.max, Math.max(definition.min, next)),
-    } as Partial<RangeDto>);
-  };
   const updateScale = (definition: ScalePropertyDefinition) => (value: string) => {
     const current = range.scaleDefinition;
     if (current.mode === "custom") return;
@@ -96,23 +89,18 @@ export function RangePropertiesEditor({
     if (current.mode !== "logarithmic" || !isLogarithmicDetailEmphasis(detailEmphasis)) return;
     onRangeChange({ scaleDefinition: { ...current, detailEmphasis } });
   }
-  const renderNumericFieldsByGroup = (group: RangeNumericPropertyDefinition["group"]) =>
-    numericDefinitions
-      .filter((definition) => definition.group === group)
-      .map((definition) => (
-        <RangePropertyRow
-          key={definition.key}
-          label={t(`range.${definition.labelKey}`)}
-          max={definition.max}
-          min={definition.min}
-          onChange={updateNumber(definition)}
-          onInteractionEnd={onHistoryTransactionEnd}
-          onInteractionStart={onHistoryTransactionStart}
-          step={definition.step}
-          suffix={t(`controls.${definition.unit}`)}
-          value={String(definition.value)}
-        />
-      ));
+  const renderNumericFieldsByGroup = (group: RangeNumericPropertyDefinition["group"]) => (
+    <NumericPropertyFields
+      definitions={numericDefinitions}
+      getLabel={(definition) => t(`range.${definition.labelKey}`)}
+      getSuffix={(definition) => t(`controls.${definition.unit}`)}
+      group={group}
+      onInteractionEnd={onHistoryTransactionEnd}
+      onInteractionStart={onHistoryTransactionStart}
+      onValueChange={(key, value) => onRangeChange({ [key]: value } as Partial<RangeDto>)}
+      snapping={snapping}
+    />
+  );
   return (
     <>
       <p className="text-xs font-semibold uppercase tracking-[0.12em] text-accent">

@@ -35,6 +35,10 @@ export function StatusMessageProvider({ children }: { children: ReactNode }) {
   const [messages, setMessages] = useState<StatusMessageEntry[]>([]);
   const nextIdRef = useRef(1);
   const timersRef = useRef(new Map<number, ReturnType<typeof setTimeout>>());
+  const orderedMessages = [
+    ...messages.filter((message) => message.duration !== "persistent"),
+    ...messages.filter((message) => message.duration === "persistent"),
+  ];
 
   const dismissMessage = useCallback((id: number) => {
     const timer = timersRef.current.get(id);
@@ -71,7 +75,7 @@ export function StatusMessageProvider({ children }: { children: ReactNode }) {
       {children}
       {messages.length > 0 ? (
         <div className="pointer-events-none fixed right-5 bottom-5 z-20 flex w-[calc(100%-2.5rem)] max-w-sm flex-col gap-2">
-          {messages.map((message) => (
+          {orderedMessages.map((message) => (
             <StatusMessage color={message.color} icon={message.icon} key={message.id}>
               {message.content}
             </StatusMessage>

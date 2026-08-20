@@ -44,7 +44,24 @@
       "redo": "Redid the project change.",
       "layerReset": "Layer settings restored to their defaults.",
       "rangeRequired": "Create a Range before adding a visual layer.",
-      "rangeDependencyWarning": "Large changes to this Range may automatically adjust {count, plural, one {the linked layer} other {# linked layers}}. Element sizes and visible values may be limited to fit the new Range."
+      "rangeDependencyWarning": "Large changes to this Range may automatically adjust {count, plural, one {the linked layer} other {# linked layers}}. Element sizes and visible values may be limited to fit the new Range.",
+      "canvasWidthTooSmall": "Canvas width must be at least {minimum} mm to keep the center of “{name}” inside.",
+      "canvasHeightTooSmall": "Canvas height must be at least {minimum} mm to keep the center of “{name}” inside.",
+      "canvasRadiusTooLarge": "At least one canvas dimension must be {minimum} mm or greater to support the radius of “{name}”.",
+      "validation": {
+        "invalidProject": "The value was not applied because it would make the project invalid.",
+        "invalidSchema": "The entered value has an invalid format or is outside its permitted range.",
+        "invalidName": "The name is required and must contain no more than 80 characters.",
+        "duplicateObjectId": "The value was not applied because object identifiers must be unique.",
+        "missingRangeReference": "Select an existing Range for this layer.",
+        "valueMustBePositive": "The resulting value must be greater than zero.",
+        "valueOutsideAllowedRange": "The entered value is outside the range allowed by the related geometry.",
+        "valueStartAfterEnd": "The start value cannot be greater than the end value.",
+        "tooManyGeneratedItems": "Increase the step so the scale generates no more than {max} items.",
+        "scaleBoundsNotAscending": "The scale end value must be greater than its start value.",
+        "customScaleEndpointsInvalid": "Custom Scale positions must begin at 0 and end at 1.",
+        "customScaleNotMonotonic": "Each Custom Scale value and position must be greater than the previous point."
+      }
     },
     "toolbar": {
       "ariaLabel": "Project actions",
@@ -140,6 +157,7 @@
       "centerY": "Center Y",
       "geometry": "Geometry",
       "radius": "Radius",
+      "cornerRadius": "Corner radius",
       "angleStart": "Start angle",
       "openingAngle": "Opening angle",
       "values": "Value mapping",
@@ -188,8 +206,8 @@
       "handleValues": {
         "center": "{x}; {y}",
         "radius": "r: {radius} mm",
-        "angle-start": "{start}°",
-        "angle-end": "{opening}°"
+        "angle-start": "start: {start}°",
+        "angle-end": "opening: {opening}°"
       }
     },
     "tickScale": {
@@ -197,7 +215,6 @@
       "geometry": "Geometry",
       "ticks": "Ticks",
       "radiusOffset": "Radius offset",
-      "cornerRadius": "Corner radius",
       "valueStart": "Start value",
       "valueEnd": "End value",
       "valueStep": "Value step",
@@ -255,6 +272,7 @@
       "name": "Name",
       "adjust": "Adjust {label}",
       "pendingCommit": "Press Enter or click outside to apply. Esc cancels.",
+      "invalidNumber": "Enter a number for {label} between {min} and {max}.",
       "millimeters": "mm",
       "degrees": "°",
       "percent": "%",

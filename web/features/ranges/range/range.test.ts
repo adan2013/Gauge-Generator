@@ -5,7 +5,11 @@ import { getRangeNumericPropertyDefinitions } from "./range-properties";
 
 describe("Range property definitions", () => {
   it("uses the default start and opening angles", () => {
-    expect(new Range(createRange()).toDto()).toMatchObject({ angleStart: 140, openingAngle: 260 });
+    expect(new Range(createRange()).toDto()).toMatchObject({
+      angleStart: 140,
+      cornerRadiusPercent: 50,
+      openingAngle: 260,
+    });
   });
 
   it("derives editable coordinate limits from the current canvas", () => {
@@ -23,10 +27,33 @@ describe("Range property definitions", () => {
     });
     expect(fields.find((field) => field.key === "centerY")).toMatchObject({ min: 0, max: 80 });
     expect(fields.find((field) => field.key === "radius")).toMatchObject({ min: 5, max: 120 });
+    expect(fields.find((field) => field.key === "cornerRadiusPercent")).toMatchObject({
+      min: 0,
+      max: 50,
+      snap: "none",
+    });
     expect(fields.find((field) => field.key === "openingAngle")).toMatchObject({
       min: -360,
       max: 360,
       snap: "angle",
+    });
+  });
+
+  it("places its handles on the shared rounded path", () => {
+    const model = new Range(
+      createRange({
+        centerX: 60,
+        centerY: 60,
+        radius: 20,
+        angleStart: 0,
+        openingAngle: 90,
+        cornerRadiusPercent: 0,
+      }),
+    );
+
+    expect(model.getHandles().find((handle) => handle.id === "radius")?.point).toEqual({
+      x: 80,
+      y: 80,
     });
   });
 
@@ -134,6 +161,27 @@ describe("Range property definitions", () => {
         },
         canvas,
       ).angleStart,
+    ).toBe(20);
+  });
+
+  it("keeps its radius when dragging starts on its rounded-path handle", () => {
+    const model = new Range(
+      createRange({ radius: 20, angleStart: 0, openingAngle: 90, cornerRadiusPercent: 0 }),
+    );
+    const radiusHandle = model.getHandles().find((handle) => handle.id === "radius")!;
+    const canvas = {
+      widthMm: 120,
+      heightMm: 120,
+      background: "#FFFFFF",
+      transparentBackground: true,
+    };
+
+    expect(
+      model.applyHandleDrag(
+        "radius",
+        { point: radiusHandle.point, shiftKey: false, altKey: false, snapDistanceMm: 1 },
+        canvas,
+      ).radius,
     ).toBe(20);
   });
 });

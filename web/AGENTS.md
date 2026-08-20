@@ -78,6 +78,10 @@ Keep those documents current. Put completed-stage evidence in
   Keep `project-dto` limited to the JSON contract. `validateProject` first parses
   that contract and then calls `Range.validate()` and `Layer.validate()` through
   the layer registry, prefixing their relative paths for JSON feedback.
+- The project format is still development-only and intentionally unstable.
+  Until an explicit stabilization milestone, schema changes do not require
+  backward compatibility, migrations, or a version bump; update current
+  factories, fixtures, tests, and documentation instead.
 - Physical project data uses millimetres; the default canvas is 120 × 120 mm
   and may be rectangular. Final SVG uses an mm `viewBox`.
 - `ranges` and visual `layers` are separate collections. Both have required,
@@ -86,12 +90,13 @@ Keep those documents current. Put completed-stage evidence in
 - Creating a visual layer is a two-step flow: first choose its type in the
   right-side picker, then create it and open its Properties. Do not create a
   placeholder layer before that choice.
-- A Range owns geometry, `valueDirection` (`ascending` or `descending`), and
-  `scaleDefinition` (`linear`, `logarithmic`, or `custom`). Visual layers such as
-  Tick Scale and Numeric Scale render using that mapping; they never choose its
-  mode or direction. Logarithmic definitions use `detailEmphasis` to give more
-  arc space to either low or high values. Custom has no curve-mirroring option;
-  direction is applied after its canonical increasing point mapping.
+- A Range owns geometry, including `cornerRadiusPercent`, `valueDirection`
+  (`ascending` or `descending`), and `scaleDefinition` (`linear`, `logarithmic`,
+  or `custom`). Visual layers such as Tick Scale and Numeric Scale render using
+  that shared path and mapping; they never choose their own shape, mode, or
+  direction. Logarithmic definitions use `detailEmphasis` to give more arc space
+  to either low or high values. Custom has no curve-mirroring option; direction
+  is applied after its canonical increasing point mapping.
 - Scale-domain bounds, Custom point values, and Tick/Numeric visible start, end,
   and step values are integers. Fractional labels come only from Numeric Scale's
   `scaleMultiplier` and `decimalPlaces` presentation settings.
@@ -132,9 +137,9 @@ Keep those documents current. Put completed-stage evidence in
   not exceed that effective radius, and tick width does not exceed tick length.
   Reducing a Range clamps dependent Tick Scale geometry in the same project
   mutation.
-- Tick Scale has a `cornerRadiusPercent` path parameter: `50` is a circle;
-  lower values form an inscribed rounded square. It is layer-owned, while the
-  Range still supplies centre, scale span, and base size.
+- Range owns the shared `cornerRadiusPercent` path parameter: `50` is a circle;
+  lower values form an inscribed rounded square. All visual layers use the
+  centralized Range path geometry at their own effective radius.
 - Tick Scale defines its own visible `valueStart`, `valueEnd`, and positive
   `valueStep`, constrained to its source Range's mapping domain. It renders at
   most 200 marks and derives each position through that Range's mapping.

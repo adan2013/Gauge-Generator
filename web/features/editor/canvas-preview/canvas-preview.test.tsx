@@ -6,9 +6,15 @@ import {
   createTickScaleLayer,
 } from "@/features/project/factories/project-factories";
 import { renderEditor } from "@/test/render-editor";
-import { CanvasPreview } from "./canvas-preview";
+import { CanvasPreview, getOverlayDisplayScale } from "./canvas-preview";
 
 describe("CanvasPreview", () => {
+  it("keeps overlay dimensions constant at a large fitted zoom", () => {
+    const tenTimesZoomWidth = 30 * (96 / 25.4) * 10;
+
+    expect(getOverlayDisplayScale(tenTimesZoomWidth, 30)).toBeCloseTo(0.1);
+  });
+
   it("renders the empty-project welcome state", () => {
     const project = createProject();
     renderEditor(

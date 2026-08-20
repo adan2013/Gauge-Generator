@@ -781,7 +781,7 @@ abstract class Layer {
   abstract readonly type: LayerType;
   abstract validate(context: ProjectContext): ValidationIssue[];
   abstract toSvg(context: RenderContext): React.ReactNode;
-  abstract toEditingOverlay(context: OverlayContext): React.ReactNode;
+  abstract getEditingOverlay(context: OverlayContext): readonly EditingOverlayPrimitive[];
   abstract getHandles(context: OverlayContext): OverlayHandle[];
   abstract applyHandleDrag(handleId: string, pointer: CanvasPointMm, context: DragContext): Layer;
 }
@@ -880,7 +880,7 @@ Każda warstwa definiuje dwa niezależne wyniki renderowania:
 - nakładkę edycyjną, widoczną wyłącznie dla aktualnie wybranej warstwy w
   edytorze, która pokazuje jej geometrię, zakres i interaktywne uchwyty.
 
-Abstrakcyjna Layer udostępnia procedury toEditingOverlay, getHandles i
+Abstrakcyjna Layer udostępnia procedury getEditingOverlay, getHandles i
 applyHandleDrag. Nakładka nie jest serializowana do JSON-a i nie jest częścią
 eksportu. Jest deklaratywnym SVG, a wspólny kontroler edytora odpowiada za
 pointer capture, przeliczenie ekranu na mm, snapping oraz przekazanie wyniku do

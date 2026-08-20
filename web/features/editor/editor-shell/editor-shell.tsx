@@ -27,9 +27,10 @@ import {
 } from "@/features/editor/editor-toolbar/editor-toolbar";
 import { LayersBrowser } from "@/features/editor/layers-browser/layers-browser";
 import { ProjectSettingsPanel } from "@/features/editor/project-settings-panel/project-settings-panel";
+import { useProjectValidation } from "@/features/editor/project-validation/use-project-validation";
 import { PropertiesPanel } from "@/features/editor/properties-panel/properties-panel";
 import {
-  createRange,
+  createRangeForCanvas,
   createLayerFromType,
   resetLayerToDefaults,
 } from "@/features/project/factories/project-factories";
@@ -59,6 +60,7 @@ export function EditorShell() {
   const { past, future } = useAppSelector((state) => state.history);
   const t = useTranslations("Editor");
   const { dismissMessage, showMessage } = useStatusMessage();
+  const { validateCandidateProject } = useProjectValidation();
   const rangeWarningIdRef = useRef<number | null>(null);
   const toolbarActions: EditorToolbarAction[] = [
     { id: "newProject", label: t("toolbar.newProject"), icon: FilePlus2 },
@@ -76,6 +78,22 @@ export function EditorShell() {
     if (rangeWarningIdRef.current === null) return;
     dismissMessage(rangeWarningIdRef.current);
     rangeWarningIdRef.current = null;
+  }
+  function commitRange(range: RangeDto) {
+    const ranges = project.ranges.map((candidate) =>
+      candidate.id === range.id ? range : candidate,
+    );
+    if (!validateCandidateProject({ ...project, ranges })) return false;
+    dispatch(projectActions.updateRange(range));
+    return true;
+  }
+  function commitLayer(layer: LayerDto) {
+    const layers = project.layers.map((candidate) =>
+      candidate.id === layer.id ? layer : candidate,
+    );
+    if (!validateCandidateProject({ ...project, layers })) return false;
+    dispatch(projectActions.updateLayer(layer));
+    return true;
   }
   function showRangeDependencyWarning(rangeId: string, candidateProject = project) {
     dismissRangeDependencyWarning();
@@ -106,9 +124,10 @@ export function EditorShell() {
   };
   function createProjectRange() {
     if (project.ranges.length >= MAX_RANGES) return;
-    const range = createRange({
+    const range = createRangeForCanvas(project.canvas, {
       name: t("ranges.defaultName", { number: project.ranges.length + 1 }),
     });
+    if (!validateCandidateProject({ ...project, ranges: [...project.ranges, range] })) return;
     dispatch(projectActions.addRange(range));
     openRangeProperties(range.id);
   }
@@ -138,11 +157,11 @@ export function EditorShell() {
     if (!selectedObject) return;
     if (selectedObject.collection === "ranges") {
       const range = project.ranges.find((item) => item.id === selectedObject.id);
-      if (range) dispatch(projectActions.updateRange({ ...range, name }));
+      if (range) commitRange({ ...range, name });
       return;
     }
     const layer = project.layers.find((item) => item.id === selectedObject.id);
-    if (layer) dispatch(projectActions.updateLayer({ ...layer, name }));
+    if (layer) commitLayer({ ...layer, name });
   }
   const selectedName =
     selectedObject?.collection === "ranges"
@@ -157,15 +176,15 @@ export function EditorShell() {
       ? project.layers.find((layer) => layer.id === selectedObject.id)
       : undefined;
   const updateSelectedRange = (change: Partial<RangeDto>) => {
-    if (selectedRange) dispatch(projectActions.updateRange({ ...selectedRange, ...change }));
+    if (selectedRange) commitRange({ ...selectedRange, ...change });
   };
   const updateSelectedLayer = (change: Partial<LayerDto>) => {
     if (!selectedLayer) return;
-    dispatch(projectActions.updateLayer({ ...selectedLayer, ...change } as LayerDto));
+    commitLayer({ ...selectedLayer, ...change } as LayerDto);
   };
   const resetSelectedLayer = () => {
     if (!selectedLayer) return;
-    dispatch(projectActions.updateLayer(resetLayerToDefaults(selectedLayer)));
+    if (!commitLayer(resetLayerToDefaults(selectedLayer))) return;
     showMessage({
       color: "neutral",
       content: t("status.layerReset"),
@@ -173,8 +192,11 @@ export function EditorShell() {
       icon: CircleCheck,
     });
   };
-  const updateCanvas = (change: Partial<typeof project.canvas>) =>
-    dispatch(projectActions.setCanvas({ ...project.canvas, ...change }));
+  const updateCanvas = (change: Partial<typeof project.canvas>) => {
+    const canvas = { ...project.canvas, ...change };
+    if (!validateCandidateProject({ ...project, canvas })) return;
+    dispatch(projectActions.setCanvas(canvas));
+  };
   const updateSnapping = (change: Partial<typeof snapping>) =>
     dispatch(editorActions.setSnapping({ ...snapping, ...change }));
   function handleToolbarAction(action: EditorToolbarAction) {
@@ -242,8 +264,7 @@ export function EditorShell() {
               }
               onToggleLayerVisibility={(layerId) => {
                 const layer = project.layers.find((item) => item.id === layerId);
-                if (layer)
-                  dispatch(projectActions.updateLayer({ ...layer, visible: !layer.visible }));
+                if (layer) commitLayer({ ...layer, visible: !layer.visible });
               }}
               project={project}
               ranges={project.ranges}
@@ -307,10 +328,10 @@ export function EditorShell() {
         <CanvasPreview
           onBrowseExamples={() => undefined}
           onCreateRange={createProjectRange}
-          onLayerChange={(layer) => dispatch(projectActions.updateLayer(layer))}
+          onLayerChange={commitLayer}
           onLayerInteractionEnd={() => dispatch(completeProjectHistoryTransaction())}
           onLayerInteractionStart={() => dispatch(beginProjectHistoryTransaction())}
-          onRangeChange={(range) => dispatch(projectActions.updateRange(range))}
+          onRangeChange={commitRange}
           onRangeInteractionEnd={() => dispatch(completeProjectHistoryTransaction())}
           onRangeInteractionStart={() => dispatch(beginProjectHistoryTransaction())}
           hoveredLayerId={hoveredLayerId}

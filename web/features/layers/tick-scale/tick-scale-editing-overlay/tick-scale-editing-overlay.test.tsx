@@ -20,6 +20,7 @@ describe("TickScaleEditingOverlay", () => {
         <svg viewBox="0 0 120 120">
           <TickScaleEditingOverlay
             canvas={project.canvas}
+            displayScale={1}
             layer={layer}
             onInteractionEnd={vi.fn()}
             onInteractionStart={vi.fn()}

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   addCustomScalePointAtLargestGap,
   editCustomScalePoint,
+  getCustomScalePointBounds,
   moveCustomScalePoint,
   removeCustomScalePoint,
   snapCustomScalePoint,
@@ -50,6 +51,12 @@ describe("custom scale points", () => {
 
     expect(lastChanged[0]).toEqual({ value: -25, position: 0 });
     expect(lastChanged[2]).toEqual({ value: 125, position: 1 });
+  });
+
+  it("declares integer value bounds at least one unit away from neighbouring points", () => {
+    expect(getCustomScalePointBounds(points, 0).value.max).toBe(49);
+    expect(getCustomScalePointBounds(points, 1).value).toEqual({ min: 1, max: 99 });
+    expect(getCustomScalePointBounds(points, 2).value.min).toBe(51);
   });
 
   it("snaps values to the project increment and positions to 0.05", () => {

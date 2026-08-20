@@ -3,7 +3,7 @@ import {
   createDevelopmentProject,
   createProject,
 } from "@/features/project/factories/project-factories";
-import { constrainLayerToRange } from "@/features/layers/core/layer-registry";
+import { constrainProjectLayersToRanges } from "@/features/layers/core/layer-registry";
 import {
   MAX_LAYERS,
   type CanvasDto,
@@ -26,12 +26,9 @@ function touch(project: ProjectDto) {
 function commitProjectMutation(state: ProjectState, mutate: (project: ProjectDto) => boolean) {
   const candidate = structuredClone(current(state.current));
   if (!mutate(candidate)) return;
-  candidate.layers = candidate.layers.map((layer) => {
-    const range = candidate.ranges.find((item) => item.id === layer.rangeId);
-    return range ? constrainLayerToRange(layer, range) : layer;
-  });
-  touch(candidate);
-  const result = validateProject(candidate);
+  const constrainedCandidate = constrainProjectLayersToRanges(candidate);
+  touch(constrainedCandidate);
+  const result = validateProject(constrainedCandidate);
   if (result.data) state.current = result.data;
 }
 

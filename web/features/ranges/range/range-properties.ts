@@ -1,6 +1,9 @@
 import type { NumericPropertyDefinition } from "@/features/layers/core/layer";
+import { getCornerRadiusPercentPropertyDefinition } from "@/features/ranges/path-geometry/corner-radius-percent";
 import {
   getRangeRadiusMaximum,
+  SCALE_VALUE_MAX,
+  SCALE_VALUE_MIN,
   type CanvasDto,
   type RangeDto,
 } from "@/features/project/project-dto/project-dto";
@@ -9,6 +12,7 @@ export const RANGE_NUMERIC_PROPERTY_KEYS = [
   "centerX",
   "centerY",
   "radius",
+  "cornerRadiusPercent",
   "angleStart",
   "openingAngle",
 ] as const;
@@ -16,8 +20,8 @@ export const RANGE_NUMERIC_PROPERTY_KEYS = [
 export type RangeNumericPropertyKey = (typeof RANGE_NUMERIC_PROPERTY_KEYS)[number];
 export type RangeNumericPropertyDefinition = NumericPropertyDefinition<RangeNumericPropertyKey> & {
   group: "geometry" | "position";
-  labelKey: "angleStart" | "centerX" | "centerY" | "openingAngle" | "radius";
-  unit: "degrees" | "millimeters";
+  labelKey: "angleStart" | "centerX" | "centerY" | "cornerRadius" | "openingAngle" | "radius";
+  unit: "degrees" | "millimeters" | "percent";
 };
 export type ScalePropertyDefinition = NumericPropertyDefinition<"end" | "start"> & {
   labelKey: "scaleEnd" | "scaleStart";
@@ -61,6 +65,7 @@ export function getRangeNumericPropertyDefinitions(
       max: getRangeRadiusMaximum(canvas),
       step: 1,
     },
+    getCornerRadiusPercentPropertyDefinition(range.cornerRadiusPercent),
     {
       key: "angleStart",
       labelKey: "angleStart",
@@ -89,7 +94,7 @@ export function getRangeNumericPropertyDefinitions(
 export function getScalePropertyDefinitions(range: RangeDto): readonly ScalePropertyDefinition[] {
   const definition = range.scaleDefinition;
   if (definition.mode === "custom") return [];
-  const minimum = definition.mode === "logarithmic" ? 1 : -1_000_000;
+  const minimum = definition.mode === "logarithmic" ? 1 : SCALE_VALUE_MIN;
   return [
     {
       integerOnly: true,
@@ -108,7 +113,7 @@ export function getScalePropertyDefinitions(range: RangeDto): readonly ScaleProp
       snap: "none",
       value: definition.end,
       min: definition.start,
-      max: 1_000_000,
+      max: SCALE_VALUE_MAX,
       step: 1,
     },
   ];

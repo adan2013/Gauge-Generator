@@ -13,10 +13,24 @@
   client `StoreProvider`.
 - React UI reads state through typed hooks and dispatches typed actions. It does
   not serialize projects, calculate geometry, or use ad-hoc object shapes.
-- Edited domain objects expose numeric property definitions (`min`, `max`, and
+- Range and visual-layer domain objects expose editing overlays as typed
+  `EditingOverlayPrimitive` collections. The shared `EditingOverlayGeometry`
+  component is the only place that translates those React-free path and line
+  descriptions into SVG elements.
+- Adjacent property-definition modules expose numeric fields (`min`, `max`, and
   `step`) to the UI. This keeps canvas- and layer-dependent limits out of React
   components; Range derives coordinate bounds from the active canvas and Tick
   Scale derives its minimum radius offset from its source Range.
+- Visual-layer property editors render those definitions through the shared
+  `NumericPropertyFields`, which centrally applies integer rounding, snapping,
+  and bounds before returning a typed field change to the owning layer editor.
+- Range-mapped visual layers share effective-radius, radius-handle, drag, and
+  editing-overlay mechanics. Each layer keeps only its own geometric limits,
+  SVG output, validation, and translated overlay adapter.
+- Editing-overlay paths remain in project millimetres, while their strokes,
+  dash patterns, handles, and labels are compensated by the fitted preview's
+  pixels-per-millimetre ratio. Their on-screen size therefore remains stable
+  across small and large canvases without changing pointer geometry.
 - Validation returns a stable `{ code, path }`, never localized text. The UI
   owns translation of an error code through `messages/en.json` when it renders
   an error.
@@ -109,3 +123,12 @@ when they need to dismiss a persistent message.
 Routine navigation does not produce messages. Use timed messages for meaningful
 operation results and validation guidance; reserve persistent messages for
 context that remains relevant until the user leaves that context.
+
+Editor-originated project changes are validated before dispatch. Rejected
+Canvas, Range, and visual-layer values produce one translated, timed danger
+message explaining the relevant domain rule; a later attempt replaces the
+previous validation message. Shared numeric controls report empty or non-finite
+drafts through the same status-message channel. `useProjectValidation` owns
+validation-code translation, contextual Canvas messages, and the lifecycle of
+the current project-validation message; `EditorShell` only asks it to validate
+a candidate before dispatch.

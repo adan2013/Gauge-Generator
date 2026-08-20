@@ -65,4 +65,23 @@ describe("StatusMessageProvider", () => {
     fireEvent.click(screen.getByRole("button", { name: "Dismiss" }));
     expect(screen.queryByText("Check linked layers")).toBeNull();
   });
+
+  it("keeps persistent messages at the bottom when timed messages are added later", () => {
+    vi.useFakeTimers();
+    render(
+      <StatusMessageProvider>
+        <MessageControls />
+      </StatusMessageProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Persistent" }));
+    fireEvent.click(screen.getByRole("button", { name: "Timed" }));
+    fireEvent.click(screen.getByRole("button", { name: "Timed" }));
+
+    expect(screen.getAllByRole("status").map((message) => message.textContent)).toEqual([
+      "Saved",
+      "Saved",
+      "Check linked layers",
+    ]);
+  });
 });

@@ -1,15 +1,19 @@
 import type { NumericScaleLayerDto, RangeDto } from "@/features/project/project-dto/project-dto";
 import { clamp } from "@/lib/geometry/geometry";
 import { constrainScaleSequenceToRange } from "@/features/ranges/scale-mapping/scale-sequence";
+import {
+  constrainRadiusOffsetMm,
+  getEffectiveRadiusMm,
+  getRadiusOffsetBounds,
+} from "@/features/layers/core/range-mapped-layer-geometry";
 import { NUMERIC_SCALE_LIMITS } from "./numeric-scale-limits";
 
 const MINIMUM_EFFECTIVE_RADIUS_MM = 0.5;
 
 export function getNumericScaleGeometryBounds(layer: NumericScaleLayerDto, range: RangeDto) {
-  const effectiveRadiusMm = range.radius + layer.radiusOffsetMm;
+  const effectiveRadiusMm = getEffectiveRadiusMm(layer, range);
   return {
-    minRadiusOffsetMm: -range.radius + MINIMUM_EFFECTIVE_RADIUS_MM,
-    maxRadiusOffsetMm: range.radius,
+    ...getRadiusOffsetBounds(range, MINIMUM_EFFECTIVE_RADIUS_MM),
     maxFontSizeMm: Math.min(
       NUMERIC_SCALE_LIMITS.fontSizeMm.max,
       Math.max(MINIMUM_EFFECTIVE_RADIUS_MM, effectiveRadiusMm),
@@ -23,12 +27,12 @@ export function constrainNumericScaleToRange(
   range: RangeDto,
 ): NumericScaleLayerDto {
   const constrainedSequence = constrainScaleSequenceToRange(layer, range);
-  const radiusOffsetMm = clamp(
+  const radiusOffsetMm = constrainRadiusOffsetMm(
     layer.radiusOffsetMm,
-    -range.radius + MINIMUM_EFFECTIVE_RADIUS_MM,
-    range.radius,
+    range,
+    MINIMUM_EFFECTIVE_RADIUS_MM,
   );
-  const effectiveRadiusMm = range.radius + radiusOffsetMm;
+  const effectiveRadiusMm = getEffectiveRadiusMm({ radiusOffsetMm }, range);
   return {
     ...constrainedSequence,
     radiusOffsetMm,

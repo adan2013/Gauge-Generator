@@ -2,10 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { ColorPropertyRow } from "@/components/molecules/color-property-row/color-property-row";
-import {
-  PropertyGroup,
-  RangePropertyRow,
-} from "@/features/editor/property-controls/property-controls";
+import { NumericPropertyFields } from "@/features/editor/numeric-property-fields/numeric-property-fields";
+import { PropertyGroup } from "@/features/editor/property-controls/property-controls";
 import {
   getTickScaleColorPropertyDefinition,
   getTickScaleNumericPropertyDefinitions,
@@ -40,34 +38,20 @@ export function TickScalePropertiesEditor({
     ranges.find((range) => range.id === layer.rangeId),
   );
   const color = getTickScaleColorPropertyDefinition(layer);
-  const update = (definition: TickScaleNumericPropertyDefinition) => (value: string) => {
-    const raw = definition.integerOnly ? Math.round(Number(value)) : Number(value);
-    const increment = definition.snap === "angle" ? snapping.angleDegrees : snapping.distanceMm;
-    const next =
-      snapping.enabled && definition.snap !== "none"
-        ? Math.round(raw / increment) * increment
-        : raw;
-    onLayerChange({
-      [definition.key]: Math.min(definition.max, Math.max(definition.min, next)),
-    } as Partial<TickScaleLayerDto>);
-  };
-  const fields = (group: TickScaleNumericPropertyDefinition["group"]) =>
-    definitions
-      .filter((definition) => definition.group === group)
-      .map((definition) => (
-        <RangePropertyRow
-          key={definition.key}
-          label={t(`tickScale.${definition.labelKey}`)}
-          max={definition.max}
-          min={definition.min}
-          onChange={update(definition)}
-          onInteractionEnd={onHistoryTransactionEnd}
-          onInteractionStart={onHistoryTransactionStart}
-          step={definition.step}
-          suffix={definition.unit === "none" ? "" : t(`controls.${definition.unit}`)}
-          value={String(definition.value)}
-        />
-      ));
+  const fields = (group: TickScaleNumericPropertyDefinition["group"]) => (
+    <NumericPropertyFields
+      definitions={definitions}
+      getLabel={(definition) => t(`tickScale.${definition.labelKey}`)}
+      getSuffix={(definition) =>
+        definition.unit === "none" ? "" : t(`controls.${definition.unit}`)
+      }
+      group={group}
+      onInteractionEnd={onHistoryTransactionEnd}
+      onInteractionStart={onHistoryTransactionStart}
+      onValueChange={(key, value) => onLayerChange({ [key]: value } as Partial<TickScaleLayerDto>)}
+      snapping={snapping}
+    />
+  );
   return (
     <>
       <PropertyGroup title={t("tickScale.range")}>{fields("range")}</PropertyGroup>

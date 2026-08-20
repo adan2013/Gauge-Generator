@@ -11,22 +11,14 @@ export const TICK_SCALE_NUMERIC_PROPERTY_KEYS = [
   "tickLengthMm",
   "tickWidthMm",
   "radiusOffsetMm",
-  "cornerRadiusPercent",
 ] as const;
 
 export type TickScaleNumericPropertyKey = (typeof TICK_SCALE_NUMERIC_PROPERTY_KEYS)[number];
 export type TickScaleNumericPropertyDefinition =
   NumericPropertyDefinition<TickScaleNumericPropertyKey> & {
     group: "geometry" | "range" | "ticks";
-    labelKey:
-      | "cornerRadius"
-      | "radiusOffset"
-      | "tickLength"
-      | "tickWidth"
-      | "valueEnd"
-      | "valueStart"
-      | "valueStep";
-    unit: "millimeters" | "none" | "percent";
+    labelKey: "radiusOffset" | "tickLength" | "tickWidth" | "valueEnd" | "valueStart" | "valueStep";
+    unit: "millimeters" | "none";
   };
 export type TickScaleColorPropertyDefinition = {
   key: "color";
@@ -51,17 +43,6 @@ export function getTickScaleNumericPropertyDefinitions(
       min: bounds?.minRadiusOffsetMm ?? -500,
       max: bounds?.maxRadiusOffsetMm ?? 500,
       step: 0.1,
-    },
-    {
-      key: "cornerRadiusPercent",
-      labelKey: "cornerRadius",
-      group: "geometry",
-      unit: "percent",
-      snap: "none",
-      value: layer.cornerRadiusPercent,
-      min: 0,
-      max: 50,
-      step: 1,
     },
     {
       key: "tickLengthMm",

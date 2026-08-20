@@ -5,12 +5,19 @@ import type {
   RenderContext,
   ValidationIssue,
 } from "@/features/layers/core/layer";
+import { OVERLAY_INTEGER_INCREMENT } from "@/features/layers/core/layer";
+import type { EditingOverlayPrimitive } from "@/features/layers/core/editing-overlay-geometry";
 import {
   getRangeRadiusMaximum,
   type CanvasDto,
   type RangeDto,
 } from "@/features/project/project-dto/project-dto";
 import { PROJECT_VALIDATION_CODES } from "@/features/project/project-dto/project-validation-codes";
+import {
+  pointOnRoundedSquare,
+  roundedSquareRadiusAtPoint,
+} from "@/features/ranges/path-geometry/rounded-square-geometry";
+import { roundedSquarePathData } from "@/features/ranges/path-geometry/rounded-square-geometry";
 import { clamp, normalizeAngle, snapAngleDegrees, snapDistanceMm } from "@/lib/geometry/geometry";
 
 export class Range {
@@ -37,31 +44,97 @@ export class Range {
         id: "radius",
         kind: "radius",
         label: "radius",
-        point: pointAtAngle(
-          this.center,
+        point: pointOnRoundedSquare(
+          this.dto.centerX,
+          this.dto.centerY,
           this.dto.radius,
           this.dto.angleStart + this.dto.openingAngle / 2,
-        ),
+          this.dto.cornerRadiusPercent,
+        ).point,
       },
       {
         id: "angle-start",
         kind: "angle-start",
         label: "angle-start",
-        point: pointAtAngle(this.center, this.dto.radius, this.dto.angleStart),
+        point: pointOnRoundedSquare(
+          this.dto.centerX,
+          this.dto.centerY,
+          this.dto.radius,
+          this.dto.angleStart,
+          this.dto.cornerRadiusPercent,
+        ).point,
       },
       {
         id: "angle-end",
         kind: "angle-end",
         label: "angle-end",
-        point: pointAtAngle(this.center, this.dto.radius, endAngle),
+        point: pointOnRoundedSquare(
+          this.dto.centerX,
+          this.dto.centerY,
+          this.dto.radius,
+          endAngle,
+          this.dto.cornerRadiusPercent,
+        ).point,
+      },
+    ];
+  }
+
+  getEditingOverlay(): readonly EditingOverlayPrimitive[] {
+    const handles = this.getHandles();
+    const start = handles.find((handle) => handle.id === "angle-start")!.point;
+    const end = handles.find((handle) => handle.id === "angle-end")!.point;
+    const radius = handles.find((handle) => handle.id === "radius")!.point;
+
+    return [
+      {
+        d: roundedSquarePathData({
+          angleStart: this.dto.angleStart,
+          centerX: this.dto.centerX,
+          centerY: this.dto.centerY,
+          cornerRadiusPercent: this.dto.cornerRadiusPercent,
+          openingAngle: this.dto.openingAngle,
+          radius: this.dto.radius,
+        }),
+        dasharray: "2 2",
+        id: "range-overlay-arc",
+        kind: "path",
+        strokeWidth: 0.6,
+        tone: "accent",
+      },
+      {
+        dasharray: "1.5 1.5",
+        end: start,
+        id: "range-start-angle-guide",
+        kind: "line",
+        start: this.center,
+        strokeWidth: 0.4,
+        tone: "muted",
+      },
+      {
+        dasharray: "1.5 1.5",
+        end,
+        id: "range-opening-angle-guide",
+        kind: "line",
+        start: this.center,
+        strokeWidth: 0.4,
+        tone: "muted",
+      },
+      {
+        dasharray: "0.6 1.2",
+        end: radius,
+        id: "range-radius-guide",
+        kind: "line",
+        start: this.center,
+        strokeWidth: 0.5,
+        tone: "accent",
       },
     ];
   }
 
   applyHandleDrag(handleId: string, pointer: PointerInput, canvas: CanvasDto): RangeDto {
     const { point } = pointer;
-    const distanceIncrement = pointer.snapDistanceMm ?? 1;
-    const angleIncrement = pointer.snapAngleDegrees ?? 1;
+    const distanceIncrement = pointer.snapDistanceMm ?? OVERLAY_INTEGER_INCREMENT;
+    const angleIncrement = pointer.snapAngleDegrees ?? OVERLAY_INTEGER_INCREMENT;
     if (handleId === "center") {
       return {
         ...this.dto,
@@ -73,7 +146,15 @@ export class Range {
       return {
         ...this.dto,
         radius: clamp(
-          snapDistanceMm(distance(this.center, point), distanceIncrement),
+          snapDistanceMm(
+            roundedSquareRadiusAtPoint(
+              this.dto.centerX,
+              this.dto.centerY,
+              point,
+              this.dto.cornerRadiusPercent,
+            ),
+            distanceIncrement,
+          ),
           5,
           getRangeRadiusMaximum(canvas),
         ),
@@ -141,15 +222,6 @@ export class Range {
   }
 }
 
-function pointAtAngle(center: CanvasPointMm, radius: number, angle: number): CanvasPointMm {
-  const radians = (angle * Math.PI) / 180;
-  return { x: center.x + radius * Math.cos(radians), y: center.y + radius * Math.sin(radians) };
-}
-
 function angleFromPoint(center: CanvasPointMm, point: CanvasPointMm): number {
   return normalizeAngle((Math.atan2(point.y - center.y, point.x - center.x) * 180) / Math.PI);
-}
-
-function distance(first: CanvasPointMm, second: CanvasPointMm): number {
-  return Math.hypot(second.x - first.x, second.y - first.y);
 }

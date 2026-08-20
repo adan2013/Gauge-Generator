@@ -2,9 +2,10 @@ import {
   LAYER_TYPE,
   PROJECT_FORMAT,
   PROJECT_VERSION,
-  type LayerType,
 } from "@/features/project/project-dto/project-dto";
+import { CORNER_RADIUS_PERCENT } from "@/features/ranges/path-geometry/corner-radius-percent";
 import type {
+  CanvasDto,
   LayerDto,
   ProjectDto,
   RangeDto,
@@ -21,12 +22,26 @@ export function createRange(overrides: Partial<RangeDto> = {}): RangeDto {
     centerX: 60,
     centerY: 60,
     radius: 48,
+    cornerRadiusPercent: CORNER_RADIUS_PERCENT.defaultValue,
     angleStart: 140,
     openingAngle: 260,
     valueDirection: "ascending",
     scaleDefinition: { mode: "linear", start: 0, end: 100 },
     ...overrides,
   };
+}
+
+/** Creates a centered Range whose initial geometry is valid for the active canvas. */
+export function createRangeForCanvas(
+  canvas: CanvasDto,
+  overrides: Partial<RangeDto> = {},
+): RangeDto {
+  return createRange({
+    centerX: canvas.widthMm / 2,
+    centerY: canvas.heightMm / 2,
+    radius: Math.max(5, Math.min(canvas.widthMm, canvas.heightMm) * 0.4),
+    ...overrides,
+  });
 }
 
 export function createTickScaleLayer(
@@ -45,7 +60,6 @@ export function createTickScaleLayer(
     tickLengthMm: 4,
     tickWidthMm: 0.6,
     radiusOffsetMm: 0,
-    cornerRadiusPercent: 50,
     color: "#20242B",
     ...overrides,
   };
@@ -78,19 +92,25 @@ export function createNumericScaleLayer(
   };
 }
 
-const LAYER_FACTORIES = {
-  [LAYER_TYPE.tickScale]: (rangeId: string, overrides: Partial<LayerDto>) =>
-    createTickScaleLayer(rangeId, overrides as never),
-  [LAYER_TYPE.numericScale]: (rangeId: string, overrides: Partial<LayerDto>) =>
-    createNumericScaleLayer(rangeId, overrides as never),
-} satisfies Record<LayerType, (rangeId: string, overrides: Partial<LayerDto>) => LayerDto>;
+type LayerFactoryOverrides = Partial<Pick<LayerDto, "id" | "name" | "visible">>;
 
 export function createLayerFromType(
-  type: LayerType,
+  type: LayerDto["type"],
   rangeId: string,
-  overrides: Partial<LayerDto> = {},
+  overrides: LayerFactoryOverrides = {},
 ): LayerDto {
-  return LAYER_FACTORIES[type](rangeId, overrides);
+  switch (type) {
+    case LAYER_TYPE.tickScale:
+      return createTickScaleLayer(rangeId, overrides);
+    case LAYER_TYPE.numericScale:
+      return createNumericScaleLayer(rangeId, overrides);
+    default:
+      return assertNever(type);
+  }
+}
+
+function assertNever(value: never): never {
+  throw new Error(`Unsupported layer type: ${value}`);
 }
 
 /** Restores layer-owned visual settings while keeping its project identity and source Range. */
@@ -121,6 +141,7 @@ export function createDevelopmentProject(): ProjectDto {
     angleStart: 135,
     openingAngle: 270,
     radius: 46,
+    cornerRadiusPercent: 30,
     scaleDefinition: {
       mode: "logarithmic",
       start: 10,
@@ -150,7 +171,6 @@ export function createDevelopmentProject(): ProjectDto {
         valueStep: 10,
         tickLengthMm: 7,
         tickWidthMm: 1.2,
-        cornerRadiusPercent: 30,
         color: "#3F3F3F",
       }),
       createTickScaleLayer(range.id, {
@@ -161,7 +181,6 @@ export function createDevelopmentProject(): ProjectDto {
         valueStep: 2,
         tickLengthMm: 3,
         tickWidthMm: 0.5,
-        cornerRadiusPercent: 30,
         color: "#C4C4C4",
       }),
       createNumericScaleLayer(range.id, {

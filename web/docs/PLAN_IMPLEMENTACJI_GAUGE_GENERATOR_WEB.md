@@ -273,7 +273,7 @@ Kolejność: **Label → Arc → Clock Hand → Ellipse → Rectangle**. Dla ka�
 warstwy wykonać ten sam checklist:
 
 1. DTO/Zod/default factory i walidacja domenowa.
-2. Klasa z `toSvg`, `toEditingOverlay`, `getHandles` i `applyHandleDrag`.
+2. Klasa z `toSvg`, `getEditingOverlay`, `getHandles` i `applyHandleDrag`.
 3. Formularz z pogrupowanymi parametrami i właściwymi kontrolkami.
 4. Render, kolorowa etykieta typu, generowana miniatura oraz hover preview.
 5. Przypięcie do Range, ograniczenia wartości i blokada usunięcia Range.

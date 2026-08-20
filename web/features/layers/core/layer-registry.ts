@@ -5,31 +5,44 @@ import { constrainTickScaleToRange } from "@/features/layers/tick-scale/tick-sca
 import {
   LAYER_TYPE,
   type LayerDto,
-  type LayerType,
+  type ProjectDto,
   type RangeDto,
 } from "@/features/project/project-dto/project-dto";
 import type { Layer } from "./layer";
 
-type LayerDefinition = {
-  constrainToRange: (layer: LayerDto, range: RangeDto) => LayerDto;
-  createModel: (layer: LayerDto) => Layer;
-};
-
-const LAYER_DEFINITIONS = {
-  [LAYER_TYPE.tickScale]: {
-    constrainToRange: (layer, range) => constrainTickScaleToRange(layer as never, range),
-    createModel: (layer) => new TickScaleLayer(layer as never),
-  },
-  [LAYER_TYPE.numericScale]: {
-    constrainToRange: (layer, range) => constrainNumericScaleToRange(layer as never, range),
-    createModel: (layer) => new NumericScaleLayer(layer as never),
-  },
-} satisfies Record<LayerType, LayerDefinition>;
-
 export function createLayerModel(layer: LayerDto): Layer {
-  return LAYER_DEFINITIONS[layer.type].createModel(layer);
+  switch (layer.type) {
+    case LAYER_TYPE.tickScale:
+      return new TickScaleLayer(layer);
+    case LAYER_TYPE.numericScale:
+      return new NumericScaleLayer(layer);
+    default:
+      return assertNever(layer);
+  }
 }
 
-export function constrainLayerToRange(layer: LayerDto, range: RangeDto): LayerDto {
-  return LAYER_DEFINITIONS[layer.type].constrainToRange(layer, range);
+export function constrainProjectLayersToRanges(project: ProjectDto): ProjectDto {
+  const rangeById = new Map(project.ranges.map((range) => [range.id, range]));
+  return {
+    ...project,
+    layers: project.layers.map((layer) => {
+      const range = rangeById.get(layer.rangeId);
+      return range ? constrainLayerToRange(layer, range) : layer;
+    }),
+  };
+}
+
+function constrainLayerToRange(layer: LayerDto, range: RangeDto): LayerDto {
+  switch (layer.type) {
+    case LAYER_TYPE.tickScale:
+      return constrainTickScaleToRange(layer, range);
+    case LAYER_TYPE.numericScale:
+      return constrainNumericScaleToRange(layer, range);
+    default:
+      return assertNever(layer);
+  }
+}
+
+function assertNever(value: never): never {
+  throw new Error(`Unsupported layer: ${JSON.stringify(value)}`);
 }

@@ -19,7 +19,6 @@ describe("TickScaleLayer", () => {
   const context = {
     project,
     rangeById: new Map(project.ranges.map((item) => [item.id, item])),
-    zoom: 1,
   };
 
   it("renders one radial SVG line for every tick across its source Range", () => {
@@ -39,12 +38,15 @@ describe("TickScaleLayer", () => {
     expect(svg).toContain('x1="93.287" y1="70.816" x2="98.042" y2="72.361"');
   });
 
-  it("uses a circular path at 50% corner radius and a rounded-square path below it", () => {
-    const circular = new TickScaleLayer({ ...layer, cornerRadiusPercent: 50 }).toSvg(context);
-    const roundedSquare = new TickScaleLayer({ ...layer, cornerRadiusPercent: 0 }).toSvg(context);
+  it("distinguishes its active and inactive value intervals in the editing overlay", () => {
+    const overlay = new TickScaleLayer({
+      ...layer,
+      valueStart: 25,
+      valueEnd: 75,
+    }).getEditingOverlay(context);
 
-    expect(circular).toContain('x1="84.749" y1="84.749" x2="88.284" y2="88.284"');
-    expect(roundedSquare).toContain('x1="95" y1="100" x2="100" y2="100"');
+    expect(overlay.filter((primitive) => primitive.segment === "inactive")).toHaveLength(2);
+    expect(overlay.some((primitive) => primitive.segment === "active")).toBe(true);
   });
 
   it("does not duplicate the closing tick of a full 360-degree scale", () => {
@@ -77,10 +79,6 @@ describe("TickScaleLayer", () => {
     expect(fields.find((field) => field.key === "valueEnd")).toMatchObject({ min: 0, max: 100 });
     expect(fields.find((field) => field.key === "tickLengthMm")).toMatchObject({ max: 40 });
     expect(fields.find((field) => field.key === "tickWidthMm")).toMatchObject({ max: 5 });
-    expect(fields.find((field) => field.key === "cornerRadiusPercent")).toMatchObject({
-      min: 0,
-      max: 50,
-    });
   });
 
   it("snaps a dragged tick-radius handle and keeps its rendered radius positive", () => {
@@ -100,6 +98,23 @@ describe("TickScaleLayer", () => {
       path: "radiusOffsetMm",
       code: "project.validation.valueMustBePositive",
     });
+  });
+
+  it("keeps overlay-edited offsets integral when the source radius is fractional", () => {
+    const fractionalRange = { ...range, radius: 40.5 };
+    const fractionalProject = createProject({ ranges: [fractionalRange], layers: [layer] });
+    const fractionalContext = {
+      project: fractionalProject,
+      rangeById: new Map([[fractionalRange.id, fractionalRange]]),
+    };
+
+    const nextLayer = new TickScaleLayer(layer).applyHandleDrag(
+      "radius-offset",
+      { point: { x: 71.4, y: 60 }, shiftKey: false, altKey: false },
+      fractionalContext,
+    );
+
+    expect(Number.isInteger(nextLayer.radiusOffsetMm)).toBe(true);
   });
 
   it("never exposes a tick-length limit above the DTO maximum", () => {

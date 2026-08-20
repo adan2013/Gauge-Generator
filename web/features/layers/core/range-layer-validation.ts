@@ -4,6 +4,7 @@ import { MAX_GENERATED_SCALE_ITEMS } from "@/features/ranges/scale-mapping/scale
 import { getRangeScaleValueBounds } from "@/features/ranges/scale-mapping/scale-mapping";
 import { getScaleItemCount } from "@/features/ranges/scale-mapping/scale-sequence";
 import type { LayerDto, RangeDto } from "@/features/project/project-dto/project-dto";
+import { getEffectiveRadiusMm } from "@/features/layers/core/range-mapped-layer-geometry";
 
 type RangeMappedLayer = Pick<LayerDto, "radiusOffsetMm" | "valueEnd" | "valueStart" | "valueStep">;
 
@@ -11,7 +12,7 @@ export function getRangeMappedLayerValidationIssues(
   layer: RangeMappedLayer,
   sourceRange: RangeDto,
 ): ValidationIssue[] {
-  const effectiveRadiusMm = sourceRange.radius + layer.radiusOffsetMm;
+  const effectiveRadiusMm = getEffectiveRadiusMm(layer, sourceRange);
   const issues: ValidationIssue[] = [];
   if (effectiveRadiusMm <= 0)
     issues.push({

@@ -1,26 +1,20 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { LayerHandles } from "@/features/layers/core/layer-handles/layer-handles";
+import {
+  formatOverlayValue,
+  RangeMappedLayerEditingOverlay,
+  type RangeMappedLayerEditingOverlayBaseProps,
+} from "@/features/layers/core/range-mapped-layer-editing-overlay/range-mapped-layer-editing-overlay";
 import { NumericScaleLayer } from "@/features/layers/numeric-scale/numeric-scale";
-import type {
-  CanvasDto,
-  NumericScaleLayerDto,
-  ProjectDto,
-} from "@/features/project/project-dto/project-dto";
+import type { NumericScaleLayerDto } from "@/features/project/project-dto/project-dto";
 
-type NumericScaleEditingOverlayProps = {
-  canvas: CanvasDto;
-  layer: NumericScaleLayerDto;
-  project: ProjectDto;
-  snapping: { enabled: boolean; distanceMm: number; angleDegrees: number };
-  onInteractionEnd: () => void;
-  onInteractionStart: () => void;
-  onLayerChange: (nextLayer: NumericScaleLayerDto) => void;
-};
+type NumericScaleEditingOverlayProps =
+  RangeMappedLayerEditingOverlayBaseProps<NumericScaleLayerDto>;
 
 export function NumericScaleEditingOverlay({
   canvas,
+  displayScale,
   layer,
   onInteractionEnd,
   onInteractionStart,
@@ -29,39 +23,23 @@ export function NumericScaleEditingOverlay({
   snapping,
 }: NumericScaleEditingOverlayProps) {
   const t = useTranslations("Editor.numericScale");
-  const model = new NumericScaleLayer(layer);
-  const context = {
-    project,
-    rangeById: new Map(project.ranges.map((range) => [range.id, range])),
-    zoom: 1,
-  };
 
   return (
-    <g aria-label={t("overlayAriaLabel")} data-testid="numeric-scale-editing-overlay">
-      <LayerHandles
-        canvas={canvas}
-        getLabel={() =>
-          t("handleValues.radiusOffset", { value: formatValue(layer.radiusOffsetMm) })
-        }
-        handles={model
-          .getHandles(context)
-          .map((handle) => ({ ...handle, label: t("handles.radiusOffset") }))}
-        onHandleChange={(handleId, input) =>
-          onLayerChange(
-            model.applyHandleDrag(
-              handleId,
-              { ...input, snapDistanceMm: snapping.enabled ? snapping.distanceMm : 1 },
-              context,
-            ),
-          )
-        }
-        onInteractionEnd={onInteractionEnd}
-        onInteractionStart={onInteractionStart}
-      />
-    </g>
+    <RangeMappedLayerEditingOverlay
+      ariaLabel={t("overlayAriaLabel")}
+      canvas={canvas}
+      displayScale={displayScale}
+      getHandleLabel={() => t("handles.radiusOffset")}
+      getValueLabel={() =>
+        t("handleValues.radiusOffset", { value: formatOverlayValue(layer.radiusOffsetMm) })
+      }
+      model={new NumericScaleLayer(layer)}
+      onInteractionEnd={onInteractionEnd}
+      onInteractionStart={onInteractionStart}
+      onLayerChange={onLayerChange}
+      project={project}
+      snapping={snapping}
+      testId="numeric-scale-editing-overlay"
+    />
   );
-}
-
-function formatValue(value: number): string {
-  return Number.isInteger(value) ? String(value) : value.toFixed(1);
 }

@@ -1,7 +1,9 @@
 "use client";
 
 import { createContext, useContext, useId, useRef, useState, type ReactNode } from "react";
+import { TriangleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useStatusMessage } from "@/components/providers/status-message-provider/status-message-provider";
 import { FieldRow } from "@/components/molecules/field-row/field-row";
 import {
   CANVAS_DIMENSION_MAX_MM,
@@ -116,11 +118,13 @@ export function RangePropertyRow({
   value,
 }: RangePropertyRowProps) {
   const t = useTranslations("Editor.controls");
+  const { dismissMessage, showMessage } = useStatusMessage();
   const inputId = useId();
   const pendingCommit = useContext(PendingCommitContext);
   const [draftValue, setDraftValue] = useState(value);
   const [isEditing, setIsEditing] = useState(false);
   const cancelCommitRef = useRef(false);
+  const validationMessageIdRef = useRef<number | null>(null);
   const hasPendingChange = isEditing && draftValue !== value;
   const hasCanvasDimensionBounds =
     min === CANVAS_DIMENSION_MIN_MM && max === CANVAS_DIMENSION_MAX_MM;
@@ -133,7 +137,24 @@ export function RangePropertyRow({
   }
   function applyNormalizedValue(nextValue: string) {
     const normalizedValue = normalize(nextValue);
-    if (normalizedValue !== null) onChange(normalizedValue);
+    if (normalizedValue !== null) {
+      dismissValidationMessage();
+      onChange(normalizedValue);
+    }
+  }
+  function dismissValidationMessage() {
+    if (validationMessageIdRef.current === null) return;
+    dismissMessage(validationMessageIdRef.current);
+    validationMessageIdRef.current = null;
+  }
+  function showValidationMessage() {
+    dismissValidationMessage();
+    validationMessageIdRef.current = showMessage({
+      color: "danger",
+      content: t("invalidNumber", { label, min, max }),
+      duration: 5_000,
+      icon: TriangleAlert,
+    });
   }
   function handleFocus() {
     cancelCommitRef.current = false;
@@ -145,8 +166,13 @@ export function RangePropertyRow({
   function handleBlur() {
     const normalizedValue = normalize(draftValue);
     setIsEditing(false);
-    if (!cancelCommitRef.current && normalizedValue !== null && normalizedValue !== value)
-      onChange(normalizedValue);
+    if (!cancelCommitRef.current) {
+      if (normalizedValue === null) showValidationMessage();
+      else {
+        dismissValidationMessage();
+        if (normalizedValue !== value) onChange(normalizedValue);
+      }
+    }
     pendingCommit?.setPendingLabel(null);
     onInteractionEnd();
   }

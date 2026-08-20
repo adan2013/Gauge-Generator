@@ -4,10 +4,8 @@ import { useTranslations } from "next-intl";
 import { BooleanPropertyRow } from "@/components/molecules/boolean-property-row/boolean-property-row";
 import { ColorPropertyRow } from "@/components/molecules/color-property-row/color-property-row";
 import { SelectPropertyRow } from "@/components/molecules/select-property-row/select-property-row";
-import {
-  PropertyGroup,
-  RangePropertyRow,
-} from "@/features/editor/property-controls/property-controls";
+import { NumericPropertyFields } from "@/features/editor/numeric-property-fields/numeric-property-fields";
+import { PropertyGroup } from "@/features/editor/property-controls/property-controls";
 import {
   getNumericScaleColorPropertyDefinition,
   getNumericScaleNumericPropertyDefinitions,
@@ -42,34 +40,22 @@ export function NumericScalePropertiesEditor({
     ranges.find((range) => range.id === layer.rangeId),
   );
   const color = getNumericScaleColorPropertyDefinition(layer);
-  const update = (definition: NumericScaleNumericPropertyDefinition) => (value: string) => {
-    const raw = definition.integerOnly ? Math.round(Number(value)) : Number(value);
-    const increment = definition.snap === "angle" ? snapping.angleDegrees : snapping.distanceMm;
-    const next =
-      snapping.enabled && definition.snap !== "none"
-        ? Math.round(raw / increment) * increment
-        : raw;
-    onLayerChange({
-      [definition.key]: Math.min(definition.max, Math.max(definition.min, next)),
-    } as Partial<NumericScaleLayerDto>);
-  };
-  const fields = (group: NumericScaleNumericPropertyDefinition["group"]) =>
-    definitions
-      .filter((definition) => definition.group === group)
-      .map((definition) => (
-        <RangePropertyRow
-          key={definition.key}
-          label={t(`numericScale.${definition.labelKey}`)}
-          max={definition.max}
-          min={definition.min}
-          onChange={update(definition)}
-          onInteractionEnd={onHistoryTransactionEnd}
-          onInteractionStart={onHistoryTransactionStart}
-          step={definition.step}
-          suffix={definition.unit === "none" ? "" : t(`controls.${definition.unit}`)}
-          value={String(definition.value)}
-        />
-      ));
+  const fields = (group: NumericScaleNumericPropertyDefinition["group"]) => (
+    <NumericPropertyFields
+      definitions={definitions}
+      getLabel={(definition) => t(`numericScale.${definition.labelKey}`)}
+      getSuffix={(definition) =>
+        definition.unit === "none" ? "" : t(`controls.${definition.unit}`)
+      }
+      group={group}
+      onInteractionEnd={onHistoryTransactionEnd}
+      onInteractionStart={onHistoryTransactionStart}
+      onValueChange={(key, value) =>
+        onLayerChange({ [key]: value } as Partial<NumericScaleLayerDto>)
+      }
+      snapping={snapping}
+    />
+  );
   return (
     <>
       <PropertyGroup title={t("numericScale.range")}>{fields("range")}</PropertyGroup>

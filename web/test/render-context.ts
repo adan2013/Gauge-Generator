@@ -8,7 +8,6 @@ export function createRenderContext(project: ProjectDto = createProject()): Rend
 
 export function createEditingOverlayContext(
   project: ProjectDto = createProject(),
-  zoom = 1,
 ): EditingOverlayContext {
-  return { ...createRenderContext(project), zoom };
+  return createRenderContext(project);
 }

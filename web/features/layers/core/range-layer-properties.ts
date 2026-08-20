@@ -1,5 +1,9 @@
 import type { NumericPropertyDefinition } from "@/features/layers/core/layer";
-import type { RangeDto } from "@/features/project/project-dto/project-dto";
+import {
+  SCALE_VALUE_MAX,
+  SCALE_VALUE_MIN,
+  type RangeDto,
+} from "@/features/project/project-dto/project-dto";
 import { getRangeScaleValueBounds } from "@/features/ranges/scale-mapping/scale-mapping";
 import type { ScaleSequence } from "@/features/ranges/scale-mapping/scale-sequence";
 
@@ -16,7 +20,9 @@ export function getRangeLayerValuePropertyDefinitions(
   sequence: ScaleSequence,
   range: RangeDto | undefined,
 ): readonly RangeLayerValuePropertyDefinition[] {
-  const bounds = range ? getRangeScaleValueBounds(range) : { min: -1_000_000, max: 1_000_000 };
+  const bounds = range
+    ? getRangeScaleValueBounds(range)
+    : { min: SCALE_VALUE_MIN, max: SCALE_VALUE_MAX };
   return [
     {
       integerOnly: true,

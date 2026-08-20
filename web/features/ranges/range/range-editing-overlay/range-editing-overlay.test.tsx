@@ -17,6 +17,7 @@ describe("RangeEditingOverlay", () => {
               background: "#FFFFFF",
               transparentBackground: true,
             }}
+            displayScale={1}
             onInteractionEnd={() => undefined}
             onInteractionStart={() => undefined}
             onRangeChange={() => undefined}
@@ -32,7 +33,8 @@ describe("RangeEditingOverlay", () => {
     expect(screen.getByLabelText("Adjust radius")).toBeTruthy();
     expect(screen.getByText("60; 60")).toBeTruthy();
     expect(screen.getByText("r: 48 mm")).toBeTruthy();
-    expect(screen.getByText("260°")).toBeTruthy();
+    expect(screen.getByText("start: 140°")).toBeTruthy();
+    expect(screen.getByText("opening: 260°")).toBeTruthy();
     expect(screen.getAllByTestId("layer-handle-label-background")).toHaveLength(4);
     expect(screen.getByTestId("range-opening-angle-guide").getAttribute("stroke-dasharray")).toBe(
       screen.getByTestId("range-start-angle-guide").getAttribute("stroke-dasharray"),
@@ -42,7 +44,7 @@ describe("RangeEditingOverlay", () => {
     );
   });
 
-  it("renders a full circle as two SVG arcs when the opening angle is 360 degrees", () => {
+  it("closes the shared path when the opening angle is 360 degrees", () => {
     render(
       <NextIntlClientProvider locale="en" messages={messages}>
         <svg viewBox="0 0 120 120">
@@ -53,6 +55,7 @@ describe("RangeEditingOverlay", () => {
               background: "#FFFFFF",
               transparentBackground: true,
             }}
+            displayScale={1}
             onInteractionEnd={() => undefined}
             onInteractionStart={() => undefined}
             onRangeChange={() => undefined}
@@ -63,8 +66,38 @@ describe("RangeEditingOverlay", () => {
       </NextIntlClientProvider>,
     );
 
-    expect(screen.getByTestId("range-overlay-arc").getAttribute("d")?.match(/ A /g)).toHaveLength(
-      2,
+    const path = screen.getByTestId("range-overlay-arc").getAttribute("d");
+    expect(path).toMatch(/^M 108 60 /);
+    expect(path).toMatch(/L 108 60$/);
+  });
+
+  it("renders the Range overlay on its rounded path", () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={messages}>
+        <svg viewBox="0 0 120 120">
+          <RangeEditingOverlay
+            canvas={{
+              widthMm: 120,
+              heightMm: 120,
+              background: "#FFFFFF",
+              transparentBackground: true,
+            }}
+            displayScale={1}
+            onInteractionEnd={() => undefined}
+            onInteractionStart={() => undefined}
+            onRangeChange={() => undefined}
+            range={createRange({
+              angleStart: 0,
+              cornerRadiusPercent: 0,
+              openingAngle: 90,
+              radius: 40,
+            })}
+            snapping={{ enabled: true, distanceMm: 2, angleDegrees: 10 }}
+          />
+        </svg>
+      </NextIntlClientProvider>,
     );
+
+    expect(screen.getByTestId("range-overlay-arc").getAttribute("d")).toContain("L 100 100");
   });
 });

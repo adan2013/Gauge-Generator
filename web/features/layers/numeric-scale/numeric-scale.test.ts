@@ -18,7 +18,6 @@ describe("NumericScaleLayer", () => {
   const context = {
     project,
     rangeById: new Map(project.ranges.map((item) => [item.id, item])),
-    zoom: 1,
   };
 
   it("renders formatted labels at values mapped through its source Range", () => {
@@ -34,6 +33,17 @@ describe("NumericScaleLayer", () => {
     expect(svg).toContain(">25.0</text>");
   });
 
+  it("distinguishes its active and inactive value intervals in the editing overlay", () => {
+    const overlay = new NumericScaleLayer({
+      ...layer,
+      valueStart: 25,
+      valueEnd: 75,
+    }).getEditingOverlay(context);
+
+    expect(overlay.filter((primitive) => primitive.segment === "inactive")).toHaveLength(2);
+    expect(overlay.some((primitive) => primitive.segment === "active")).toBe(true);
+  });
+
   it("does not duplicate the closing label on a full circle", () => {
     const fullRange = {
       ...range,
@@ -45,7 +55,6 @@ describe("NumericScaleLayer", () => {
     const fullContext = {
       project: fullProject,
       rangeById: new Map(fullProject.ranges.map((item) => [item.id, item])),
-      zoom: 1,
     };
 
     expect(new NumericScaleLayer(fullLayer).toSvg(fullContext).match(/<text /g)).toHaveLength(3);
@@ -76,5 +85,22 @@ describe("NumericScaleLayer", () => {
     );
 
     expect(next.radiusOffsetMm).toBe(-34);
+  });
+
+  it("keeps overlay-edited offsets integral when the source radius is fractional", () => {
+    const fractionalRange = { ...range, radius: 40.5 };
+    const fractionalProject = createProject({ ranges: [fractionalRange], layers: [layer] });
+    const fractionalContext = {
+      project: fractionalProject,
+      rangeById: new Map([[fractionalRange.id, fractionalRange]]),
+    };
+
+    const nextLayer = new NumericScaleLayer(layer).applyHandleDrag(
+      "radius-offset",
+      { point: { x: 71.4, y: 60 }, shiftKey: false, altKey: false },
+      fractionalContext,
+    );
+
+    expect(Number.isInteger(nextLayer.radiusOffsetMm)).toBe(true);
   });
 });

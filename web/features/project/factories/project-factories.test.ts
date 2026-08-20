@@ -4,9 +4,23 @@ import {
   createLayerFromType,
   createNumericScaleLayer,
   createRange,
+  createRangeForCanvas,
   createTickScaleLayer,
   resetLayerToDefaults,
 } from "./project-factories";
+
+describe("createRangeForCanvas", () => {
+  it("centers and sizes a valid initial Range for a small canvas", () => {
+    expect(
+      createRangeForCanvas({
+        widthMm: 30,
+        heightMm: 30,
+        background: "#FFFFFF",
+        transparentBackground: true,
+      }),
+    ).toMatchObject({ centerX: 15, centerY: 15, radius: 12 });
+  });
+});
 
 describe("createDevelopmentProject", () => {
   it("provides a logarithmic pressure-gauge workbench", () => {
@@ -17,6 +31,7 @@ describe("createDevelopmentProject", () => {
     expect(project.layers.every((layer) => layer.rangeId === project.ranges[0].id)).toBe(true);
     expect(project.ranges[0]).toMatchObject({
       angleStart: 135,
+      cornerRadiusPercent: 30,
       openingAngle: 270,
       radius: 46,
       valueDirection: "ascending",
@@ -30,8 +45,8 @@ describe("createDevelopmentProject", () => {
     expect(project.canvas).toMatchObject({ background: "#FFFFFF", transparentBackground: false });
     expect(project.layers.filter((layer) => layer.type === "tick-scale")).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ cornerRadiusPercent: 30, color: "#C4C4C4" }),
-        expect.objectContaining({ cornerRadiusPercent: 30, color: "#3F3F3F" }),
+        expect.objectContaining({ color: "#C4C4C4" }),
+        expect.objectContaining({ color: "#3F3F3F" }),
       ]),
     );
     expect(project.layers.map((layer) => layer.name)).toEqual([

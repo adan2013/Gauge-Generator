@@ -1,17 +1,20 @@
 import type { RangeDto, TickScaleLayerDto } from "@/features/project/project-dto/project-dto";
 import { clamp } from "@/lib/geometry/geometry";
 import { constrainScaleSequenceToRange } from "@/features/ranges/scale-mapping/scale-sequence";
+import {
+  constrainRadiusOffsetMm,
+  getEffectiveRadiusMm,
+  getRadiusOffsetBounds,
+} from "@/features/layers/core/range-mapped-layer-geometry";
 import { TICK_SCALE_LIMITS } from "./tick-scale-limits";
 
 const minimumEffectiveRadiusMm = TICK_SCALE_LIMITS.tickLengthMm.min;
 
 export function getTickScaleGeometryBounds(layer: TickScaleLayerDto, range: RangeDto) {
-  const minRadiusOffsetMm = -range.radius + minimumEffectiveRadiusMm;
-  const maxRadiusOffsetMm = range.radius;
-  const effectiveRadiusMm = range.radius + layer.radiusOffsetMm;
+  const radiusOffsetBounds = getRadiusOffsetBounds(range, minimumEffectiveRadiusMm);
+  const effectiveRadiusMm = getEffectiveRadiusMm(layer, range);
   return {
-    minRadiusOffsetMm,
-    maxRadiusOffsetMm,
+    ...radiusOffsetBounds,
     maxTickLengthMm: Math.min(
       TICK_SCALE_LIMITS.tickLengthMm.max,
       Math.max(minimumEffectiveRadiusMm, effectiveRadiusMm),
@@ -26,12 +29,12 @@ export function constrainTickScaleToRange(
   range: RangeDto,
 ): TickScaleLayerDto {
   const constrainedSequence = constrainScaleSequenceToRange(layer, range);
-  const radiusOffsetMm = clamp(
+  const radiusOffsetMm = constrainRadiusOffsetMm(
     layer.radiusOffsetMm,
-    -range.radius + minimumEffectiveRadiusMm,
-    range.radius,
+    range,
+    minimumEffectiveRadiusMm,
   );
-  const effectiveRadiusMm = range.radius + radiusOffsetMm;
+  const effectiveRadiusMm = getEffectiveRadiusMm({ radiusOffsetMm }, range);
   const tickLengthMm = clamp(
     layer.tickLengthMm,
     minimumEffectiveRadiusMm,

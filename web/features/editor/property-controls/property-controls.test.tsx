@@ -94,6 +94,31 @@ describe("RangePropertyRow", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
+  it("shows a status message when a numeric draft is empty", () => {
+    const onChange = vi.fn();
+    renderEditor(
+      <RangePropertyRow
+        label="Radius"
+        max={50}
+        min={5}
+        onChange={onChange}
+        onInteractionEnd={vi.fn()}
+        onInteractionStart={vi.fn()}
+        step={1}
+        suffix="mm"
+        value="10"
+      />,
+    );
+    const input = screen.getByRole("spinbutton", { name: "Radius" });
+
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: "" } });
+    fireEvent.blur(input);
+
+    expect(screen.getByText("Enter a number for Radius between 5 and 50.")).toBeTruthy();
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
   it("keeps slider changes live", () => {
     const onChange = vi.fn();
     renderEditor(

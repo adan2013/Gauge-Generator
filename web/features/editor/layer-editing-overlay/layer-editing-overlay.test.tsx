@@ -13,6 +13,7 @@ describe("LayerEditingOverlay", () => {
   const range = createRange();
   const baseProps = {
     canvas: createProject().canvas,
+    displayScale: 1,
     onInteractionEnd: vi.fn(),
     onInteractionStart: vi.fn(),
     onLayerChange: vi.fn(),

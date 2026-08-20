@@ -5,6 +5,30 @@ import { renderEditor } from "@/test/render-editor";
 import { RangePropertiesEditor } from "./range-properties-editor";
 
 describe("RangePropertiesEditor", () => {
+  it("edits the shared corner radius without distance snapping", () => {
+    const range = createRange();
+    const onRangeChange = vi.fn();
+    renderEditor(
+      <RangePropertiesEditor
+        canvas={createProject().canvas}
+        onHistoryTransactionEnd={vi.fn()}
+        onHistoryTransactionStart={vi.fn()}
+        onNameChange={vi.fn()}
+        onRangeChange={onRangeChange}
+        range={range}
+        selectedName={range.name}
+        snapping={{ enabled: true, distanceMm: 2, angleDegrees: 10 }}
+      />,
+    );
+    const input = screen.getByRole("spinbutton", { name: "Corner radius" });
+
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: "27" } });
+    fireEvent.blur(input);
+
+    expect(onRangeChange).toHaveBeenCalledWith({ cornerRadiusPercent: 27 });
+  });
+
   it("commits scale bounds only after the user finishes editing", () => {
     const range = createRange();
     const project = createProject({ ranges: [range] });

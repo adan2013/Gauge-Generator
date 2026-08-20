@@ -1,12 +1,11 @@
 import {
   CUSTOM_SCALE_POSITION_STEP,
+  SCALE_VALUE_MAX,
+  SCALE_VALUE_MIN,
   type ScaleDefinitionDto,
 } from "@/features/project/project-dto/project-dto";
 
 export type CustomScalePoint = Extract<ScaleDefinitionDto, { mode: "custom" }>["points"][number];
-
-export const CUSTOM_SCALE_VALUE_MIN = -1_000_000;
-export const CUSTOM_SCALE_VALUE_MAX = 1_000_000;
 
 export type CustomScaleSnapOptions = {
   enabled: boolean;
@@ -143,8 +142,8 @@ export function getCustomScalePointBounds(
   const next = points[index + 1];
   return {
     value: {
-      min: previous ? previous.value : CUSTOM_SCALE_VALUE_MIN,
-      max: next ? next.value : CUSTOM_SCALE_VALUE_MAX,
+      min: previous ? previous.value + 1 : SCALE_VALUE_MIN,
+      max: next ? next.value - 1 : SCALE_VALUE_MAX,
     },
     position: {
       min: previous
