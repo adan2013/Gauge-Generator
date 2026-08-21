@@ -138,7 +138,7 @@ Keep those documents current. Put completed-stage evidence in
   Reducing a Range clamps dependent Tick Scale geometry in the same project
   mutation.
 - Range owns the shared `cornerRadiusPercent` path parameter: `50` is a circle;
-  lower values form an inscribed rounded square. All visual layers use the
+  values down to `1` form an inscribed rounded square without an ambiguous sharp-corner normal. All visual layers use the
   centralized Range path geometry at their own effective radius.
 - Tick Scale defines its own visible `valueStart`, `valueEnd`, and positive
   `valueStep`, constrained to its source Range's mapping domain. It renders at

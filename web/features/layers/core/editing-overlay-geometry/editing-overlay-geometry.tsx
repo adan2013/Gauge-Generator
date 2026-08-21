@@ -24,6 +24,7 @@ export function EditingOverlayGeometry({ displayScale, primitives }: EditingOver
           d={primitive.d}
           fill="none"
           key={primitive.id}
+          strokeLinejoin="round"
         />
       );
 

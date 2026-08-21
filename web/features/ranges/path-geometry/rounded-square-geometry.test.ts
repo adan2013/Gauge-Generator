@@ -35,4 +35,34 @@ describe("rounded-square geometry", () => {
     expect(path).toContain("L 100 100");
     expect(path).toMatch(/L 60 100$/);
   });
+
+  it("uses true SVG arcs instead of sampled line segments for rounded corners", () => {
+    const path = roundedSquarePathData({
+      angleStart: 0,
+      centerX: 60,
+      centerY: 60,
+      cornerRadiusPercent: 25,
+      openingAngle: 90,
+      radius: 40,
+    });
+
+    expect(path).toMatch(/^M 100 60 L /);
+    expect(path).toContain("A 20 20 0 0 1");
+    expect(path.match(/ A /g)).toHaveLength(1);
+    expect(path).toMatch(/ L 60 100$/);
+  });
+
+  it("uses the reverse SVG sweep for counter-clockwise paths", () => {
+    const path = roundedSquarePathData({
+      angleStart: 90,
+      centerX: 60,
+      centerY: 60,
+      cornerRadiusPercent: 25,
+      openingAngle: -90,
+      radius: 40,
+    });
+
+    expect(path).toContain("A 20 20 0 0 0");
+    expect(path).toMatch(/L 100 60$/);
+  });
 });

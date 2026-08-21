@@ -50,7 +50,7 @@ from `-1,000,000` to `1,000,000`. New layer types
 extend the strict Zod discriminated union in their own implementation stage.
 
 Every physical value is a number in millimetres. Angles are degrees. Range
-stores `centerX`, `centerY`, `radius`, `cornerRadiusPercent` (0–50), `angleStart`,
+stores `centerX`, `centerY`, `radius`, `cornerRadiusPercent` (1–50), `angleStart`,
 `openingAngle`, and `valueDirection` (`ascending` or `descending`) plus
 `scaleDefinition`; it has no pivot field. At 50% the shared path is circular;
 lower values form an inscribed rounded square used by every visual layer. A Range centre must remain on the

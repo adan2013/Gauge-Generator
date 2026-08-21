@@ -3,7 +3,7 @@ import type { NumericPropertyDefinition } from "@/features/layers/core/layer";
 export const CORNER_RADIUS_PERCENT = {
   defaultValue: 50,
   max: 50,
-  min: 0,
+  min: 1,
   step: 1,
 } as const;
 

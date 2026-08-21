@@ -24,5 +24,6 @@ describe("EditingOverlayGeometry", () => {
 
     expect(screen.getByTestId("scaled-overlay").getAttribute("stroke-width")).toBe("0.2");
     expect(screen.getByTestId("scaled-overlay").getAttribute("stroke-dasharray")).toBe("0.5 1");
+    expect(screen.getByTestId("scaled-overlay").getAttribute("stroke-linejoin")).toBe("round");
   });
 });

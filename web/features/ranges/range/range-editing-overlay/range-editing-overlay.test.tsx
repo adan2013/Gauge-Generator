@@ -68,7 +68,8 @@ describe("RangeEditingOverlay", () => {
 
     const path = screen.getByTestId("range-overlay-arc").getAttribute("d");
     expect(path).toMatch(/^M 108 60 /);
-    expect(path).toMatch(/L 108 60$/);
+    expect(path).toContain("A 48 48 0 0 1");
+    expect(path).toMatch(/108 60$/);
   });
 
   it("renders the Range overlay on its rounded path", () => {
@@ -88,7 +89,7 @@ describe("RangeEditingOverlay", () => {
             onRangeChange={() => undefined}
             range={createRange({
               angleStart: 0,
-              cornerRadiusPercent: 0,
+              cornerRadiusPercent: 1,
               openingAngle: 90,
               radius: 40,
             })}
@@ -98,6 +99,6 @@ describe("RangeEditingOverlay", () => {
       </NextIntlClientProvider>,
     );
 
-    expect(screen.getByTestId("range-overlay-arc").getAttribute("d")).toContain("L 100 100");
+    expect(screen.getByTestId("range-overlay-arc").getAttribute("d")).toContain("A 0.8 0.8 0 0 1");
   });
 });

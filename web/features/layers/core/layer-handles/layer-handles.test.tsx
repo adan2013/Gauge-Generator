@@ -39,7 +39,7 @@ describe("LayerHandles", () => {
       expect.objectContaining({ point: { x: 60, y: 60 } }),
     );
     expect(Number(screen.getByTestId("layer-handle-label-background").getAttribute("width"))).toBe(
-      8.4,
+      10,
     );
     expect(screen.getByText("0 mm").getAttribute("font-family")).toBe("Courier New, monospace");
   });
@@ -77,7 +77,7 @@ describe("LayerHandles", () => {
       Number(background.getAttribute("x")) + Number(background.getAttribute("width"));
 
     expect(Number(label.getAttribute("x"))).toBeLessThan(115);
-    expect(Number(background.getAttribute("width"))).toBeCloseTo(24.6);
+    expect(Number(background.getAttribute("width"))).toBeCloseTo(28.9);
     expect(backgroundRightEdge).toBeLessThanOrEqual(120);
   });
 
@@ -134,10 +134,10 @@ describe("LayerHandles", () => {
       </svg>,
     );
 
-    expect(screen.getByLabelText("Adjust radius").getAttribute("r")).toBe("0.4");
-    expect(screen.getByText("0 mm").getAttribute("font-size")).toBe("0.75");
+    expect(screen.getByLabelText("Adjust radius").getAttribute("r")).toBe("0.5");
+    expect(screen.getByText("0 mm").getAttribute("font-size")).toBe("0.9");
     expect(Number(screen.getByTestId("layer-handle-label-background").getAttribute("width"))).toBe(
-      2.1,
+      2.5,
     );
   });
 });

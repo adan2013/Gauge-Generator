@@ -28,7 +28,7 @@ describe("Range property definitions", () => {
     expect(fields.find((field) => field.key === "centerY")).toMatchObject({ min: 0, max: 80 });
     expect(fields.find((field) => field.key === "radius")).toMatchObject({ min: 5, max: 120 });
     expect(fields.find((field) => field.key === "cornerRadiusPercent")).toMatchObject({
-      min: 0,
+      min: 1,
       max: 50,
       snap: "none",
     });
@@ -47,13 +47,13 @@ describe("Range property definitions", () => {
         radius: 20,
         angleStart: 0,
         openingAngle: 90,
-        cornerRadiusPercent: 0,
+        cornerRadiusPercent: 1,
       }),
     );
 
     expect(model.getHandles().find((handle) => handle.id === "radius")?.point).toEqual({
-      x: 80,
-      y: 80,
+      x: expect.closeTo(79.883, 3),
+      y: expect.closeTo(79.883, 3),
     });
   });
 
@@ -166,7 +166,7 @@ describe("Range property definitions", () => {
 
   it("keeps its radius when dragging starts on its rounded-path handle", () => {
     const model = new Range(
-      createRange({ radius: 20, angleStart: 0, openingAngle: 90, cornerRadiusPercent: 0 }),
+      createRange({ radius: 20, angleStart: 0, openingAngle: 90, cornerRadiusPercent: 1 }),
     );
     const radiusHandle = model.getHandles().find((handle) => handle.id === "radius")!;
     const canvas = {

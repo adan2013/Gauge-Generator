@@ -44,7 +44,7 @@ describe("getRangeScaleEditingOverlay", () => {
     const activePath = overlay.find((primitive) => primitive.segment === "active");
     expect(activePath).toMatchObject({ kind: "path", tone: "accent" });
     expect(activePath?.kind === "path" ? activePath.d : "").toMatch(
-      /^M 75\.307 96\.955 L.*L 60 100$/,
+      /^M 75\.307 96\.955 A 40 40 0 0 1 60 100$/,
     );
   });
 });

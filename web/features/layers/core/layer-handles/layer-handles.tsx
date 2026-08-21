@@ -14,10 +14,15 @@ type LayerHandlesProps = {
   onInteractionStart: () => void;
 };
 
-const handleRadiusMm = 1.6;
-const labelGapMm = 2.5;
-const labelHorizontalPaddingMm = 0.6;
-const labelCharacterWidthMm = 1.8;
+const handleRadiusMm = 2;
+const handleStrokeWidthMm = 0.5;
+const labelGapMm = 3;
+const labelHeightMm = 5;
+const labelCornerRadiusMm = 0.8;
+const labelFontSizeMm = 3.6;
+const labelBaselineOffsetMm = 3.7;
+const labelHorizontalPaddingMm = 0.8;
+const labelCharacterWidthMm = 2.1;
 
 export function LayerHandles({
   canvas,
@@ -79,7 +84,7 @@ export function LayerHandles({
         onPointerUp={handlePointerEnd}
         r={handleRadiusMm * displayScale}
         stroke="currentColor"
-        strokeWidth={0.4 * displayScale}
+        strokeWidth={handleStrokeWidthMm * displayScale}
         className="cursor-grab text-accent active:cursor-grabbing"
       />
       <HandleLabel
@@ -116,16 +121,16 @@ function HandleLabel({
       <rect
         data-testid="layer-handle-label-background"
         fill="white"
-        height={4 * displayScale}
-        rx={0.6 * displayScale}
+        height={labelHeightMm * displayScale}
+        rx={labelCornerRadiusMm * displayScale}
         width={width}
         x={backgroundX}
-        y={textY - 3 * displayScale}
+        y={textY - labelBaselineOffsetMm * displayScale}
       />
       <text
         fill="currentColor"
         fontFamily="Courier New, monospace"
-        fontSize={3 * displayScale}
+        fontSize={labelFontSizeMm * displayScale}
         x={textX}
         y={textY}
         className="text-muted"

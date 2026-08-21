@@ -16,7 +16,7 @@ type RoundedSquarePathOptions = {
   radius: number;
 };
 
-const MAX_PATH_SEGMENT_ANGLE_DEGREES = 8;
+const PATH_ANGLE_TOLERANCE = 1e-9;
 
 export function pointOnRoundedSquare(
   centerX: number,
@@ -84,15 +84,66 @@ export function roundedSquarePathData({
   openingAngle,
   radius,
 }: RoundedSquarePathOptions): string {
-  const pointCount = Math.max(
-    2,
-    Math.ceil(Math.abs(openingAngle) / MAX_PATH_SEGMENT_ANGLE_DEGREES) + 1,
-  );
-  return Array.from({ length: pointCount }, (_, index) => {
-    const angle = angleStart + openingAngle * (index / (pointCount - 1));
-    const point = pointOnRoundedSquare(centerX, centerY, radius, angle, cornerRadiusPercent).point;
-    return `${index === 0 ? "M" : "L"} ${format(point.x)} ${format(point.y)}`;
-  }).join(" ");
+  const angleEnd = angleStart + openingAngle;
+  const direction = Math.sign(openingAngle) || 1;
+  const cornerRadius = radius * (cornerRadiusPercent / CORNER_RADIUS_PERCENT.max);
+  const straightEdge = radius - cornerRadius;
+  const edgeHalfAngle = (Math.atan2(straightEdge, radius) * 180) / Math.PI;
+  const minimumAngle = Math.min(angleStart, angleEnd);
+  const maximumAngle = Math.max(angleStart, angleEnd);
+  const transitionAngles: number[] = [];
+  const firstEdgeIndex = Math.floor(minimumAngle / 90) - 1;
+  const lastEdgeIndex = Math.ceil(maximumAngle / 90) + 1;
+
+  for (let edgeIndex = firstEdgeIndex; edgeIndex <= lastEdgeIndex; edgeIndex += 1) {
+    const edgeCenterAngle = edgeIndex * 90;
+    transitionAngles.push(edgeCenterAngle - edgeHalfAngle, edgeCenterAngle + edgeHalfAngle);
+  }
+
+  const internalAngles = transitionAngles
+    .filter(
+      (angle) =>
+        angle > minimumAngle + PATH_ANGLE_TOLERANCE && angle < maximumAngle - PATH_ANGLE_TOLERANCE,
+    )
+    .sort((left, right) => direction * (left - right))
+    .filter(
+      (angle, index, angles) =>
+        index === 0 || Math.abs(angle - angles[index - 1]) > PATH_ANGLE_TOLERANCE,
+    );
+  const angles = [angleStart, ...internalAngles, angleEnd];
+  const start = pointOnRoundedSquare(
+    centerX,
+    centerY,
+    radius,
+    angleStart,
+    cornerRadiusPercent,
+  ).point;
+  const commands = [`M ${format(start.x)} ${format(start.y)}`];
+
+  for (let index = 1; index < angles.length; index += 1) {
+    const previousAngle = angles[index - 1];
+    const angle = angles[index];
+    if (Math.abs(angle - previousAngle) <= PATH_ANGLE_TOLERANCE) continue;
+    const end = pointOnRoundedSquare(centerX, centerY, radius, angle, cornerRadiusPercent).point;
+    const midpoint = pointOnRoundedSquare(
+      centerX,
+      centerY,
+      radius,
+      (previousAngle + angle) / 2,
+      cornerRadiusPercent,
+    );
+    const followsCorner =
+      cornerRadius > PATH_ANGLE_TOLERANCE &&
+      Math.abs(midpoint.normal.x) > PATH_ANGLE_TOLERANCE &&
+      Math.abs(midpoint.normal.y) > PATH_ANGLE_TOLERANCE;
+    commands.push(
+      followsCorner
+        ? `A ${format(cornerRadius)} ${format(cornerRadius)} 0 0 ${direction > 0 ? 1 : 0} ${format(end.x)} ${format(end.y)}`
+        : `L ${format(end.x)} ${format(end.y)}`,
+    );
+  }
+
+  return commands.join(" ");
 }
 
 function format(value: number): string {
