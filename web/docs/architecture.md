@@ -108,6 +108,12 @@ layers consume that distribution and own only their shape-specific geometry and
 SVG. Shared generation limits live in `scale-constants.ts`; validation and
 rendering import the same constant.
 
+Arc is a Range-mapped interval layer rather than an independently angled shape.
+It stores only integer `valueStart` and `valueEnd`; shared mapping derives its
+temporary path angles from the source Range. Its radius offset uses the common
+Range-mapped overlay and handle, while stroke thickness, color, and rounded or
+flat SVG end caps remain Arc-owned presentation.
+
 Custom points map an ascending value axis to an ascending normalized-position
 axis. The first and last positions are locked to zero and one at the domain
 boundaries, while their values remain editable. The graph editor constrains

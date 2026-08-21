@@ -16,6 +16,7 @@ import type {
   TickScaleLayerDto,
   NumericScaleLayerDto,
   LabelLayerDto,
+  ArcLayerDto,
   TextStyleDto,
 } from "@/features/project/project-dto/project-dto";
 
@@ -122,6 +123,23 @@ export function createLabelLayer(
   };
 }
 
+export function createArcLayer(rangeId: string, overrides: Partial<ArcLayerDto> = {}): ArcLayerDto {
+  return {
+    id: crypto.randomUUID(),
+    name: "Arc",
+    visible: true,
+    rangeId,
+    type: LAYER_TYPE.arc,
+    valueStart: 0,
+    valueEnd: 100,
+    radiusOffsetMm: 0,
+    strokeWidthMm: 2,
+    roundedEnds: false,
+    color: "#2E7D32",
+    ...overrides,
+  };
+}
+
 type LayerFactoryOverrides = Partial<Pick<LayerDto, "id" | "name" | "visible">>;
 
 export function createLayerFromType(
@@ -136,6 +154,8 @@ export function createLayerFromType(
       return createNumericScaleLayer(rangeId, overrides);
     case LAYER_TYPE.label:
       return createLabelLayer(rangeId, overrides);
+    case LAYER_TYPE.arc:
+      return createArcLayer(rangeId, overrides);
     default:
       return assertNever(type);
   }
@@ -195,6 +215,15 @@ export function createDevelopmentProject(): ProjectDto {
     },
     ranges: [range],
     layers: [
+      createArcLayer(range.id, {
+        name: "Warning arc",
+        valueStart: 70,
+        valueEnd: 100,
+        radiusOffsetMm: 3,
+        strokeWidthMm: 3,
+        roundedEnds: false,
+        color: "#C62828",
+      }),
       createLabelLayer(range.id, {
         name: "Unit label",
         text: "bar",

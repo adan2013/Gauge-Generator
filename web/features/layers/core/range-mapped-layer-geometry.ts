@@ -11,6 +11,7 @@ import {
   pointOnRoundedSquare,
   roundedSquareRadiusAtPoint,
 } from "@/features/ranges/path-geometry/rounded-square-geometry";
+import { valueToNormalizedPosition } from "@/features/ranges/scale-mapping/scale-mapping";
 import { clamp, snapDistanceMm } from "@/lib/geometry/geometry";
 
 type RadiusOffsetLayer = { radiusOffsetMm: number };
@@ -19,6 +20,16 @@ export type RadiusOffsetBounds = { maxRadiusOffsetMm: number; minRadiusOffsetMm:
 
 export function getEffectiveRadiusMm(layer: RadiusOffsetLayer, range: RangeDto): number {
   return range.radius + layer.radiusOffsetMm;
+}
+
+export function getRangeMappedLayerPathGeometry(layer: RangeScaleLayer, range: RangeDto) {
+  const startPosition = valueToNormalizedPosition(range, layer.valueStart);
+  const endPosition = valueToNormalizedPosition(range, layer.valueEnd);
+  return {
+    angleStart: range.angleStart + range.openingAngle * startPosition,
+    openingAngle: range.openingAngle * (endPosition - startPosition),
+    radius: getEffectiveRadiusMm(layer, range),
+  };
 }
 
 export function getRadiusOffsetBounds(

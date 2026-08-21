@@ -3,6 +3,7 @@ import { CORNER_RADIUS_PERCENT } from "@/features/ranges/path-geometry/corner-ra
 import { NUMERIC_SCALE_LIMITS } from "@/features/layers/numeric-scale/numeric-scale-limits";
 import { TICK_SCALE_LIMITS } from "@/features/layers/tick-scale/tick-scale-limits";
 import { LABEL_LIMITS } from "@/features/layers/label/label-limits";
+import { ARC_LIMITS } from "@/features/layers/arc/arc-limits";
 import {
   SYSTEM_FONT_FAMILIES,
   TEXT_STYLE_LIMITS,
@@ -170,10 +171,21 @@ const LabelLayerSchema = LayerBaseSchema.extend({
   textStyle: TextStyleSchema,
 }).strict();
 
+const ArcLayerSchema = LayerBaseSchema.extend({
+  type: z.literal(LAYER_TYPE.arc),
+  valueStart: ScaleValueSchema,
+  valueEnd: ScaleValueSchema,
+  radiusOffsetMm: z.number().min(-500).max(500),
+  strokeWidthMm: z.number().min(ARC_LIMITS.strokeWidthMm.min).max(ARC_LIMITS.strokeWidthMm.max),
+  roundedEnds: z.boolean(),
+  color: HexColorSchema,
+}).strict();
+
 export const LayerSchema = z.discriminatedUnion("type", [
   TickScaleLayerSchema,
   NumericScaleLayerSchema,
   LabelLayerSchema,
+  ArcLayerSchema,
 ]);
 
 export const CanvasSchema = z
@@ -209,6 +221,7 @@ export type LayerDto = z.infer<typeof LayerSchema>;
 export type TickScaleLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.tickScale }>;
 export type NumericScaleLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.numericScale }>;
 export type LabelLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.label }>;
+export type ArcLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.arc }>;
 export type FontReferenceDto = z.infer<typeof FontReferenceSchema>;
 export type TextStyleDto = z.infer<typeof TextStyleSchema>;
 export type CanvasDto = z.infer<typeof CanvasSchema>;

@@ -171,15 +171,16 @@ zaokrągleniem powinna zostać wprowadzona później jako osobny obiekt wizualny
 
 ### Arc
 
-| Właściwość                   | Typ     | Opis / zakres                                    |
-| ---------------------------- | ------- | ------------------------------------------------ |
-| circleOffsetX, circleOffsetY | number  | przesunięcie środka łuku (-100–100%)             |
-| distanceFromCenter           | number  | zewnętrzny promień (20–100%)                     |
-| manualAngle                  | boolean | wybór ręcznego kąta zamiast zakresu wartości     |
-| rangeMin, rangeMax           | integer | początek i koniec strefy w wartościach Range     |
-| angleStart, openingAngle     | integer | ręczny początek (0–360°) i rozwarcie (-360–360°) |
-| color                        | kolor   | wypełnienie łuku                                 |
-| weight                       | number  | szerokość pasa (1–100%)                          |
+| Właściwość     | Typ     | Opis / zakres                                         |
+| -------------- | ------- | ----------------------------------------------------- |
+| valueStart/End | integer | niezerowy fragment ścieżki mapowany wartościami Range |
+| radiusOffsetMm | number  | przesunięcie promienia ścieżki w mm                   |
+| strokeWidthMm  | number  | grubość łuku w mm                                     |
+| roundedEnds    | boolean | płaskie albo zaokrąglone końce ścieżki SVG            |
+| color          | kolor   | kolor obrysu łuku                                     |
+
+Arc nie posiada trybu ręcznych kątów. Kąty renderowania są zawsze wyliczane z
+`valueStart` i `valueEnd` przez aktualne mapowanie źródłowego Range.
 
 ### Clock Hand
 
@@ -893,7 +894,7 @@ Minimalny zestaw interaktywnych nakładek:
 | -------------------------- | --------------------------------------------------------------------------- |
 | Range                      | środek, promień oraz początek i rozwarcie kąta zakresu; Range nie ma pivotu |
 | Tick Scale / Numeric Scale | granice widocznego zakresu, promień oraz długość kresek/pozycję etykiet     |
-| Arc                        | środek, promień, początek i koniec łuku                                     |
+| Arc                        | aktywny przedział wartości Range i uchwyt promienia                         |
 | Clock Hand                 | obrót/wartość wskazówki, długość końca dodatniego i punkt osi               |
 | Label                      | pozycja i obrót                                                             |
 | Ellipse / Rectangle        | pozycja, szerokość, wysokość i obrót                                        |

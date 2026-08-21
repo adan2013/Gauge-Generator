@@ -1,6 +1,7 @@
 import { NumericScaleEditingOverlay } from "@/features/layers/numeric-scale/numeric-scale-editing-overlay/numeric-scale-editing-overlay";
 import { TickScaleEditingOverlay } from "@/features/layers/tick-scale/tick-scale-editing-overlay/tick-scale-editing-overlay";
 import { LabelEditingOverlay } from "@/features/layers/label/label-editing-overlay/label-editing-overlay";
+import { ArcEditingOverlay } from "@/features/layers/arc/arc-editing-overlay/arc-editing-overlay";
 import {
   LAYER_TYPE,
   type CanvasDto,
@@ -27,6 +28,8 @@ export function LayerEditingOverlay(props: LayerEditingOverlayProps) {
       return <NumericScaleEditingOverlay {...props} layer={props.layer} />;
     case LAYER_TYPE.label:
       return <LabelEditingOverlay {...props} layer={props.layer} />;
+    case LAYER_TYPE.arc:
+      return <ArcEditingOverlay {...props} layer={props.layer} />;
     default:
       return assertNever(props.layer);
   }

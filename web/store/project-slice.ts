@@ -75,7 +75,7 @@ export const projectSlice = createSlice({
     },
     addLayer: (state, action: PayloadAction<LayerDto>) => {
       commitProjectMutation(state, (project) => {
-        project.layers.push(action.payload);
+        project.layers.unshift(action.payload);
         return true;
       });
     },

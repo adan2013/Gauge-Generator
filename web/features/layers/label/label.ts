@@ -10,6 +10,7 @@ import type { EditingOverlayPrimitive } from "@/features/layers/core/editing-ove
 import {
   applyRangeMappedLayerRadiusDrag,
   getEffectiveRadiusMm,
+  getRangeMappedLayerPathGeometry,
 } from "@/features/layers/core/range-mapped-layer-geometry";
 import {
   escapeXml,
@@ -27,7 +28,6 @@ import {
   pointOnRoundedSquare,
   roundedSquarePathData,
 } from "@/features/ranges/path-geometry/rounded-square-geometry";
-import { valueToNormalizedPosition } from "@/features/ranges/scale-mapping/scale-mapping";
 import { clamp, normalizeAngle, snapAngleDegrees, snapDistanceMm } from "@/lib/geometry/geometry";
 
 const ROTATION_HANDLE_DISTANCE_MIN_MM = 10;
@@ -221,14 +221,14 @@ function getTextArcGeometry(
   layout: Extract<LabelLayerDto["layout"], { mode: "text-arc" }>,
   range: RangeDto,
 ) {
-  const startPosition = valueToNormalizedPosition(range, layout.valueStart);
-  const endPosition = valueToNormalizedPosition(range, layout.valueEnd);
-  const forwardStart = range.angleStart + range.openingAngle * startPosition;
-  const forwardOpening = range.openingAngle * (endPosition - startPosition);
+  const geometry = getRangeMappedLayerPathGeometry(layout, range);
   return {
-    angleStart: layout.direction === "forward" ? forwardStart : forwardStart + forwardOpening,
-    openingAngle: layout.direction === "forward" ? forwardOpening : -forwardOpening,
-    radius: getEffectiveRadiusMm(layout, range),
+    angleStart:
+      layout.direction === "forward"
+        ? geometry.angleStart
+        : geometry.angleStart + geometry.openingAngle,
+    openingAngle: layout.direction === "forward" ? geometry.openingAngle : -geometry.openingAngle,
+    radius: geometry.radius,
   };
 }
 

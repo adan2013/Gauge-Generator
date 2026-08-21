@@ -13,9 +13,12 @@ type RangeMappedLayer = {
   valueStep: number;
 };
 
-export function getRangeMappedLayerValidationIssues(
-  layer: RangeMappedLayer,
+type RangeMappedIntervalLayer = Omit<RangeMappedLayer, "valueStep">;
+
+export function getRangeMappedIntervalValidationIssues(
+  layer: RangeMappedIntervalLayer,
   sourceRange: RangeDto,
+  requireSpan = false,
 ): ValidationIssue[] {
   const effectiveRadiusMm = getEffectiveRadiusMm(layer, sourceRange);
   const issues: ValidationIssue[] = [];
@@ -40,6 +43,19 @@ export function getRangeMappedLayerValidationIssues(
       path: "valueStart",
       code: PROJECT_VALIDATION_CODES.valueStartAfterEnd,
     });
+  else if (requireSpan && layer.valueStart === layer.valueEnd)
+    issues.push({
+      path: "valueStart",
+      code: PROJECT_VALIDATION_CODES.valueRangeMustHaveSpan,
+    });
+  return issues;
+}
+
+export function getRangeMappedLayerValidationIssues(
+  layer: RangeMappedLayer,
+  sourceRange: RangeDto,
+): ValidationIssue[] {
+  const issues = getRangeMappedIntervalValidationIssues(layer, sourceRange);
   if (getScaleItemCount(layer) > MAX_GENERATED_SCALE_ITEMS)
     issues.push({
       path: "valueStep",

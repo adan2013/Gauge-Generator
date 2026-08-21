@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   createDevelopmentProject,
+  createArcLayer,
   createLayerFromType,
   createLabelLayer,
   createNumericScaleLayer,
@@ -28,7 +29,7 @@ describe("createDevelopmentProject", () => {
     const project = createDevelopmentProject();
 
     expect(project.ranges).toHaveLength(1);
-    expect(project.layers).toHaveLength(5);
+    expect(project.layers).toHaveLength(6);
     expect(project.layers.every((layer) => layer.rangeId === project.ranges[0].id)).toBe(true);
     expect(project.ranges[0]).toMatchObject({
       angleStart: 135,
@@ -50,7 +51,12 @@ describe("createDevelopmentProject", () => {
         expect.objectContaining({ color: "#3F3F3F" }),
       ]),
     );
+    expect(project.layers.find((layer) => layer.type === "arc")).toMatchObject({
+      radiusOffsetMm: 3,
+      roundedEnds: false,
+    });
     expect(project.layers.map((layer) => layer.name)).toEqual([
+      "Warning arc",
       "Unit label",
       "Arc caption",
       "Major pressure ticks",
@@ -75,6 +81,10 @@ describe("createLayerFromType", () => {
     expect(createLayerFromType("label", range.id)).toMatchObject({
       rangeId: range.id,
       type: "label",
+    });
+    expect(createLayerFromType("arc", range.id)).toMatchObject({
+      rangeId: range.id,
+      type: "arc",
     });
   });
 });
@@ -136,6 +146,24 @@ describe("resetLayerToDefaults", () => {
       name: "Caption",
       rangeId: range.id,
       text: "Label",
+    });
+  });
+
+  it("restores Arc settings without losing identity or its Range", () => {
+    const range = createRange();
+    const layer = createArcLayer(range.id, {
+      name: "Limit",
+      strokeWidthMm: 8,
+      roundedEnds: false,
+    });
+
+    expect(resetLayerToDefaults(layer)).toMatchObject({
+      id: layer.id,
+      name: "Limit",
+      rangeId: range.id,
+      strokeWidthMm: 2,
+      roundedEnds: false,
+      color: "#2E7D32",
     });
   });
 });

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createRange } from "@/features/project/factories/project-factories";
 import { MAX_GENERATED_SCALE_ITEMS } from "./scale-constants";
 import {
+  constrainScaleIntervalToRange,
   constrainScaleSequenceToRange,
   getScaleDistribution,
   getScaleItemCount,
@@ -86,5 +87,15 @@ describe("scale sequence", () => {
       valueStep: 10,
       marker: "kept",
     });
+  });
+
+  it("preserves a required minimum span when constraining a mapped interval", () => {
+    expect(
+      constrainScaleIntervalToRange(
+        { valueStart: 100, valueEnd: 100, marker: "kept" },
+        createRange(),
+        1,
+      ),
+    ).toEqual({ valueStart: 99, valueEnd: 100, marker: "kept" });
   });
 });

@@ -11,6 +11,7 @@
 | UI              | toolbar + jeden sliderowy sidebar Layers/Properties + preview po prawej                                                                           |
 | Wybór           | tylko z panelu warstw; hover miniatury daje szybki preview                                                                                        |
 | Range           | wiele Range; Range nie jest wizualną warstwą i jest zarządzany wyłącznie w sekcji Ranges; każda visual layer wymaga `rangeId`                     |
+| Arc             | tylko `valueStart`/`valueEnd` mapowane przez Range; bez ręcznych kątów; grubość w mm i płaskie albo zaokrąglone końce SVG                         |
 | Nazewnictwo     | każda visual layer i każdy Range mają wymaganą, edytowalną nazwę; nazwa warstwy pochodzi z bazowego modelu `Layer`, a Range ma własne pole `name` |
 | Walidacja       | domena i Zod zwracają stabilne kody oraz ścieżki błędów, bez angielskich komunikatów; interfejs tłumaczy kod przez `en.json`                      |
 | Historia        | Redux, maks. 50 undo i 50 redo; drag = jedna operacja                                                                                             |

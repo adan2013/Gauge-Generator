@@ -1,6 +1,6 @@
 "use client";
 
-import { Hash, LineStyle, Type } from "lucide-react";
+import { Hash, LineStyle, Rainbow, Type } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { LAYER_TYPE, type LayerType } from "@/features/project/project-dto/project-dto";
 import { cn } from "@/lib/cn";
@@ -17,6 +17,11 @@ const LAYER_PICKER_ITEMS = {
     descriptionKey: "picker.numericScaleDescription",
     icon: Hash,
     titleKey: "types.numericScale",
+  },
+  [LAYER_TYPE.arc]: {
+    descriptionKey: "picker.arcDescription",
+    icon: Rainbow,
+    titleKey: "types.arc",
   },
   [LAYER_TYPE.label]: {
     descriptionKey: "picker.labelDescription",

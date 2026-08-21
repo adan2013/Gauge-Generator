@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   createProject,
+  createArcLayer,
   createLabelLayer,
   createRange,
   createNumericScaleLayer,
@@ -196,6 +197,20 @@ describe("ProjectSchema", () => {
     });
 
     expect(validateProject(createProject({ ranges: [range], layers: [layer] })).issues).toEqual([]);
+  });
+
+  it("validates Arc as a Range-mapped value interval without angle fields", () => {
+    const range = createRange();
+    const layer = createArcLayer(range.id);
+    const invalidProject: unknown = {
+      ...createProject({ ranges: [range], layers: [layer] }),
+      layers: [{ ...layer, angleStart: 0 }],
+    };
+
+    expect(validateProject(createProject({ ranges: [range], layers: [layer] })).issues).toEqual([]);
+    expect(validateProject(invalidProject).issues[0]?.code).toBe(
+      PROJECT_VALIDATION_CODES.invalidSchema,
+    );
   });
 
   it("limits point Label rotation to zero through 359 degrees", () => {

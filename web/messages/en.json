@@ -97,12 +97,14 @@
         "description": "Select the visual element you want to add to this gauge.",
         "tickScaleDescription": "Draw radial tick marks using the selected Range.",
         "numericScaleDescription": "Draw value labels using the selected Range.",
-        "labelDescription": "Add regular labels or text that follows the selected Range path."
+        "labelDescription": "Add regular labels or text that follows the selected Range path.",
+        "arcDescription": "Draw a styled arc between values on the selected Range."
       },
       "types": {
         "tickScale": "Tick scale",
         "numericScale": "Numeric scale",
-        "label": "Label"
+        "label": "Label",
+        "arc": "Arc"
       },
       "editLayer": "Edit {name}",
       "deleteLayer": "Delete {name}",
@@ -282,6 +284,23 @@
       "handleValues": {
         "position": "{x}; {y} mm",
         "rotation": "{value}°",
+        "radiusOffset": "{value} mm"
+      }
+    },
+    "arc": {
+      "range": "Visible value range",
+      "appearance": "Appearance",
+      "valueStart": "Start value",
+      "valueEnd": "End value",
+      "radiusOffset": "Radius offset",
+      "strokeWidth": "Arc thickness",
+      "roundedEnds": "Rounded ends",
+      "color": "Color",
+      "overlayAriaLabel": "Arc editing overlay",
+      "handles": {
+        "radiusOffset": "Adjust arc radius"
+      },
+      "handleValues": {
         "radiusOffset": "{value} mm"
       }
     },

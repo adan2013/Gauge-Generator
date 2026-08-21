@@ -123,6 +123,22 @@ describe("project store and history", () => {
     ]);
   });
 
+  it("adds a new visual layer at the top of the stack", () => {
+    const range = createRange();
+    const existing = { ...createTickScaleLayer(range.id), name: "Existing" };
+    const added = { ...createTickScaleLayer(range.id), name: "Added" };
+    const store = createTestStore({
+      project: { current: createProject({ ranges: [range], layers: [existing] }) },
+    });
+
+    store.dispatch(projectActions.addLayer(added));
+
+    expect(store.getState().project.current.layers.map((layer) => layer.name)).toEqual([
+      "Added",
+      "Existing",
+    ]);
+  });
+
   it("duplicates a layer immediately above its source with a fresh identity", () => {
     const range = createRange();
     const first = { ...createTickScaleLayer(range.id), name: "Top" };

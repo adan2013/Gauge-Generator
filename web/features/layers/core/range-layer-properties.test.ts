@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { createRange } from "@/features/project/factories/project-factories";
-import { getRangeLayerValuePropertyDefinitions } from "./range-layer-properties";
+import {
+  getRangeLayerIntervalPropertyDefinitions,
+  getRangeLayerValuePropertyDefinitions,
+} from "./range-layer-properties";
 
 describe("Range-linked layer value properties", () => {
   it("derives the shared visible-sequence fields from the Range domain", () => {
@@ -37,5 +40,17 @@ describe("Range-linked layer value properties", () => {
         max: 100,
       }),
     ]);
+  });
+
+  it("supports a non-zero interval without adding a step field", () => {
+    const definitions = getRangeLayerIntervalPropertyDefinitions(
+      { valueStart: 20, valueEnd: 80 },
+      createRange(),
+      1,
+    );
+
+    expect(definitions.map((definition) => definition.key)).toEqual(["valueStart", "valueEnd"]);
+    expect(definitions[0]).toMatchObject({ max: 79 });
+    expect(definitions[1]).toMatchObject({ min: 21 });
   });
 });

@@ -28,7 +28,7 @@ final SVG representation. Every object has a stable UUID and a non-empty,
 user-editable `name`.
 
 The currently supported visual discriminants are `tick-scale`, `numeric-scale`,
-and `label`. Tick Scale renders radial marks over the referenced Range arc
+`label`, and `arc`. Tick Scale renders radial marks over the referenced Range arc
 and has these required fields:
 `valueStart`, `valueEnd`, positive `valueStep`, `tickLengthMm` (at least 0.2
 mm), `tickWidthMm` (at least 0.1 mm), `radiusOffsetMm`, and hexadecimal `color`.
@@ -58,6 +58,14 @@ also supports a Range-mapped text path:
 direction }`. It uses the same linear, logarithmic, or custom value mapping and
 rounded-square geometry as scale layers. `alignment` is `start`, `center`, or
 `end`; `direction` is `forward` or `reverse`.
+
+Arc stores `valueStart`, `valueEnd`, `radiusOffsetMm`, `strokeWidthMm`,
+`roundedEnds`, and hexadecimal `color`. It has no independent angle mode or
+angle fields. Its non-zero integer value interval is mapped through the source
+Range's linear, logarithmic, or custom definition onto the shared rounded-square
+path. `strokeWidthMm` is expressed in millimetres and cannot exceed the
+effective path diameter. `roundedEnds` selects SVG `stroke-linecap="round"`;
+otherwise the path uses the flat `butt` cap.
 
 Numeric Scale and Label share the same nested typography contract:
 `textStyle: { font, sizeMm, color, bold, italic, underline }`. `font` is a

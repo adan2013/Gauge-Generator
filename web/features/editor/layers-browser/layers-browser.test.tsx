@@ -1,6 +1,7 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import {
+  createArcLayer,
   createNumericScaleLayer,
   createProject,
   createRange,
@@ -92,5 +93,30 @@ describe("LayersBrowser", () => {
     );
 
     expect(screen.getAllByText("Numeric scale")).toHaveLength(2);
+  });
+
+  it("labels Arc with its own layer type", () => {
+    const range = createRange();
+    const layer = createArcLayer(range.id);
+    renderEditor(
+      <LayersBrowser
+        layers={[layer]}
+        onCreateLayer={vi.fn()}
+        onCreateRange={vi.fn()}
+        onDeleteLayer={vi.fn()}
+        onDeleteRange={vi.fn()}
+        onDuplicateLayer={vi.fn()}
+        onHoverLayer={vi.fn()}
+        onOpenLayerProperties={vi.fn()}
+        onOpenProjectSettings={vi.fn()}
+        onOpenRangeProperties={vi.fn()}
+        onReorderLayer={vi.fn()}
+        onToggleLayerVisibility={vi.fn()}
+        project={createProject({ layers: [layer], ranges: [range] })}
+        ranges={[range]}
+      />,
+    );
+
+    expect(screen.getAllByText("Arc")).toHaveLength(2);
   });
 });

@@ -3,9 +3,12 @@ import { clamp } from "@/lib/geometry/geometry";
 import { MAX_GENERATED_SCALE_ITEMS } from "./scale-constants";
 import { getRangeScaleValueBounds, valueToNormalizedPosition } from "./scale-mapping";
 
-export type ScaleSequence = {
+export type ScaleInterval = {
   valueEnd: number;
   valueStart: number;
+};
+
+export type ScaleSequence = ScaleInterval & {
   valueStep: number;
 };
 
@@ -78,11 +81,27 @@ export function constrainScaleSequenceToRange<TSequence extends ScaleSequence>(
   sequence: TSequence,
   range: RangeDto,
 ): TSequence {
+  return constrainScaleIntervalToRange(sequence, range);
+}
+
+export function constrainScaleIntervalToRange<TInterval extends ScaleInterval>(
+  interval: TInterval,
+  range: RangeDto,
+  minimumSpan = 0,
+): TInterval {
   const bounds = getRangeScaleValueBounds(range);
-  const valueStart = clamp(sequence.valueStart, bounds.min, bounds.max);
+  let valueStart = clamp(interval.valueStart, bounds.min, bounds.max);
+  let valueEnd = clamp(interval.valueEnd, valueStart, bounds.max);
+  if (valueEnd - valueStart < minimumSpan) {
+    if (valueStart + minimumSpan <= bounds.max) valueEnd = valueStart + minimumSpan;
+    else {
+      valueEnd = bounds.max;
+      valueStart = bounds.max - minimumSpan;
+    }
+  }
   return {
-    ...sequence,
+    ...interval,
     valueStart,
-    valueEnd: clamp(sequence.valueEnd, valueStart, bounds.max),
+    valueEnd,
   };
 }

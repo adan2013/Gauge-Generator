@@ -278,6 +278,7 @@ function SortableLayerRow({
     [LAYER_TYPE.tickScale]: "types.tickScale",
     [LAYER_TYPE.numericScale]: "types.numericScale",
     [LAYER_TYPE.label]: "types.label",
+    [LAYER_TYPE.arc]: "types.arc",
   } as const;
   return (
     <li

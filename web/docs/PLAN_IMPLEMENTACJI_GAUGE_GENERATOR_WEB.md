@@ -277,6 +277,11 @@ współdzielony z Numeric Scale kontrakt typografii, punktowy layout z offsetami
 w mm, wariant tekstu na ścieżce Range oraz własne overlay pozycji, obrotu i
 promienia ścieżki.
 
+Arc jest ukończony jako drugi vertical slice etapu. Przechowuje wyłącznie
+`valueStart` i `valueEnd` mapowane przez Range, bez ręcznego trybu kątowego.
+Posiada offset promienia, grubość w mm, kolor, płaskie lub zaokrąglone końce SVG
+oraz wspólny Range-mapped overlay promienia. Następną warstwą jest Clock Hand.
+
 1. DTO/Zod/default factory i walidacja domenowa.
 2. Klasa z `toSvg`, `getEditingOverlay`, `getHandles` i `applyHandleDrag`.
 3. Formularz z pogrupowanymi parametrami i właściwymi kontrolkami.

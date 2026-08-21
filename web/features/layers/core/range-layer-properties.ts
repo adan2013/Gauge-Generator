@@ -5,7 +5,7 @@ import {
   type RangeDto,
 } from "@/features/project/project-dto/project-dto";
 import { getRangeScaleValueBounds } from "@/features/ranges/scale-mapping/scale-mapping";
-import type { ScaleSequence } from "@/features/ranges/scale-mapping/scale-sequence";
+import type { ScaleInterval, ScaleSequence } from "@/features/ranges/scale-mapping/scale-sequence";
 
 export type RangeLayerValuePropertyKey = "valueEnd" | "valueStart" | "valueStep";
 
@@ -16,10 +16,19 @@ export type RangeLayerValuePropertyDefinition =
     unit: "none";
   };
 
-export function getRangeLayerValuePropertyDefinitions(
-  sequence: ScaleSequence,
+export type RangeLayerIntervalPropertyDefinition = Omit<
+  RangeLayerValuePropertyDefinition,
+  "key" | "labelKey"
+> & {
+  key: "valueEnd" | "valueStart";
+  labelKey: "valueEnd" | "valueStart";
+};
+
+export function getRangeLayerIntervalPropertyDefinitions(
+  interval: ScaleInterval,
   range: RangeDto | undefined,
-): readonly RangeLayerValuePropertyDefinition[] {
+  minimumSpan = 0,
+): readonly RangeLayerIntervalPropertyDefinition[] {
   const bounds = range
     ? getRangeScaleValueBounds(range)
     : { min: SCALE_VALUE_MIN, max: SCALE_VALUE_MAX };
@@ -31,9 +40,9 @@ export function getRangeLayerValuePropertyDefinitions(
       group: "range",
       unit: "none",
       snap: "none",
-      value: sequence.valueStart,
+      value: interval.valueStart,
       min: bounds.min,
-      max: sequence.valueEnd,
+      max: interval.valueEnd - minimumSpan,
       step: 1,
     },
     {
@@ -43,11 +52,21 @@ export function getRangeLayerValuePropertyDefinitions(
       group: "range",
       unit: "none",
       snap: "none",
-      value: sequence.valueEnd,
-      min: sequence.valueStart,
+      value: interval.valueEnd,
+      min: interval.valueStart + minimumSpan,
       max: bounds.max,
       step: 1,
     },
+  ];
+}
+
+export function getRangeLayerValuePropertyDefinitions(
+  sequence: ScaleSequence,
+  range: RangeDto | undefined,
+): readonly RangeLayerValuePropertyDefinition[] {
+  const intervalDefinitions = getRangeLayerIntervalPropertyDefinitions(sequence, range);
+  return [
+    ...intervalDefinitions,
     {
       integerOnly: true,
       key: "valueStep",
