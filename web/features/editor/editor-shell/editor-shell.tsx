@@ -151,7 +151,7 @@ export function EditorShell() {
     const sourceRange = project.ranges.at(-1);
     if (!sourceRange) return;
     const name = t("layers.defaultName", { number: project.layers.length + 1 });
-    const layer = createLayerFromType(type, sourceRange.id, { name });
+    const layer = createLayerFromType(type, sourceRange, { name });
     dispatch(projectActions.addLayer(layer));
     openLayerProperties(layer.id);
   }
@@ -186,7 +186,8 @@ export function EditorShell() {
   };
   const resetSelectedLayer = () => {
     if (!selectedLayer) return;
-    if (!commitLayer(resetLayerToDefaults(selectedLayer))) return;
+    const sourceRange = project.ranges.find((range) => range.id === selectedLayer.rangeId);
+    if (!sourceRange || !commitLayer(resetLayerToDefaults(selectedLayer, sourceRange))) return;
     showMessage({
       color: "neutral",
       content: t("status.layerReset"),

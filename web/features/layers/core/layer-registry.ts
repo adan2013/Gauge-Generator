@@ -2,7 +2,9 @@ import { TickScaleLayer } from "@/features/layers/tick-scale/tick-scale";
 import { NumericScaleLayer } from "@/features/layers/numeric-scale/numeric-scale";
 import { LabelLayer } from "@/features/layers/label/label";
 import { ArcLayer } from "@/features/layers/arc/arc";
+import { NeedleLayer } from "@/features/layers/needle/needle";
 import { constrainArcToRange } from "@/features/layers/arc/arc-constraints";
+import { constrainNeedleToRange } from "@/features/layers/needle/needle-constraints";
 import { constrainLabelToRange } from "@/features/layers/label/label-constraints";
 import { constrainNumericScaleToRange } from "@/features/layers/numeric-scale/numeric-scale-constraints";
 import { constrainTickScaleToRange } from "@/features/layers/tick-scale/tick-scale-constraints";
@@ -24,6 +26,8 @@ export function createLayerModel(layer: LayerDto): Layer {
       return new LabelLayer(layer);
     case LAYER_TYPE.arc:
       return new ArcLayer(layer);
+    case LAYER_TYPE.needle:
+      return new NeedleLayer(layer);
     default:
       return assertNever(layer);
   }
@@ -50,6 +54,8 @@ function constrainLayerToRange(layer: LayerDto, range: RangeDto): LayerDto {
       return constrainLabelToRange(layer, range);
     case LAYER_TYPE.arc:
       return constrainArcToRange(layer, range);
+    case LAYER_TYPE.needle:
+      return constrainNeedleToRange(layer, range);
     default:
       return assertNever(layer);
   }

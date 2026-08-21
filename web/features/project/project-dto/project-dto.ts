@@ -4,6 +4,7 @@ import { NUMERIC_SCALE_LIMITS } from "@/features/layers/numeric-scale/numeric-sc
 import { TICK_SCALE_LIMITS } from "@/features/layers/tick-scale/tick-scale-limits";
 import { LABEL_LIMITS } from "@/features/layers/label/label-limits";
 import { ARC_LIMITS } from "@/features/layers/arc/arc-limits";
+import { NEEDLE_LIMITS } from "@/features/layers/needle/needle-limits";
 import {
   SYSTEM_FONT_FAMILIES,
   TEXT_STYLE_LIMITS,
@@ -181,11 +182,38 @@ const ArcLayerSchema = LayerBaseSchema.extend({
   color: HexColorSchema,
 }).strict();
 
+const NeedleLayerSchema = LayerBaseSchema.extend({
+  type: z.literal(LAYER_TYPE.needle),
+  value: ScaleValueSchema,
+  shaft: z
+    .object({
+      lengthMm: z.number().min(NEEDLE_LIMITS.lengthMm.min).max(NEEDLE_LIMITS.lengthMm.max),
+      tailLengthMm: z
+        .number()
+        .min(NEEDLE_LIMITS.tailLengthMm.min)
+        .max(NEEDLE_LIMITS.tailLengthMm.max),
+      widthMm: z.number().min(NEEDLE_LIMITS.widthMm.min).max(NEEDLE_LIMITS.widthMm.max),
+      tipStyle: z.enum(["flat", "rounded", "arrowhead", "pointed", "tapered-rounded"]),
+      color: HexColorSchema,
+      tailColor: HexColorSchema,
+    })
+    .strict(),
+  hub: z
+    .object({
+      visible: z.boolean(),
+      radiusMm: z.number().min(NEEDLE_LIMITS.hubRadiusMm.min).max(NEEDLE_LIMITS.hubRadiusMm.max),
+      color: HexColorSchema,
+      placement: z.enum(["front", "behind"]),
+    })
+    .strict(),
+}).strict();
+
 export const LayerSchema = z.discriminatedUnion("type", [
   TickScaleLayerSchema,
   NumericScaleLayerSchema,
   LabelLayerSchema,
   ArcLayerSchema,
+  NeedleLayerSchema,
 ]);
 
 export const CanvasSchema = z
@@ -222,6 +250,7 @@ export type TickScaleLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.tick
 export type NumericScaleLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.numericScale }>;
 export type LabelLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.label }>;
 export type ArcLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.arc }>;
+export type NeedleLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.needle }>;
 export type FontReferenceDto = z.infer<typeof FontReferenceSchema>;
 export type TextStyleDto = z.infer<typeof TextStyleSchema>;
 export type CanvasDto = z.infer<typeof CanvasSchema>;

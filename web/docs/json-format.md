@@ -67,6 +67,35 @@ path. `strokeWidthMm` is expressed in millimetres and cannot exceed the
 effective path diameter. `roundedEnds` selects SVG `stroke-linecap="round"`;
 otherwise the path uses the flat `butt` cap.
 
+Needle stores an integer `value` mapped through its source Range and two nested
+presentation objects:
+
+```json
+{
+  "type": "needle",
+  "rangeId": "…",
+  "value": 50,
+  "shaft": {
+    "lengthMm": 40,
+    "tailLengthMm": 6,
+    "widthMm": 2,
+    "tipStyle": "tapered-rounded",
+    "color": "#C62828",
+    "tailColor": "#20242B"
+  },
+  "hub": {
+    "visible": true,
+    "radiusMm": 3,
+    "color": "#20242B",
+    "placement": "front"
+  }
+}
+```
+
+`tipStyle` is `flat`, `rounded`, `arrowhead`, `pointed`, or `tapered-rounded`;
+`placement` is `front` or `behind`. Needle never stores an angle or pivot
+because both are derived from the current Range.
+
 Numeric Scale and Label share the same nested typography contract:
 `textStyle: { font, sizeMm, color, bold, italic, underline }`. `font` is a
 reference object rather than a bare family field; MVP supports

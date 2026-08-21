@@ -106,6 +106,9 @@ Keep those documents current. Put completed-stage evidence in
   and a text-arc layout mapped by Range values onto shared path geometry.
 - Arc stores only a non-zero Range-mapped value interval, radius offset, stroke
   width, color, and rounded-end preference. It never stores independent angles.
+- Needle stores one Range-mapped integer value plus nested `shaft` and `hub`
+  presentation. Its pivot is always the source Range center; it never stores an
+  independent angle or position.
 - `Layer` is the visual-layer base abstraction; `Range` is separate. Layer
   implementations own final SVG, validation, editing overlay, handles, drag
   behavior, and numeric field definitions. Keep rendering/domain code React-free.
@@ -176,7 +179,7 @@ Keep those documents current. Put completed-stage evidence in
   suffix. It is a project mutation and therefore participates in Undo/Redo.
 - The initial store state in `NODE_ENV=development` uses a deterministic
   logarithmic pressure-gauge workbench (`1..10 bar`) with high-value detail and
-  representative Arc, Label, Tick Scale, and Numeric Scale layers. Production
+  representative Arc, Needle, Label, Tick Scale, and Numeric Scale layers. Production
   and explicit New project flows remain empty.
 
 ## Quality and future slices

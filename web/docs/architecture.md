@@ -114,6 +114,13 @@ temporary path angles from the source Range. Its radius offset uses the common
 Range-mapped overlay and handle, while stroke thickness, color, and rounded or
 flat SVG end caps remain Arc-owned presentation.
 
+Needle is a Range-mapped point layer. Its integer `value` is converted to a
+normalized position with the same linear, logarithmic, or custom mapping as the
+scales; handle dragging uses the shared inverse mapping to recover a value from
+the pointer position. The Range center is its fixed pivot. Shaft and hub remain
+nested, Needle-owned presentation objects, and no independent angle or pivot is
+stored.
+
 Custom points map an ascending value axis to an ascending normalized-position
 axis. The first and last positions are locked to zero and one at the domain
 boundaries, while their values remain editable. The graph editor constrains

@@ -10,6 +10,7 @@ import { NumericScalePropertiesEditor } from "@/features/layers/numeric-scale/nu
 import { TickScalePropertiesEditor } from "@/features/layers/tick-scale/tick-scale-properties-editor/tick-scale-properties-editor";
 import { LabelPropertiesEditor } from "@/features/layers/label/label-properties-editor/label-properties-editor";
 import { ArcPropertiesEditor } from "@/features/layers/arc/arc-properties-editor/arc-properties-editor";
+import { NeedlePropertiesEditor } from "@/features/layers/needle/needle-properties-editor/needle-properties-editor";
 import {
   LAYER_TYPE,
   type LayerDto,
@@ -67,6 +68,8 @@ function LayerSpecificProperties(props: LayerPropertiesProps) {
       return <LabelPropertiesEditor {...props} layer={props.layer} />;
     case LAYER_TYPE.arc:
       return <ArcPropertiesEditor {...props} layer={props.layer} />;
+    case LAYER_TYPE.needle:
+      return <NeedlePropertiesEditor {...props} layer={props.layer} />;
     default:
       return assertNever(props.layer);
   }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createRange } from "@/features/project/factories/project-factories";
 import type { ScaleDefinitionDto } from "@/features/project/project-dto/project-dto";
-import { valueToNormalizedPosition } from "./scale-mapping";
+import { normalizedPositionToValue, valueToNormalizedPosition } from "./scale-mapping";
 
 describe("scale mapping", () => {
   it("maps configured linear, logarithmic, and custom midpoint values to the same position", () => {
@@ -113,5 +113,32 @@ describe("scale mapping", () => {
     expect(valueToNormalizedPosition(range, 10)).toBeCloseTo(0.05);
     expect(valueToNormalizedPosition(range, 60)).toBeCloseTo(0.55);
     expect(valueToNormalizedPosition(range, 100)).toBe(1);
+  });
+
+  it("inverts linear, logarithmic, and custom mappings in both value directions", () => {
+    const definitions: ScaleDefinitionDto[] = [
+      { mode: "linear", start: 0, end: 100 },
+      { mode: "logarithmic", start: 1, end: 100, detailEmphasis: "low-values" },
+      { mode: "logarithmic", start: 1, end: 100, detailEmphasis: "high-values" },
+      {
+        mode: "custom",
+        points: [
+          { value: 0, position: 0 },
+          { value: 30, position: 0.2 },
+          { value: 100, position: 1 },
+        ],
+      },
+    ];
+
+    for (const definition of definitions) {
+      for (const valueDirection of ["ascending", "descending"] as const) {
+        const range = createRange({ scaleDefinition: definition, valueDirection });
+        for (const value of [definition.mode === "logarithmic" ? 2 : 10, 50, 90]) {
+          expect(
+            normalizedPositionToValue(range, valueToNormalizedPosition(range, value)),
+          ).toBeCloseTo(value);
+        }
+      }
+    }
   });
 });

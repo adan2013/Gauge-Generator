@@ -4,6 +4,7 @@ import {
   PROJECT_VERSION,
 } from "@/features/project/project-dto/project-dto";
 import { CORNER_RADIUS_PERCENT } from "@/features/ranges/path-geometry/corner-radius-percent";
+import { getRangeScaleValueBounds } from "@/features/ranges/scale-mapping/scale-mapping";
 import {
   createPointLabelLayout,
   createTextArcLabelLayout,
@@ -17,6 +18,7 @@ import type {
   NumericScaleLayerDto,
   LabelLayerDto,
   ArcLayerDto,
+  NeedleLayerDto,
   TextStyleDto,
 } from "@/features/project/project-dto/project-dto";
 
@@ -140,22 +142,53 @@ export function createArcLayer(rangeId: string, overrides: Partial<ArcLayerDto> 
   };
 }
 
+export function createNeedleLayer(
+  range: RangeDto,
+  overrides: Partial<NeedleLayerDto> = {},
+): NeedleLayerDto {
+  return {
+    id: crypto.randomUUID(),
+    name: "Needle",
+    visible: true,
+    rangeId: range.id,
+    type: LAYER_TYPE.needle,
+    value: getRangeScaleValueBounds(range).min,
+    shaft: {
+      lengthMm: 40,
+      tailLengthMm: 6,
+      widthMm: 2,
+      tipStyle: "tapered-rounded",
+      color: "#C62828",
+      tailColor: "#20242B",
+    },
+    hub: {
+      visible: true,
+      radiusMm: 3,
+      color: "#20242B",
+      placement: "front",
+    },
+    ...overrides,
+  };
+}
+
 type LayerFactoryOverrides = Partial<Pick<LayerDto, "id" | "name" | "visible">>;
 
 export function createLayerFromType(
   type: LayerDto["type"],
-  rangeId: string,
+  range: RangeDto,
   overrides: LayerFactoryOverrides = {},
 ): LayerDto {
   switch (type) {
     case LAYER_TYPE.tickScale:
-      return createTickScaleLayer(rangeId, overrides);
+      return createTickScaleLayer(range.id, overrides);
     case LAYER_TYPE.numericScale:
-      return createNumericScaleLayer(rangeId, overrides);
+      return createNumericScaleLayer(range.id, overrides);
     case LAYER_TYPE.label:
-      return createLabelLayer(rangeId, overrides);
+      return createLabelLayer(range.id, overrides);
     case LAYER_TYPE.arc:
-      return createArcLayer(rangeId, overrides);
+      return createArcLayer(range.id, overrides);
+    case LAYER_TYPE.needle:
+      return createNeedleLayer(range, overrides);
     default:
       return assertNever(type);
   }
@@ -166,8 +199,8 @@ function assertNever(value: never): never {
 }
 
 /** Restores layer-owned visual settings while keeping its project identity and source Range. */
-export function resetLayerToDefaults(layer: LayerDto): LayerDto {
-  return createLayerFromType(layer.type, layer.rangeId, {
+export function resetLayerToDefaults(layer: LayerDto, range: RangeDto): LayerDto {
+  return createLayerFromType(layer.type, range, {
     id: layer.id,
     name: layer.name,
     visible: layer.visible,
@@ -223,6 +256,24 @@ export function createDevelopmentProject(): ProjectDto {
         strokeWidthMm: 3,
         roundedEnds: false,
         color: "#C62828",
+      }),
+      createNeedleLayer(range, {
+        name: "Pressure needle",
+        value: 70,
+        shaft: {
+          lengthMm: 35,
+          tailLengthMm: 6,
+          widthMm: 2,
+          tipStyle: "tapered-rounded",
+          color: "#C62828",
+          tailColor: "#3F3F3F",
+        },
+        hub: {
+          visible: true,
+          radiusMm: 3,
+          color: "#3F3F3F",
+          placement: "front",
+        },
       }),
       createLabelLayer(range.id, {
         name: "Unit label",

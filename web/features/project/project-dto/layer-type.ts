@@ -3,6 +3,7 @@ export const LAYER_TYPE = {
   numericScale: "numeric-scale",
   label: "label",
   arc: "arc",
+  needle: "needle",
 } as const;
 
 export type LayerType = (typeof LAYER_TYPE)[keyof typeof LAYER_TYPE];

@@ -5,6 +5,7 @@ import {
   createLabelLayer,
   createRange,
   createNumericScaleLayer,
+  createNeedleLayer,
   createTickScaleLayer,
 } from "@/features/project/factories/project-factories";
 import { ProjectSchema } from "./project-dto";
@@ -212,6 +213,37 @@ describe("ProjectSchema", () => {
       PROJECT_VALIDATION_CODES.invalidSchema,
     );
   });
+
+  it("validates Needle as nested shaft and hub settings without an angle or pivot", () => {
+    const range = createRange();
+    const layer = createNeedleLayer(range);
+    const invalidProject: unknown = {
+      ...createProject({ ranges: [range], layers: [layer] }),
+      layers: [{ ...layer, angle: 90 }],
+    };
+
+    expect(validateProject(createProject({ ranges: [range], layers: [layer] })).issues).toEqual([]);
+    expect(validateProject(invalidProject).issues[0]?.code).toBe(
+      PROJECT_VALIDATION_CODES.invalidSchema,
+    );
+  });
+
+  it.each(["arrowhead", "tapered-rounded"] as const)(
+    "accepts the Needle %s tip style",
+    (tipStyle) => {
+      const range = createRange();
+      const layer = createNeedleLayer(range);
+
+      expect(
+        validateProject(
+          createProject({
+            ranges: [range],
+            layers: [{ ...layer, shaft: { ...layer.shaft, tipStyle } }],
+          }),
+        ).issues,
+      ).toEqual([]);
+    },
+  );
 
   it("limits point Label rotation to zero through 359 degrees", () => {
     const range = createRange();

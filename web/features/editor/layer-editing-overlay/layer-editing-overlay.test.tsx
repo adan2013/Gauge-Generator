@@ -4,6 +4,7 @@ import {
   createNumericScaleLayer,
   createArcLayer,
   createLabelLayer,
+  createNeedleLayer,
   createProject,
   createRange,
   createTickScaleLayer,
@@ -28,6 +29,7 @@ describe("LayerEditingOverlay", () => {
     ["numeric-scale", createNumericScaleLayer(range.id), "numeric-scale-editing-overlay"],
     ["label", createLabelLayer(range.id), "label-editing-overlay"],
     ["arc", createArcLayer(range.id), "arc-editing-overlay"],
+    ["needle", createNeedleLayer(range), "needle-editing-overlay"],
   ] as const)("selects the %s overlay from the registry", (_, layer, testId) => {
     renderEditor(
       <svg>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Hash, LineStyle, Rainbow, Type } from "lucide-react";
+import { Gauge, Hash, LineStyle, Rainbow, Type } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { LAYER_TYPE, type LayerType } from "@/features/project/project-dto/project-dto";
 import { cn } from "@/lib/cn";
@@ -27,6 +27,11 @@ const LAYER_PICKER_ITEMS = {
     descriptionKey: "picker.labelDescription",
     icon: Type,
     titleKey: "types.label",
+  },
+  [LAYER_TYPE.needle]: {
+    descriptionKey: "picker.needleDescription",
+    icon: Gauge,
+    titleKey: "types.needle",
   },
 } satisfies Record<LayerType, { descriptionKey: string; icon: typeof LineStyle; titleKey: string }>;
 

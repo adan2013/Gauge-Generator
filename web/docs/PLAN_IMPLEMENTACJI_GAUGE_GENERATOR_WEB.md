@@ -269,7 +269,7 @@ wybór `rangeId`, krzywą i minimum jeden drag uchwytu na warstwę.
 
 **Cel:** zwiększać zakres bez utraty spójności modelu.
 
-Kolejność: **Label → Arc → Clock Hand → Ellipse → Rectangle**. Dla każdej
+Kolejność: **Label → Arc → Needle → Ellipse → Rectangle**. Dla każdej
 warstwy wykonać ten sam checklist:
 
 Label jest ukończony jako pierwszy vertical slice etapu: posiada zagnieżdżony,
@@ -280,7 +280,12 @@ promienia ścieżki.
 Arc jest ukończony jako drugi vertical slice etapu. Przechowuje wyłącznie
 `valueStart` i `valueEnd` mapowane przez Range, bez ręcznego trybu kątowego.
 Posiada offset promienia, grubość w mm, kolor, płaskie lub zaokrąglone końce SVG
-oraz wspólny Range-mapped overlay promienia. Następną warstwą jest Clock Hand.
+oraz wspólny Range-mapped overlay promienia.
+
+Needle jest ukończony jako trzeci vertical slice etapu. Wartość całkowita jest
+mapowana przez Range, którego środek stanowi stałą oś wskazówki. Zagnieżdżone
+obiekty `shaft` i `hub` przechowują geometrię i prezentację w mm; warstwa nie ma
+ręcznego kąta ani własnego pivotu. Następną warstwą jest Ellipse.
 
 1. DTO/Zod/default factory i walidacja domenowa.
 2. Klasa z `toSvg`, `getEditingOverlay`, `getHandles` i `applyHandleDrag`.

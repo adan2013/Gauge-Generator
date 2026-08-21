@@ -97,7 +97,7 @@ Maksimum to 80 warstw.
 | Numeric Scale | Liczby na skali                       | min./max./krok, mnożnik, format, odległość, obrót, font i styl                                   |
 | Label         | Dowolny napis                         | tekst, X/Y, obrót, font, kolor, pogrubienie/kursywa/podkreślenie                                 |
 | Arc           | Kolorowy pas, np. strefa ostrzegawcza | zakres wartości lub ręczny kąt, przesunięcie, promień, szerokość, kolor                          |
-| Clock Hand    | Wskazówka                             | wartość lub ręczny kąt, długości/kolory części, grubość, grot, koło osi                          |
+| Needle        | Wskazówka                             | wartość Range, długości/kolory części, grubość, grot, koło osi                                   |
 | Ellipse       | Elipsa                                | środek, rozmiar, obrót, wypełnienie, obrys                                                       |
 | Rectangle     | Prostokąt                             | środek, rozmiar, obrót, wypełnienie, obrys                                                       |
 
@@ -182,22 +182,23 @@ zaokrągleniem powinna zostać wprowadzona później jako osobny obiekt wizualny
 Arc nie posiada trybu ręcznych kątów. Kąty renderowania są zawsze wyliczane z
 `valueStart` i `valueEnd` przez aktualne mapowanie źródłowego Range.
 
-### Clock Hand
+### Needle
 
-| Właściwość        | Typ     | Opis / zakres                                          |
-| ----------------- | ------- | ------------------------------------------------------ |
-| negativeLength    | number  | długość części za osią (0–50%)                         |
-| thickness         | number  | grubość wskazówki (1–10%)                              |
-| negativeColor     | kolor   | kolor części za osią                                   |
-| positiveLength    | number  | długość części przed osią (20–100%)                    |
-| positiveColor     | kolor   | kolor części przed osią                                |
-| endType           | enum    | normal, rounded, shortArrow, longArrow, softArrow      |
-| circleSize        | number  | promień koła osi (1–10%)                               |
-| circleColor       | kolor   | kolor koła osi                                         |
-| circleBehindArrow | boolean | koło pod wskazówką albo nad nią                        |
-| manualAngle       | boolean | wybór ręcznego kąta zamiast wartości                   |
-| value             | integer | wartość z Range (-1000–1000, ograniczana przez źródło) |
-| angle             | integer | ręczny kąt (0–360°)                                    |
+| Właściwość         | Typ     | Opis / zakres                                         |
+| ------------------ | ------- | ----------------------------------------------------- |
+| value              | integer | wartość ograniczana i mapowana przez źródłowy Range   |
+| shaft.lengthMm     | number  | długość części przed osią w mm                        |
+| shaft.tailLengthMm | number  | długość części za osią w mm                           |
+| shaft.widthMm      | number  | grubość wskazówki w mm                                |
+| shaft.tipStyle     | enum    | flat, rounded, arrowhead, pointed lub tapered-rounded |
+| shaft colors       | kolor   | osobny kolor trzonu i ogona                           |
+| hub.visible        | boolean | widoczność koła osi                                   |
+| hub.radiusMm       | number  | promień koła osi w mm                                 |
+| hub.color          | kolor   | kolor koła osi                                        |
+| hub.placement      | enum    | koło przed albo za wskazówką                          |
+
+Needle zawsze obraca się wokół środka Range. Nie przechowuje ręcznego kąta,
+osobnego pivotu ani wartości procentowych.
 
 ### Ellipse i Rectangle
 
@@ -237,7 +238,7 @@ mm i zapisuje wynik w mm. Renderer SVG używa wspólnego układu współrzędnyc
 viewBox wyrażonego w mm.
 
 Skala jest niezależnym obiektem domenowym współdzielonym przez Tick Scale,
-Numeric Scale i Clock Hand:
+Numeric Scale i Needle:
 
 | Tryb        | Dane                         | Znaczenie                                                           |
 | ----------- | ---------------------------- | ------------------------------------------------------------------- |
@@ -791,7 +792,7 @@ class TickScale extends Layer {}
 class NumericScale extends Layer {}
 class Label extends Layer {}
 class Arc extends Layer {}
-class ClockHand extends Layer {}
+class Needle extends Layer {}
 class Ellipse extends Layer {}
 class Rectangle extends Layer {}
 ```
@@ -895,7 +896,7 @@ Minimalny zestaw interaktywnych nakładek:
 | Range                      | środek, promień oraz początek i rozwarcie kąta zakresu; Range nie ma pivotu |
 | Tick Scale / Numeric Scale | granice widocznego zakresu, promień oraz długość kresek/pozycję etykiet     |
 | Arc                        | aktywny przedział wartości Range i uchwyt promienia                         |
-| Clock Hand                 | obrót/wartość wskazówki, długość końca dodatniego i punkt osi               |
+| Needle                     | wartość wskazówki oraz długość trzonu i ogona                               |
 | Label                      | pozycja i obrót                                                             |
 | Ellipse / Rectangle        | pozycja, szerokość, wysokość i obrót                                        |
 
@@ -928,7 +929,7 @@ pipeline'u E2E w MVP.
 W repozytorium należy utworzyć wspólne narzędzia testowe:
 
 - factory createProject z sensownym domyślnym prostokątnym płótnem;
-- fabryki createRange, createTickScale, createClockHand i pozostałych warstw,
+- fabryki createRange, createTickScale, createNeedle i pozostałych warstw,
   przyjmujące tylko właściwości zmieniane w danym teście;
 - builder createEditorState, createTestStore oraz renderEditor, który
   automatycznie owija widok w ReduxProvider, lokalizację i wymagane contexty;
@@ -973,7 +974,7 @@ Kolejność zwiększa złożoność stopniowo:
 2. Numeric Scale;
 3. Label;
 4. Arc;
-5. Clock Hand;
+5. Needle;
 6. Ellipse;
 7. Rectangle.
 

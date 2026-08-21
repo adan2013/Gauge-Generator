@@ -279,6 +279,7 @@ function SortableLayerRow({
     [LAYER_TYPE.numericScale]: "types.numericScale",
     [LAYER_TYPE.label]: "types.label",
     [LAYER_TYPE.arc]: "types.arc",
+    [LAYER_TYPE.needle]: "types.needle",
   } as const;
   return (
     <li

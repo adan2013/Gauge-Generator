@@ -98,13 +98,15 @@
         "tickScaleDescription": "Draw radial tick marks using the selected Range.",
         "numericScaleDescription": "Draw value labels using the selected Range.",
         "labelDescription": "Add regular labels or text that follows the selected Range path.",
-        "arcDescription": "Draw a styled arc between values on the selected Range."
+        "arcDescription": "Draw a styled arc between values on the selected Range.",
+        "needleDescription": "Point to a value using the selected Range mapping."
       },
       "types": {
         "tickScale": "Tick scale",
         "numericScale": "Numeric scale",
         "label": "Label",
-        "arc": "Arc"
+        "arc": "Arc",
+        "needle": "Needle"
       },
       "editLayer": "Edit {name}",
       "deleteLayer": "Delete {name}",
@@ -302,6 +304,46 @@
       },
       "handleValues": {
         "radiusOffset": "{value} mm"
+      }
+    },
+    "needle": {
+      "groups": {
+        "value": "Value",
+        "shaft": "Shaft",
+        "hub": "Hub"
+      },
+      "value": "Value",
+      "length": "Length",
+      "tailLength": "Tail length",
+      "width": "Width",
+      "tipStyle": "Tip style",
+      "shaftColor": "Shaft color",
+      "tailColor": "Tail color",
+      "hubVisible": "Show hub",
+      "hubRadius": "Hub radius",
+      "hubColor": "Hub color",
+      "hubPlacement": "Hub placement",
+      "tipStyles": {
+        "flat": "Flat",
+        "rounded": "Rounded",
+        "arrowhead": "Arrowhead",
+        "pointed": "Pointed taper",
+        "tapered-rounded": "Rounded taper"
+      },
+      "hubPlacements": {
+        "front": "In front of shaft",
+        "behind": "Behind shaft"
+      },
+      "overlayAriaLabel": "Needle editing overlay",
+      "handles": {
+        "value": "Adjust indicated value",
+        "length": "Adjust shaft length",
+        "tail-length": "Adjust tail length"
+      },
+      "handleValues": {
+        "value": "value: {value}",
+        "length": "length: {value} mm",
+        "tailLength": "tail: {value} mm"
       }
     },
     "textStyle": {

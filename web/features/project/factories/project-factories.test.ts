@@ -5,6 +5,7 @@ import {
   createLayerFromType,
   createLabelLayer,
   createNumericScaleLayer,
+  createNeedleLayer,
   createRange,
   createRangeForCanvas,
   createTickScaleLayer,
@@ -29,7 +30,7 @@ describe("createDevelopmentProject", () => {
     const project = createDevelopmentProject();
 
     expect(project.ranges).toHaveLength(1);
-    expect(project.layers).toHaveLength(6);
+    expect(project.layers).toHaveLength(7);
     expect(project.layers.every((layer) => layer.rangeId === project.ranges[0].id)).toBe(true);
     expect(project.ranges[0]).toMatchObject({
       angleStart: 135,
@@ -55,8 +56,14 @@ describe("createDevelopmentProject", () => {
       radiusOffsetMm: 3,
       roundedEnds: false,
     });
+    expect(project.layers.find((layer) => layer.type === "needle")).toMatchObject({
+      value: 70,
+      shaft: { lengthMm: 35, tipStyle: "tapered-rounded" },
+      hub: { placement: "front" },
+    });
     expect(project.layers.map((layer) => layer.name)).toEqual([
       "Warning arc",
+      "Pressure needle",
       "Unit label",
       "Arc caption",
       "Major pressure ticks",
@@ -70,21 +77,41 @@ describe("createLayerFromType", () => {
   it("creates a visual layer from its registered type", () => {
     const range = createRange();
 
-    expect(createLayerFromType("tick-scale", range.id)).toMatchObject({
+    expect(createLayerFromType("tick-scale", range)).toMatchObject({
       rangeId: range.id,
       type: "tick-scale",
     });
-    expect(createLayerFromType("numeric-scale", range.id)).toMatchObject({
+    expect(createLayerFromType("numeric-scale", range)).toMatchObject({
       rangeId: range.id,
       type: "numeric-scale",
     });
-    expect(createLayerFromType("label", range.id)).toMatchObject({
+    expect(createLayerFromType("label", range)).toMatchObject({
       rangeId: range.id,
       type: "label",
     });
-    expect(createLayerFromType("arc", range.id)).toMatchObject({
+    expect(createLayerFromType("arc", range)).toMatchObject({
       rangeId: range.id,
       type: "arc",
+    });
+    expect(createLayerFromType("needle", range)).toMatchObject({
+      rangeId: range.id,
+      type: "needle",
+    });
+  });
+
+  it("uses the source Range minimum and rounded taper as Needle defaults", () => {
+    const range = createRange({
+      scaleDefinition: { mode: "linear", start: 20, end: 80 },
+    });
+
+    expect(createNeedleLayer(range)).toMatchObject({
+      rangeId: range.id,
+      value: 20,
+      shaft: { tipStyle: "tapered-rounded" },
+    });
+    expect(createLayerFromType("needle", range)).toMatchObject({
+      value: 20,
+      shaft: { tipStyle: "tapered-rounded" },
     });
   });
 });
@@ -100,7 +127,7 @@ describe("resetLayerToDefaults", () => {
       visible: false,
     });
 
-    expect(resetLayerToDefaults(layer)).toMatchObject({
+    expect(resetLayerToDefaults(layer, range)).toMatchObject({
       id: layer.id,
       name: "Custom markers",
       rangeId: range.id,
@@ -125,7 +152,7 @@ describe("resetLayerToDefaults", () => {
       },
     });
 
-    expect(resetLayerToDefaults(layer)).toMatchObject({
+    expect(resetLayerToDefaults(layer, range)).toMatchObject({
       id: layer.id,
       name: "Labels",
       rangeId: range.id,
@@ -141,7 +168,7 @@ describe("resetLayerToDefaults", () => {
     const range = createRange();
     const layer = createLabelLayer(range.id, { text: "Custom", name: "Caption" });
 
-    expect(resetLayerToDefaults(layer)).toMatchObject({
+    expect(resetLayerToDefaults(layer, range)).toMatchObject({
       id: layer.id,
       name: "Caption",
       rangeId: range.id,
@@ -157,13 +184,37 @@ describe("resetLayerToDefaults", () => {
       roundedEnds: false,
     });
 
-    expect(resetLayerToDefaults(layer)).toMatchObject({
+    expect(resetLayerToDefaults(layer, range)).toMatchObject({
       id: layer.id,
       name: "Limit",
       rangeId: range.id,
       strokeWidthMm: 2,
       roundedEnds: false,
       color: "#2E7D32",
+    });
+  });
+
+  it("restores nested Needle settings without losing identity or its Range", () => {
+    const range = createRange();
+    const layer = createNeedleLayer(range, {
+      name: "Pointer",
+      value: 80,
+      shaft: {
+        lengthMm: 20,
+        tailLengthMm: 0,
+        widthMm: 4,
+        tipStyle: "flat",
+        color: "#000000",
+        tailColor: "#111111",
+      },
+    });
+
+    expect(resetLayerToDefaults(layer, range)).toMatchObject({
+      id: layer.id,
+      name: "Pointer",
+      rangeId: range.id,
+      value: 0,
+      shaft: { lengthMm: 40, tipStyle: "tapered-rounded", color: "#C62828" },
     });
   });
 });
