@@ -3,10 +3,15 @@ import type { ValidationIssue } from "@/features/layers/core/layer";
 import { MAX_GENERATED_SCALE_ITEMS } from "@/features/ranges/scale-mapping/scale-constants";
 import { getRangeScaleValueBounds } from "@/features/ranges/scale-mapping/scale-mapping";
 import { getScaleItemCount } from "@/features/ranges/scale-mapping/scale-sequence";
-import type { LayerDto, RangeDto } from "@/features/project/project-dto/project-dto";
+import type { RangeDto } from "@/features/project/project-dto/project-dto";
 import { getEffectiveRadiusMm } from "@/features/layers/core/range-mapped-layer-geometry";
 
-type RangeMappedLayer = Pick<LayerDto, "radiusOffsetMm" | "valueEnd" | "valueStart" | "valueStep">;
+type RangeMappedLayer = {
+  radiusOffsetMm: number;
+  valueEnd: number;
+  valueStart: number;
+  valueStep: number;
+};
 
 export function getRangeMappedLayerValidationIssues(
   layer: RangeMappedLayer,

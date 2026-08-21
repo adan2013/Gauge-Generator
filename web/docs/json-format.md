@@ -27,8 +27,8 @@ required `rangeId`, which must reference an item in `ranges`. A Range has no
 final SVG representation. Every object has a stable UUID and a non-empty,
 user-editable `name`.
 
-The currently supported visual discriminants are `tick-scale` and
-`numeric-scale`. Tick Scale renders radial marks over the referenced Range arc
+The currently supported visual discriminants are `tick-scale`, `numeric-scale`,
+and `label`. Tick Scale renders radial marks over the referenced Range arc
 and has these required fields:
 `valueStart`, `valueEnd`, positive `valueStep`, `tickLengthMm` (at least 0.2
 mm), `tickWidthMm` (at least 0.1 mm), `radiusOffsetMm`, and hexadecimal `color`.
@@ -41,13 +41,30 @@ tick width cannot exceed tick length. A Range update clamps dependent Tick Scale
 values. Tick positions use the linear, logarithmic, or custom mapping belonging
 to the source Range. Numeric Scale uses the same mapped positions for text and
 stores its integer visible range and positive integer step, radius offset,
-multiplier, decimal places, web-safe font settings, text style flags, and color.
+multiplier, decimal places, a nested `textStyle`, and its rotation behavior.
 Its labels follow the same Range-owned circular-to-rounded-square path geometry
 as Tick Scale.
 Fractional Numeric Scale labels are produced only by `scaleMultiplier` (from
 `0.01` to `100`) and `decimalPlaces`; canonical mapped values remain integers
 from `-1,000,000` to `1,000,000`. New layer types
 extend the strict Zod discriminated union in their own implementation stage.
+
+Label renders user text of up to 40 characters. Its point layout is stored as
+`layout: { mode: "point", offsetXMm, offsetYMm, rotationDegrees }`. Offsets are
+physical distances from the source Range center and remain stable when its
+radius changes. Point rotation is an integer from `0` to `359` degrees. Label
+also supports a Range-mapped text path:
+`layout: { mode: "text-arc", radiusOffsetMm, valueStart, valueEnd, alignment,
+direction }`. It uses the same linear, logarithmic, or custom value mapping and
+rounded-square geometry as scale layers. `alignment` is `start`, `center`, or
+`end`; `direction` is `forward` or `reverse`.
+
+Numeric Scale and Label share the same nested typography contract:
+`textStyle: { font, sizeMm, color, bold, italic, underline }`. `font` is a
+reference object rather than a bare family field; MVP supports
+`{ source: "system", family: "Arial" | "Georgia" | "Courier New" }`. This keeps
+future web or user-loaded font sources extensible without adding font fields to
+every text layer.
 
 Every physical value is a number in millimetres. Angles are degrees. Range
 stores `centerX`, `centerY`, `radius`, `cornerRadiusPercent` (1–50), `angleStart`,

@@ -7,6 +7,7 @@ export const PROJECT_VALIDATION_CODES = {
   valueMustBePositive: "project.validation.valueMustBePositive",
   valueOutsideAllowedRange: "project.validation.valueOutsideAllowedRange",
   valueStartAfterEnd: "project.validation.valueStartAfterEnd",
+  valueRangeMustHaveSpan: "project.validation.valueRangeMustHaveSpan",
   tooManyGeneratedItems: "project.validation.tooManyGeneratedItems",
   scaleBoundsNotAscending: "project.validation.scaleBoundsNotAscending",
   customScaleEndpointsInvalid: "project.validation.customScaleEndpointsInvalid",

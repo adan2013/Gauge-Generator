@@ -8,6 +8,7 @@ projekt WPF wyłącznie jako materiał referencyjny.
 
 - [Analiza i założenia](docs/ANALIZA_MODERNIZACJI_WEB.md)
 - [Plan implementacji](docs/PLAN_IMPLEMENTACJI_GAUGE_GENERATOR_WEB.md)
+- [Jak dodać nową warstwę wizualną](docs/adding-a-visual-layer.md)
 - [Materiały dla agenta AI](ai-handoff/README.md)
 
 Aktualny starter został utworzony przez

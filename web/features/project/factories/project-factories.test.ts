@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   createDevelopmentProject,
   createLayerFromType,
+  createLabelLayer,
   createNumericScaleLayer,
   createRange,
   createRangeForCanvas,
@@ -27,7 +28,7 @@ describe("createDevelopmentProject", () => {
     const project = createDevelopmentProject();
 
     expect(project.ranges).toHaveLength(1);
-    expect(project.layers).toHaveLength(3);
+    expect(project.layers).toHaveLength(5);
     expect(project.layers.every((layer) => layer.rangeId === project.ranges[0].id)).toBe(true);
     expect(project.ranges[0]).toMatchObject({
       angleStart: 135,
@@ -50,6 +51,8 @@ describe("createDevelopmentProject", () => {
       ]),
     );
     expect(project.layers.map((layer) => layer.name)).toEqual([
+      "Unit label",
+      "Arc caption",
       "Major pressure ticks",
       "Minor pressure ticks",
       "Pressure values (bar)",
@@ -68,6 +71,10 @@ describe("createLayerFromType", () => {
     expect(createLayerFromType("numeric-scale", range.id)).toMatchObject({
       rangeId: range.id,
       type: "numeric-scale",
+    });
+    expect(createLayerFromType("label", range.id)).toMatchObject({
+      rangeId: range.id,
+      type: "label",
     });
   });
 });
@@ -96,14 +103,39 @@ describe("resetLayerToDefaults", () => {
 
   it("restores Numeric Scale settings without losing identity or its Range", () => {
     const range = createRange();
-    const layer = createNumericScaleLayer(range.id, { name: "Labels", fontSizeMm: 8, bold: true });
+    const layer = createNumericScaleLayer(range.id, {
+      name: "Labels",
+      textStyle: {
+        font: { source: "system", family: "Georgia" },
+        sizeMm: 8,
+        color: "#123456",
+        bold: true,
+        italic: true,
+        underline: true,
+      },
+    });
 
     expect(resetLayerToDefaults(layer)).toMatchObject({
       id: layer.id,
       name: "Labels",
       rangeId: range.id,
-      fontSizeMm: 3,
-      bold: false,
+      textStyle: expect.objectContaining({
+        font: { source: "system", family: "Arial" },
+        sizeMm: 3,
+        bold: false,
+      }),
+    });
+  });
+
+  it("restores Label settings without losing identity or its Range", () => {
+    const range = createRange();
+    const layer = createLabelLayer(range.id, { text: "Custom", name: "Caption" });
+
+    expect(resetLayerToDefaults(layer)).toMatchObject({
+      id: layer.id,
+      name: "Caption",
+      rangeId: range.id,
+      text: "Label",
     });
   });
 });

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   createProject,
+  createLabelLayer,
   createRange,
   createTickScaleLayer,
 } from "@/features/project/factories/project-factories";
@@ -66,6 +67,43 @@ describe("project store and history", () => {
       valueStart: 30,
       valueEnd: 70,
       valueStep: 10,
+    });
+  });
+
+  it("constrains dependent Label layouts when their Range changes", () => {
+    const range = createRange({ radius: 40 });
+    const pointLabel = createLabelLayer(range.id, {
+      layout: { mode: "point", offsetXMm: 30, offsetYMm: -30, rotationDegrees: 0 },
+    });
+    const textArcLabel = createLabelLayer(range.id, {
+      layout: {
+        mode: "text-arc",
+        radiusOffsetMm: 30,
+        valueStart: 20,
+        valueEnd: 80,
+        alignment: "center",
+        direction: "forward",
+      },
+    });
+    const store = createTestStore({
+      project: {
+        current: createProject({ ranges: [range], layers: [pointLabel, textArcLabel] }),
+      },
+    });
+
+    store.dispatch(
+      projectActions.updateRange({
+        ...range,
+        radius: 15,
+        scaleDefinition: { mode: "linear", start: 40, end: 60 },
+      }),
+    );
+
+    expect(store.getState().project.current.layers[0]).toMatchObject({
+      layout: { offsetXMm: 15, offsetYMm: -15 },
+    });
+    expect(store.getState().project.current.layers[1]).toMatchObject({
+      layout: { radiusOffsetMm: 15, valueStart: 40, valueEnd: 60 },
     });
   });
 

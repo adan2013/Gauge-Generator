@@ -19,6 +19,7 @@ const VALIDATION_MESSAGE_KEY_BY_CODE = {
   [PROJECT_VALIDATION_CODES.valueMustBePositive]: "valueMustBePositive",
   [PROJECT_VALIDATION_CODES.valueOutsideAllowedRange]: "valueOutsideAllowedRange",
   [PROJECT_VALIDATION_CODES.valueStartAfterEnd]: "valueStartAfterEnd",
+  [PROJECT_VALIDATION_CODES.valueRangeMustHaveSpan]: "valueRangeMustHaveSpan",
   [PROJECT_VALIDATION_CODES.scaleBoundsNotAscending]: "scaleBoundsNotAscending",
   [PROJECT_VALIDATION_CODES.customScaleEndpointsInvalid]: "customScaleEndpointsInvalid",
   [PROJECT_VALIDATION_CODES.customScaleNotMonotonic]: "customScaleNotMonotonic",

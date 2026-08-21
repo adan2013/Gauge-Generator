@@ -1,5 +1,7 @@
 import { TickScaleLayer } from "@/features/layers/tick-scale/tick-scale";
 import { NumericScaleLayer } from "@/features/layers/numeric-scale/numeric-scale";
+import { LabelLayer } from "@/features/layers/label/label";
+import { constrainLabelToRange } from "@/features/layers/label/label-constraints";
 import { constrainNumericScaleToRange } from "@/features/layers/numeric-scale/numeric-scale-constraints";
 import { constrainTickScaleToRange } from "@/features/layers/tick-scale/tick-scale-constraints";
 import {
@@ -16,6 +18,8 @@ export function createLayerModel(layer: LayerDto): Layer {
       return new TickScaleLayer(layer);
     case LAYER_TYPE.numericScale:
       return new NumericScaleLayer(layer);
+    case LAYER_TYPE.label:
+      return new LabelLayer(layer);
     default:
       return assertNever(layer);
   }
@@ -38,6 +42,8 @@ function constrainLayerToRange(layer: LayerDto, range: RangeDto): LayerDto {
       return constrainTickScaleToRange(layer, range);
     case LAYER_TYPE.numericScale:
       return constrainNumericScaleToRange(layer, range);
+    case LAYER_TYPE.label:
+      return constrainLabelToRange(layer, range);
     default:
       return assertNever(layer);
   }

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   createProject,
+  createLabelLayer,
   createRange,
   createNumericScaleLayer,
   createTickScaleLayer,
@@ -144,16 +145,80 @@ describe("ProjectSchema", () => {
 
   it("validates Numeric Scale as an independent visual layer tied to a Range", () => {
     const range = createRange();
-    const layer = createNumericScaleLayer(range.id, { fontSizeMm: 4 });
+    const layer = createNumericScaleLayer(range.id, {
+      textStyle: {
+        font: { source: "system", family: "Arial" },
+        sizeMm: 4,
+        color: "#20242B",
+        bold: false,
+        italic: false,
+        underline: false,
+      },
+    });
 
     expect(validateProject(createProject({ ranges: [range], layers: [layer] })).issues).toEqual([]);
     expect(
-      validateProject(createProject({ ranges: [range], layers: [{ ...layer, fontSizeMm: 50 }] }))
-        .issues,
+      validateProject(
+        createProject({
+          ranges: [range],
+          layers: [{ ...layer, textStyle: { ...layer.textStyle, sizeMm: 50 } }],
+        }),
+      ).issues,
     ).toContainEqual({
-      path: `layers.${layer.id}.fontSizeMm`,
+      path: `layers.${layer.id}.textStyle.sizeMm`,
       code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange,
     });
+  });
+
+  it("validates Label text, point layout, and nested typography", () => {
+    const range = createRange();
+    const layer = createLabelLayer(range.id);
+
+    expect(validateProject(createProject({ ranges: [range], layers: [layer] })).issues).toEqual([]);
+    expect(
+      validateProject(
+        createProject({ ranges: [range], layers: [{ ...layer, text: "x".repeat(41) }] }),
+      ).issues[0]?.code,
+    ).toBe(PROJECT_VALIDATION_CODES.invalidSchema);
+  });
+
+  it("accepts a Label text path mapped through its source Range", () => {
+    const range = createRange();
+    const layer = createLabelLayer(range.id, {
+      layout: {
+        mode: "text-arc",
+        radiusOffsetMm: -5,
+        valueStart: 0,
+        valueEnd: 100,
+        alignment: "center",
+        direction: "reverse",
+      },
+    });
+
+    expect(validateProject(createProject({ ranges: [range], layers: [layer] })).issues).toEqual([]);
+  });
+
+  it("limits point Label rotation to zero through 359 degrees", () => {
+    const range = createRange();
+    const layer = createLabelLayer(range.id);
+    if (layer.layout.mode !== "point") throw new Error("Expected point layout");
+
+    expect(
+      validateProject(
+        createProject({
+          ranges: [range],
+          layers: [{ ...layer, layout: { ...layer.layout, rotationDegrees: -1 } }],
+        }),
+      ).issues[0]?.code,
+    ).toBe(PROJECT_VALIDATION_CODES.invalidSchema);
+    expect(
+      validateProject(
+        createProject({
+          ranges: [range],
+          layers: [{ ...layer, layout: { ...layer.layout, rotationDegrees: 360 } }],
+        }),
+      ).issues[0]?.code,
+    ).toBe(PROJECT_VALIDATION_CODES.invalidSchema);
   });
 
   it("rejects a Tick Scale whose radius offset would create a non-positive rendered radius", () => {

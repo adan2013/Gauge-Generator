@@ -6,13 +6,22 @@ import {
 } from "@/features/project/factories/project-factories";
 import { NumericScaleLayer } from "./numeric-scale";
 import { getNumericScaleNumericPropertyDefinitions } from "./numeric-scale-properties";
+import { getTextStyleSizePropertyDefinition } from "@/features/layers/core/text-style/text-style-properties";
+import { getNumericScaleGeometryBounds } from "./numeric-scale-constraints";
 
 describe("NumericScaleLayer", () => {
   const range = createRange({ angleStart: 0, openingAngle: 90, radius: 40 });
   const layer = createNumericScaleLayer(range.id, {
     valueEnd: 100,
     valueStep: 50,
-    fontSizeMm: 3,
+    textStyle: {
+      font: { source: "system", family: "Arial" },
+      sizeMm: 3,
+      color: "#20242B",
+      bold: false,
+      italic: false,
+      underline: false,
+    },
   });
   const project = createProject({ ranges: [range], layers: [layer] });
   const context = {
@@ -31,6 +40,26 @@ describe("NumericScaleLayer", () => {
     expect(svg).toContain('x="92" y="60"');
     expect(svg).toContain('x="60" y="92"');
     expect(svg).toContain(">25.0</text>");
+  });
+
+  it("renders the shared nested typography settings", () => {
+    const svg = new NumericScaleLayer({
+      ...layer,
+      textStyle: {
+        ...layer.textStyle,
+        font: { source: "system", family: "Courier New" },
+        color: "#123456",
+        bold: true,
+        italic: true,
+        underline: true,
+      },
+    }).toSvg(context);
+
+    expect(svg).toContain('fill="#123456"');
+    expect(svg).toContain('font-family="Courier New"');
+    expect(svg).toContain('font-weight="700"');
+    expect(svg).toContain('font-style="italic"');
+    expect(svg).toContain('text-decoration="underline"');
   });
 
   it("distinguishes its active and inactive value intervals in the editing overlay", () => {
@@ -68,13 +97,23 @@ describe("NumericScaleLayer", () => {
       max: 40,
       snap: "distance",
     });
-    expect(fields.find((field) => field.key === "fontSizeMm")).toMatchObject({ max: 32 });
+    expect(
+      getTextStyleSizePropertyDefinition(
+        layer.textStyle.sizeMm,
+        getNumericScaleGeometryBounds(layer, range).maxFontSizeMm,
+      ),
+    ).toMatchObject({ max: 32 });
   });
 
   it("never exposes a font-size limit above the DTO maximum", () => {
-    const fields = getNumericScaleNumericPropertyDefinitions(layer, createRange({ radius: 500 }));
+    const largeRange = createRange({ radius: 500 });
 
-    expect(fields.find((field) => field.key === "fontSizeMm")).toMatchObject({ max: 50 });
+    expect(
+      getTextStyleSizePropertyDefinition(
+        layer.textStyle.sizeMm,
+        getNumericScaleGeometryBounds(layer, largeRange).maxFontSizeMm,
+      ),
+    ).toMatchObject({ max: 50 });
   });
 
   it("snaps the label-radius handle and keeps the label circle valid", () => {

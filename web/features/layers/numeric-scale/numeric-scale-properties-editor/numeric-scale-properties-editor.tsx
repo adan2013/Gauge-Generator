@@ -2,15 +2,15 @@
 
 import { useTranslations } from "next-intl";
 import { BooleanPropertyRow } from "@/components/molecules/boolean-property-row/boolean-property-row";
-import { ColorPropertyRow } from "@/components/molecules/color-property-row/color-property-row";
-import { SelectPropertyRow } from "@/components/molecules/select-property-row/select-property-row";
 import { NumericPropertyFields } from "@/features/editor/numeric-property-fields/numeric-property-fields";
 import { PropertyGroup } from "@/features/editor/property-controls/property-controls";
+import { TextStylePropertiesEditor } from "@/features/layers/core/text-style/text-style-properties-editor/text-style-properties-editor";
+import { getTextStyleSizePropertyDefinition } from "@/features/layers/core/text-style/text-style-properties";
 import {
-  getNumericScaleColorPropertyDefinition,
   getNumericScaleNumericPropertyDefinitions,
   type NumericScaleNumericPropertyDefinition,
 } from "@/features/layers/numeric-scale/numeric-scale-properties";
+import { getNumericScaleGeometryBounds } from "@/features/layers/numeric-scale/numeric-scale-constraints";
 import type {
   LayerDto,
   NumericScaleLayerDto,
@@ -35,11 +35,9 @@ export function NumericScalePropertiesEditor({
   snapping,
 }: NumericScalePropertiesEditorProps) {
   const t = useTranslations("Editor");
-  const definitions = getNumericScaleNumericPropertyDefinitions(
-    layer,
-    ranges.find((range) => range.id === layer.rangeId),
-  );
-  const color = getNumericScaleColorPropertyDefinition(layer);
+  const range = ranges.find((candidate) => candidate.id === layer.rangeId);
+  const definitions = getNumericScaleNumericPropertyDefinitions(layer, range);
+  const geometry = range ? getNumericScaleGeometryBounds(layer, range) : undefined;
   const fields = (group: NumericScaleNumericPropertyDefinition["group"]) => (
     <NumericPropertyFields
       definitions={definitions}
@@ -61,39 +59,21 @@ export function NumericScalePropertiesEditor({
       <PropertyGroup title={t("numericScale.range")}>{fields("range")}</PropertyGroup>
       <PropertyGroup title={t("numericScale.geometry")}>{fields("geometry")}</PropertyGroup>
       <PropertyGroup title={t("numericScale.font")}>
-        {fields("font")}
-        <SelectPropertyRow
-          label={t("numericScale.fontFamily")}
-          onChange={(fontFamily) => onLayerChange({ fontFamily } as Partial<NumericScaleLayerDto>)}
-          options={["Arial", "Georgia", "Courier New"].map((value) => ({ label: value, value }))}
-          value={layer.fontFamily}
-        />
-        <BooleanPropertyRow
-          checked={layer.bold}
-          label={t("numericScale.bold")}
-          onChange={(bold) => onLayerChange({ bold } as Partial<NumericScaleLayerDto>)}
-        />
-        <BooleanPropertyRow
-          checked={layer.italic}
-          label={t("numericScale.italic")}
-          onChange={(italic) => onLayerChange({ italic } as Partial<NumericScaleLayerDto>)}
-        />
-        <BooleanPropertyRow
-          checked={layer.underline}
-          label={t("numericScale.underline")}
-          onChange={(underline) => onLayerChange({ underline } as Partial<NumericScaleLayerDto>)}
+        <TextStylePropertiesEditor
+          definition={getTextStyleSizePropertyDefinition(
+            layer.textStyle.sizeMm,
+            geometry?.maxFontSizeMm,
+          )}
+          onChange={(textStyle) => onLayerChange({ textStyle } as Partial<NumericScaleLayerDto>)}
+          onInteractionEnd={onHistoryTransactionEnd}
+          onInteractionStart={onHistoryTransactionStart}
+          snapping={snapping}
+          style={layer.textStyle}
         />
         <BooleanPropertyRow
           checked={layer.rotated}
           label={t("numericScale.rotated")}
           onChange={(rotated) => onLayerChange({ rotated } as Partial<NumericScaleLayerDto>)}
-        />
-        <ColorPropertyRow
-          label={t(`numericScale.${color.labelKey}`)}
-          onChange={(value) => onLayerChange({ color: value })}
-          onInteractionEnd={onHistoryTransactionEnd}
-          onInteractionStart={onHistoryTransactionStart}
-          value={color.value}
         />
       </PropertyGroup>
     </>

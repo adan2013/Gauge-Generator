@@ -2,6 +2,7 @@ import { screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import {
   createNumericScaleLayer,
+  createLabelLayer,
   createProject,
   createRange,
   createTickScaleLayer,
@@ -24,6 +25,7 @@ describe("LayerEditingOverlay", () => {
   it.each([
     ["tick-scale", createTickScaleLayer(range.id), "tick-scale-editing-overlay"],
     ["numeric-scale", createNumericScaleLayer(range.id), "numeric-scale-editing-overlay"],
+    ["label", createLabelLayer(range.id), "label-editing-overlay"],
   ] as const)("selects the %s overlay from the registry", (_, layer, testId) => {
     renderEditor(
       <svg>

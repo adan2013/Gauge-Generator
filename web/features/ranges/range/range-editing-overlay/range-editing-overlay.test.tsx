@@ -31,7 +31,7 @@ describe("RangeEditingOverlay", () => {
     expect(screen.getByTestId("range-editing-overlay")).toBeTruthy();
     expect(screen.getByLabelText("Move center")).toBeTruthy();
     expect(screen.getByLabelText("Adjust radius")).toBeTruthy();
-    expect(screen.getByText("60; 60")).toBeTruthy();
+    expect(screen.getByText("60; 60 mm")).toBeTruthy();
     expect(screen.getByText("r: 48 mm")).toBeTruthy();
     expect(screen.getByText("start: 140°")).toBeTruthy();
     expect(screen.getByText("opening: 260°")).toBeTruthy();

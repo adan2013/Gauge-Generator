@@ -57,6 +57,7 @@
         "valueMustBePositive": "The resulting value must be greater than zero.",
         "valueOutsideAllowedRange": "The entered value is outside the range allowed by the related geometry.",
         "valueStartAfterEnd": "The start value cannot be greater than the end value.",
+        "valueRangeMustHaveSpan": "The start and end values must define a non-zero interval.",
         "tooManyGeneratedItems": "Increase the step so the scale generates no more than {max} items.",
         "scaleBoundsNotAscending": "The scale end value must be greater than its start value.",
         "customScaleEndpointsInvalid": "Custom Scale positions must begin at 0 and end at 1.",
@@ -95,11 +96,13 @@
         "title": "Choose a layer type",
         "description": "Select the visual element you want to add to this gauge.",
         "tickScaleDescription": "Draw radial tick marks using the selected Range.",
-        "numericScaleDescription": "Draw value labels using the selected Range."
+        "numericScaleDescription": "Draw value labels using the selected Range.",
+        "labelDescription": "Add regular labels or text that follows the selected Range path."
       },
       "types": {
         "tickScale": "Tick scale",
-        "numericScale": "Numeric scale"
+        "numericScale": "Numeric scale",
+        "label": "Label"
       },
       "editLayer": "Edit {name}",
       "deleteLayer": "Delete {name}",
@@ -204,7 +207,7 @@
         "angle-end": "Adjust end angle"
       },
       "handleValues": {
-        "center": "{x}; {y}",
+        "center": "{x}; {y} mm",
         "radius": "r: {radius} mm",
         "angle-start": "start: {start}°",
         "angle-end": "opening: {opening}°"
@@ -239,16 +242,57 @@
       "scaleMultiplier": "Value multiplier",
       "decimalPlaces": "Decimal places",
       "radiusOffset": "Radius offset",
-      "fontSize": "Font size",
-      "fontFamily": "Font family",
-      "bold": "Bold",
-      "italic": "Italic",
-      "underline": "Underline",
       "rotated": "Rotate text",
-      "color": "Color",
       "overlayAriaLabel": "Numeric scale editing overlay",
       "handles": { "radiusOffset": "Adjust label radius" },
       "handleValues": { "radiusOffset": "{value} mm" }
+    },
+    "label": {
+      "content": "Content",
+      "layout": "Layout",
+      "layoutMode": "Text layout",
+      "layoutModes": {
+        "point": "Point text",
+        "textArc": "Text on Range path"
+      },
+      "text": "Text",
+      "offsetX": "Horizontal offset",
+      "offsetY": "Vertical offset",
+      "rotation": "Rotation",
+      "valueStart": "Start value",
+      "valueEnd": "End value",
+      "radiusOffset": "Radius offset",
+      "alignment": "Alignment",
+      "alignments": {
+        "start": "Start",
+        "center": "Center",
+        "end": "End"
+      },
+      "direction": "Direction",
+      "directions": {
+        "forward": "Forward",
+        "reverse": "Reverse"
+      },
+      "overlayAriaLabel": "Label editing overlay",
+      "handles": {
+        "position": "Move label",
+        "rotation": "Rotate label",
+        "radius-offset": "Adjust text path radius"
+      },
+      "handleValues": {
+        "position": "{x}; {y} mm",
+        "rotation": "{value}°",
+        "radiusOffset": "{value} mm"
+      }
+    },
+    "textStyle": {
+      "title": "Typography",
+      "size": "Font size",
+      "font": "Font",
+      "bold": "Bold",
+      "italic": "Italic",
+      "underline": "Underline",
+      "color": "Color"
     },
     "layerEditor": {
       "reset": "Reset layer",

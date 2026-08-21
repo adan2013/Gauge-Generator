@@ -20,7 +20,8 @@ Before a feature, read the relevant parts of:
 1. `docs/ANALIZA_MODERNIZACJI_WEB.md` — product and layer catalogue;
 2. `docs/PLAN_IMPLEMENTACJI_GAUGE_GENERATOR_WEB.md` — sequencing and stage gates;
 3. `docs/architecture.md` and `docs/json-format.md` — implemented contracts;
-4. `ai-handoff/` — decisions, legacy references, and stage evidence.
+4. `docs/adding-a-visual-layer.md` — required vertical-slice integration points;
+5. `ai-handoff/` — decisions, legacy references, and stage evidence.
 
 Keep those documents current. Put completed-stage evidence in
 `ai-handoff/implementation-evidence/`; do not use this file as a changelog.
@@ -100,6 +101,9 @@ Keep those documents current. Put completed-stage evidence in
 - Scale-domain bounds, Custom point values, and Tick/Numeric visible start, end,
   and step values are integers. Fractional labels come only from Numeric Scale's
   `scaleMultiplier` and `decimalPlaces` presentation settings.
+- Numeric Scale and Label share a nested `textStyle` contract with a structured
+  font reference. Label has a discriminated point layout with millimetre offsets
+  and a text-arc layout mapped by Range values onto shared path geometry.
 - `Layer` is the visual-layer base abstraction; `Range` is separate. Layer
   implementations own final SVG, validation, editing overlay, handles, drag
   behavior, and numeric field definitions. Keep rendering/domain code React-free.

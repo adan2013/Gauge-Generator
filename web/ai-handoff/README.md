@@ -18,7 +18,9 @@ transactional dragging. All scale-domain values are integers; fractional Numeric
 Scale labels are presentation produced by its multiplier and decimal-place
 settings. Curve mapping, visible-sequence generation, Range-bound constraints,
 and ready-to-render angular distribution are shared outside visual layers. The
-next vertical slice is stage 5, starting with the Label layer.
+Stage 5 is in progress: Label is complete, including shared typography with
+Numeric Scale, millimetre point offsets, and Range-mapped text paths. The next
+vertical slice is Arc.
 
 ## Initial repository context
 

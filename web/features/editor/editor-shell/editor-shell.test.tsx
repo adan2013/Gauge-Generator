@@ -2,6 +2,7 @@ import { fireEvent, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import {
   createProject,
+  createLabelLayer,
   createRange,
   createTickScaleLayer,
 } from "@/features/project/factories/project-factories";
@@ -28,6 +29,28 @@ describe("EditorShell", () => {
       .closest('[role="status"]');
     if (!warning) throw new Error("Range dependency warning was not rendered");
     expect(warning.querySelector("svg")).not.toBeNull();
+  });
+
+  it("validates a Range edit after constraining its linked Label", () => {
+    const range = createRange({ radius: 40 });
+    const layer = createLabelLayer(range.id, {
+      layout: { mode: "point", offsetXMm: 30, offsetYMm: 0, rotationDegrees: 0 },
+    });
+    const store = makeStore({
+      project: { current: createProject({ ranges: [range], layers: [layer] }) },
+    });
+    renderEditor(<EditorShell />, store);
+    fireEvent.click(screen.getByRole("button", { name: `Edit ${range.name}` }));
+    const radius = screen.getByRole("spinbutton", { name: "Radius" });
+
+    fireEvent.focus(radius);
+    fireEvent.change(radius, { target: { value: "15" } });
+    fireEvent.blur(radius);
+
+    expect(store.getState().project.current.ranges[0].radius).toBe(16);
+    expect(store.getState().project.current.layers[0]).toMatchObject({
+      layout: { offsetXMm: 16 },
+    });
   });
 
   it("creates a Range and navigates to its editor", () => {

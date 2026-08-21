@@ -8,6 +8,7 @@ import {
 } from "@/features/editor/property-controls/property-controls";
 import { NumericScalePropertiesEditor } from "@/features/layers/numeric-scale/numeric-scale-properties-editor/numeric-scale-properties-editor";
 import { TickScalePropertiesEditor } from "@/features/layers/tick-scale/tick-scale-properties-editor/tick-scale-properties-editor";
+import { LabelPropertiesEditor } from "@/features/layers/label/label-properties-editor/label-properties-editor";
 import {
   LAYER_TYPE,
   type LayerDto,
@@ -61,6 +62,8 @@ function LayerSpecificProperties(props: LayerPropertiesProps) {
       return <TickScalePropertiesEditor {...props} layer={props.layer} />;
     case LAYER_TYPE.numericScale:
       return <NumericScalePropertiesEditor {...props} layer={props.layer} />;
+    case LAYER_TYPE.label:
+      return <LabelPropertiesEditor {...props} layer={props.layer} />;
     default:
       return assertNever(props.layer);
   }

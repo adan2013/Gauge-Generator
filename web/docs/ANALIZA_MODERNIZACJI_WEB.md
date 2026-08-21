@@ -148,29 +148,26 @@ zaokrągleniem powinna zostać wprowadzona później jako osobny obiekt wizualny
 
 ### Numeric Scale
 
-| Właściwość                    | Typ     | Opis / zakres                            |
-| ----------------------------- | ------- | ---------------------------------------- |
-| rangeMin, rangeMax, rangeStep | integer | fragment skali i krok                    |
-| scaleMultiplier               | number  | mnożnik wyświetlanej wartości (0,01–100) |
-| rounding                      | integer | liczba miejsc formatowania (0–2)         |
-| distanceFromCenter            | number  | odległość etykiet od środka (20–100%)    |
-| rotated                       | boolean | obraca napisy zgodnie z pozycją na skali |
-| fontColor                     | kolor   | kolor tekstu                             |
-| fontSize                      | number  | rozmiar fontu (5–20%)                    |
-| fontFamily                    | string  | rodzina fontu                            |
-| bold, italic, underline       | boolean | modyfikatory kroju                       |
+| Właściwość                    | Typ     | Opis / zakres                                |
+| ----------------------------- | ------- | -------------------------------------------- |
+| rangeMin, rangeMax, rangeStep | integer | fragment skali i krok                        |
+| scaleMultiplier               | number  | mnożnik wyświetlanej wartości (0,01–100)     |
+| rounding                      | integer | liczba miejsc formatowania (0–2)             |
+| distanceFromCenter            | number  | odległość etykiet od środka (20–100%)        |
+| rotated                       | boolean | obraca napisy zgodnie z pozycją na skali     |
+| textStyle                     | object  | wspólna typografia, kolor i referencja fontu |
 
 ### Label
 
-| Właściwość              | Typ     | Opis / zakres                             |
-| ----------------------- | ------- | ----------------------------------------- |
-| text                    | string  | wyświetlany tekst (obecnie do 40 znaków)  |
-| positionX, positionY    | number  | pozycja względem środka Range (-100–100%) |
-| angle                   | integer | obrót (-360–360°)                         |
-| fontColor               | kolor   | kolor tekstu                              |
-| fontSize                | number  | rozmiar fontu (5–25%)                     |
-| fontFamily              | string  | rodzina fontu                             |
-| bold, italic, underline | boolean | modyfikatory kroju                        |
+| Właściwość                      | Typ     | Opis / zakres                                  |
+| ------------------------------- | ------- | ---------------------------------------------- |
+| text                            | string  | wyświetlany tekst (obecnie do 40 znaków)       |
+| layout.point offsets            | number  | przesunięcie X/Y od środka Range w mm          |
+| layout.point rotation           | integer | obrót (0–359°)                                 |
+| layout.text-arc radiusOffset    | number  | przesunięcie promienia ścieżki w mm            |
+| layout.text-arc valueStart/End  | integer | fragment ścieżki mapowany przez wartości Range |
+| layout.text-arc align/direction | enum    | wyrównanie oraz kierunek tekstu na ścieżce     |
+| textStyle                       | object  | wspólna typografia, kolor i referencja fontu   |
 
 ### Arc
 
@@ -304,13 +301,12 @@ Ustawienia snappingu nie zmieniają wyniku renderowania projektu. Są lokalną
 preferencją edytora przechowywaną razem z ustawieniami autosave w localStorage,
 nie elementem eksportowanego JSON-a.
 
-### Kierunek rozwoju Label: tekst po łuku
+### Label: tekst po ścieżce Range
 
-Label w pierwszej wersji obsługuje tekst punktowy. Jego model należy jednak
-przygotować na layout textArc: tekst ma referencję do Range, promień/offset,
-kąt początkowy, rozwarcie, wyrównanie oraz kierunek. Renderer SVG użyje wtedy
-elementów path i textPath. Nie jest to wymagane do pierwszego wydania, ale
-nie należy blokować go przez zbyt sztywny model pojedynczego positionX/positionY.
+Label obsługuje layout punktowy oraz `text-arc`. Tekst po ścieżce przechowuje
+offset promienia, granice w wartościach Range, wyrównanie oraz kierunek. Renderer
+SVG używa `path` i `textPath`; kąty nie są zapisywane w Label, lecz wynikają ze
+wspólnego mapowania i geometrii Range.
 
 ### Fonty
 
@@ -1011,8 +1007,8 @@ klonowanie, typowane formularze, Import i Download (JSON), localStorage autosave
 co 3 minuty z Restore, skale liniowe, logarytmiczne i edytowalne krzywe
 nieliniowe, snapping, interaktywne nakładki edycyjne, PNG, SVG, wektorowy PDF
 w skali, mini-wiki, własne przykłady, undo/redo oraz testy jednostkowe z
-wspólnymi fabrykami. Tekst po łuku, chmura, konta, współpraca i telemetria
-powinny wejść dopiero w kolejnych iteracjach.
+wspólnymi fabrykami. Chmura, konta, współpraca i telemetria powinny wejść
+dopiero w kolejnych iteracjach.
 
 Taka kolejność daje niezależny od Windows edytor, który wykorzystuje dojrzałą
 ideę modelu warstw, ale nie dziedziczy starego formatu, UI ani zależności.

@@ -63,6 +63,7 @@ export function PropertyGroup({ children, title }: { title: string; children: Re
 
 type TextPropertyRowProps = {
   label: string;
+  maxLength?: number;
   value: string;
   onChange: (value: string) => void;
   onInteractionEnd: () => void;
@@ -70,6 +71,7 @@ type TextPropertyRowProps = {
 };
 export function TextPropertyRow({
   label,
+  maxLength,
   onChange,
   onInteractionEnd,
   onInteractionStart,
@@ -82,6 +84,7 @@ export function TextPropertyRow({
         aria-label={label}
         className="h-9 w-full rounded-md border border-border bg-app px-2 text-right text-sm text-ink outline-none focus:border-focus focus:ring-2 focus:ring-focus/30"
         id={inputId}
+        maxLength={maxLength}
         onBlur={onInteractionEnd}
         onChange={(event) => onChange(event.target.value)}
         onFocus={onInteractionStart}

@@ -277,6 +277,7 @@ function SortableLayerRow({
   const layerTypeLabelKey = {
     [LAYER_TYPE.tickScale]: "types.tickScale",
     [LAYER_TYPE.numericScale]: "types.numericScale",
+    [LAYER_TYPE.label]: "types.label",
   } as const;
   return (
     <li

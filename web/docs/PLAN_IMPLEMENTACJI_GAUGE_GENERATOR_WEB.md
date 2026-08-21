@@ -272,6 +272,11 @@ wybór `rangeId`, krzywą i minimum jeden drag uchwytu na warstwę.
 Kolejność: **Label → Arc → Clock Hand → Ellipse → Rectangle**. Dla każdej
 warstwy wykonać ten sam checklist:
 
+Label jest ukończony jako pierwszy vertical slice etapu: posiada zagnieżdżony,
+współdzielony z Numeric Scale kontrakt typografii, punktowy layout z offsetami
+w mm, wariant tekstu na ścieżce Range oraz własne overlay pozycji, obrotu i
+promienia ścieżki.
+
 1. DTO/Zod/default factory i walidacja domenowa.
 2. Klasa z `toSvg`, `getEditingOverlay`, `getHandles` i `applyHandleDrag`.
 3. Formularz z pogrupowanymi parametrami i właściwymi kontrolkami.

@@ -6,7 +6,7 @@ import {
   getEffectiveRadiusMm,
   getRadiusOffsetBounds,
 } from "@/features/layers/core/range-mapped-layer-geometry";
-import { NUMERIC_SCALE_LIMITS } from "./numeric-scale-limits";
+import { TEXT_STYLE_LIMITS } from "@/features/layers/core/text-style/text-style-limits";
 
 const MINIMUM_EFFECTIVE_RADIUS_MM = 0.5;
 
@@ -15,7 +15,7 @@ export function getNumericScaleGeometryBounds(layer: NumericScaleLayerDto, range
   return {
     ...getRadiusOffsetBounds(range, MINIMUM_EFFECTIVE_RADIUS_MM),
     maxFontSizeMm: Math.min(
-      NUMERIC_SCALE_LIMITS.fontSizeMm.max,
+      TEXT_STYLE_LIMITS.sizeMm.max,
       Math.max(MINIMUM_EFFECTIVE_RADIUS_MM, effectiveRadiusMm),
     ),
   };
@@ -36,10 +36,13 @@ export function constrainNumericScaleToRange(
   return {
     ...constrainedSequence,
     radiusOffsetMm,
-    fontSizeMm: clamp(
-      layer.fontSizeMm,
-      MINIMUM_EFFECTIVE_RADIUS_MM,
-      Math.min(NUMERIC_SCALE_LIMITS.fontSizeMm.max, effectiveRadiusMm),
-    ),
+    textStyle: {
+      ...layer.textStyle,
+      sizeMm: clamp(
+        layer.textStyle.sizeMm,
+        MINIMUM_EFFECTIVE_RADIUS_MM,
+        Math.min(TEXT_STYLE_LIMITS.sizeMm.max, effectiveRadiusMm),
+      ),
+    },
   };
 }

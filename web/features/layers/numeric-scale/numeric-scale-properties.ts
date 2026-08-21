@@ -11,28 +11,20 @@ export const NUMERIC_SCALE_NUMERIC_PROPERTY_KEYS = [
   "scaleMultiplier",
   "decimalPlaces",
   "radiusOffsetMm",
-  "fontSizeMm",
 ] as const;
 export type NumericScaleNumericPropertyKey = (typeof NUMERIC_SCALE_NUMERIC_PROPERTY_KEYS)[number];
 export type NumericScaleNumericPropertyDefinition =
   NumericPropertyDefinition<NumericScaleNumericPropertyKey> & {
-    group: "range" | "geometry" | "font";
+    group: "range" | "geometry";
     labelKey:
       | "valueStart"
       | "valueEnd"
       | "valueStep"
       | "scaleMultiplier"
       | "decimalPlaces"
-      | "radiusOffset"
-      | "fontSize";
+      | "radiusOffset";
     unit: "millimeters" | "none";
   };
-export type NumericScaleColorPropertyDefinition = {
-  key: "color";
-  labelKey: "color";
-  value: string;
-};
-
 export function getNumericScaleNumericPropertyDefinitions(
   layer: NumericScaleLayerDto,
   range: RangeDto | undefined,
@@ -74,22 +66,5 @@ export function getNumericScaleNumericPropertyDefinitions(
       max: geometry?.maxRadiusOffsetMm ?? 500,
       step: 0.1,
     },
-    {
-      key: "fontSizeMm",
-      labelKey: "fontSize",
-      group: "font",
-      unit: "millimeters",
-      snap: "distance",
-      value: layer.fontSizeMm,
-      min: NUMERIC_SCALE_LIMITS.fontSizeMm.min,
-      max: geometry?.maxFontSizeMm ?? NUMERIC_SCALE_LIMITS.fontSizeMm.max,
-      step: 0.1,
-    },
   ];
-}
-
-export function getNumericScaleColorPropertyDefinition(
-  layer: NumericScaleLayerDto,
-): NumericScaleColorPropertyDefinition {
-  return { key: "color", labelKey: "color", value: layer.color };
 }

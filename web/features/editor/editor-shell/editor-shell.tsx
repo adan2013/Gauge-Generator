@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useStatusMessage } from "@/components/providers/status-message-provider/status-message-provider";
 import { CanvasPreview } from "@/features/editor/canvas-preview/canvas-preview";
+import { constrainProjectLayersToRanges } from "@/features/layers/core/layer-registry";
 import { EditorSidebar } from "@/features/editor/editor-sidebar/editor-sidebar";
 import {
   EditorToolbar,
@@ -83,7 +84,8 @@ export function EditorShell() {
     const ranges = project.ranges.map((candidate) =>
       candidate.id === range.id ? range : candidate,
     );
-    if (!validateCandidateProject({ ...project, ranges })) return false;
+    const candidateProject = constrainProjectLayersToRanges({ ...project, ranges });
+    if (!validateCandidateProject(candidateProject)) return false;
     dispatch(projectActions.updateRange(range));
     return true;
   }

@@ -90,6 +90,15 @@ values are integers. Numeric Scale may present fractional labels by multiplying
 those canonical values with `scaleMultiplier` and formatting the result with
 `decimalPlaces`; the presentation does not alter mapping positions.
 
+Text-rendering layers share one nested `textStyle` value. It owns a structured
+font reference, physical size, color, weight, italic, and underline flags.
+Numeric Scale adds only scale-specific placement behavior; Label provides a
+discriminated point or Range-path layout. Point offsets use millimetres. Text
+paths use Range values, shared scale mapping, and shared rounded-square geometry
+rather than storing independent angles. Shared property UI and SVG attribute
+generation consume the same contract, so future font sources do not require
+parallel fields in each layer.
+
 Scale calculations are split by responsibility under `features/ranges/scale-mapping`:
 `scale-mapping.ts` maps a domain value through the selected curve and value
 direction, while `scale-sequence.ts` generates a bounded visible sequence and

@@ -7,6 +7,10 @@ import { PROJECT_VALIDATION_CODES } from "@/features/project/project-dto/project
 import { getScaleDistribution } from "@/features/ranges/scale-mapping/scale-sequence";
 import type { NumericScaleLayerDto, RangeDto } from "@/features/project/project-dto/project-dto";
 import { getNumericScaleGeometryBounds } from "./numeric-scale-constraints";
+import {
+  formatSvgNumber,
+  getTextStyleSvgAttributes,
+} from "@/features/layers/core/text-style/text-style-svg";
 
 export class NumericScaleLayer extends RangeMappedLayer<NumericScaleLayerDto> {
   constructor(dto: NumericScaleLayerDto) {
@@ -18,9 +22,9 @@ export class NumericScaleLayer extends RangeMappedLayer<NumericScaleLayerDto> {
     if (!range) return [{ path: "rangeId", code: PROJECT_VALIDATION_CODES.missingRangeReference }];
     const issues = getRangeMappedLayerValidationIssues(this.dto, range);
     const radius = getEffectiveRadiusMm(this.dto, range);
-    if (this.dto.fontSizeMm > radius)
+    if (this.dto.textStyle.sizeMm > radius)
       issues.push({
-        path: "fontSizeMm",
+        path: "textStyle.sizeMm",
         code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange,
       });
     return issues;
@@ -31,8 +35,7 @@ export class NumericScaleLayer extends RangeMappedLayer<NumericScaleLayerDto> {
     if (!range || !this.dto.visible) return "";
     const radius = getEffectiveRadiusMm(this.dto, range);
     if (radius <= 0) return "";
-    const weight = this.dto.bold ? ' font-weight="700"' : "";
-    const style = `${this.dto.italic ? ' font-style="italic"' : ""}${this.dto.underline ? ' text-decoration="underline"' : ""}`;
+    const textStyle = getTextStyleSvgAttributes(this.dto.textStyle);
     return getScaleDistribution(this.dto, range)
       .map(({ angle, value }) => {
         const placement = pointOnRoundedSquare(
@@ -44,9 +47,9 @@ export class NumericScaleLayer extends RangeMappedLayer<NumericScaleLayerDto> {
         );
         const { x, y } = placement.point;
         const transform = this.dto.rotated
-          ? ` transform=\"rotate(${format(normalAngle(placement.normal) + 90)} ${format(x)} ${format(y)})\"`
+          ? ` transform=\"rotate(${formatSvgNumber(normalAngle(placement.normal) + 90)} ${formatSvgNumber(x)} ${formatSvgNumber(y)})\"`
           : "";
-        return `<text x=\"${format(x)}\" y=\"${format(y)}\" fill=\"${this.dto.color}\" font-family=\"${this.dto.fontFamily}\" font-size=\"${format(this.dto.fontSizeMm)}\" text-anchor=\"middle\" dominant-baseline=\"middle\"${weight}${style}${transform}>${formatValue(value * this.dto.scaleMultiplier, this.dto.decimalPlaces)}</text>`;
+        return `<text x=\"${formatSvgNumber(x)}\" y=\"${formatSvgNumber(y)}\" ${textStyle} text-anchor=\"middle\" dominant-baseline=\"middle\"${transform}>${formatValue(value * this.dto.scaleMultiplier, this.dto.decimalPlaces)}</text>`;
       })
       .join("");
   }
@@ -56,9 +59,6 @@ export class NumericScaleLayer extends RangeMappedLayer<NumericScaleLayerDto> {
   }
 }
 
-function format(value: number): string {
-  return Number(value.toFixed(3)).toString();
-}
 function normalAngle(normal: { x: number; y: number }): number {
   return (Math.atan2(normal.y, normal.x) * 180) / Math.PI;
 }

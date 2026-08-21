@@ -4,6 +4,10 @@ import {
   PROJECT_VERSION,
 } from "@/features/project/project-dto/project-dto";
 import { CORNER_RADIUS_PERCENT } from "@/features/ranges/path-geometry/corner-radius-percent";
+import {
+  createPointLabelLayout,
+  createTextArcLabelLayout,
+} from "@/features/layers/label/label-layout-factories";
 import type {
   CanvasDto,
   LayerDto,
@@ -11,9 +15,23 @@ import type {
   RangeDto,
   TickScaleLayerDto,
   NumericScaleLayerDto,
+  LabelLayerDto,
+  TextStyleDto,
 } from "@/features/project/project-dto/project-dto";
 
 const DEFAULT_TIMESTAMP = "2026-01-01T00:00:00.000Z";
+
+export function createTextStyle(overrides: Partial<TextStyleDto> = {}): TextStyleDto {
+  return {
+    font: { source: "system", family: "Arial" },
+    sizeMm: 3,
+    color: "#20242B",
+    bold: false,
+    italic: false,
+    underline: false,
+    ...overrides,
+  };
+}
 
 export function createRange(overrides: Partial<RangeDto> = {}): RangeDto {
   return {
@@ -81,13 +99,25 @@ export function createNumericScaleLayer(
     scaleMultiplier: 1,
     decimalPlaces: 0,
     radiusOffsetMm: -8,
-    fontSizeMm: 3,
-    fontFamily: "Arial",
-    bold: false,
-    italic: false,
-    underline: false,
+    textStyle: createTextStyle(),
     rotated: false,
-    color: "#20242B",
+    ...overrides,
+  };
+}
+
+export function createLabelLayer(
+  rangeId: string,
+  overrides: Partial<LabelLayerDto> = {},
+): LabelLayerDto {
+  return {
+    id: crypto.randomUUID(),
+    name: "Label",
+    visible: true,
+    rangeId,
+    type: LAYER_TYPE.label,
+    text: "Label",
+    layout: createPointLabelLayout(),
+    textStyle: createTextStyle({ sizeMm: 5, bold: true }),
     ...overrides,
   };
 }
@@ -104,6 +134,8 @@ export function createLayerFromType(
       return createTickScaleLayer(rangeId, overrides);
     case LAYER_TYPE.numericScale:
       return createNumericScaleLayer(rangeId, overrides);
+    case LAYER_TYPE.label:
+      return createLabelLayer(rangeId, overrides);
     default:
       return assertNever(type);
   }
@@ -163,6 +195,22 @@ export function createDevelopmentProject(): ProjectDto {
     },
     ranges: [range],
     layers: [
+      createLabelLayer(range.id, {
+        name: "Unit label",
+        text: "bar",
+        layout: createPointLabelLayout({ offsetYMm: 16 }),
+        textStyle: createTextStyle({ sizeMm: 5, bold: true, color: "#3F3F3F" }),
+      }),
+      createLabelLayer(range.id, {
+        name: "Arc caption",
+        text: "PRESSURE",
+        layout: createTextArcLabelLayout(range, {
+          radiusOffsetMm: -20,
+          valueStart: 20,
+          valueEnd: 80,
+        }),
+        textStyle: createTextStyle({ sizeMm: 3, color: "#3F3F3F" }),
+      }),
       createTickScaleLayer(range.id, {
         name: "Major pressure ticks",
         radiusOffsetMm: 0,
@@ -190,9 +238,7 @@ export function createDevelopmentProject(): ProjectDto {
         valueStep: 10,
         scaleMultiplier: 0.1,
         radiusOffsetMm: -11,
-        fontSizeMm: 4.5,
-        bold: true,
-        color: "#3F3F3F",
+        textStyle: createTextStyle({ sizeMm: 4.5, bold: true, color: "#3F3F3F" }),
       }),
     ],
   });
