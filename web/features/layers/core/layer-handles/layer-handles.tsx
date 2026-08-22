@@ -8,7 +8,7 @@ type LayerHandlesProps = {
   canvas: CanvasDto;
   displayScale: number;
   handles: LayerHandle[];
-  getLabel: (handle: LayerHandle) => string;
+  getLabel: (handle: LayerHandle) => string | null;
   onHandleChange: (handleId: string, input: PointerInput) => void;
   onInteractionEnd: () => void;
   onInteractionStart: () => void;
@@ -70,31 +70,36 @@ export function LayerHandles({
     onInteractionEnd();
   }
 
-  return handles.map((handle) => (
-    <g key={handle.id}>
-      <circle
-        aria-label={handle.label}
-        cx={handle.point.x}
-        cy={handle.point.y}
-        fill="white"
-        onPointerDown={(event) => handlePointerDown(event, handle.id)}
-        onPointerMove={(event) => handlePointerMove(event, handle.id)}
-        onLostPointerCapture={handlePointerEnd}
-        onPointerCancel={handlePointerEnd}
-        onPointerUp={handlePointerEnd}
-        r={handleRadiusMm * displayScale}
-        stroke="currentColor"
-        strokeWidth={handleStrokeWidthMm * displayScale}
-        className="cursor-grab text-accent active:cursor-grabbing"
-      />
-      <HandleLabel
-        canvasWidth={canvas.widthMm}
-        displayScale={displayScale}
-        point={handle.point}
-        value={getLabel(handle)}
-      />
-    </g>
-  ));
+  return handles.map((handle) => {
+    const value = getLabel(handle);
+    return (
+      <g key={handle.id}>
+        <circle
+          aria-label={handle.label}
+          cx={handle.point.x}
+          cy={handle.point.y}
+          fill="white"
+          onPointerDown={(event) => handlePointerDown(event, handle.id)}
+          onPointerMove={(event) => handlePointerMove(event, handle.id)}
+          onLostPointerCapture={handlePointerEnd}
+          onPointerCancel={handlePointerEnd}
+          onPointerUp={handlePointerEnd}
+          r={handleRadiusMm * displayScale}
+          stroke="currentColor"
+          strokeWidth={handleStrokeWidthMm * displayScale}
+          className="cursor-grab text-accent active:cursor-grabbing"
+        />
+        {value !== null && (
+          <HandleLabel
+            canvasWidth={canvas.widthMm}
+            displayScale={displayScale}
+            point={handle.point}
+            value={value}
+          />
+        )}
+      </g>
+    );
+  });
 }
 
 function HandleLabel({

@@ -291,8 +291,12 @@ Ellipse i Rectangle są ukończone jako wspólny czwarty vertical slice etapu.
 Przechowują offsety i wymiary w mm, obrót `0..359`, zagnieżdżony styl
 wypełnienia i obrysu oraz współdzielone uchwyty środka, obrotu i rozmiaru.
 Uchwyt rozmiaru pracuje w lokalnych osiach obróconej figury. Rectangle dodaje
-promień narożników `0..50%`. Etap 5 jest ukończony; następnym etapem są pliki
-użytkownika, autosave i przykłady.
+promień narożników `0..50%`.
+
+Line jest ukończony jako dodatkowy vertical slice etapu. Zapisuje środek względem
+Range, długość i obrót, ale udostępnia w overlayu środek oraz oba punkty końcowe.
+Przeciągnięcie końca przelicza środek, długość i obrót. Etap 5 jest ukończony;
+następnym etapem są pliki użytkownika, autosave i przykłady.
 
 1. DTO/Zod/default factory i walidacja domenowa.
 2. Klasa z `toSvg`, `getEditingOverlay`, `getHandles` i `applyHandleDrag`.

@@ -8,6 +8,7 @@ import {
   createNeedleLayer,
   createEllipseLayer,
   createRectangleLayer,
+  createLineLayer,
   createTickScaleLayer,
 } from "@/features/project/factories/project-factories";
 import { ProjectSchema } from "./project-dto";
@@ -247,15 +248,16 @@ describe("ProjectSchema", () => {
     },
   );
 
-  it("validates Ellipse and Rectangle nested geometry and styling", () => {
+  it("validates Ellipse, Rectangle, and Line nested geometry and styling", () => {
     const range = createRange();
     const project = createProject({ ranges: [range] });
     const ellipse = createEllipseLayer(range.id, project.canvas);
     const rectangle = createRectangleLayer(range.id, project.canvas, {
       cornerRadiusPercent: 50,
     });
+    const line = createLineLayer(range.id, project.canvas);
 
-    expect(validateProject({ ...project, layers: [ellipse, rectangle] }).issues).toEqual([]);
+    expect(validateProject({ ...project, layers: [ellipse, rectangle, line] }).issues).toEqual([]);
     expect(
       validateProject({
         ...project,
@@ -265,6 +267,12 @@ describe("ProjectSchema", () => {
     expect(
       validateProject({ ...project, layers: [{ ...rectangle, cornerRadiusPercent: 50.1 }] })
         .issues[0]?.code,
+    ).toBe(PROJECT_VALIDATION_CODES.invalidSchema);
+    expect(
+      validateProject({
+        ...project,
+        layers: [{ ...line, geometry: { ...line.geometry, rotationDegrees: -1 } }],
+      }).issues[0]?.code,
     ).toBe(PROJECT_VALIDATION_CODES.invalidSchema);
   });
 

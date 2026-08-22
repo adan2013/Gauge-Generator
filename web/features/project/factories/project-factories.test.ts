@@ -33,7 +33,7 @@ describe("createDevelopmentProject", () => {
     const project = createDevelopmentProject();
 
     expect(project.ranges).toHaveLength(1);
-    expect(project.layers).toHaveLength(9);
+    expect(project.layers).toHaveLength(10);
     expect(project.layers.every((layer) => layer.rangeId === project.ranges[0].id)).toBe(true);
     expect(project.ranges[0]).toMatchObject({
       angleStart: 135,
@@ -73,6 +73,7 @@ describe("createDevelopmentProject", () => {
       "Minor pressure ticks",
       "Pressure values (bar)",
       "Unit badge",
+      "Unit divider",
       "Gauge plate",
     ]);
     expect(project.layers.find((layer) => layer.type === "ellipse")).toMatchObject({
@@ -82,6 +83,10 @@ describe("createDevelopmentProject", () => {
     expect(project.layers.find((layer) => layer.type === "rectangle")).toMatchObject({
       style: { fillColor: "#E8F1FA", borderWidthMm: 1.2 },
       cornerRadiusPercent: 5,
+    });
+    expect(project.layers.find((layer) => layer.type === "line")).toMatchObject({
+      geometry: { offsetYMm: 25, lengthMm: 20, rotationDegrees: 0 },
+      style: { color: "#1565C0", strokeWidthMm: 1, roundedEnds: true },
     });
   });
 });
@@ -118,6 +123,12 @@ describe("createLayerFromType", () => {
     expect(createLayerFromType("rectangle", range, canvas)).toMatchObject({
       rangeId: range.id,
       type: "rectangle",
+    });
+    expect(createLayerFromType("line", range, canvas)).toMatchObject({
+      rangeId: range.id,
+      type: "line",
+      geometry: { lengthMm: canvas.widthMm / 2, rotationDegrees: 0 },
+      style: { roundedEnds: false },
     });
   });
 

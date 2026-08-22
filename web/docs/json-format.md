@@ -123,6 +123,31 @@ percentage of the shorter side, so `50` equals half of the shorter side.
 New shapes default to the source Range center and half of the current canvas
 width and height.
 
+Line stores a center-based geometry while exposing both endpoints in its editor:
+
+```json
+{
+  "type": "line",
+  "rangeId": "…",
+  "geometry": {
+    "offsetXMm": 0,
+    "offsetYMm": 0,
+    "lengthMm": 60,
+    "rotationDegrees": 0
+  },
+  "style": {
+    "color": "#1565C0",
+    "strokeWidthMm": 2,
+    "roundedEnds": false
+  }
+}
+```
+
+Dragging either endpoint derives a new center, length, and rotation while the
+opposite endpoint remains fixed whenever the canvas-center constraint permits it.
+Length is limited to twice the canvas width and stroke width to half the shorter
+canvas side.
+
 Numeric Scale and Label share the same nested typography contract:
 `textStyle: { font, sizeMm, color, bold, italic, underline }`. `font` is a
 reference object rather than a bare family field; MVP supports

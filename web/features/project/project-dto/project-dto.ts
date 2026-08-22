@@ -6,6 +6,7 @@ import { LABEL_LIMITS } from "@/features/layers/label/label-limits";
 import { ARC_LIMITS } from "@/features/layers/arc/arc-limits";
 import { NEEDLE_LIMITS } from "@/features/layers/needle/needle-limits";
 import { PLANAR_SHAPE_LIMITS } from "@/features/layers/planar-shape/planar-shape-limits";
+import { LINE_LIMITS } from "@/features/layers/line/line-limits";
 import {
   SYSTEM_FONT_FAMILIES,
   TEXT_STYLE_LIMITS,
@@ -262,6 +263,32 @@ const RectangleLayerSchema = LayerBaseSchema.extend({
     .max(PLANAR_SHAPE_LIMITS.cornerRadiusPercent.max),
 }).strict();
 
+const LineLayerSchema = LayerBaseSchema.extend({
+  type: z.literal(LAYER_TYPE.line),
+  geometry: z
+    .object({
+      offsetXMm: z.number().min(LINE_LIMITS.offsetMm.min).max(LINE_LIMITS.offsetMm.max),
+      offsetYMm: z.number().min(LINE_LIMITS.offsetMm.min).max(LINE_LIMITS.offsetMm.max),
+      lengthMm: z.number().min(LINE_LIMITS.lengthMm.min).max(LINE_LIMITS.lengthMm.max),
+      rotationDegrees: z
+        .number()
+        .int()
+        .min(LINE_LIMITS.rotationDegrees.min)
+        .max(LINE_LIMITS.rotationDegrees.max),
+    })
+    .strict(),
+  style: z
+    .object({
+      color: HexColorSchema,
+      strokeWidthMm: z
+        .number()
+        .min(LINE_LIMITS.strokeWidthMm.min)
+        .max(LINE_LIMITS.strokeWidthMm.max),
+      roundedEnds: z.boolean(),
+    })
+    .strict(),
+}).strict();
+
 export const LayerSchema = z.discriminatedUnion("type", [
   TickScaleLayerSchema,
   NumericScaleLayerSchema,
@@ -270,6 +297,7 @@ export const LayerSchema = z.discriminatedUnion("type", [
   NeedleLayerSchema,
   EllipseLayerSchema,
   RectangleLayerSchema,
+  LineLayerSchema,
 ]);
 
 export const CanvasSchema = z
@@ -309,6 +337,7 @@ export type ArcLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.arc }>;
 export type NeedleLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.needle }>;
 export type EllipseLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.ellipse }>;
 export type RectangleLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.rectangle }>;
+export type LineLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.line }>;
 export type PlanarShapeLayerDto = EllipseLayerDto | RectangleLayerDto;
 export type FontReferenceDto = z.infer<typeof FontReferenceSchema>;
 export type TextStyleDto = z.infer<typeof TextStyleSchema>;

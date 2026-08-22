@@ -112,6 +112,9 @@ Keep those documents current. Put completed-stage evidence in
 - Ellipse and Rectangle share nested millimetre `geometry`, fill/border `style`,
   and the same center, rotation, and orientation-aware resize handles. Rectangle
   alone adds `cornerRadiusPercent` from zero through 50.
+- Line stores its center as millimetre offsets from the source Range plus length
+  and rotation. Its overlay exposes the center and both endpoints; endpoint
+  dragging derives the stored center, length, and rotation.
 - `Layer` is the visual-layer base abstraction; `Range` is separate. Layer
   implementations own final SVG, validation, editing overlay, handles, drag
   behavior, and numeric field definitions. Keep rendering/domain code React-free.

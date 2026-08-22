@@ -128,6 +128,12 @@ Resize dragging projects the pointer into the shape's rotated local axes before
 updating both dimensions. Both share nested `geometry` and `style`; only
 Rectangle owns corner rounding.
 
+Line follows the same center-relative positioning convention without pretending
+to have two planar dimensions. Its persisted geometry contains millimetre center
+offsets, length, and rotation. The editing overlay derives two endpoints; moving
+one endpoint recalculates the stored geometry, while a center handle translates
+the complete line.
+
 Custom points map an ascending value axis to an ascending normalized-position
 axis. The first and last positions are locked to zero and one at the domain
 boundaries, while their values remain editable. The graph editor constrains

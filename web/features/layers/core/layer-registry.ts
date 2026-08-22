@@ -5,12 +5,14 @@ import { ArcLayer } from "@/features/layers/arc/arc";
 import { NeedleLayer } from "@/features/layers/needle/needle";
 import { EllipseLayer } from "@/features/layers/ellipse/ellipse";
 import { RectangleLayer } from "@/features/layers/rectangle/rectangle";
+import { LineLayer } from "@/features/layers/line/line";
 import { constrainArcToRange } from "@/features/layers/arc/arc-constraints";
 import { constrainNeedleToRange } from "@/features/layers/needle/needle-constraints";
 import { constrainLabelToRange } from "@/features/layers/label/label-constraints";
 import { constrainNumericScaleToRange } from "@/features/layers/numeric-scale/numeric-scale-constraints";
 import { constrainTickScaleToRange } from "@/features/layers/tick-scale/tick-scale-constraints";
 import { constrainPlanarShapeToCanvas } from "@/features/layers/planar-shape/planar-shape-constraints";
+import { constrainLineToCanvas } from "@/features/layers/line/line-constraints";
 import {
   LAYER_TYPE,
   type LayerDto,
@@ -35,6 +37,8 @@ export function createLayerModel(layer: LayerDto): Layer {
       return new EllipseLayer(layer);
     case LAYER_TYPE.rectangle:
       return new RectangleLayer(layer);
+    case LAYER_TYPE.line:
+      return new LineLayer(layer);
     default:
       return assertNever(layer);
   }
@@ -70,6 +74,8 @@ function constrainLayerToRange(
     case LAYER_TYPE.ellipse:
     case LAYER_TYPE.rectangle:
       return constrainPlanarShapeToCanvas(layer, range, canvas);
+    case LAYER_TYPE.line:
+      return constrainLineToCanvas(layer, range, canvas);
     default:
       return assertNever(layer);
   }

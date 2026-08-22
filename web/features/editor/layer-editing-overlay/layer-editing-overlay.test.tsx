@@ -7,6 +7,7 @@ import {
   createNeedleLayer,
   createEllipseLayer,
   createRectangleLayer,
+  createLineLayer,
   createProject,
   createRange,
   createTickScaleLayer,
@@ -34,6 +35,7 @@ describe("LayerEditingOverlay", () => {
     ["needle", createNeedleLayer(range), "needle-editing-overlay"],
     ["ellipse", createEllipseLayer(range.id, baseProps.canvas), "ellipse-editing-overlay"],
     ["rectangle", createRectangleLayer(range.id, baseProps.canvas), "rectangle-editing-overlay"],
+    ["line", createLineLayer(range.id, baseProps.canvas), "line-editing-overlay"],
   ] as const)("selects the %s overlay from the registry", (_, layer, testId) => {
     renderEditor(
       <svg>

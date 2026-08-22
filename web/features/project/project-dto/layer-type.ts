@@ -6,6 +6,7 @@ export const LAYER_TYPE = {
   needle: "needle",
   ellipse: "ellipse",
   rectangle: "rectangle",
+  line: "line",
 } as const;
 
 export type LayerType = (typeof LAYER_TYPE)[keyof typeof LAYER_TYPE];

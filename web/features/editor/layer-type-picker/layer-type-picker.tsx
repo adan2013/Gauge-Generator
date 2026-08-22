@@ -1,6 +1,15 @@
 "use client";
 
-import { Ellipse, Gauge, Hash, LineStyle, Rainbow, RectangleHorizontal, Type } from "lucide-react";
+import {
+  Ellipse,
+  Gauge,
+  Hash,
+  LineStyle,
+  Rainbow,
+  RectangleHorizontal,
+  Slash,
+  Type,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { LAYER_TYPE, type LayerType } from "@/features/project/project-dto/project-dto";
 import { cn } from "@/lib/cn";
@@ -37,6 +46,11 @@ const LAYER_PICKER_ITEMS = {
     descriptionKey: "picker.rectangleDescription",
     icon: RectangleHorizontal,
     titleKey: "types.rectangle",
+  },
+  [LAYER_TYPE.line]: {
+    descriptionKey: "picker.lineDescription",
+    icon: Slash,
+    titleKey: "types.line",
   },
   [LAYER_TYPE.needle]: {
     descriptionKey: "picker.needleDescription",

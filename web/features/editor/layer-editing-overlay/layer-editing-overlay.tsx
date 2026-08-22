@@ -4,6 +4,7 @@ import { LabelEditingOverlay } from "@/features/layers/label/label-editing-overl
 import { ArcEditingOverlay } from "@/features/layers/arc/arc-editing-overlay/arc-editing-overlay";
 import { NeedleEditingOverlay } from "@/features/layers/needle/needle-editing-overlay/needle-editing-overlay";
 import { PlanarShapeEditingOverlay } from "@/features/layers/planar-shape/planar-shape-editing-overlay/planar-shape-editing-overlay";
+import { LineEditingOverlay } from "@/features/layers/line/line-editing-overlay/line-editing-overlay";
 import {
   LAYER_TYPE,
   type CanvasDto,
@@ -37,6 +38,8 @@ export function LayerEditingOverlay(props: LayerEditingOverlayProps) {
     case LAYER_TYPE.ellipse:
     case LAYER_TYPE.rectangle:
       return <PlanarShapeEditingOverlay {...props} layer={props.layer} />;
+    case LAYER_TYPE.line:
+      return <LineEditingOverlay {...props} layer={props.layer} />;
     default:
       return assertNever(props.layer);
   }

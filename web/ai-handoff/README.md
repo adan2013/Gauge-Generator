@@ -18,13 +18,14 @@ transactional dragging. All scale-domain values are integers; fractional Numeric
 Scale labels are presentation produced by its multiplier and decimal-place
 settings. Curve mapping, visible-sequence generation, Range-bound constraints,
 and ready-to-render angular distribution are shared outside visual layers. The
-Stage 5 is complete: Label, Arc, Needle, Ellipse, and Rectangle are implemented. Label includes shared
+Stage 5 is complete: Label, Arc, Needle, Ellipse, Rectangle, and Line are implemented. Label includes shared
 typography with Numeric Scale, millimetre point offsets, and Range-mapped text
 paths. Arc is defined only by a Range-mapped value interval, radius offset,
 stroke thickness, color, and flat or rounded end caps; it has no manual angle
 mode. Needle maps one integer value through Range, uses its center as a fixed
 pivot, and stores nested shaft and hub presentation. Ellipse and Rectangle share
-millimetre geometry, styling, and orientation-aware editing handles. The next
+millimetre geometry, styling, and orientation-aware editing handles. Line stores
+center offsets, length, and rotation while offering center and endpoint handles. The next
 stage is user files, autosave, and examples.
 
 ## Initial repository context

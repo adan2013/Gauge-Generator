@@ -21,6 +21,7 @@ import type {
   NeedleLayerDto,
   EllipseLayerDto,
   RectangleLayerDto,
+  LineLayerDto,
   TextStyleDto,
 } from "@/features/project/project-dto/project-dto";
 
@@ -224,6 +225,32 @@ export function createRectangleLayer(
   };
 }
 
+export function createLineLayer(
+  rangeId: string,
+  canvas: CanvasDto,
+  overrides: Partial<LineLayerDto> = {},
+): LineLayerDto {
+  return {
+    id: crypto.randomUUID(),
+    name: "Line",
+    visible: true,
+    rangeId,
+    type: LAYER_TYPE.line,
+    geometry: {
+      offsetXMm: 0,
+      offsetYMm: 0,
+      lengthMm: canvas.widthMm / 2,
+      rotationDegrees: 0,
+    },
+    style: {
+      color: "#1565C0",
+      strokeWidthMm: 2,
+      roundedEnds: false,
+    },
+    ...overrides,
+  };
+}
+
 type LayerFactoryOverrides = Partial<Pick<LayerDto, "id" | "name" | "visible">>;
 
 export function createLayerFromType(
@@ -247,6 +274,8 @@ export function createLayerFromType(
       return createEllipseLayer(range.id, canvas, overrides);
     case LAYER_TYPE.rectangle:
       return createRectangleLayer(range.id, canvas, overrides);
+    case LAYER_TYPE.line:
+      return createLineLayer(range.id, canvas, overrides);
     default:
       return assertNever(type);
   }
@@ -393,6 +422,16 @@ export function createDevelopmentProject(): ProjectDto {
           rotationDegrees: 0,
         },
         style: { fillColor: "#E3F2FD", borderColor: "#1565C0", borderWidthMm: 0.8 },
+      }),
+      createLineLayer(range.id, canvas, {
+        name: "Unit divider",
+        geometry: {
+          offsetXMm: 0,
+          offsetYMm: 25,
+          lengthMm: 20,
+          rotationDegrees: 0,
+        },
+        style: { color: "#1565C0", strokeWidthMm: 1, roundedEnds: true },
       }),
       createRectangleLayer(range.id, canvas, {
         name: "Gauge plate",

@@ -12,6 +12,7 @@ import { LabelPropertiesEditor } from "@/features/layers/label/label-properties-
 import { ArcPropertiesEditor } from "@/features/layers/arc/arc-properties-editor/arc-properties-editor";
 import { NeedlePropertiesEditor } from "@/features/layers/needle/needle-properties-editor/needle-properties-editor";
 import { PlanarShapePropertiesEditor } from "@/features/layers/planar-shape/planar-shape-properties-editor/planar-shape-properties-editor";
+import { LinePropertiesEditor } from "@/features/layers/line/line-properties-editor/line-properties-editor";
 import {
   LAYER_TYPE,
   type CanvasDto,
@@ -76,6 +77,8 @@ function LayerSpecificProperties(props: LayerPropertiesProps) {
     case LAYER_TYPE.ellipse:
     case LAYER_TYPE.rectangle:
       return <PlanarShapePropertiesEditor {...props} layer={props.layer} />;
+    case LAYER_TYPE.line:
+      return <LinePropertiesEditor {...props} layer={props.layer} />;
     default:
       return assertNever(props.layer);
   }
