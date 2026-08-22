@@ -28,7 +28,8 @@ final SVG representation. Every object has a stable UUID and a non-empty,
 user-editable `name`.
 
 The currently supported visual discriminants are `tick-scale`, `numeric-scale`,
-`label`, and `arc`. Tick Scale renders radial marks over the referenced Range arc
+`label`, `arc`, `needle`, `ellipse`, `rectangle`, `line`, and `icon`. Tick Scale
+renders radial marks over the referenced Range arc
 and has these required fields:
 `valueStart`, `valueEnd`, positive `valueStep`, `tickLengthMm` (at least 0.2
 mm), `tickWidthMm` (at least 0.1 mm), `radiusOffsetMm`, and hexadecimal `color`.
@@ -147,6 +148,38 @@ Dragging either endpoint derives a new center, length, and rotation while the
 opposite endpoint remains fixed whenever the canvas-center constraint permits it.
 Length is limited to twice the canvas width and stroke width to half the shorter
 canvas side.
+
+Icon stores a stable Lucide catalogue reference rather than copying library SVG
+data into the project:
+
+```json
+{
+  "type": "icon",
+  "rangeId": "…",
+  "icon": {
+    "library": "lucide",
+    "name": "gauge"
+  },
+  "geometry": {
+    "offsetXMm": 0,
+    "offsetYMm": 0,
+    "widthMm": 30,
+    "heightMm": 30,
+    "rotationDegrees": 0
+  },
+  "style": {
+    "color": "#1565C0",
+    "strokeWidthMm": 1
+  }
+}
+```
+
+The name must exist in the installed Lucide catalogue. Geometry uses the same
+center-relative, independently resizable width/height contract as planar shapes,
+which also accommodates future non-square user icons. It uses millimetres and
+keeps the icon center on the canvas.
+The renderer resolves the catalogue entry on demand and converts its normalized
+nodes into deterministic project SVG; the resolved nodes are not persisted.
 
 Numeric Scale and Label share the same nested typography contract:
 `textStyle: { font, sizeMm, color, bold, italic, underline }`. `font` is a

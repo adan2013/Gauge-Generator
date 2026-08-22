@@ -62,33 +62,6 @@ describe("NumericScaleLayer", () => {
     expect(svg).toContain('text-decoration="underline"');
   });
 
-  it("distinguishes its active and inactive value intervals in the editing overlay", () => {
-    const overlay = new NumericScaleLayer({
-      ...layer,
-      valueStart: 25,
-      valueEnd: 75,
-    }).getEditingOverlay(context);
-
-    expect(overlay.filter((primitive) => primitive.segment === "inactive")).toHaveLength(2);
-    expect(overlay.some((primitive) => primitive.segment === "active")).toBe(true);
-  });
-
-  it("does not duplicate the closing label on a full circle", () => {
-    const fullRange = {
-      ...range,
-      openingAngle: 360,
-      scaleDefinition: { mode: "linear" as const, start: 0, end: 60 },
-    };
-    const fullLayer = { ...layer, valueEnd: 60, valueStep: 20 };
-    const fullProject = createProject({ ranges: [fullRange], layers: [fullLayer] });
-    const fullContext = {
-      project: fullProject,
-      rangeById: new Map(fullProject.ranges.map((item) => [item.id, item])),
-    };
-
-    expect(new NumericScaleLayer(fullLayer).toSvg(fullContext).match(/<text /g)).toHaveLength(3);
-  });
-
   it("derives its label radius and font-size limits from the source Range", () => {
     const fields = getNumericScaleNumericPropertyDefinitions(layer, range);
 

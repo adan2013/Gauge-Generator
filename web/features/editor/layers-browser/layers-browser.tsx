@@ -283,6 +283,7 @@ function SortableLayerRow({
     [LAYER_TYPE.ellipse]: "types.ellipse",
     [LAYER_TYPE.rectangle]: "types.rectangle",
     [LAYER_TYPE.line]: "types.line",
+    [LAYER_TYPE.icon]: "types.icon",
   } as const;
   return (
     <li

@@ -1,4 +1,5 @@
 import { createLayerModel } from "@/features/layers/core/layer-registry";
+import { useLucideIconDefinitions } from "@/features/layers/icon/use-lucide-icon-definitions";
 import type { LayerDto, ProjectDto } from "@/features/project/project-dto/project-dto";
 
 type LayerThumbnailProps = {
@@ -7,8 +8,10 @@ type LayerThumbnailProps = {
 };
 
 export function LayerThumbnail({ layer, project }: LayerThumbnailProps) {
+  const iconDefinitions = useLucideIconDefinitions(layer.type === "icon" ? [layer.icon.name] : []);
   const model = createLayerModel(layer);
   const svg = model.toSvg({
+    iconDefinitions,
     project,
     rangeById: new Map(project.ranges.map((range) => [range.id, range])),
   });

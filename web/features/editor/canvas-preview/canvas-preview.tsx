@@ -5,7 +5,9 @@ import { BookOpen, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ActionButton } from "@/components/atoms/action-button/action-button";
 import { LayerEditingOverlay } from "@/features/editor/layer-editing-overlay/layer-editing-overlay";
+import type { RenderContext } from "@/features/layers/core/layer";
 import { createLayerModel } from "@/features/layers/core/layer-registry";
+import { useLucideIconDefinitions } from "@/features/layers/icon/use-lucide-icon-definitions";
 import { RangeEditingOverlay } from "@/features/ranges/range/range-editing-overlay/range-editing-overlay";
 import type { LayerDto, ProjectDto, RangeDto } from "@/features/project/project-dto/project-dto";
 import type { LayerPreviewModifiers } from "@/store/editor-slice";
@@ -51,7 +53,11 @@ export function CanvasPreview({
   const { canvas } = project;
   const { heightMm: canvasHeight, widthMm: canvasWidth } = canvas;
   const hasRange = project.ranges.length > 0;
+  const iconDefinitions = useLucideIconDefinitions(
+    project.layers.flatMap((layer) => (layer.type === "icon" ? [layer.icon.name] : [])),
+  );
   const renderContext = {
+    iconDefinitions,
     project,
     rangeById: new Map(project.ranges.map((range) => [range.id, range])),
   };
@@ -225,7 +231,7 @@ function VisualLayers({
   hoveredLayerId: string | null;
   layers: LayerDto[];
   previewModifiers: LayerPreviewModifiers;
-  renderContext: { project: ProjectDto; rangeById: ReadonlyMap<string, RangeDto> };
+  renderContext: RenderContext;
   selectedLayerId: string | undefined;
   onSelectLayer: (layerId: string) => void;
 }) {

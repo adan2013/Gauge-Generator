@@ -295,8 +295,15 @@ promień narożników `0..50%`.
 
 Line jest ukończony jako dodatkowy vertical slice etapu. Zapisuje środek względem
 Range, długość i obrót, ale udostępnia w overlayu środek oraz oba punkty końcowe.
-Przeciągnięcie końca przelicza środek, długość i obrót. Etap 5 jest ukończony;
-następnym etapem są pliki użytkownika, autosave i przykłady.
+Przeciągnięcie końca przelicza środek, długość i obrót.
+
+Icon jest ukończony jako dodatkowy vertical slice etapu. Projekt przechowuje
+wyłącznie nazwę z katalogu Lucide, geometrię i styl. Panel udostępnia wyszukiwarkę
+pełnego katalogu, a współdzielony resolver ładuje i normalizuje węzły SVG na
+potrzeby podglądu oraz miniatury. Icon współdzieli z Ellipse i Rectangle planar
+geometry, overlay i niezależne wymiary `widthMm`/`heightMm`, przygotowane także
+pod przyszłe niekwadratowe zasoby użytkownika. Etap 5 jest ukończony; następnym
+etapem są pliki użytkownika, autosave i przykłady.
 
 1. DTO/Zod/default factory i walidacja domenowa.
 2. Klasa z `toSvg`, `getEditingOverlay`, `getHandles` i `applyHandleDrag`.

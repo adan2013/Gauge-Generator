@@ -33,7 +33,7 @@ describe("createDevelopmentProject", () => {
     const project = createDevelopmentProject();
 
     expect(project.ranges).toHaveLength(1);
-    expect(project.layers).toHaveLength(10);
+    expect(project.layers).toHaveLength(11);
     expect(project.layers.every((layer) => layer.rangeId === project.ranges[0].id)).toBe(true);
     expect(project.ranges[0]).toMatchObject({
       angleStart: 135,
@@ -73,6 +73,7 @@ describe("createDevelopmentProject", () => {
       "Minor pressure ticks",
       "Pressure values (bar)",
       "Unit badge",
+      "Pressure symbol",
       "Unit divider",
       "Gauge plate",
     ]);
@@ -87,6 +88,10 @@ describe("createDevelopmentProject", () => {
     expect(project.layers.find((layer) => layer.type === "line")).toMatchObject({
       geometry: { offsetYMm: 25, lengthMm: 20, rotationDegrees: 0 },
       style: { color: "#1565C0", strokeWidthMm: 1, roundedEnds: true },
+    });
+    expect(project.layers.find((layer) => layer.type === "icon")).toMatchObject({
+      icon: { library: "lucide", name: "gauge" },
+      geometry: { offsetXMm: 28, offsetYMm: 25, widthMm: 12, heightMm: 12 },
     });
   });
 });
@@ -129,6 +134,11 @@ describe("createLayerFromType", () => {
       type: "line",
       geometry: { lengthMm: canvas.widthMm / 2, rotationDegrees: 0 },
       style: { roundedEnds: false },
+    });
+    expect(createLayerFromType("icon", range, canvas)).toMatchObject({
+      rangeId: range.id,
+      type: "icon",
+      icon: { library: "lucide", name: "gauge" },
     });
   });
 

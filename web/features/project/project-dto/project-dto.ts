@@ -6,7 +6,9 @@ import { LABEL_LIMITS } from "@/features/layers/label/label-limits";
 import { ARC_LIMITS } from "@/features/layers/arc/arc-limits";
 import { NEEDLE_LIMITS } from "@/features/layers/needle/needle-limits";
 import { PLANAR_SHAPE_LIMITS } from "@/features/layers/planar-shape/planar-shape-limits";
+import { PLANAR_GEOMETRY_LIMITS } from "@/features/layers/planar-geometry/planar-geometry-limits";
 import { LINE_LIMITS } from "@/features/layers/line/line-limits";
+import { ICON_LIMITS } from "@/features/layers/icon/icon-limits";
 import {
   SYSTEM_FONT_FAMILIES,
   TEXT_STYLE_LIMITS,
@@ -210,29 +212,29 @@ const NeedleLayerSchema = LayerBaseSchema.extend({
     .strict(),
 }).strict();
 
-const PlanarShapeGeometrySchema = z
+const PlanarGeometrySchema = z
   .object({
     offsetXMm: z
       .number()
-      .min(PLANAR_SHAPE_LIMITS.offsetMm.min)
-      .max(PLANAR_SHAPE_LIMITS.offsetMm.max),
+      .min(PLANAR_GEOMETRY_LIMITS.offsetMm.min)
+      .max(PLANAR_GEOMETRY_LIMITS.offsetMm.max),
     offsetYMm: z
       .number()
-      .min(PLANAR_SHAPE_LIMITS.offsetMm.min)
-      .max(PLANAR_SHAPE_LIMITS.offsetMm.max),
+      .min(PLANAR_GEOMETRY_LIMITS.offsetMm.min)
+      .max(PLANAR_GEOMETRY_LIMITS.offsetMm.max),
     widthMm: z
       .number()
-      .min(PLANAR_SHAPE_LIMITS.dimensionMm.min)
-      .max(PLANAR_SHAPE_LIMITS.dimensionMm.max),
+      .min(PLANAR_GEOMETRY_LIMITS.dimensionMm.min)
+      .max(PLANAR_GEOMETRY_LIMITS.dimensionMm.max),
     heightMm: z
       .number()
-      .min(PLANAR_SHAPE_LIMITS.dimensionMm.min)
-      .max(PLANAR_SHAPE_LIMITS.dimensionMm.max),
+      .min(PLANAR_GEOMETRY_LIMITS.dimensionMm.min)
+      .max(PLANAR_GEOMETRY_LIMITS.dimensionMm.max),
     rotationDegrees: z
       .number()
       .int()
-      .min(PLANAR_SHAPE_LIMITS.rotationDegrees.min)
-      .max(PLANAR_SHAPE_LIMITS.rotationDegrees.max),
+      .min(PLANAR_GEOMETRY_LIMITS.rotationDegrees.min)
+      .max(PLANAR_GEOMETRY_LIMITS.rotationDegrees.max),
   })
   .strict();
 
@@ -249,13 +251,13 @@ const PlanarShapeStyleSchema = z
 
 const EllipseLayerSchema = LayerBaseSchema.extend({
   type: z.literal(LAYER_TYPE.ellipse),
-  geometry: PlanarShapeGeometrySchema,
+  geometry: PlanarGeometrySchema,
   style: PlanarShapeStyleSchema,
 }).strict();
 
 const RectangleLayerSchema = LayerBaseSchema.extend({
   type: z.literal(LAYER_TYPE.rectangle),
-  geometry: PlanarShapeGeometrySchema,
+  geometry: PlanarGeometrySchema,
   style: PlanarShapeStyleSchema,
   cornerRadiusPercent: z
     .number()
@@ -289,6 +291,30 @@ const LineLayerSchema = LayerBaseSchema.extend({
     .strict(),
 }).strict();
 
+const IconLayerSchema = LayerBaseSchema.extend({
+  type: z.literal(LAYER_TYPE.icon),
+  icon: z
+    .object({
+      library: z.literal("lucide"),
+      name: z
+        .string()
+        .regex(/^[a-z0-9-]+$/)
+        .min(1)
+        .max(80),
+    })
+    .strict(),
+  geometry: PlanarGeometrySchema,
+  style: z
+    .object({
+      color: HexColorSchema,
+      strokeWidthMm: z
+        .number()
+        .min(ICON_LIMITS.strokeWidthMm.min)
+        .max(ICON_LIMITS.strokeWidthMm.max),
+    })
+    .strict(),
+}).strict();
+
 export const LayerSchema = z.discriminatedUnion("type", [
   TickScaleLayerSchema,
   NumericScaleLayerSchema,
@@ -298,6 +324,7 @@ export const LayerSchema = z.discriminatedUnion("type", [
   EllipseLayerSchema,
   RectangleLayerSchema,
   LineLayerSchema,
+  IconLayerSchema,
 ]);
 
 export const CanvasSchema = z
@@ -338,7 +365,9 @@ export type NeedleLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.needle 
 export type EllipseLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.ellipse }>;
 export type RectangleLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.rectangle }>;
 export type LineLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.line }>;
+export type IconLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.icon }>;
 export type PlanarShapeLayerDto = EllipseLayerDto | RectangleLayerDto;
+export type PlanarGeometryLayerDto = PlanarShapeLayerDto | IconLayerDto;
 export type FontReferenceDto = z.infer<typeof FontReferenceSchema>;
 export type TextStyleDto = z.infer<typeof TextStyleSchema>;
 export type CanvasDto = z.infer<typeof CanvasSchema>;

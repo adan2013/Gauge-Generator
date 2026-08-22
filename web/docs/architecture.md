@@ -134,6 +134,21 @@ offsets, length, and rotation. The editing overlay derives two endpoints; moving
 one endpoint recalculates the stored geometry, while a center handle translates
 the complete line.
 
+Icon is a resource-backed layer. Project JSON stores only
+`{ library: "lucide", name }`, geometry, and presentation. A shared asynchronous
+resolver loads Lucide's `__iconNode` for requested names, removes React-only
+attributes, accepts only the supported SVG element/attribute allowlist, and
+caches the normalized definition. Preview and thumbnails supply those resolved
+definitions through `RenderContext`; `IconLayer` remains synchronous,
+deterministic, and React-free like every other domain renderer.
+`PlanarGeometryLayer` owns center-relative offsets, independent width and height,
+rotation, geometry validation, handle dragging, and the shared editing overlay.
+`PlanarShapeLayer` extends it only for Ellipse and Rectangle, adding their shared
+border-width validation. `IconLayer` extends `PlanarGeometryLayer` directly, so
+it reuses planar mechanics without depending on fill or border semantics. Its
+independent `widthMm` and `heightMm` support non-square icons; only catalogue
+validation, stroke styling, and SVG-node rendering remain Icon-owned.
+
 Custom points map an ascending value axis to an ascending normalized-position
 axis. The first and last positions are locked to zero and one at the domain
 boundaries, while their values remain editable. The graph editor constrains

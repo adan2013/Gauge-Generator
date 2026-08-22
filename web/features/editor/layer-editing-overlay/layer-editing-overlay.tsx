@@ -3,7 +3,7 @@ import { TickScaleEditingOverlay } from "@/features/layers/tick-scale/tick-scale
 import { LabelEditingOverlay } from "@/features/layers/label/label-editing-overlay/label-editing-overlay";
 import { ArcEditingOverlay } from "@/features/layers/arc/arc-editing-overlay/arc-editing-overlay";
 import { NeedleEditingOverlay } from "@/features/layers/needle/needle-editing-overlay/needle-editing-overlay";
-import { PlanarShapeEditingOverlay } from "@/features/layers/planar-shape/planar-shape-editing-overlay/planar-shape-editing-overlay";
+import { PlanarGeometryEditingOverlay } from "@/features/layers/planar-geometry/planar-geometry-editing-overlay/planar-geometry-editing-overlay";
 import { LineEditingOverlay } from "@/features/layers/line/line-editing-overlay/line-editing-overlay";
 import {
   LAYER_TYPE,
@@ -37,7 +37,8 @@ export function LayerEditingOverlay(props: LayerEditingOverlayProps) {
       return <NeedleEditingOverlay {...props} layer={props.layer} />;
     case LAYER_TYPE.ellipse:
     case LAYER_TYPE.rectangle:
-      return <PlanarShapeEditingOverlay {...props} layer={props.layer} />;
+    case LAYER_TYPE.icon:
+      return <PlanarGeometryEditingOverlay {...props} layer={props.layer} />;
     case LAYER_TYPE.line:
       return <LineEditingOverlay {...props} layer={props.layer} />;
     default:

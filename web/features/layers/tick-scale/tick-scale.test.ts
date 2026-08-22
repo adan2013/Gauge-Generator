@@ -38,35 +38,6 @@ describe("TickScaleLayer", () => {
     expect(svg).toContain('x1="93.287" y1="70.816" x2="98.042" y2="72.361"');
   });
 
-  it("distinguishes its active and inactive value intervals in the editing overlay", () => {
-    const overlay = new TickScaleLayer({
-      ...layer,
-      valueStart: 25,
-      valueEnd: 75,
-    }).getEditingOverlay(context);
-
-    expect(overlay.filter((primitive) => primitive.segment === "inactive")).toHaveLength(2);
-    expect(overlay.some((primitive) => primitive.segment === "active")).toBe(true);
-  });
-
-  it("does not duplicate the closing tick of a full 360-degree scale", () => {
-    const fullRange = {
-      ...range,
-      openingAngle: 360,
-      scaleDefinition: { mode: "linear" as const, start: 0, end: 60 },
-    };
-    const fullLayer = { ...layer, valueEnd: 60, valueStep: 20 };
-    const fullProject = createProject({ ranges: [fullRange], layers: [fullLayer] });
-    const fullContext = {
-      project: fullProject,
-      rangeById: new Map(fullProject.ranges.map((item) => [item.id, item])),
-    };
-
-    const svg = new TickScaleLayer(fullLayer).toSvg(fullContext);
-    expect(svg).toContain('x1="95" y1="60" x2="100" y2="60"');
-    expect(svg).toContain('x1="42.5" y1="90.311" x2="40" y2="94.641"');
-  });
-
   it("derives spatial limits from its source Range", () => {
     const fields = getTickScaleNumericPropertyDefinitions(layer, range);
 

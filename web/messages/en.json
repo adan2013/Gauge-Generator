@@ -95,15 +95,7 @@
       "picker": {
         "eyebrow": "New layer",
         "title": "Choose a layer type",
-        "description": "Select the visual element you want to add to this gauge.",
-        "tickScaleDescription": "Draw radial tick marks using the selected Range.",
-        "numericScaleDescription": "Draw value labels using the selected Range.",
-        "labelDescription": "Add regular labels or text that follows the selected Range path.",
-        "arcDescription": "Draw a styled arc between values on the selected Range.",
-        "needleDescription": "Point to a value using the selected Range mapping.",
-        "ellipseDescription": "Add a positioned, sized, and rotated ellipse.",
-        "rectangleDescription": "Add a rectangle with optional rounded corners.",
-        "lineDescription": "Add a positioned line with editable endpoints."
+        "description": "Select the visual element you want to add to this gauge."
       },
       "types": {
         "tickScale": "Tick scale",
@@ -113,7 +105,8 @@
         "needle": "Needle",
         "ellipse": "Ellipse",
         "rectangle": "Rectangle",
-        "line": "Line"
+        "line": "Line",
+        "icon": "Icon"
       },
       "editLayer": "Edit {name}",
       "deleteLayer": "Delete {name}",
@@ -367,18 +360,7 @@
       "borderWidth": "Border width",
       "cornerRadius": "Corner radius",
       "fillColor": "Background color",
-      "borderColor": "Border color",
-      "overlayAriaLabel": "Shape editing overlay",
-      "handles": {
-        "position": "Move shape",
-        "rotation": "Rotate shape",
-        "size": "Resize shape"
-      },
-      "handleValues": {
-        "position": "{x}; {y} mm",
-        "rotation": "{value}°",
-        "size": "{width} × {height} mm"
-      }
+      "borderColor": "Border color"
     },
     "line": {
       "groups": {
@@ -401,6 +383,41 @@
       },
       "handleValues": {
         "position": "{x}; {y} mm"
+      }
+    },
+    "icon": {
+      "groups": {
+        "icon": "Icon",
+        "position": "Position",
+        "geometry": "Geometry",
+        "appearance": "Appearance"
+      },
+      "browser": {
+        "searchAriaLabel": "Search Lucide icons",
+        "searchPlaceholder": "Search icons by name",
+        "emptyHint": "Type in the search field to browse icon examples.",
+        "noResults": "No matching icons found.",
+        "poweredBy": "Powered by Lucide"
+      },
+      "offsetX": "Horizontal offset",
+      "offsetY": "Vertical offset",
+      "width": "Width",
+      "height": "Height",
+      "rotation": "Rotation",
+      "strokeWidth": "Stroke width",
+      "color": "Color"
+    },
+    "planarGeometryOverlay": {
+      "overlayAriaLabel": "Layer geometry editing overlay",
+      "handles": {
+        "position": "Move layer",
+        "rotation": "Rotate layer",
+        "size": "Resize layer"
+      },
+      "handleValues": {
+        "position": "{x}; {y} mm",
+        "rotation": "{value}°",
+        "size": "{width} × {height} mm"
       }
     },
     "textStyle": {

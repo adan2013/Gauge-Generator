@@ -115,6 +115,12 @@ Keep those documents current. Put completed-stage evidence in
 - Line stores its center as millimetre offsets from the source Range plus length
   and rotation. Its overlay exposes the center and both endpoints; endpoint
   dragging derives the stored center, length, and rotation.
+- Icon persists only a Lucide catalogue name plus planar millimetre geometry and
+  style. `PlanarGeometryLayer` owns the independent width/height, center, rotation,
+  resize, and overlay mechanics shared with Ellipse and Rectangle. `PlanarShapeLayer`
+  adds fill and border semantics only for those two shapes. Lucide nodes are loaded on demand,
+  normalized into a safe SVG definition, and supplied to the otherwise
+  synchronous, React-free layer renderer.
 - `Layer` is the visual-layer base abstraction; `Range` is separate. Layer
   implementations own final SVG, validation, editing overlay, handles, drag
   behavior, and numeric field definitions. Keep rendering/domain code React-free.
@@ -185,8 +191,8 @@ Keep those documents current. Put completed-stage evidence in
   suffix. It is a project mutation and therefore participates in Undo/Redo.
 - The initial store state in `NODE_ENV=development` uses a deterministic
   logarithmic pressure-gauge workbench (`1..10 bar`) with high-value detail and
-  representative Arc, Needle, Label, Ellipse, Rectangle, Tick Scale, and Numeric
-  Scale layers. Production
+  representative Arc, Needle, Label, Ellipse, Rectangle, Line, Icon, Tick Scale,
+  and Numeric Scale layers. Production
   and explicit New project flows remain empty.
 
 ## Quality and future slices

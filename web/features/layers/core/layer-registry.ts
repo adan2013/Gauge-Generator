@@ -6,6 +6,7 @@ import { NeedleLayer } from "@/features/layers/needle/needle";
 import { EllipseLayer } from "@/features/layers/ellipse/ellipse";
 import { RectangleLayer } from "@/features/layers/rectangle/rectangle";
 import { LineLayer } from "@/features/layers/line/line";
+import { IconLayer } from "@/features/layers/icon/icon";
 import { constrainArcToRange } from "@/features/layers/arc/arc-constraints";
 import { constrainNeedleToRange } from "@/features/layers/needle/needle-constraints";
 import { constrainLabelToRange } from "@/features/layers/label/label-constraints";
@@ -13,14 +14,18 @@ import { constrainNumericScaleToRange } from "@/features/layers/numeric-scale/nu
 import { constrainTickScaleToRange } from "@/features/layers/tick-scale/tick-scale-constraints";
 import { constrainPlanarShapeToCanvas } from "@/features/layers/planar-shape/planar-shape-constraints";
 import { constrainLineToCanvas } from "@/features/layers/line/line-constraints";
+import { constrainIconToCanvas } from "@/features/layers/icon/icon-constraints";
 import {
   LAYER_TYPE,
   type LayerDto,
+  type PlanarGeometryLayerDto,
   type ProjectDto,
   type RangeDto,
 } from "@/features/project/project-dto/project-dto";
 import type { Layer } from "./layer";
 
+export function createLayerModel(layer: PlanarGeometryLayerDto): Layer<PlanarGeometryLayerDto>;
+export function createLayerModel(layer: LayerDto): Layer;
 export function createLayerModel(layer: LayerDto): Layer {
   switch (layer.type) {
     case LAYER_TYPE.tickScale:
@@ -39,6 +44,8 @@ export function createLayerModel(layer: LayerDto): Layer {
       return new RectangleLayer(layer);
     case LAYER_TYPE.line:
       return new LineLayer(layer);
+    case LAYER_TYPE.icon:
+      return new IconLayer(layer);
     default:
       return assertNever(layer);
   }
@@ -76,6 +83,8 @@ function constrainLayerToRange(
       return constrainPlanarShapeToCanvas(layer, range, canvas);
     case LAYER_TYPE.line:
       return constrainLineToCanvas(layer, range, canvas);
+    case LAYER_TYPE.icon:
+      return constrainIconToCanvas(layer, range, canvas);
     default:
       return assertNever(layer);
   }

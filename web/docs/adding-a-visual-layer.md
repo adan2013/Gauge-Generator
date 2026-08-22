@@ -213,6 +213,12 @@ export class ExampleLayer extends Layer<ExampleLayerDto> {
 Thumbnail nie wymaga osobnego renderera. `LayerThumbnail` wywołuje tę samą metodę
 `toSvg()`, więc podgląd i miniatura używają jednego źródła prawdy.
 
+Jeśli SVG zależy od zewnętrznego katalogu zasobów, w JSON zapisz stabilną
+referencję, a nie skopiowaną geometrię biblioteki. Zasób rozwiąż przed wywołaniem
+`toSvg()` i przekaż przez typowany `RenderContext`. Sam model warstwy pozostaje
+synchroniczny i niezależny od Reacta. Warstwa Icon pokazuje ten wariant dla
+katalogu Lucide.
+
 ### Wariant `RangeMappedLayer`
 
 Jeśli warstwa spełnia wspólny kontrakt Range, implementacja może być krótsza:

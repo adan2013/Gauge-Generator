@@ -14,6 +14,7 @@
 | Arc             | tylko `valueStart`/`valueEnd` mapowane przez Range; bez ręcznych kątów; grubość w mm i płaskie albo zaokrąglone końce SVG                         |
 | Needle          | jedna wartość mapowana przez Range; pivot w środku Range; zagnieżdżone `shaft`/`hub`; bez ręcznego kąta i własnej pozycji                         |
 | Planar shapes   | Ellipse i Rectangle współdzielą geometrię w mm, styl fill/border oraz uchwyty środka, obrotu i rozmiaru; Rectangle dodaje corner radius 0–50%     |
+| Icon            | zapisuje nazwę Lucide zamiast SVG; ma wspólną planar geometry z Ellipse/Rectangle (`widthMm`/`heightMm`), a resolver ładuje i cache'uje węzły     |
 | Nazewnictwo     | każda visual layer i każdy Range mają wymaganą, edytowalną nazwę; nazwa warstwy pochodzi z bazowego modelu `Layer`, a Range ma własne pole `name` |
 | Walidacja       | domena i Zod zwracają stabilne kody oraz ścieżki błędów, bez angielskich komunikatów; interfejs tłumaczy kod przez `en.json`                      |
 | Historia        | Redux, maks. 50 undo i 50 redo; drag = jedna operacja                                                                                             |

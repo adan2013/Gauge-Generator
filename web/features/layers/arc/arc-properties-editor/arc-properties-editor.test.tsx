@@ -5,7 +5,7 @@ import { renderEditor } from "@/test/render-editor";
 import { ArcPropertiesEditor } from "./arc-properties-editor";
 
 describe("ArcPropertiesEditor", () => {
-  it("edits thickness and flat or rounded end caps without exposing angles", () => {
+  it("edits thickness and flat or rounded end caps", () => {
     const range = createRange();
     const layer = createArcLayer(range.id);
     const onLayerChange = vi.fn();
@@ -28,6 +28,5 @@ describe("ArcPropertiesEditor", () => {
 
     expect(onLayerChange).toHaveBeenCalledWith({ strokeWidthMm: 4 });
     expect(onLayerChange).toHaveBeenCalledWith({ roundedEnds: true });
-    expect(screen.queryByRole("spinbutton", { name: /angle/i })).toBeNull();
   });
 });

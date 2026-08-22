@@ -5,9 +5,9 @@ import {
   createRange,
 } from "@/features/project/factories/project-factories";
 import { EllipseLayer } from "@/features/layers/ellipse/ellipse";
-import { getPlanarShapeGeometry } from "./planar-shape";
+import { getPlanarGeometry } from "./planar-geometry";
 
-describe("PlanarShapeLayer", () => {
+describe("PlanarGeometryLayer", () => {
   const range = createRange();
   const project = createProject({ ranges: [range] });
   const layer = createEllipseLayer(range.id, project.canvas, {
@@ -22,7 +22,7 @@ describe("PlanarShapeLayer", () => {
   const context = { project, rangeById: new Map([[range.id, range]]) };
 
   it("places center, rotation, and bottom-right resize handles in rotated local axes", () => {
-    expect(getPlanarShapeGeometry(layer, range)).toMatchObject({
+    expect(getPlanarGeometry(layer, range)).toMatchObject({
       center: { x: 60, y: 60 },
       rotationGuideStart: { x: 60, y: 60 },
       rotationHandle: { x: 72, y: 60 },
@@ -41,7 +41,7 @@ describe("PlanarShapeLayer", () => {
       geometry: { ...layer.geometry, widthMm: 100, heightMm: 100 },
     };
 
-    expect(getPlanarShapeGeometry(tallerLayer, range).rotationHandle).toEqual({ x: 72, y: 60 });
+    expect(getPlanarGeometry(tallerLayer, range).rotationHandle).toEqual({ x: 72, y: 60 });
   });
 
   it("resizes in local axes after rotation", () => {
@@ -85,7 +85,7 @@ describe("PlanarShapeLayer", () => {
   it("draws only the rotation guide from the top edge to its handle", () => {
     expect(new EllipseLayer(layer).getEditingOverlay(context)).toEqual([
       expect.objectContaining({
-        id: "shape-rotation-guide",
+        id: "planar-rotation-guide",
         start: expect.objectContaining({ x: 60, y: 60 }),
         end: expect.objectContaining({ x: 72, y: 60 }),
       }),

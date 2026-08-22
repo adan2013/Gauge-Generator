@@ -4,31 +4,27 @@ import { useTranslations } from "next-intl";
 import { EditingOverlayGeometry } from "@/features/layers/core/editing-overlay-geometry/editing-overlay-geometry";
 import { OVERLAY_INTEGER_INCREMENT } from "@/features/layers/core/layer";
 import { LayerHandles } from "@/features/layers/core/layer-handles/layer-handles";
-import { EllipseLayer } from "@/features/layers/ellipse/ellipse";
-import { RectangleLayer } from "@/features/layers/rectangle/rectangle";
+import { createLayerModel } from "@/features/layers/core/layer-registry";
 import type {
   CanvasDto,
-  PlanarShapeLayerDto,
+  PlanarGeometryLayerDto,
   ProjectDto,
 } from "@/features/project/project-dto/project-dto";
 
-type PlanarShapeEditingOverlayProps = {
+type PlanarGeometryEditingOverlayProps = {
   canvas: CanvasDto;
   displayScale: number;
-  layer: PlanarShapeLayerDto;
+  layer: PlanarGeometryLayerDto;
   onInteractionEnd: () => void;
   onInteractionStart: () => void;
-  onLayerChange: (layer: PlanarShapeLayerDto) => void;
+  onLayerChange: (layer: PlanarGeometryLayerDto) => void;
   project: ProjectDto;
   snapping: { enabled: boolean; distanceMm: number; angleDegrees: number };
 };
 
-export function PlanarShapeEditingOverlay(props: PlanarShapeEditingOverlayProps) {
-  const t = useTranslations("Editor.shape");
-  const model =
-    props.layer.type === "ellipse"
-      ? new EllipseLayer(props.layer)
-      : new RectangleLayer(props.layer);
+export function PlanarGeometryEditingOverlay(props: PlanarGeometryEditingOverlayProps) {
+  const t = useTranslations("Editor.planarGeometryOverlay");
+  const model = createLayerModel(props.layer);
   const context = {
     project: props.project,
     rangeById: new Map(props.project.ranges.map((range) => [range.id, range])),

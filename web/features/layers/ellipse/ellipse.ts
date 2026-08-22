@@ -1,9 +1,7 @@
 import type { RenderContext } from "@/features/layers/core/layer";
 import { formatSvgNumber } from "@/features/layers/core/text-style/text-style-svg";
-import {
-  getPlanarShapeGeometry,
-  PlanarShapeLayer,
-} from "@/features/layers/planar-shape/planar-shape";
+import { getPlanarGeometry } from "@/features/layers/planar-geometry/planar-geometry";
+import { PlanarShapeLayer } from "@/features/layers/planar-shape/planar-shape";
 import type { EllipseLayerDto } from "@/features/project/project-dto/project-dto";
 
 export class EllipseLayer extends PlanarShapeLayer<EllipseLayerDto> {
@@ -14,7 +12,7 @@ export class EllipseLayer extends PlanarShapeLayer<EllipseLayerDto> {
   toSvg(context: RenderContext): string {
     const range = context.rangeById.get(this.dto.rangeId);
     if (!range || !this.dto.visible) return "";
-    const { center } = getPlanarShapeGeometry(this.dto, range);
+    const { center } = getPlanarGeometry(this.dto, range);
     const transform = this.dto.geometry.rotationDegrees
       ? ` transform="rotate(${this.dto.geometry.rotationDegrees} ${formatSvgNumber(center.x)} ${formatSvgNumber(center.y)})"`
       : "";

@@ -1,6 +1,7 @@
 import type { LayerDto, ProjectDto, RangeDto } from "@/features/project/project-dto/project-dto";
 import type { ProjectValidationCode } from "@/features/project/project-dto/project-validation-codes";
 import type { EditingOverlayPrimitive } from "@/features/layers/core/editing-overlay-geometry";
+import type { SvgIconDefinition } from "@/features/layers/icon/lucide-icon-resources";
 
 export type CanvasPointMm = { x: number; y: number };
 export type ValidationIssue = { path: string; code: ProjectValidationCode };
@@ -13,7 +14,11 @@ export type NumericPropertyDefinition<TKey extends string = string> = {
   step: number;
   value: number;
 };
-export type RenderContext = { project: ProjectDto; rangeById: ReadonlyMap<string, RangeDto> };
+export type RenderContext = {
+  iconDefinitions?: ReadonlyMap<string, SvgIconDefinition>;
+  project: ProjectDto;
+  rangeById: ReadonlyMap<string, RangeDto>;
+};
 export type EditingOverlayContext = RenderContext;
 export const OVERLAY_INTEGER_INCREMENT = 1;
 export type PointerInput = {

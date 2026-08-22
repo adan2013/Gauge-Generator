@@ -22,6 +22,7 @@ import type {
   EllipseLayerDto,
   RectangleLayerDto,
   LineLayerDto,
+  IconLayerDto,
   TextStyleDto,
 } from "@/features/project/project-dto/project-dto";
 
@@ -180,7 +181,7 @@ const DEFAULT_SHAPE_STYLE = {
   borderWidthMm: 0,
 } as const;
 
-function createPlanarShapeGeometry(canvas: CanvasDto) {
+function createPlanarGeometry(canvas: CanvasDto) {
   return {
     offsetXMm: 0,
     offsetYMm: 0,
@@ -201,7 +202,7 @@ export function createEllipseLayer(
     visible: true,
     rangeId,
     type: LAYER_TYPE.ellipse,
-    geometry: createPlanarShapeGeometry(canvas),
+    geometry: createPlanarGeometry(canvas),
     style: { ...DEFAULT_SHAPE_STYLE },
     ...overrides,
   };
@@ -218,7 +219,7 @@ export function createRectangleLayer(
     visible: true,
     rangeId,
     type: LAYER_TYPE.rectangle,
-    geometry: createPlanarShapeGeometry(canvas),
+    geometry: createPlanarGeometry(canvas),
     style: { ...DEFAULT_SHAPE_STYLE },
     cornerRadiusPercent: 0,
     ...overrides,
@@ -251,6 +252,30 @@ export function createLineLayer(
   };
 }
 
+export function createIconLayer(
+  rangeId: string,
+  canvas: CanvasDto,
+  overrides: Partial<IconLayerDto> = {},
+): IconLayerDto {
+  return {
+    id: crypto.randomUUID(),
+    name: "Icon",
+    visible: true,
+    rangeId,
+    type: LAYER_TYPE.icon,
+    icon: { library: "lucide", name: "gauge" },
+    geometry: {
+      offsetXMm: 0,
+      offsetYMm: 0,
+      widthMm: Math.min(canvas.widthMm, canvas.heightMm) / 4,
+      heightMm: Math.min(canvas.widthMm, canvas.heightMm) / 4,
+      rotationDegrees: 0,
+    },
+    style: { color: "#1565C0", strokeWidthMm: 1 },
+    ...overrides,
+  };
+}
+
 type LayerFactoryOverrides = Partial<Pick<LayerDto, "id" | "name" | "visible">>;
 
 export function createLayerFromType(
@@ -276,6 +301,8 @@ export function createLayerFromType(
       return createRectangleLayer(range.id, canvas, overrides);
     case LAYER_TYPE.line:
       return createLineLayer(range.id, canvas, overrides);
+    case LAYER_TYPE.icon:
+      return createIconLayer(range.id, canvas, overrides);
     default:
       return assertNever(type);
   }
@@ -422,6 +449,18 @@ export function createDevelopmentProject(): ProjectDto {
           rotationDegrees: 0,
         },
         style: { fillColor: "#E3F2FD", borderColor: "#1565C0", borderWidthMm: 0.8 },
+      }),
+      createIconLayer(range.id, canvas, {
+        name: "Pressure symbol",
+        icon: { library: "lucide", name: "gauge" },
+        geometry: {
+          offsetXMm: 28,
+          offsetYMm: 25,
+          widthMm: 12,
+          heightMm: 12,
+          rotationDegrees: 0,
+        },
+        style: { color: "#1565C0", strokeWidthMm: 1 },
       }),
       createLineLayer(range.id, canvas, {
         name: "Unit divider",

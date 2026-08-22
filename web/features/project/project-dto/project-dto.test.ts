@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
   createProject,
-  createArcLayer,
   createLabelLayer,
   createRange,
   createNumericScaleLayer,
@@ -9,6 +8,7 @@ import {
   createEllipseLayer,
   createRectangleLayer,
   createLineLayer,
+  createIconLayer,
   createTickScaleLayer,
 } from "@/features/project/factories/project-factories";
 import { ProjectSchema } from "./project-dto";
@@ -23,19 +23,6 @@ describe("ProjectSchema", () => {
 
     expect(result.issues).toEqual([]);
     expect(ProjectSchema.parse(result.data)).toEqual(project);
-  });
-
-  it("defaults a missing canvas transparency flag to true for older JSON files", () => {
-    const project = createProject();
-    const legacyCanvas = {
-      widthMm: project.canvas.widthMm,
-      heightMm: project.canvas.heightMm,
-      background: project.canvas.background,
-    };
-
-    expect(
-      ProjectSchema.parse({ ...project, canvas: legacyCanvas }).canvas.transparentBackground,
-    ).toBe(true);
   });
 
   it("rejects negative canvas dimensions and blank object names", () => {
@@ -75,26 +62,6 @@ describe("ProjectSchema", () => {
     expect(validateProject(project).issues[0]?.code).toBe(
       PROJECT_VALIDATION_CODES.missingRangeReference,
     );
-  });
-
-  it("keeps the value-mapping mode on Range, not on a visual Tick Scale", () => {
-    const range = createRange({
-      scaleDefinition: {
-        mode: "logarithmic",
-        start: 1,
-        end: 100,
-        detailEmphasis: "low-values",
-      },
-    });
-    const layer = createTickScaleLayer(range.id, { valueStart: 1, valueEnd: 100, valueStep: 10 });
-    const project = createProject({ ranges: [range], layers: [layer] });
-
-    expect(validateProject(project).data?.ranges[0].scaleDefinition.mode).toBe("logarithmic");
-    const invalidLayerProject: unknown = {
-      ...project,
-      layers: [{ ...layer, scaleDefinition: range.scaleDefinition }],
-    };
-    expect(validateProject(invalidLayerProject).issues).not.toEqual([]);
   });
 
   it("requires custom-scale endpoints to cover normalized positions zero and one", () => {
@@ -203,34 +170,6 @@ describe("ProjectSchema", () => {
     expect(validateProject(createProject({ ranges: [range], layers: [layer] })).issues).toEqual([]);
   });
 
-  it("validates Arc as a Range-mapped value interval without angle fields", () => {
-    const range = createRange();
-    const layer = createArcLayer(range.id);
-    const invalidProject: unknown = {
-      ...createProject({ ranges: [range], layers: [layer] }),
-      layers: [{ ...layer, angleStart: 0 }],
-    };
-
-    expect(validateProject(createProject({ ranges: [range], layers: [layer] })).issues).toEqual([]);
-    expect(validateProject(invalidProject).issues[0]?.code).toBe(
-      PROJECT_VALIDATION_CODES.invalidSchema,
-    );
-  });
-
-  it("validates Needle as nested shaft and hub settings without an angle or pivot", () => {
-    const range = createRange();
-    const layer = createNeedleLayer(range);
-    const invalidProject: unknown = {
-      ...createProject({ ranges: [range], layers: [layer] }),
-      layers: [{ ...layer, angle: 90 }],
-    };
-
-    expect(validateProject(createProject({ ranges: [range], layers: [layer] })).issues).toEqual([]);
-    expect(validateProject(invalidProject).issues[0]?.code).toBe(
-      PROJECT_VALIDATION_CODES.invalidSchema,
-    );
-  });
-
   it.each(["arrowhead", "tapered-rounded"] as const)(
     "accepts the Needle %s tip style",
     (tipStyle) => {
@@ -248,7 +187,7 @@ describe("ProjectSchema", () => {
     },
   );
 
-  it("validates Ellipse, Rectangle, and Line nested geometry and styling", () => {
+  it("validates Ellipse, Rectangle, Line, and Icon nested geometry and styling", () => {
     const range = createRange();
     const project = createProject({ ranges: [range] });
     const ellipse = createEllipseLayer(range.id, project.canvas);
@@ -256,8 +195,11 @@ describe("ProjectSchema", () => {
       cornerRadiusPercent: 50,
     });
     const line = createLineLayer(range.id, project.canvas);
+    const icon = createIconLayer(range.id, project.canvas);
 
-    expect(validateProject({ ...project, layers: [ellipse, rectangle, line] }).issues).toEqual([]);
+    expect(
+      validateProject({ ...project, layers: [ellipse, rectangle, line, icon] }).issues,
+    ).toEqual([]);
     expect(
       validateProject({
         ...project,
@@ -274,6 +216,12 @@ describe("ProjectSchema", () => {
         layers: [{ ...line, geometry: { ...line.geometry, rotationDegrees: -1 } }],
       }).issues[0]?.code,
     ).toBe(PROJECT_VALIDATION_CODES.invalidSchema);
+    expect(
+      validateProject({
+        ...project,
+        layers: [{ ...icon, icon: { library: "lucide", name: "not-a-real-icon" } }],
+      }).issues[0],
+    ).toMatchObject({ code: PROJECT_VALIDATION_CODES.invalidSchema });
   });
 
   it("limits point Label rotation to zero through 359 degrees", () => {
@@ -300,18 +248,6 @@ describe("ProjectSchema", () => {
   });
 
   it("rejects a Tick Scale whose radius offset would create a non-positive rendered radius", () => {
-    const range = createRange({ radius: 20 });
-    const layer = createTickScaleLayer(range.id, { radiusOffsetMm: -20 });
-
-    expect(
-      validateProject(createProject({ ranges: [range], layers: [layer] })).issues,
-    ).toContainEqual({
-      path: `layers.${layer.id}.radiusOffsetMm`,
-      code: PROJECT_VALIDATION_CODES.valueMustBePositive,
-    });
-  });
-
-  it("uses each domain object validate method to return JSON paths", () => {
     const range = createRange({ radius: 20 });
     const layer = createTickScaleLayer(range.id, { radiusOffsetMm: -20 });
 

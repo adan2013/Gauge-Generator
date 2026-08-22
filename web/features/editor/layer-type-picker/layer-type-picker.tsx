@@ -7,6 +7,7 @@ import {
   LineStyle,
   Rainbow,
   RectangleHorizontal,
+  Shapes,
   Slash,
   Type,
 } from "lucide-react";
@@ -18,46 +19,42 @@ type LayerTypePickerProps = { onCreateLayer: (type: LayerType) => void };
 
 const LAYER_PICKER_ITEMS = {
   [LAYER_TYPE.tickScale]: {
-    descriptionKey: "picker.tickScaleDescription",
     icon: LineStyle,
     titleKey: "types.tickScale",
   },
   [LAYER_TYPE.numericScale]: {
-    descriptionKey: "picker.numericScaleDescription",
     icon: Hash,
     titleKey: "types.numericScale",
   },
   [LAYER_TYPE.arc]: {
-    descriptionKey: "picker.arcDescription",
     icon: Rainbow,
     titleKey: "types.arc",
   },
   [LAYER_TYPE.label]: {
-    descriptionKey: "picker.labelDescription",
     icon: Type,
     titleKey: "types.label",
   },
   [LAYER_TYPE.ellipse]: {
-    descriptionKey: "picker.ellipseDescription",
     icon: Ellipse,
     titleKey: "types.ellipse",
   },
   [LAYER_TYPE.rectangle]: {
-    descriptionKey: "picker.rectangleDescription",
     icon: RectangleHorizontal,
     titleKey: "types.rectangle",
   },
   [LAYER_TYPE.line]: {
-    descriptionKey: "picker.lineDescription",
     icon: Slash,
     titleKey: "types.line",
   },
+  [LAYER_TYPE.icon]: {
+    icon: Shapes,
+    titleKey: "types.icon",
+  },
   [LAYER_TYPE.needle]: {
-    descriptionKey: "picker.needleDescription",
     icon: Gauge,
     titleKey: "types.needle",
   },
-} satisfies Record<LayerType, { descriptionKey: string; icon: typeof LineStyle; titleKey: string }>;
+} satisfies Record<LayerType, { icon: typeof LineStyle; titleKey: string }>;
 
 export function LayerTypePicker({ onCreateLayer }: LayerTypePickerProps) {
   const t = useTranslations("Editor.layers");
@@ -68,31 +65,25 @@ export function LayerTypePicker({ onCreateLayer }: LayerTypePickerProps) {
       </p>
       <h2 className="mt-1 text-xl font-semibold">{t("picker.title")}</h2>
       <p className="mt-2 text-sm leading-6 text-muted">{t("picker.description")}</p>
-      <div className="mt-5 space-y-2">
-        {Object.entries(LAYER_PICKER_ITEMS).map(
-          ([type, { descriptionKey, icon: Icon, titleKey }]) => (
-            <button
-              className={cn(
-                "flex w-full items-start gap-2.5 rounded-lg border border-border bg-app p-3 text-left",
-                "transition-colors hover:border-focus hover:bg-surface-subtle",
-                "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
-              )}
-              key={type}
-              onClick={() => onCreateLayer(type as LayerType)}
-              type="button"
-            >
-              <span className="grid size-9 shrink-0 place-items-center rounded-md bg-accent-subtle text-accent">
-                <Icon aria-hidden="true" size={18} />
-              </span>
-              <span>
-                <span className="block text-sm font-semibold text-ink">{t(titleKey)}</span>
-                <span className="mt-0.5 block text-sm leading-5 text-muted">
-                  {t(descriptionKey)}
-                </span>
-              </span>
-            </button>
-          ),
-        )}
+      <div className="mt-5 grid grid-cols-2 gap-2">
+        {Object.entries(LAYER_PICKER_ITEMS).map(([type, { icon: Icon, titleKey }]) => (
+          <button
+            className={cn(
+              "flex min-h-24 w-full flex-col items-center justify-center gap-2 rounded-lg",
+              "border border-border bg-app p-3 text-center",
+              "transition-colors hover:border-focus hover:bg-surface-subtle",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
+            )}
+            key={type}
+            onClick={() => onCreateLayer(type as LayerType)}
+            type="button"
+          >
+            <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-accent-subtle text-accent">
+              <Icon aria-hidden="true" size={24} />
+            </span>
+            <span className="text-sm font-semibold leading-5 text-ink">{t(titleKey)}</span>
+          </button>
+        ))}
       </div>
     </>
   );
