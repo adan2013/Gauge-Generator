@@ -199,6 +199,22 @@ describe("EditorShell", () => {
     expect(store.getState().editor.sidebarMode).toBe("layers");
     expect(screen.getByRole("heading", { name: "Layers" })).toBeTruthy();
   });
+  it("leaves Range editing and dismisses its dependency warning when Escape is pressed", () => {
+    const range = createRange();
+    const layer = createTickScaleLayer(range.id);
+    const store = makeStore({
+      project: { current: createProject({ ranges: [range], layers: [layer] }) },
+    });
+    renderEditor(<EditorShell />, store);
+    fireEvent.click(screen.getByRole("button", { name: `Edit ${range.name}` }));
+    expect(screen.getByText(/Large changes to this Range may automatically adjust/)).toBeTruthy();
+
+    fireEvent.keyDown(document, { key: "Escape" });
+
+    expect(store.getState().editor.sidebarMode).toBe("layers");
+    expect(screen.getByRole("heading", { name: "Layers" })).toBeTruthy();
+    expect(screen.queryByText(/Large changes to this Range may automatically adjust/)).toBeNull();
+  });
   it("connects toolbar undo and redo to project history", () => {
     const { store } = renderEditor(<EditorShell />);
     fireEvent.click(screen.getAllByRole("button", { name: "Create first Range" })[0]);

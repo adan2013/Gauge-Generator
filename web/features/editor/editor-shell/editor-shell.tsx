@@ -196,9 +196,13 @@ export function EditorShell() {
     selectedObject?.collection === "layers"
       ? project.layers.find((layer) => layer.id === selectedObject.id)
       : undefined;
+  function closeProperties() {
+    dismissRangeDependencyWarning();
+    dispatch(editorActions.setSidebarMode("layers"));
+  }
   useLayerEditingEscape({
-    enabled: sidebarMode === "properties" && selectedObject?.collection === "layers",
-    onEscape: () => dispatch(editorActions.setSidebarMode("layers")),
+    enabled: sidebarMode === "properties" && selectedObject !== null,
+    onEscape: closeProperties,
   });
   const updateSelectedRange = (change: Partial<RangeDto>) => {
     if (selectedRange) commitRange({ ...selectedRange, ...change });
@@ -332,10 +336,7 @@ export function EditorShell() {
           properties={
             <PropertiesPanel
               canvas={project.canvas}
-              onBack={() => {
-                dismissRangeDependencyWarning();
-                dispatch(editorActions.setSidebarMode("layers"));
-              }}
+              onBack={closeProperties}
               onCreateLayer={createLayer}
               onHistoryTransactionEnd={() => dispatch(completeProjectHistoryTransaction())}
               onHistoryTransactionStart={() => dispatch(beginProjectHistoryTransaction())}
