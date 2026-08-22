@@ -109,6 +109,9 @@ Keep those documents current. Put completed-stage evidence in
 - Needle stores one Range-mapped integer value plus nested `shaft` and `hub`
   presentation. Its pivot is always the source Range center; it never stores an
   independent angle or position.
+- Ellipse and Rectangle share nested millimetre `geometry`, fill/border `style`,
+  and the same center, rotation, and orientation-aware resize handles. Rectangle
+  alone adds `cornerRadiusPercent` from zero through 50.
 - `Layer` is the visual-layer base abstraction; `Range` is separate. Layer
   implementations own final SVG, validation, editing overlay, handles, drag
   behavior, and numeric field definitions. Keep rendering/domain code React-free.
@@ -179,7 +182,8 @@ Keep those documents current. Put completed-stage evidence in
   suffix. It is a project mutation and therefore participates in Undo/Redo.
 - The initial store state in `NODE_ENV=development` uses a deterministic
   logarithmic pressure-gauge workbench (`1..10 bar`) with high-value detail and
-  representative Arc, Needle, Label, Tick Scale, and Numeric Scale layers. Production
+  representative Arc, Needle, Label, Ellipse, Rectangle, Tick Scale, and Numeric
+  Scale layers. Production
   and explicit New project flows remain empty.
 
 ## Quality and future slices

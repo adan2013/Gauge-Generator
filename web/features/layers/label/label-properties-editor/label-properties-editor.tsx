@@ -18,9 +18,15 @@ import {
   getLabelPointPropertyDefinitions,
   getLabelTextArcPropertyDefinitions,
 } from "@/features/layers/label/label-properties";
-import type { LabelLayerDto, LayerDto, RangeDto } from "@/features/project/project-dto/project-dto";
+import type {
+  CanvasDto,
+  LabelLayerDto,
+  LayerDto,
+  RangeDto,
+} from "@/features/project/project-dto/project-dto";
 
 type LabelPropertiesEditorProps = {
+  canvas: CanvasDto;
   layer: LabelLayerDto;
   onLayerChange: (change: Partial<LayerDto>) => void;
   onHistoryTransactionEnd: () => void;
@@ -30,6 +36,7 @@ type LabelPropertiesEditorProps = {
 };
 
 export function LabelPropertiesEditor({
+  canvas,
   layer,
   onLayerChange,
   onHistoryTransactionEnd,
@@ -71,7 +78,7 @@ export function LabelPropertiesEditor({
         />
         {layer.layout.mode === "point" ? (
           <NumericPropertyFields
-            definitions={getLabelPointPropertyDefinitions(layer.layout, range)}
+            definitions={getLabelPointPropertyDefinitions(layer.layout, canvas, range)}
             getLabel={(definition) => t(`label.${definition.labelKey}`)}
             getSuffix={(definition) => t(`controls.${definition.unit}`)}
             group="point"

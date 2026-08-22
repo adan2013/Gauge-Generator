@@ -70,7 +70,7 @@ describe("project store and history", () => {
     });
   });
 
-  it("constrains dependent Label layouts when their Range changes", () => {
+  it("constrains only the Range-mapped Label layout when its Range changes", () => {
     const range = createRange({ radius: 40 });
     const pointLabel = createLabelLayer(range.id, {
       layout: { mode: "point", offsetXMm: 30, offsetYMm: -30, rotationDegrees: 0 },
@@ -100,7 +100,7 @@ describe("project store and history", () => {
     );
 
     expect(store.getState().project.current.layers[0]).toMatchObject({
-      layout: { offsetXMm: 15, offsetYMm: -15 },
+      layout: { offsetXMm: 30, offsetYMm: -30 },
     });
     expect(store.getState().project.current.layers[1]).toMatchObject({
       layout: { radiusOffsetMm: 15, valueStart: 40, valueEnd: 60 },

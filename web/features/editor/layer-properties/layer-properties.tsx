@@ -11,13 +11,16 @@ import { TickScalePropertiesEditor } from "@/features/layers/tick-scale/tick-sca
 import { LabelPropertiesEditor } from "@/features/layers/label/label-properties-editor/label-properties-editor";
 import { ArcPropertiesEditor } from "@/features/layers/arc/arc-properties-editor/arc-properties-editor";
 import { NeedlePropertiesEditor } from "@/features/layers/needle/needle-properties-editor/needle-properties-editor";
+import { PlanarShapePropertiesEditor } from "@/features/layers/planar-shape/planar-shape-properties-editor/planar-shape-properties-editor";
 import {
   LAYER_TYPE,
+  type CanvasDto,
   type LayerDto,
   type RangeDto,
 } from "@/features/project/project-dto/project-dto";
 
 type LayerPropertiesProps = {
+  canvas: CanvasDto;
   layer: LayerDto;
   onHistoryTransactionEnd: () => void;
   onHistoryTransactionStart: () => void;
@@ -70,6 +73,9 @@ function LayerSpecificProperties(props: LayerPropertiesProps) {
       return <ArcPropertiesEditor {...props} layer={props.layer} />;
     case LAYER_TYPE.needle:
       return <NeedlePropertiesEditor {...props} layer={props.layer} />;
+    case LAYER_TYPE.ellipse:
+    case LAYER_TYPE.rectangle:
+      return <PlanarShapePropertiesEditor {...props} layer={props.layer} />;
     default:
       return assertNever(props.layer);
   }

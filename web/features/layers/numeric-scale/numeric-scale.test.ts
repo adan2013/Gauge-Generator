@@ -119,11 +119,32 @@ describe("NumericScaleLayer", () => {
   it("snaps the label-radius handle and keeps the label circle valid", () => {
     const next = new NumericScaleLayer(layer).applyHandleDrag(
       "radius-offset",
-      { point: { x: 54, y: 60 }, shiftKey: false, altKey: false, snapDistanceMm: 2 },
+      { point: { x: 64.24, y: 64.24 }, shiftKey: false, altKey: false, snapDistanceMm: 2 },
       context,
     );
 
     expect(next.radiusOffsetMm).toBe(-34);
+  });
+
+  it("keeps labels on the normal extension of ticks for a square Range", () => {
+    const squareRange = createRange({
+      angleStart: 160,
+      openingAngle: 1,
+      radius: 40,
+      cornerRadiusPercent: 0,
+    });
+    const squareLayer = createNumericScaleLayer(squareRange.id, {
+      valueEnd: 0,
+      valueStep: 1,
+      radiusOffsetMm: -10,
+    });
+    const squareProject = createProject({ ranges: [squareRange], layers: [squareLayer] });
+    const svg = new NumericScaleLayer(squareLayer).toSvg({
+      project: squareProject,
+      rangeById: new Map([[squareRange.id, squareRange]]),
+    });
+
+    expect(svg).toContain('y="74.559"');
   });
 
   it("keeps overlay-edited offsets integral when the source radius is fractional", () => {

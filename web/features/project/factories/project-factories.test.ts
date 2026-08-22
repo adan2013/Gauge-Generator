@@ -6,6 +6,9 @@ import {
   createLabelLayer,
   createNumericScaleLayer,
   createNeedleLayer,
+  createEllipseLayer,
+  createRectangleLayer,
+  createProject,
   createRange,
   createRangeForCanvas,
   createTickScaleLayer,
@@ -30,7 +33,7 @@ describe("createDevelopmentProject", () => {
     const project = createDevelopmentProject();
 
     expect(project.ranges).toHaveLength(1);
-    expect(project.layers).toHaveLength(7);
+    expect(project.layers).toHaveLength(9);
     expect(project.layers.every((layer) => layer.rangeId === project.ranges[0].id)).toBe(true);
     expect(project.ranges[0]).toMatchObject({
       angleStart: 135,
@@ -69,33 +72,52 @@ describe("createDevelopmentProject", () => {
       "Major pressure ticks",
       "Minor pressure ticks",
       "Pressure values (bar)",
+      "Unit badge",
+      "Gauge plate",
     ]);
+    expect(project.layers.find((layer) => layer.type === "ellipse")).toMatchObject({
+      geometry: { offsetYMm: 16, widthMm: 24, heightMm: 12 },
+      style: { borderWidthMm: 0.8 },
+    });
+    expect(project.layers.find((layer) => layer.type === "rectangle")).toMatchObject({
+      style: { fillColor: "#E8F1FA", borderWidthMm: 1.2 },
+      cornerRadiusPercent: 5,
+    });
   });
 });
 
 describe("createLayerFromType", () => {
   it("creates a visual layer from its registered type", () => {
     const range = createRange();
+    const canvas = createProject().canvas;
 
-    expect(createLayerFromType("tick-scale", range)).toMatchObject({
+    expect(createLayerFromType("tick-scale", range, canvas)).toMatchObject({
       rangeId: range.id,
       type: "tick-scale",
     });
-    expect(createLayerFromType("numeric-scale", range)).toMatchObject({
+    expect(createLayerFromType("numeric-scale", range, canvas)).toMatchObject({
       rangeId: range.id,
       type: "numeric-scale",
     });
-    expect(createLayerFromType("label", range)).toMatchObject({
+    expect(createLayerFromType("label", range, canvas)).toMatchObject({
       rangeId: range.id,
       type: "label",
     });
-    expect(createLayerFromType("arc", range)).toMatchObject({
+    expect(createLayerFromType("arc", range, canvas)).toMatchObject({
       rangeId: range.id,
       type: "arc",
     });
-    expect(createLayerFromType("needle", range)).toMatchObject({
+    expect(createLayerFromType("needle", range, canvas)).toMatchObject({
       rangeId: range.id,
       type: "needle",
+    });
+    expect(createLayerFromType("ellipse", range, canvas)).toMatchObject({
+      rangeId: range.id,
+      type: "ellipse",
+    });
+    expect(createLayerFromType("rectangle", range, canvas)).toMatchObject({
+      rangeId: range.id,
+      type: "rectangle",
     });
   });
 
@@ -109,7 +131,7 @@ describe("createLayerFromType", () => {
       value: 20,
       shaft: { tipStyle: "tapered-rounded" },
     });
-    expect(createLayerFromType("needle", range)).toMatchObject({
+    expect(createLayerFromType("needle", range, createProject().canvas)).toMatchObject({
       value: 20,
       shaft: { tipStyle: "tapered-rounded" },
     });
@@ -127,7 +149,7 @@ describe("resetLayerToDefaults", () => {
       visible: false,
     });
 
-    expect(resetLayerToDefaults(layer, range)).toMatchObject({
+    expect(resetLayerToDefaults(layer, range, createProject().canvas)).toMatchObject({
       id: layer.id,
       name: "Custom markers",
       rangeId: range.id,
@@ -152,7 +174,7 @@ describe("resetLayerToDefaults", () => {
       },
     });
 
-    expect(resetLayerToDefaults(layer, range)).toMatchObject({
+    expect(resetLayerToDefaults(layer, range, createProject().canvas)).toMatchObject({
       id: layer.id,
       name: "Labels",
       rangeId: range.id,
@@ -168,7 +190,7 @@ describe("resetLayerToDefaults", () => {
     const range = createRange();
     const layer = createLabelLayer(range.id, { text: "Custom", name: "Caption" });
 
-    expect(resetLayerToDefaults(layer, range)).toMatchObject({
+    expect(resetLayerToDefaults(layer, range, createProject().canvas)).toMatchObject({
       id: layer.id,
       name: "Caption",
       rangeId: range.id,
@@ -184,7 +206,7 @@ describe("resetLayerToDefaults", () => {
       roundedEnds: false,
     });
 
-    expect(resetLayerToDefaults(layer, range)).toMatchObject({
+    expect(resetLayerToDefaults(layer, range, createProject().canvas)).toMatchObject({
       id: layer.id,
       name: "Limit",
       rangeId: range.id,
@@ -209,12 +231,36 @@ describe("resetLayerToDefaults", () => {
       },
     });
 
-    expect(resetLayerToDefaults(layer, range)).toMatchObject({
+    expect(resetLayerToDefaults(layer, range, createProject().canvas)).toMatchObject({
       id: layer.id,
       name: "Pointer",
       rangeId: range.id,
       value: 0,
       shaft: { lengthMm: 40, tipStyle: "tapered-rounded", color: "#C62828" },
+    });
+  });
+
+  it("restores shape dimensions from the current canvas", () => {
+    const range = createRange();
+    const canvas = { ...createProject().canvas, widthMm: 200, heightMm: 80 };
+    const ellipse = createEllipseLayer(range.id, canvas, {
+      geometry: {
+        offsetXMm: 12,
+        offsetYMm: -4,
+        widthMm: 10,
+        heightMm: 20,
+        rotationDegrees: 45,
+      },
+    });
+    const rectangle = createRectangleLayer(range.id, canvas, { cornerRadiusPercent: 30 });
+
+    expect(resetLayerToDefaults(ellipse, range, canvas)).toMatchObject({
+      geometry: { offsetXMm: 0, offsetYMm: 0, widthMm: 100, heightMm: 40, rotationDegrees: 0 },
+      style: { fillColor: "#BBDEFB", borderColor: "#1565C0", borderWidthMm: 0 },
+    });
+    expect(resetLayerToDefaults(rectangle, range, canvas)).toMatchObject({
+      cornerRadiusPercent: 0,
+      geometry: { widthMm: 100, heightMm: 40 },
     });
   });
 });

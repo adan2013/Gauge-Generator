@@ -1,8 +1,10 @@
 import type { NumericPropertyDefinition } from "@/features/layers/core/layer";
+import { getCanvasOffsetBounds } from "@/features/layers/core/canvas-offset-bounds";
 import { getLabelTextArcRadiusOffsetBounds } from "@/features/layers/label/label-constraints";
 import {
   SCALE_VALUE_MAX,
   SCALE_VALUE_MIN,
+  type CanvasDto,
   type LabelLayerDto,
   type RangeDto,
 } from "@/features/project/project-dto/project-dto";
@@ -30,16 +32,20 @@ export type LabelTextArcPropertyDefinition = NumericPropertyDefinition<
 
 export function getLabelPointPropertyDefinitions(
   layout: PointLayout,
+  canvas: CanvasDto | undefined,
   range: RangeDto | undefined,
 ): readonly LabelPointPropertyDefinition[] {
-  const maximumOffset = range?.radius ?? LABEL_LIMITS.pointOffsetMm.max;
+  const bounds =
+    canvas && range
+      ? getCanvasOffsetBounds(canvas, range)
+      : { offsetX: LABEL_LIMITS.pointOffsetMm, offsetY: LABEL_LIMITS.pointOffsetMm };
   return [
     {
       key: "offsetXMm",
       group: "point",
       labelKey: "offsetX",
-      max: maximumOffset,
-      min: -maximumOffset,
+      max: bounds.offsetX.max,
+      min: bounds.offsetX.min,
       snap: "distance",
       step: 0.1,
       unit: "millimeters",
@@ -49,8 +55,8 @@ export function getLabelPointPropertyDefinitions(
       key: "offsetYMm",
       group: "point",
       labelKey: "offsetY",
-      max: maximumOffset,
-      min: -maximumOffset,
+      max: bounds.offsetY.max,
+      min: bounds.offsetY.min,
       snap: "distance",
       step: 0.1,
       unit: "millimeters",

@@ -25,7 +25,16 @@ export type PointerInput = {
 };
 export type LayerHandle = {
   id: string;
-  kind: "move" | "radius" | "rotation" | "angle-start" | "angle-end" | "pivot" | "length" | "value";
+  kind:
+    | "move"
+    | "radius"
+    | "rotation"
+    | "angle-start"
+    | "angle-end"
+    | "pivot"
+    | "length"
+    | "value"
+    | "resize";
   label: string;
   point: CanvasPointMm;
 };

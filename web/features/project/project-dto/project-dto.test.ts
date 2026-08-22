@@ -6,6 +6,8 @@ import {
   createRange,
   createNumericScaleLayer,
   createNeedleLayer,
+  createEllipseLayer,
+  createRectangleLayer,
   createTickScaleLayer,
 } from "@/features/project/factories/project-factories";
 import { ProjectSchema } from "./project-dto";
@@ -244,6 +246,27 @@ describe("ProjectSchema", () => {
       ).toEqual([]);
     },
   );
+
+  it("validates Ellipse and Rectangle nested geometry and styling", () => {
+    const range = createRange();
+    const project = createProject({ ranges: [range] });
+    const ellipse = createEllipseLayer(range.id, project.canvas);
+    const rectangle = createRectangleLayer(range.id, project.canvas, {
+      cornerRadiusPercent: 50,
+    });
+
+    expect(validateProject({ ...project, layers: [ellipse, rectangle] }).issues).toEqual([]);
+    expect(
+      validateProject({
+        ...project,
+        layers: [{ ...ellipse, geometry: { ...ellipse.geometry, rotationDegrees: 360 } }],
+      }).issues[0]?.code,
+    ).toBe(PROJECT_VALIDATION_CODES.invalidSchema);
+    expect(
+      validateProject({ ...project, layers: [{ ...rectangle, cornerRadiusPercent: 50.1 }] })
+        .issues[0]?.code,
+    ).toBe(PROJECT_VALIDATION_CODES.invalidSchema);
+  });
 
   it("limits point Label rotation to zero through 359 degrees", () => {
     const range = createRange();

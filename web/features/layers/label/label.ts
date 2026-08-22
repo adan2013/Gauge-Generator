@@ -7,6 +7,7 @@ import type {
 } from "@/features/layers/core/layer";
 import { OVERLAY_INTEGER_INCREMENT, Layer } from "@/features/layers/core/layer";
 import type { EditingOverlayPrimitive } from "@/features/layers/core/editing-overlay-geometry";
+import { getCanvasOffsetBounds } from "@/features/layers/core/canvas-offset-bounds";
 import {
   applyRangeMappedLayerRadiusDrag,
   getEffectiveRadiusMm,
@@ -31,6 +32,7 @@ import {
 import { clamp, normalizeAngle, snapAngleDegrees, snapDistanceMm } from "@/lib/geometry/geometry";
 
 const ROTATION_HANDLE_DISTANCE_MIN_MM = 10;
+const ROTATION_HANDLE_GAP_MM = 4;
 
 export class LabelLayer extends Layer<LabelLayerDto> {
   constructor(dto: LabelLayerDto) {
@@ -40,7 +42,7 @@ export class LabelLayer extends Layer<LabelLayerDto> {
   validate(context: RenderContext): ValidationIssue[] {
     const range = context.rangeById.get(this.dto.rangeId);
     return range
-      ? getLabelLayoutValidationIssues(this.dto, range)
+      ? getLabelLayoutValidationIssues(this.dto, context.project.canvas, range)
       : [{ path: "rangeId", code: PROJECT_VALIDATION_CODES.missingRangeReference }];
   }
 
@@ -69,15 +71,6 @@ export class LabelLayer extends Layer<LabelLayerDto> {
       point,
     );
     return [
-      {
-        dasharray: "1.5 1.5",
-        end: point,
-        id: "label-position-guide",
-        kind: "line",
-        start: { x: range.centerX, y: range.centerY },
-        strokeWidth: 0.35,
-        tone: "muted",
-      },
       {
         dasharray: "1 1",
         end: rotationPoint,
@@ -148,12 +141,13 @@ export class LabelLayer extends Layer<LabelLayerDto> {
       const increment = pointer.snapDistanceMm ?? OVERLAY_INTEGER_INCREMENT;
       const offsetX = snapDistanceMm(pointer.point.x - range.centerX, increment);
       const offsetY = snapDistanceMm(pointer.point.y - range.centerY, increment);
+      const bounds = getCanvasOffsetBounds(context.project.canvas, range);
       return {
         ...this.dto,
         layout: {
           ...this.dto.layout,
-          offsetXMm: clamp(Math.round(offsetX), -range.radius, range.radius),
-          offsetYMm: clamp(Math.round(offsetY), -range.radius, range.radius),
+          offsetXMm: clamp(Math.round(offsetX), bounds.offsetX.min, bounds.offsetX.max),
+          offsetYMm: clamp(Math.round(offsetY), bounds.offsetY.min, bounds.offsetY.max),
         },
       };
     }
@@ -237,7 +231,10 @@ function getRotationHandlePoint(
   textSizeMm: number,
   point: { x: number; y: number },
 ) {
-  const distance = Math.max(ROTATION_HANDLE_DISTANCE_MIN_MM, textSizeMm * 1.5);
+  const distance = Math.max(
+    ROTATION_HANDLE_DISTANCE_MIN_MM,
+    textSizeMm / 2 + ROTATION_HANDLE_GAP_MM,
+  );
   const radians = ((rotationDegrees - 90) * Math.PI) / 180;
   return {
     x: point.x + Math.cos(radians) * distance,

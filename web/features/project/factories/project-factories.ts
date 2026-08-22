@@ -19,6 +19,8 @@ import type {
   LabelLayerDto,
   ArcLayerDto,
   NeedleLayerDto,
+  EllipseLayerDto,
+  RectangleLayerDto,
   TextStyleDto,
 } from "@/features/project/project-dto/project-dto";
 
@@ -171,11 +173,63 @@ export function createNeedleLayer(
   };
 }
 
+const DEFAULT_SHAPE_STYLE = {
+  fillColor: "#BBDEFB",
+  borderColor: "#1565C0",
+  borderWidthMm: 0,
+} as const;
+
+function createPlanarShapeGeometry(canvas: CanvasDto) {
+  return {
+    offsetXMm: 0,
+    offsetYMm: 0,
+    widthMm: canvas.widthMm / 2,
+    heightMm: canvas.heightMm / 2,
+    rotationDegrees: 0,
+  };
+}
+
+export function createEllipseLayer(
+  rangeId: string,
+  canvas: CanvasDto,
+  overrides: Partial<EllipseLayerDto> = {},
+): EllipseLayerDto {
+  return {
+    id: crypto.randomUUID(),
+    name: "Ellipse",
+    visible: true,
+    rangeId,
+    type: LAYER_TYPE.ellipse,
+    geometry: createPlanarShapeGeometry(canvas),
+    style: { ...DEFAULT_SHAPE_STYLE },
+    ...overrides,
+  };
+}
+
+export function createRectangleLayer(
+  rangeId: string,
+  canvas: CanvasDto,
+  overrides: Partial<RectangleLayerDto> = {},
+): RectangleLayerDto {
+  return {
+    id: crypto.randomUUID(),
+    name: "Rectangle",
+    visible: true,
+    rangeId,
+    type: LAYER_TYPE.rectangle,
+    geometry: createPlanarShapeGeometry(canvas),
+    style: { ...DEFAULT_SHAPE_STYLE },
+    cornerRadiusPercent: 0,
+    ...overrides,
+  };
+}
+
 type LayerFactoryOverrides = Partial<Pick<LayerDto, "id" | "name" | "visible">>;
 
 export function createLayerFromType(
   type: LayerDto["type"],
   range: RangeDto,
+  canvas: CanvasDto,
   overrides: LayerFactoryOverrides = {},
 ): LayerDto {
   switch (type) {
@@ -189,6 +243,10 @@ export function createLayerFromType(
       return createArcLayer(range.id, overrides);
     case LAYER_TYPE.needle:
       return createNeedleLayer(range, overrides);
+    case LAYER_TYPE.ellipse:
+      return createEllipseLayer(range.id, canvas, overrides);
+    case LAYER_TYPE.rectangle:
+      return createRectangleLayer(range.id, canvas, overrides);
     default:
       return assertNever(type);
   }
@@ -199,8 +257,12 @@ function assertNever(value: never): never {
 }
 
 /** Restores layer-owned visual settings while keeping its project identity and source Range. */
-export function resetLayerToDefaults(layer: LayerDto, range: RangeDto): LayerDto {
-  return createLayerFromType(layer.type, range, {
+export function resetLayerToDefaults(
+  layer: LayerDto,
+  range: RangeDto,
+  canvas: CanvasDto,
+): LayerDto {
+  return createLayerFromType(layer.type, range, canvas, {
     id: layer.id,
     name: layer.name,
     visible: layer.visible,
@@ -221,6 +283,12 @@ export function createProject(overrides: Partial<ProjectDto> = {}): ProjectDto {
 
 /** A predictable populated document for manual development of visual layers. */
 export function createDevelopmentProject(): ProjectDto {
+  const canvas: CanvasDto = {
+    widthMm: 120,
+    heightMm: 120,
+    background: "#FFFFFF",
+    transparentBackground: false,
+  };
   const range = createRange({
     name: "Pressure range (bar)",
     angleStart: 135,
@@ -240,12 +308,7 @@ export function createDevelopmentProject(): ProjectDto {
       createdAt: DEFAULT_TIMESTAMP,
       updatedAt: DEFAULT_TIMESTAMP,
     },
-    canvas: {
-      widthMm: 120,
-      heightMm: 120,
-      background: "#FFFFFF",
-      transparentBackground: false,
-    },
+    canvas,
     ranges: [range],
     layers: [
       createArcLayer(range.id, {
@@ -319,6 +382,29 @@ export function createDevelopmentProject(): ProjectDto {
         scaleMultiplier: 0.1,
         radiusOffsetMm: -11,
         textStyle: createTextStyle({ sizeMm: 4.5, bold: true, color: "#3F3F3F" }),
+      }),
+      createEllipseLayer(range.id, canvas, {
+        name: "Unit badge",
+        geometry: {
+          offsetXMm: 0,
+          offsetYMm: 16,
+          widthMm: 24,
+          heightMm: 12,
+          rotationDegrees: 0,
+        },
+        style: { fillColor: "#E3F2FD", borderColor: "#1565C0", borderWidthMm: 0.8 },
+      }),
+      createRectangleLayer(range.id, canvas, {
+        name: "Gauge plate",
+        geometry: {
+          offsetXMm: 0,
+          offsetYMm: 0,
+          widthMm: 116,
+          heightMm: 116,
+          rotationDegrees: 0,
+        },
+        style: { fillColor: "#E8F1FA", borderColor: "#1565C0", borderWidthMm: 1.2 },
+        cornerRadiusPercent: 5,
       }),
     ],
   });

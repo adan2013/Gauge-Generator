@@ -5,6 +5,7 @@ import { TICK_SCALE_LIMITS } from "@/features/layers/tick-scale/tick-scale-limit
 import { LABEL_LIMITS } from "@/features/layers/label/label-limits";
 import { ARC_LIMITS } from "@/features/layers/arc/arc-limits";
 import { NEEDLE_LIMITS } from "@/features/layers/needle/needle-limits";
+import { PLANAR_SHAPE_LIMITS } from "@/features/layers/planar-shape/planar-shape-limits";
 import {
   SYSTEM_FONT_FAMILIES,
   TEXT_STYLE_LIMITS,
@@ -208,12 +209,67 @@ const NeedleLayerSchema = LayerBaseSchema.extend({
     .strict(),
 }).strict();
 
+const PlanarShapeGeometrySchema = z
+  .object({
+    offsetXMm: z
+      .number()
+      .min(PLANAR_SHAPE_LIMITS.offsetMm.min)
+      .max(PLANAR_SHAPE_LIMITS.offsetMm.max),
+    offsetYMm: z
+      .number()
+      .min(PLANAR_SHAPE_LIMITS.offsetMm.min)
+      .max(PLANAR_SHAPE_LIMITS.offsetMm.max),
+    widthMm: z
+      .number()
+      .min(PLANAR_SHAPE_LIMITS.dimensionMm.min)
+      .max(PLANAR_SHAPE_LIMITS.dimensionMm.max),
+    heightMm: z
+      .number()
+      .min(PLANAR_SHAPE_LIMITS.dimensionMm.min)
+      .max(PLANAR_SHAPE_LIMITS.dimensionMm.max),
+    rotationDegrees: z
+      .number()
+      .int()
+      .min(PLANAR_SHAPE_LIMITS.rotationDegrees.min)
+      .max(PLANAR_SHAPE_LIMITS.rotationDegrees.max),
+  })
+  .strict();
+
+const PlanarShapeStyleSchema = z
+  .object({
+    fillColor: HexColorSchema,
+    borderColor: HexColorSchema,
+    borderWidthMm: z
+      .number()
+      .min(PLANAR_SHAPE_LIMITS.borderWidthMm.min)
+      .max(PLANAR_SHAPE_LIMITS.borderWidthMm.max),
+  })
+  .strict();
+
+const EllipseLayerSchema = LayerBaseSchema.extend({
+  type: z.literal(LAYER_TYPE.ellipse),
+  geometry: PlanarShapeGeometrySchema,
+  style: PlanarShapeStyleSchema,
+}).strict();
+
+const RectangleLayerSchema = LayerBaseSchema.extend({
+  type: z.literal(LAYER_TYPE.rectangle),
+  geometry: PlanarShapeGeometrySchema,
+  style: PlanarShapeStyleSchema,
+  cornerRadiusPercent: z
+    .number()
+    .min(PLANAR_SHAPE_LIMITS.cornerRadiusPercent.min)
+    .max(PLANAR_SHAPE_LIMITS.cornerRadiusPercent.max),
+}).strict();
+
 export const LayerSchema = z.discriminatedUnion("type", [
   TickScaleLayerSchema,
   NumericScaleLayerSchema,
   LabelLayerSchema,
   ArcLayerSchema,
   NeedleLayerSchema,
+  EllipseLayerSchema,
+  RectangleLayerSchema,
 ]);
 
 export const CanvasSchema = z
@@ -251,6 +307,9 @@ export type NumericScaleLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.n
 export type LabelLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.label }>;
 export type ArcLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.arc }>;
 export type NeedleLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.needle }>;
+export type EllipseLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.ellipse }>;
+export type RectangleLayerDto = Extract<LayerDto, { type: typeof LAYER_TYPE.rectangle }>;
+export type PlanarShapeLayerDto = EllipseLayerDto | RectangleLayerDto;
 export type FontReferenceDto = z.infer<typeof FontReferenceSchema>;
 export type TextStyleDto = z.infer<typeof TextStyleSchema>;
 export type CanvasDto = z.infer<typeof CanvasSchema>;

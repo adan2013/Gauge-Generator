@@ -85,7 +85,7 @@ describe("TickScaleLayer", () => {
     const nextLayer = new TickScaleLayer(layer).applyHandleDrag(
       "radius-offset",
       {
-        point: { x: 54, y: 60 },
+        point: { x: 64.24, y: 64.24 },
         shiftKey: false,
         altKey: false,
         snapDistanceMm: 2,

@@ -121,6 +121,13 @@ the pointer position. The Range center is its fixed pivot. Shaft and hub remain
 nested, Needle-owned presentation objects, and no independent angle or pivot is
 stored.
 
+Ellipse and Rectangle use the shared planar-shape model. Their center is stored
+as millimetre offsets from the source Range center, while width and height are
+physical millimetres and rotation is an integer from zero through 359 degrees.
+Resize dragging projects the pointer into the shape's rotated local axes before
+updating both dimensions. Both share nested `geometry` and `style`; only
+Rectangle owns corner rounding.
+
 Custom points map an ascending value axis to an ascending normalized-position
 axis. The first and last positions are locked to zero and one at the domain
 boundaries, while their values remain editable. The graph editor constrains

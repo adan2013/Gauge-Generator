@@ -1,6 +1,9 @@
 import type { RangeDto } from "@/features/project/project-dto/project-dto";
 import type { EditingOverlayPrimitive } from "@/features/layers/core/editing-overlay-geometry";
-import { roundedSquarePathData } from "@/features/ranges/path-geometry/rounded-square-geometry";
+import {
+  roundedSquareNormalOffsetPathData,
+  roundedSquarePathData,
+} from "@/features/ranges/path-geometry/rounded-square-geometry";
 import { valueToNormalizedPosition } from "@/features/ranges/scale-mapping/scale-mapping";
 import { clamp } from "@/lib/geometry/geometry";
 
@@ -11,6 +14,11 @@ type RangeScaleEditingOverlayOptions = {
   valueStart: number;
 };
 
+type RangeScaleNormalOffsetEditingOverlayOptions = Omit<
+  RangeScaleEditingOverlayOptions,
+  "radius"
+> & { radiusOffsetMm: number };
+
 const POSITION_TOLERANCE = 1e-9;
 
 export function getRangeScaleEditingOverlay({
@@ -19,7 +27,58 @@ export function getRangeScaleEditingOverlay({
   valueEnd,
   valueStart,
 }: RangeScaleEditingOverlayOptions): readonly EditingOverlayPrimitive[] {
-  if (radius <= 0) return [];
+  return getEditingOverlaySegments({
+    range,
+    valueEnd,
+    valueStart,
+    getPathData: (positionStart, positionEnd) =>
+      roundedSquarePathData({
+        angleStart: range.angleStart + range.openingAngle * positionStart,
+        centerX: range.centerX,
+        centerY: range.centerY,
+        cornerRadiusPercent: range.cornerRadiusPercent,
+        openingAngle: range.openingAngle * (positionEnd - positionStart),
+        radius,
+      }),
+    valid: radius > 0,
+  });
+}
+
+export function getRangeScaleNormalOffsetEditingOverlay({
+  radiusOffsetMm,
+  range,
+  valueEnd,
+  valueStart,
+}: RangeScaleNormalOffsetEditingOverlayOptions): readonly EditingOverlayPrimitive[] {
+  return getEditingOverlaySegments({
+    range,
+    valueEnd,
+    valueStart,
+    getPathData: (positionStart, positionEnd) =>
+      roundedSquareNormalOffsetPathData({
+        angleStart: range.angleStart + range.openingAngle * positionStart,
+        centerX: range.centerX,
+        centerY: range.centerY,
+        cornerRadiusPercent: range.cornerRadiusPercent,
+        openingAngle: range.openingAngle * (positionEnd - positionStart),
+        radius: range.radius,
+        offsetMm: radiusOffsetMm,
+      }),
+    valid: range.radius + radiusOffsetMm > 0,
+  });
+}
+
+function getEditingOverlaySegments({
+  getPathData,
+  range,
+  valid,
+  valueEnd,
+  valueStart,
+}: Omit<RangeScaleEditingOverlayOptions, "radius"> & {
+  getPathData: (positionStart: number, positionEnd: number) => string;
+  valid: boolean;
+}): readonly EditingOverlayPrimitive[] {
+  if (!valid) return [];
   const mappedPositions = [
     clamp(valueToNormalizedPosition(range, valueStart), 0, 1),
     clamp(valueToNormalizedPosition(range, valueEnd), 0, 1),
@@ -37,8 +96,7 @@ export function getRangeScaleEditingOverlay({
         id: `scale-overlay-inactive-${index}`,
         positionEnd,
         positionStart,
-        radius,
-        range,
+        getPathData,
         segment: "inactive",
       }),
     ),
@@ -46,8 +104,7 @@ export function getRangeScaleEditingOverlay({
       id: "scale-overlay-active",
       positionEnd: activeEnd,
       positionStart: activeStart,
-      radius,
-      range,
+      getPathData,
       segment: "active",
     }),
   ];
@@ -55,27 +112,18 @@ export function getRangeScaleEditingOverlay({
 
 function getPath({
   id,
+  getPathData,
   positionEnd,
   positionStart,
-  radius,
-  range,
   segment,
 }: {
+  getPathData: (positionStart: number, positionEnd: number) => string;
   id: string;
   positionEnd: number;
   positionStart: number;
-  radius: number;
-  range: RangeDto;
   segment: "active" | "inactive";
 }): EditingOverlayPrimitive {
-  const commands = roundedSquarePathData({
-    angleStart: range.angleStart + range.openingAngle * positionStart,
-    centerX: range.centerX,
-    centerY: range.centerY,
-    cornerRadiusPercent: range.cornerRadiusPercent,
-    openingAngle: range.openingAngle * (positionEnd - positionStart),
-    radius,
-  });
+  const commands = getPathData(positionStart, positionEnd);
 
   return {
     d: commands,

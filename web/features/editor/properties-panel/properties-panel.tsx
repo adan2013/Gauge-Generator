@@ -93,6 +93,7 @@ export function PropertiesPanel({
             />
           ) : selectedLayer ? (
             <LayerProperties
+              canvas={canvas}
               layer={selectedLayer}
               onHistoryTransactionEnd={onHistoryTransactionEnd}
               onHistoryTransactionStart={onHistoryTransactionStart}

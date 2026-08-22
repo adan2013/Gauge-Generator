@@ -1,14 +1,14 @@
 import { type RenderContext, type ValidationIssue } from "@/features/layers/core/layer";
 import { getRangeMappedLayerValidationIssues } from "@/features/layers/core/range-layer-validation";
 import { getEffectiveRadiusMm } from "@/features/layers/core/range-mapped-layer-geometry";
-import { RangeMappedLayer } from "@/features/layers/core/range-mapped-layer";
+import { NormalOffsetRangeMappedLayer } from "@/features/layers/core/normal-offset-range-mapped-layer";
 import { PROJECT_VALIDATION_CODES } from "@/features/project/project-dto/project-validation-codes";
-import { pointOnRoundedSquare } from "@/features/ranges/path-geometry/rounded-square-geometry";
+import { pointOnRoundedSquareNormalOffset } from "@/features/ranges/path-geometry/rounded-square-geometry";
 import { getScaleDistribution } from "@/features/ranges/scale-mapping/scale-sequence";
 import type { RangeDto, TickScaleLayerDto } from "@/features/project/project-dto/project-dto";
 import { getTickScaleGeometryBounds } from "./tick-scale-constraints";
 
-export class TickScaleLayer extends RangeMappedLayer<TickScaleLayerDto> {
+export class TickScaleLayer extends NormalOffsetRangeMappedLayer<TickScaleLayerDto> {
   constructor(dto: TickScaleLayerDto) {
     super(dto);
   }
@@ -38,12 +38,13 @@ export class TickScaleLayer extends RangeMappedLayer<TickScaleLayerDto> {
     if (radius <= 0) return "";
     return getScaleDistribution(this.dto, range)
       .map(({ angle }) => {
-        const outer = pointOnRoundedSquare(
+        const outer = pointOnRoundedSquareNormalOffset(
           range.centerX,
           range.centerY,
-          radius,
+          range.radius,
           angle,
           range.cornerRadiusPercent,
+          this.dto.radiusOffsetMm,
         );
         const inner = {
           x: outer.point.x - outer.normal.x * this.dto.tickLengthMm,

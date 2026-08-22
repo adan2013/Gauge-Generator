@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import {
   createProject,
@@ -30,6 +30,7 @@ describe("CanvasPreview", () => {
         onLayerChange={vi.fn()}
         onLayerInteractionEnd={vi.fn()}
         onLayerInteractionStart={vi.fn()}
+        onSelectLayer={vi.fn()}
         onRangeChange={vi.fn()}
         onRangeInteractionEnd={vi.fn()}
         onRangeInteractionStart={vi.fn()}
@@ -59,6 +60,7 @@ describe("CanvasPreview", () => {
         onLayerChange={vi.fn()}
         onLayerInteractionEnd={vi.fn()}
         onLayerInteractionStart={vi.fn()}
+        onSelectLayer={vi.fn()}
         onRangeChange={vi.fn()}
         onRangeInteractionEnd={vi.fn()}
         onRangeInteractionStart={vi.fn()}
@@ -70,6 +72,45 @@ describe("CanvasPreview", () => {
     );
 
     expect(container.querySelectorAll("line")).toHaveLength(3);
+    expect(
+      screen.getByRole("img", { name: "Gauge preview" }).classList.contains("select-none"),
+    ).toBe(true);
+  });
+
+  it("selects the layer when its rendered SVG geometry is clicked", () => {
+    const range = createRange();
+    const layer = createTickScaleLayer(range.id, { valueEnd: 20, valueStep: 10 });
+    const project = createProject({ ranges: [range], layers: [layer] });
+    const onSelectLayer = vi.fn();
+    const { container } = renderEditor(
+      <CanvasPreview
+        hoveredLayerId={null}
+        layerPreviewModifiers={{
+          bringSelectedLayerToFront: false,
+          showEditingOverlay: true,
+          showOnlySelectedLayer: false,
+        }}
+        onBrowseExamples={vi.fn()}
+        onCreateRange={vi.fn()}
+        onLayerChange={vi.fn()}
+        onLayerInteractionEnd={vi.fn()}
+        onLayerInteractionStart={vi.fn()}
+        onRangeChange={vi.fn()}
+        onRangeInteractionEnd={vi.fn()}
+        onRangeInteractionStart={vi.fn()}
+        onSelectLayer={onSelectLayer}
+        project={project}
+        selectedLayer={undefined}
+        selectedRange={undefined}
+        snapping={{ angleDegrees: 10, distanceMm: 2, enabled: true }}
+      />,
+    );
+
+    const renderedTick = container.querySelector(`[data-layer-id="${layer.id}"] line`);
+    if (!renderedTick) throw new Error("Expected rendered layer geometry");
+    fireEvent.click(renderedTick);
+
+    expect(onSelectLayer).toHaveBeenCalledWith(layer.id);
   });
 
   it("temporarily isolates the hovered layer in the preview", () => {
@@ -90,6 +131,7 @@ describe("CanvasPreview", () => {
         onLayerChange={vi.fn()}
         onLayerInteractionEnd={vi.fn()}
         onLayerInteractionStart={vi.fn()}
+        onSelectLayer={vi.fn()}
         onRangeChange={vi.fn()}
         onRangeInteractionEnd={vi.fn()}
         onRangeInteractionStart={vi.fn()}
@@ -121,6 +163,7 @@ describe("CanvasPreview", () => {
         onLayerChange={vi.fn()}
         onLayerInteractionEnd={vi.fn()}
         onLayerInteractionStart={vi.fn()}
+        onSelectLayer={vi.fn()}
         onRangeChange={vi.fn()}
         onRangeInteractionEnd={vi.fn()}
         onRangeInteractionStart={vi.fn()}
@@ -160,6 +203,7 @@ describe("CanvasPreview", () => {
         onLayerChange={vi.fn()}
         onLayerInteractionEnd={vi.fn()}
         onLayerInteractionStart={vi.fn()}
+        onSelectLayer={vi.fn()}
         onRangeChange={vi.fn()}
         onRangeInteractionEnd={vi.fn()}
         onRangeInteractionStart={vi.fn()}

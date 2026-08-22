@@ -280,6 +280,8 @@ function SortableLayerRow({
     [LAYER_TYPE.label]: "types.label",
     [LAYER_TYPE.arc]: "types.arc",
     [LAYER_TYPE.needle]: "types.needle",
+    [LAYER_TYPE.ellipse]: "types.ellipse",
+    [LAYER_TYPE.rectangle]: "types.rectangle",
   } as const;
   return (
     <li

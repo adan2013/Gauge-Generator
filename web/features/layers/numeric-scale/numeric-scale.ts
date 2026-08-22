@@ -1,8 +1,8 @@
 import type { RenderContext, ValidationIssue } from "@/features/layers/core/layer";
 import { getRangeMappedLayerValidationIssues } from "@/features/layers/core/range-layer-validation";
 import { getEffectiveRadiusMm } from "@/features/layers/core/range-mapped-layer-geometry";
-import { RangeMappedLayer } from "@/features/layers/core/range-mapped-layer";
-import { pointOnRoundedSquare } from "@/features/ranges/path-geometry/rounded-square-geometry";
+import { NormalOffsetRangeMappedLayer } from "@/features/layers/core/normal-offset-range-mapped-layer";
+import { pointOnRoundedSquareNormalOffset } from "@/features/ranges/path-geometry/rounded-square-geometry";
 import { PROJECT_VALIDATION_CODES } from "@/features/project/project-dto/project-validation-codes";
 import { getScaleDistribution } from "@/features/ranges/scale-mapping/scale-sequence";
 import type { NumericScaleLayerDto, RangeDto } from "@/features/project/project-dto/project-dto";
@@ -12,7 +12,7 @@ import {
   getTextStyleSvgAttributes,
 } from "@/features/layers/core/text-style/text-style-svg";
 
-export class NumericScaleLayer extends RangeMappedLayer<NumericScaleLayerDto> {
+export class NumericScaleLayer extends NormalOffsetRangeMappedLayer<NumericScaleLayerDto> {
   constructor(dto: NumericScaleLayerDto) {
     super(dto);
   }
@@ -38,12 +38,13 @@ export class NumericScaleLayer extends RangeMappedLayer<NumericScaleLayerDto> {
     const textStyle = getTextStyleSvgAttributes(this.dto.textStyle);
     return getScaleDistribution(this.dto, range)
       .map(({ angle, value }) => {
-        const placement = pointOnRoundedSquare(
+        const placement = pointOnRoundedSquareNormalOffset(
           range.centerX,
           range.centerY,
-          radius,
+          range.radius,
           angle,
           range.cornerRadiusPercent,
+          this.dto.radiusOffsetMm,
         );
         const { x, y } = placement.point;
         const transform = this.dto.rotated

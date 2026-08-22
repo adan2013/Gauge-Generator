@@ -19,6 +19,7 @@ type CanvasPreviewProps = {
   onLayerChange: (layer: LayerDto) => void;
   onLayerInteractionEnd: () => void;
   onLayerInteractionStart: () => void;
+  onSelectLayer: (layerId: string) => void;
   onRangeChange: (range: RangeDto) => void;
   onRangeInteractionEnd: () => void;
   onRangeInteractionStart: () => void;
@@ -37,6 +38,7 @@ export function CanvasPreview({
   onLayerChange,
   onLayerInteractionEnd,
   onLayerInteractionStart,
+  onSelectLayer,
   onRangeChange,
   onRangeInteractionEnd,
   onRangeInteractionStart,
@@ -130,7 +132,7 @@ export function CanvasPreview({
           {selectedRange ? (
             <svg
               aria-label={t("canvas.previewAriaLabel")}
-              className="absolute inset-0 size-full"
+              className="absolute inset-0 size-full select-none"
               preserveAspectRatio="xMidYMid meet"
               role="img"
               viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
@@ -142,6 +144,7 @@ export function CanvasPreview({
                 previewModifiers={layerPreviewModifiers}
                 renderContext={renderContext}
                 selectedLayerId={selectedLayer?.id}
+                onSelectLayer={onSelectLayer}
               />
               <RangeEditingOverlay
                 canvas={canvas}
@@ -156,7 +159,7 @@ export function CanvasPreview({
           ) : !showWelcome ? (
             <svg
               aria-label={t("canvas.previewAriaLabel")}
-              className="absolute inset-0 size-full"
+              className="absolute inset-0 size-full select-none"
               preserveAspectRatio="xMidYMid meet"
               role="img"
               viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
@@ -168,6 +171,7 @@ export function CanvasPreview({
                 previewModifiers={layerPreviewModifiers}
                 renderContext={renderContext}
                 selectedLayerId={selectedLayer?.id}
+                onSelectLayer={onSelectLayer}
               />
               {selectedLayer && layerPreviewModifiers.showEditingOverlay ? (
                 <LayerEditingOverlay
@@ -216,12 +220,14 @@ function VisualLayers({
   previewModifiers,
   renderContext,
   selectedLayerId,
+  onSelectLayer,
 }: {
   hoveredLayerId: string | null;
   layers: LayerDto[];
   previewModifiers: LayerPreviewModifiers;
   renderContext: { project: ProjectDto; rangeById: ReadonlyMap<string, RangeDto> };
   selectedLayerId: string | undefined;
+  onSelectLayer: (layerId: string) => void;
 }) {
   const isolatedLayerId =
     previewModifiers.showOnlySelectedLayer && selectedLayerId ? selectedLayerId : hoveredLayerId;
@@ -238,5 +244,13 @@ function VisualLayers({
   return orderedLayers
     .map((layer) => ({ id: layer.id, svg: createLayerModel(layer).toSvg(renderContext) }))
     .filter((layer) => layer.svg)
-    .map((layer) => <g dangerouslySetInnerHTML={{ __html: layer.svg }} key={layer.id} />);
+    .map((layer) => (
+      <g
+        className="cursor-pointer"
+        dangerouslySetInnerHTML={{ __html: layer.svg }}
+        data-layer-id={layer.id}
+        key={layer.id}
+        onClick={() => onSelectLayer(layer.id)}
+      />
+    ));
 }

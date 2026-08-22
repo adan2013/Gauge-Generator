@@ -1,21 +1,26 @@
 import { describe, expect, it } from "vitest";
-import { createLabelLayer, createRange } from "@/features/project/factories/project-factories";
+import {
+  createLabelLayer,
+  createProject,
+  createRange,
+} from "@/features/project/factories/project-factories";
 import {
   getLabelPointPropertyDefinitions,
   getLabelTextArcPropertyDefinitions,
 } from "./label-properties";
 
 describe("Label property definitions", () => {
-  const range = createRange({ radius: 30 });
+  const canvas = createProject().canvas;
+  const range = createRange({ centerX: 30, centerY: 80, radius: 30 });
 
   it("uses millimetres and Range-derived bounds for point offsets", () => {
     const layer = createLabelLayer(range.id);
     if (layer.layout.mode !== "point") throw new Error("Expected point layout");
 
-    expect(getLabelPointPropertyDefinitions(layer.layout, range)[0]).toMatchObject({
+    expect(getLabelPointPropertyDefinitions(layer.layout, canvas, range)[0]).toMatchObject({
       key: "offsetXMm",
       min: -30,
-      max: 30,
+      max: canvas.widthMm - 30,
       snap: "distance",
       unit: "millimeters",
     });

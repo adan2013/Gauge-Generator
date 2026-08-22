@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   pointOnRoundedSquare,
+  pointOnRoundedSquareNormalOffset,
+  roundedSquareNormalOffsetPathData,
   roundedSquarePathData,
   roundedSquareRadiusAtPoint,
 } from "./rounded-square-geometry";
@@ -19,6 +21,30 @@ describe("rounded-square geometry", () => {
       const point = pointOnRoundedSquare(60, 60, 40, 45, cornerRadiusPercent).point;
       expect(roundedSquareRadiusAtPoint(60, 60, point, cornerRadiusPercent)).toBeCloseTo(40);
     }
+  });
+
+  it("preserves the path position when applying a normal offset", () => {
+    const base = pointOnRoundedSquare(60, 60, 40, 160, 0);
+    const inset = pointOnRoundedSquareNormalOffset(60, 60, 40, 160, 0, -10);
+
+    expect(inset.point.x).toBe(base.point.x + 10);
+    expect(inset.point.y).toBeCloseTo(base.point.y);
+  });
+
+  it("offsets rounded overlay paths along their normals", () => {
+    const path = roundedSquareNormalOffsetPathData({
+      angleStart: 0,
+      centerX: 60,
+      centerY: 60,
+      cornerRadiusPercent: 25,
+      openingAngle: 90,
+      radius: 40,
+      offsetMm: -5,
+    });
+
+    expect(path).toMatch(/^M 95 60 L /);
+    expect(path).toContain("A 15 15 0 0 1");
+    expect(path).toMatch(/ L 60 95$/);
   });
 
   it("generates the shared rounded path used by Range and visual-layer overlays", () => {

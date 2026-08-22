@@ -43,6 +43,7 @@
       "undo": "Undid the last project change.",
       "redo": "Redid the project change.",
       "layerReset": "Layer settings restored to their defaults.",
+      "layerEditModeStarted": "You are editing layer “{name}”.",
       "rangeRequired": "Create a Range before adding a visual layer.",
       "rangeDependencyWarning": "Large changes to this Range may automatically adjust {count, plural, one {the linked layer} other {# linked layers}}. Element sizes and visible values may be limited to fit the new Range.",
       "canvasWidthTooSmall": "Canvas width must be at least {minimum} mm to keep the center of “{name}” inside.",
@@ -99,14 +100,18 @@
         "numericScaleDescription": "Draw value labels using the selected Range.",
         "labelDescription": "Add regular labels or text that follows the selected Range path.",
         "arcDescription": "Draw a styled arc between values on the selected Range.",
-        "needleDescription": "Point to a value using the selected Range mapping."
+        "needleDescription": "Point to a value using the selected Range mapping.",
+        "ellipseDescription": "Add a positioned, sized, and rotated ellipse.",
+        "rectangleDescription": "Add a rectangle with optional rounded corners."
       },
       "types": {
         "tickScale": "Tick scale",
         "numericScale": "Numeric scale",
         "label": "Label",
         "arc": "Arc",
-        "needle": "Needle"
+        "needle": "Needle",
+        "ellipse": "Ellipse",
+        "rectangle": "Rectangle"
       },
       "editLayer": "Edit {name}",
       "deleteLayer": "Delete {name}",
@@ -344,6 +349,33 @@
         "value": "value: {value}",
         "length": "length: {value} mm",
         "tailLength": "tail: {value} mm"
+      }
+    },
+    "shape": {
+      "groups": {
+        "position": "Position",
+        "size": "Size",
+        "appearance": "Appearance"
+      },
+      "offsetX": "Horizontal offset",
+      "offsetY": "Vertical offset",
+      "width": "Width",
+      "height": "Height",
+      "rotation": "Rotation",
+      "borderWidth": "Border width",
+      "cornerRadius": "Corner radius",
+      "fillColor": "Background color",
+      "borderColor": "Border color",
+      "overlayAriaLabel": "Shape editing overlay",
+      "handles": {
+        "position": "Move shape",
+        "rotation": "Rotate shape",
+        "size": "Resize shape"
+      },
+      "handleValues": {
+        "position": "{x}; {y} mm",
+        "rotation": "{value}°",
+        "size": "{width} × {height} mm"
       }
     },
     "textStyle": {

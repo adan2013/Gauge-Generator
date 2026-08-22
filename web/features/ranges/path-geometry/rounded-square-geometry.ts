@@ -62,6 +62,24 @@ export function pointOnRoundedSquare(
   return { point, normal };
 }
 
+export function pointOnRoundedSquareNormalOffset(
+  centerX: number,
+  centerY: number,
+  radius: number,
+  angle: number,
+  cornerRadiusPercent: number,
+  offsetMm: number,
+): RoundedSquarePoint {
+  const placement = pointOnRoundedSquare(centerX, centerY, radius, angle, cornerRadiusPercent);
+  return {
+    normal: placement.normal,
+    point: {
+      x: placement.point.x + placement.normal.x * offsetMm,
+      y: placement.point.y + placement.normal.y * offsetMm,
+    },
+  };
+}
+
 export function roundedSquareRadiusAtPoint(
   centerX: number,
   centerY: number,
@@ -84,6 +102,26 @@ export function roundedSquarePathData({
   openingAngle,
   radius,
 }: RoundedSquarePathOptions): string {
+  return roundedSquareNormalOffsetPathData({
+    angleStart,
+    centerX,
+    centerY,
+    cornerRadiusPercent,
+    openingAngle,
+    radius,
+    offsetMm: 0,
+  });
+}
+
+export function roundedSquareNormalOffsetPathData({
+  angleStart,
+  centerX,
+  centerY,
+  cornerRadiusPercent,
+  openingAngle,
+  radius,
+  offsetMm,
+}: RoundedSquarePathOptions & { offsetMm: number }): string {
   const angleEnd = angleStart + openingAngle;
   const direction = Math.sign(openingAngle) || 1;
   const cornerRadius = radius * (cornerRadiusPercent / CORNER_RADIUS_PERCENT.max);
@@ -111,12 +149,13 @@ export function roundedSquarePathData({
         index === 0 || Math.abs(angle - angles[index - 1]) > PATH_ANGLE_TOLERANCE,
     );
   const angles = [angleStart, ...internalAngles, angleEnd];
-  const start = pointOnRoundedSquare(
+  const start = pointOnRoundedSquareNormalOffset(
     centerX,
     centerY,
     radius,
     angleStart,
     cornerRadiusPercent,
+    offsetMm,
   ).point;
   const commands = [`M ${format(start.x)} ${format(start.y)}`];
 
@@ -124,7 +163,14 @@ export function roundedSquarePathData({
     const previousAngle = angles[index - 1];
     const angle = angles[index];
     if (Math.abs(angle - previousAngle) <= PATH_ANGLE_TOLERANCE) continue;
-    const end = pointOnRoundedSquare(centerX, centerY, radius, angle, cornerRadiusPercent).point;
+    const end = pointOnRoundedSquareNormalOffset(
+      centerX,
+      centerY,
+      radius,
+      angle,
+      cornerRadiusPercent,
+      offsetMm,
+    ).point;
     const midpoint = pointOnRoundedSquare(
       centerX,
       centerY,
@@ -132,13 +178,14 @@ export function roundedSquarePathData({
       (previousAngle + angle) / 2,
       cornerRadiusPercent,
     );
+    const offsetCornerRadius = cornerRadius + offsetMm;
     const followsCorner =
-      cornerRadius > PATH_ANGLE_TOLERANCE &&
+      offsetCornerRadius > PATH_ANGLE_TOLERANCE &&
       Math.abs(midpoint.normal.x) > PATH_ANGLE_TOLERANCE &&
       Math.abs(midpoint.normal.y) > PATH_ANGLE_TOLERANCE;
     commands.push(
       followsCorner
-        ? `A ${format(cornerRadius)} ${format(cornerRadius)} 0 0 ${direction > 0 ? 1 : 0} ${format(end.x)} ${format(end.y)}`
+        ? `A ${format(offsetCornerRadius)} ${format(offsetCornerRadius)} 0 0 ${direction > 0 ? 1 : 0} ${format(end.x)} ${format(end.y)}`
         : `L ${format(end.x)} ${format(end.y)}`,
     );
   }

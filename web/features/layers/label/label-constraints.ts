@@ -3,8 +3,13 @@ import {
   getRadiusOffsetBounds,
 } from "@/features/layers/core/range-mapped-layer-geometry";
 import type { ValidationIssue } from "@/features/layers/core/layer";
+import { getCanvasOffsetBounds } from "@/features/layers/core/canvas-offset-bounds";
 import { PROJECT_VALIDATION_CODES } from "@/features/project/project-dto/project-validation-codes";
-import type { LabelLayerDto, RangeDto } from "@/features/project/project-dto/project-dto";
+import type {
+  CanvasDto,
+  LabelLayerDto,
+  RangeDto,
+} from "@/features/project/project-dto/project-dto";
 import { getRangeScaleValueBounds } from "@/features/ranges/scale-mapping/scale-mapping";
 import { clamp } from "@/lib/geometry/geometry";
 
@@ -12,16 +17,18 @@ export const LABEL_MINIMUM_EFFECTIVE_RADIUS_MM = 0.5;
 
 export function getLabelLayoutValidationIssues(
   layer: LabelLayerDto,
+  canvas: CanvasDto,
   range: RangeDto,
 ): ValidationIssue[] {
   if (layer.layout.mode === "point") {
+    const bounds = getCanvasOffsetBounds(canvas, range);
     const issues: ValidationIssue[] = [];
-    if (Math.abs(layer.layout.offsetXMm) > range.radius)
+    if (layer.layout.offsetXMm < bounds.offsetX.min || layer.layout.offsetXMm > bounds.offsetX.max)
       issues.push({
         path: "layout.offsetXMm",
         code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange,
       });
-    if (Math.abs(layer.layout.offsetYMm) > range.radius)
+    if (layer.layout.offsetYMm < bounds.offsetY.min || layer.layout.offsetYMm > bounds.offsetY.max)
       issues.push({
         path: "layout.offsetYMm",
         code: PROJECT_VALIDATION_CODES.valueOutsideAllowedRange,
@@ -60,16 +67,22 @@ export function getLabelLayoutValidationIssues(
   return issues;
 }
 
-export function constrainLabelToRange(layer: LabelLayerDto, range: RangeDto): LabelLayerDto {
-  if (layer.layout.mode === "point")
+export function constrainLabelToRange(
+  layer: LabelLayerDto,
+  range: RangeDto,
+  canvas: CanvasDto,
+): LabelLayerDto {
+  if (layer.layout.mode === "point") {
+    const bounds = getCanvasOffsetBounds(canvas, range);
     return {
       ...layer,
       layout: {
         ...layer.layout,
-        offsetXMm: clamp(layer.layout.offsetXMm, -range.radius, range.radius),
-        offsetYMm: clamp(layer.layout.offsetYMm, -range.radius, range.radius),
+        offsetXMm: clamp(layer.layout.offsetXMm, bounds.offsetX.min, bounds.offsetX.max),
+        offsetYMm: clamp(layer.layout.offsetYMm, bounds.offsetY.min, bounds.offsetY.max),
       },
     };
+  }
 
   const bounds = getRangeScaleValueBounds(range);
   let valueStart = clamp(layer.layout.valueStart, bounds.min, bounds.max);

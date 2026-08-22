@@ -204,14 +204,18 @@ osobnego pivotu ani wartości procentowych.
 
 Warstwy mają ten sam zestaw właściwości; różni je prymityw SVG.
 
-| Właściwość                   | Typ     | Opis / zakres                                  |
-| ---------------------------- | ------- | ---------------------------------------------- |
-| centerOffsetX, centerOffsetY | number  | przesunięcie środka względem Range (-100–100%) |
-| width, height                | number  | wymiary (5–100%)                               |
-| color                        | kolor   | wypełnienie                                    |
-| borderColor                  | kolor   | kolor obrysu                                   |
-| borderThickness              | number  | grubość obrysu (0–25%; zero ukrywa obrys)      |
-| angle                        | integer | obrót (-360–360°)                              |
+| Właściwość                | Typ     | Opis / zakres                             |
+| ------------------------- | ------- | ----------------------------------------- |
+| geometry.offsetXMm/YMm    | number  | przesunięcie środka względem Range w mm   |
+| geometry.widthMm/heightMm | number  | fizyczne wymiary w mm                     |
+| geometry.rotationDegrees  | integer | obrót od 0 do 359 stopni                  |
+| style.fillColor           | kolor   | kolor wypełnienia                         |
+| style.borderColor         | kolor   | kolor obrysu                              |
+| style.borderWidthMm       | number  | grubość obrysu w mm                       |
+| cornerRadiusPercent       | number  | tylko Rectangle; 0–50% krótszego boku     |
+| borderColor               | kolor   | kolor obrysu                              |
+| borderThickness           | number  | grubość obrysu (0–25%; zero ukrywa obrys) |
+| angle                     | integer | obrót (-360–360°)                         |
 
 ### Ustawienia projektu
 

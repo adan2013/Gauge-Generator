@@ -1,16 +1,23 @@
 import { fireEvent, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { createLabelLayer, createRange } from "@/features/project/factories/project-factories";
+import {
+  createLabelLayer,
+  createProject,
+  createRange,
+} from "@/features/project/factories/project-factories";
 import { renderEditor } from "@/test/render-editor";
 import { LabelPropertiesEditor } from "./label-properties-editor";
 
 describe("LabelPropertiesEditor", () => {
+  const canvas = createProject().canvas;
+
   it("edits content and keeps point-layout updates nested", () => {
     const range = createRange();
     const layer = createLabelLayer(range.id);
     const onLayerChange = vi.fn();
     renderEditor(
       <LabelPropertiesEditor
+        canvas={canvas}
         layer={layer}
         onHistoryTransactionEnd={vi.fn()}
         onHistoryTransactionStart={vi.fn()}
@@ -41,6 +48,7 @@ describe("LabelPropertiesEditor", () => {
     const layer = createLabelLayer(range.id);
     const onLayerChange = vi.fn();
     const sharedProps = {
+      canvas,
       onHistoryTransactionEnd: vi.fn(),
       onHistoryTransactionStart: vi.fn(),
       onLayerChange,

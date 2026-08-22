@@ -31,7 +31,7 @@ describe("EditorShell", () => {
     expect(warning.querySelector("svg")).not.toBeNull();
   });
 
-  it("validates a Range edit after constraining its linked Label", () => {
+  it("keeps a linked point Label in place when the Range radius changes", () => {
     const range = createRange({ radius: 40 });
     const layer = createLabelLayer(range.id, {
       layout: { mode: "point", offsetXMm: 30, offsetYMm: 0, rotationDegrees: 0 },
@@ -49,7 +49,7 @@ describe("EditorShell", () => {
 
     expect(store.getState().project.current.ranges[0].radius).toBe(16);
     expect(store.getState().project.current.layers[0]).toMatchObject({
-      layout: { offsetXMm: 16 },
+      layout: { offsetXMm: 30 },
     });
   });
 
@@ -161,6 +161,43 @@ describe("EditorShell", () => {
       screen.getByText("The name is required and must contain no more than 80 characters."),
     ).toBeTruthy();
     expect(store.getState().project.current.layers[0].name).toBe("Major ticks");
+  });
+  it("shows a temporary status when a canvas click opens layer editing", () => {
+    const range = createRange();
+    const layer = createTickScaleLayer(range.id, { name: "Major ticks" });
+    const store = makeStore({
+      project: { current: createProject({ ranges: [range], layers: [layer] }) },
+    });
+    const { container } = renderEditor(<EditorShell />, store);
+    const renderedTick = container.querySelector(`[data-layer-id="${layer.id}"] line`);
+    if (!renderedTick) throw new Error("Expected rendered layer geometry");
+
+    fireEvent.click(renderedTick);
+
+    const status = screen
+      .getByText("You are editing layer “Major ticks”.")
+      .closest('[role="status"]');
+    if (!status) throw new Error("Layer editing status was not rendered");
+    expect(status.querySelector("svg")).not.toBeNull();
+    expect(store.getState().editor.selectedObject).toEqual({ collection: "layers", id: layer.id });
+
+    fireEvent.click(renderedTick);
+
+    expect(screen.getAllByText("You are editing layer “Major ticks”.")).toHaveLength(1);
+  });
+  it("leaves layer editing when Escape is pressed", () => {
+    const range = createRange();
+    const layer = createTickScaleLayer(range.id);
+    const store = makeStore({
+      project: { current: createProject({ ranges: [range], layers: [layer] }) },
+    });
+    renderEditor(<EditorShell />, store);
+    fireEvent.click(screen.getByRole("button", { name: `Edit ${layer.name}` }));
+
+    fireEvent.keyDown(document, { key: "Escape" });
+
+    expect(store.getState().editor.sidebarMode).toBe("layers");
+    expect(screen.getByRole("heading", { name: "Layers" })).toBeTruthy();
   });
   it("connects toolbar undo and redo to project history", () => {
     const { store } = renderEditor(<EditorShell />);

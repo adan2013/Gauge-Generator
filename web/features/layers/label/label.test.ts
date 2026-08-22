@@ -51,8 +51,24 @@ describe("LabelLayer", () => {
   it("exposes independent move and rotation handles", () => {
     const model = new LabelLayer(layer);
 
-    expect(model.getEditingOverlay(context)).toHaveLength(2);
+    expect(model.getEditingOverlay(context)).toEqual([
+      expect.objectContaining({ id: "label-rotation-guide" }),
+    ]);
     expect(model.getHandles(context).map((handle) => handle.id)).toEqual(["position", "rotation"]);
+  });
+
+  it("places the rotation handle just beyond large text", () => {
+    const largeTextLayer = {
+      ...layer,
+      textStyle: { ...layer.textStyle, sizeMm: 40 },
+    };
+    const rotationHandle = new LabelLayer(largeTextLayer)
+      .getHandles(context)
+      .find(({ id }) => id === "rotation");
+    const point = { x: 70, y: 40 };
+
+    expect(rotationHandle?.point.x).toBeCloseTo(point.x + 12);
+    expect(rotationHandle?.point.y).toBeCloseTo(point.y - 12 * Math.sqrt(3));
   });
 
   it("keeps values edited by handles integral", () => {

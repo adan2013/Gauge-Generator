@@ -96,6 +96,33 @@ presentation objects:
 `placement` is `front` or `behind`. Needle never stores an angle or pivot
 because both are derived from the current Range.
 
+Ellipse and Rectangle share nested geometry and presentation:
+
+```json
+{
+  "type": "ellipse",
+  "rangeId": "…",
+  "geometry": {
+    "offsetXMm": 0,
+    "offsetYMm": 0,
+    "widthMm": 60,
+    "heightMm": 60,
+    "rotationDegrees": 0
+  },
+  "style": {
+    "fillColor": "#BBDEFB",
+    "borderColor": "#1565C0",
+    "borderWidthMm": 0
+  }
+}
+```
+
+Rectangle has the same fields and additionally stores
+`cornerRadiusPercent` from `0` to `50`. The resulting SVG radius is that
+percentage of the shorter side, so `50` equals half of the shorter side.
+New shapes default to the source Range center and half of the current canvas
+width and height.
+
 Numeric Scale and Label share the same nested typography contract:
 `textStyle: { font, sizeMm, color, bold, italic, underline }`. `font` is a
 reference object rather than a bare family field; MVP supports

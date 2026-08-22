@@ -285,7 +285,14 @@ oraz wspólny Range-mapped overlay promienia.
 Needle jest ukończony jako trzeci vertical slice etapu. Wartość całkowita jest
 mapowana przez Range, którego środek stanowi stałą oś wskazówki. Zagnieżdżone
 obiekty `shaft` i `hub` przechowują geometrię i prezentację w mm; warstwa nie ma
-ręcznego kąta ani własnego pivotu. Następną warstwą jest Ellipse.
+ręcznego kąta ani własnego pivotu.
+
+Ellipse i Rectangle są ukończone jako wspólny czwarty vertical slice etapu.
+Przechowują offsety i wymiary w mm, obrót `0..359`, zagnieżdżony styl
+wypełnienia i obrysu oraz współdzielone uchwyty środka, obrotu i rozmiaru.
+Uchwyt rozmiaru pracuje w lokalnych osiach obróconej figury. Rectangle dodaje
+promień narożników `0..50%`. Etap 5 jest ukończony; następnym etapem są pliki
+użytkownika, autosave i przykłady.
 
 1. DTO/Zod/default factory i walidacja domenowa.
 2. Klasa z `toSvg`, `getEditingOverlay`, `getHandles` i `applyHandleDrag`.

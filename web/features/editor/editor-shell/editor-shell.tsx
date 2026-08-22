@@ -10,6 +10,7 @@ import {
   FolderOpen,
   HelpCircle,
   History,
+  Pencil,
   Redo2,
   TriangleAlert,
   Undo2,
@@ -29,6 +30,7 @@ import {
 import { LayersBrowser } from "@/features/editor/layers-browser/layers-browser";
 import { ProjectSettingsPanel } from "@/features/editor/project-settings-panel/project-settings-panel";
 import { useProjectValidation } from "@/features/editor/project-validation/use-project-validation";
+import { useLayerEditingEscape } from "@/features/editor/editor-shell/use-layer-editing-escape";
 import { PropertiesPanel } from "@/features/editor/properties-panel/properties-panel";
 import {
   createRangeForCanvas,
@@ -124,6 +126,23 @@ export function EditorShell() {
     dispatch(editorActions.setSelectedObject({ collection: "layers", id: layerId }));
     dispatch(editorActions.setSidebarMode("properties"));
   };
+  const openLayerFromCanvas = (layerId: string) => {
+    if (
+      sidebarMode === "properties" &&
+      selectedObject?.collection === "layers" &&
+      selectedObject.id === layerId
+    )
+      return;
+    const layer = project.layers.find((candidate) => candidate.id === layerId);
+    if (!layer) return;
+    openLayerProperties(layerId);
+    showMessage({
+      color: "neutral",
+      content: t("status.layerEditModeStarted", { name: layer.name }),
+      duration: 2_500,
+      icon: Pencil,
+    });
+  };
   function createProjectRange() {
     if (project.ranges.length >= MAX_RANGES) return;
     const range = createRangeForCanvas(project.canvas, {
@@ -151,7 +170,7 @@ export function EditorShell() {
     const sourceRange = project.ranges.at(-1);
     if (!sourceRange) return;
     const name = t("layers.defaultName", { number: project.layers.length + 1 });
-    const layer = createLayerFromType(type, sourceRange, { name });
+    const layer = createLayerFromType(type, sourceRange, project.canvas, { name });
     dispatch(projectActions.addLayer(layer));
     openLayerProperties(layer.id);
   }
@@ -177,6 +196,10 @@ export function EditorShell() {
     selectedObject?.collection === "layers"
       ? project.layers.find((layer) => layer.id === selectedObject.id)
       : undefined;
+  useLayerEditingEscape({
+    enabled: sidebarMode === "properties" && selectedObject?.collection === "layers",
+    onEscape: () => dispatch(editorActions.setSidebarMode("layers")),
+  });
   const updateSelectedRange = (change: Partial<RangeDto>) => {
     if (selectedRange) commitRange({ ...selectedRange, ...change });
   };
@@ -187,7 +210,11 @@ export function EditorShell() {
   const resetSelectedLayer = () => {
     if (!selectedLayer) return;
     const sourceRange = project.ranges.find((range) => range.id === selectedLayer.rangeId);
-    if (!sourceRange || !commitLayer(resetLayerToDefaults(selectedLayer, sourceRange))) return;
+    if (
+      !sourceRange ||
+      !commitLayer(resetLayerToDefaults(selectedLayer, sourceRange, project.canvas))
+    )
+      return;
     showMessage({
       color: "neutral",
       content: t("status.layerReset"),
@@ -334,6 +361,7 @@ export function EditorShell() {
           onLayerChange={commitLayer}
           onLayerInteractionEnd={() => dispatch(completeProjectHistoryTransaction())}
           onLayerInteractionStart={() => dispatch(beginProjectHistoryTransaction())}
+          onSelectLayer={openLayerFromCanvas}
           onRangeChange={commitRange}
           onRangeInteractionEnd={() => dispatch(completeProjectHistoryTransaction())}
           onRangeInteractionStart={() => dispatch(beginProjectHistoryTransaction())}
