@@ -281,7 +281,9 @@ export function EditorShell() {
               onCreateRange={createProjectRange}
               onDeleteLayer={(layerId) => dispatch(projectActions.removeLayer(layerId))}
               onDeleteRange={(rangeId) => dispatch(projectActions.removeRange(rangeId))}
-              onDuplicateLayer={(layerId) => dispatch(projectActions.duplicateLayer(layerId))}
+              onDuplicateLayer={(layerId, name) =>
+                dispatch(projectActions.duplicateLayer({ layerId, name }))
+              }
               onHoverLayer={(layerId) => dispatch(editorActions.setHoveredLayerId(layerId))}
               onOpenLayerProperties={openLayerProperties}
               onOpenProjectSettings={() => {

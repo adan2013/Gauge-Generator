@@ -147,11 +147,11 @@ describe("project store and history", () => {
       project: { current: createProject({ ranges: [range], layers: [first, second] }) },
     });
 
-    store.dispatch(projectActions.duplicateLayer(second.id));
+    store.dispatch(projectActions.duplicateLayer({ layerId: second.id, name: "Copied markers" }));
 
     const layers = store.getState().project.current.layers;
-    expect(layers.map((layer) => layer.name)).toEqual(["Top", "Markers_Copy", "Markers"]);
-    expect(layers[1]).toMatchObject({ ...second, id: expect.any(String), name: "Markers_Copy" });
+    expect(layers.map((layer) => layer.name)).toEqual(["Top", "Copied markers", "Markers"]);
+    expect(layers[1]).toMatchObject({ ...second, id: expect.any(String), name: "Copied markers" });
     expect(layers[1].id).not.toBe(second.id);
   });
 

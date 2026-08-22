@@ -79,16 +79,18 @@ export const projectSlice = createSlice({
         return true;
       });
     },
-    duplicateLayer: (state, action: PayloadAction<string>) => {
+    duplicateLayer: (state, action: PayloadAction<{ layerId: string; name: string }>) => {
       commitProjectMutation(state, (project) => {
         if (project.layers.length >= MAX_LAYERS) return false;
-        const sourceIndex = project.layers.findIndex((layer) => layer.id === action.payload);
+        const sourceIndex = project.layers.findIndex(
+          (layer) => layer.id === action.payload.layerId,
+        );
         if (sourceIndex < 0) return false;
         const sourceLayer = project.layers[sourceIndex];
         project.layers.splice(sourceIndex, 0, {
           ...sourceLayer,
           id: crypto.randomUUID(),
-          name: `${sourceLayer.name}_Copy`,
+          name: action.payload.name,
         });
         return true;
       });

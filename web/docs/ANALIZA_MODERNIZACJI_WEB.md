@@ -702,7 +702,7 @@ jest to płatność, tracking ani wymagany element użycia aplikacji.
 | Add layer               | otwiera wybór typu warstwy oraz formularz jej utworzenia                     |
 | Project settings        | otwiera ustawienia projektu: płótno i snapping                               |
 | Delete layer            | usuwa zaznaczoną warstwę po potwierdzeniu; blokuje usunięcie używanego Range |
-| Duplicate layer         | tworzy kopię zaznaczonej warstwy z nową nazwą i identyfikatorem              |
+| Duplicate layer         | otwiera dialog nazwania kopii zaznaczonej warstwy                            |
 | Move layer up           | przesuwa warstwę wyżej w kolejności nakładania                               |
 | Move layer down         | przesuwa warstwę niżej w kolejności nakładania                               |
 | Toggle layer visibility | ikona przy warstwie; ukrywa lub pokazuje ją na podglądzie                    |
@@ -744,6 +744,10 @@ reset zachowuje identyfikator, nazwę, widoczność oraz wybrany Range warstwy.
 | Home            | Video tutorials        | otwiera stronę tutoriali                                            |
 | Help            | Back to editor         | wraca z mini-wiki do bieżącego projektu bez utraty stanu            |
 | Help            | Previous / Next        | przechodzi między kolejnymi sekcjami mini-wiki                      |
+
+Dialog duplikowania wstępnie wypełnia pole nazwą warstwy źródłowej i zaznacza
+cały tekst. Zatwierdzona kopia otrzymuje nowy identyfikator i pojawia się
+bezpośrednio wyżej od źródła w hierarchii projektu.
 
 Wszystkie akcje destrukcyjne i potencjalnie utracone zmiany wymagają
 zlokalizowanego dialogu potwierdzenia: Delete layer, Reset layer, New project,

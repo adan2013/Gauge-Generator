@@ -111,6 +111,13 @@
       "editLayer": "Edit {name}",
       "deleteLayer": "Delete {name}",
       "duplicateLayer": "Duplicate {name}",
+      "duplicateDialog": {
+        "title": "Duplicate layer",
+        "description": "Choose a name for the duplicated layer.",
+        "nameLabel": "Layer name",
+        "confirm": "Duplicate",
+        "cancel": "Cancel"
+      },
       "hideLayer": "Hide {name}",
       "showLayer": "Show {name}",
       "reorderLayer": "Reorder {name}",

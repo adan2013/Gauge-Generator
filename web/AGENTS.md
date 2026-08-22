@@ -187,8 +187,9 @@ Keep those documents current. Put completed-stage evidence in
 - Use `dnd-kit` for visual-layer ordering; rely on its sortable motion rather
   than adding a separate drop-target indicator.
 - The Layers browser duplicates a visual layer immediately above its source
-  (the preceding, visually higher index), with a fresh ID and a `_Copy` name
-  suffix. It is a project mutation and therefore participates in Undo/Redo.
+  (the preceding, visually higher index) with a fresh ID. Duplication first opens
+  a modal whose selected text is the source name; only submitting a valid name
+  mutates the project and participates in Undo/Redo.
 - The initial store state in `NODE_ENV=development` uses a deterministic
   logarithmic pressure-gauge workbench (`1..10 bar`) with high-value detail and
   representative Arc, Needle, Label, Ellipse, Rectangle, Line, Icon, Tick Scale,

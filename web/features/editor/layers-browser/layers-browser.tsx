@@ -1,6 +1,6 @@
 "use client";
 
-import type { DragEvent as ReactDragEvent } from "react";
+import { useState, type DragEvent as ReactDragEvent } from "react";
 import { DndContext, PointerSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -10,6 +10,7 @@ import { ActionButton } from "@/components/atoms/action-button/action-button";
 import { Tooltip } from "@/components/atoms/tooltip/tooltip";
 import { useConfirmation } from "@/components/providers/confirmation-provider/confirmation-provider";
 import { LayerThumbnail } from "@/features/layers/core/layer-thumbnail/layer-thumbnail";
+import { DuplicateLayerModal } from "./duplicate-layer-modal";
 import {
   LAYER_TYPE,
   MAX_RANGES,
@@ -25,7 +26,7 @@ export type LayersBrowserProps = {
   ranges: RangeDto[];
   onCreateLayer: () => void;
   onCreateRange: () => void;
-  onDuplicateLayer: (layerId: string) => void;
+  onDuplicateLayer: (layerId: string, name: string) => void;
   onDeleteLayer: (layerId: string) => void;
   onDeleteRange: (rangeId: string) => void;
   onHoverLayer: (layerId: string | null) => void;
@@ -56,6 +57,7 @@ export function LayersBrowser({
   const rangesT = useTranslations("Editor.ranges");
   const confirmationT = useTranslations("Editor.confirmation");
   const { confirm } = useConfirmation();
+  const [layerToDuplicate, setLayerToDuplicate] = useState<LayerDto>();
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
   function handleLayerDragEnd({ active, over }: DragEndEvent) {
     if (!over || active.id === over.id) return;
@@ -155,7 +157,7 @@ export function LayersBrowser({
                       key={layer.id}
                       layer={layer}
                       onDelete={() => void requestLayerDeletion(layer)}
-                      onDuplicate={() => onDuplicateLayer(layer.id)}
+                      onDuplicate={() => setLayerToDuplicate(layer)}
                       onEdit={() => onOpenLayerProperties(layer.id)}
                       onHoverChange={onHoverLayer}
                       onNativeDrop={handleNativeLayerDrop}
@@ -241,6 +243,16 @@ export function LayersBrowser({
           />
         </section>
       </div>
+      {layerToDuplicate ? (
+        <DuplicateLayerModal
+          layer={layerToDuplicate}
+          onCancel={() => setLayerToDuplicate(undefined)}
+          onDuplicate={(name) => {
+            onDuplicateLayer(layerToDuplicate.id, name);
+            setLayerToDuplicate(undefined);
+          }}
+        />
+      ) : null}
     </section>
   );
 }

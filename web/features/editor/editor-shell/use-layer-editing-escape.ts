@@ -12,7 +12,7 @@ export function useLayerEditingEscape({ enabled, onEscape }: UseLayerEditingEsca
     if (!enabled) return;
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key !== "Escape" || event.repeat || event.defaultPrevented) return;
-      if (document.querySelector('[role="alertdialog"]')) return;
+      if (document.querySelector('[role="alertdialog"], [role="dialog"]')) return;
       if (isEditableTarget(event.target)) return;
       event.preventDefault();
       onEscape();

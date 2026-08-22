@@ -64,7 +64,44 @@ describe("LayersBrowser", () => {
     expect(onHoverLayer).toHaveBeenLastCalledWith(layer.id);
     fireEvent.pointerLeave(screen.getByTestId(`layer-thumbnail-${layer.id}`));
     expect(onHoverLayer).toHaveBeenLastCalledWith(null);
+  });
+
+  it("duplicates a layer with the name submitted from the modal", () => {
+    const range = createRange();
+    const layer = createTickScaleLayer(range.id, { name: "Major ticks" });
+    const onDuplicateLayer = vi.fn();
+    renderEditor(
+      <LayersBrowser
+        layers={[layer]}
+        onCreateLayer={vi.fn()}
+        onCreateRange={vi.fn()}
+        onDeleteLayer={vi.fn()}
+        onDeleteRange={vi.fn()}
+        onDuplicateLayer={onDuplicateLayer}
+        onHoverLayer={vi.fn()}
+        onOpenLayerProperties={vi.fn()}
+        onOpenProjectSettings={vi.fn()}
+        onOpenRangeProperties={vi.fn()}
+        onReorderLayer={vi.fn()}
+        onToggleLayerVisibility={vi.fn()}
+        project={createProject({ layers: [layer], ranges: [range] })}
+        ranges={[range]}
+      />,
+    );
+
     fireEvent.click(screen.getByRole("button", { name: "Duplicate Major ticks" }));
-    expect(onDuplicateLayer).toHaveBeenCalledWith(layer.id);
+    expect(onDuplicateLayer).not.toHaveBeenCalled();
+    const dialog = screen.getByRole("dialog", { name: "Duplicate layer" });
+    expect(dialog.parentElement?.parentElement).toBe(document.body);
+    const nameInput = screen.getByRole("textbox", { name: "Layer name" }) as HTMLInputElement;
+    expect(nameInput.value).toBe("Major ticks");
+    expect(nameInput.selectionStart).toBe(0);
+    expect(nameInput.selectionEnd).toBe("Major ticks".length);
+
+    fireEvent.change(nameInput, { target: { value: "Copied markers" } });
+    fireEvent.click(screen.getByRole("button", { name: "Duplicate" }));
+
+    expect(onDuplicateLayer).toHaveBeenCalledWith(layer.id, "Copied markers");
+    expect(screen.queryByRole("dialog")).toBeNull();
   });
 });
