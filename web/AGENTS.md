@@ -206,6 +206,10 @@ Keep those documents current. Put completed-stage evidence in
   development. Update existing expectations to the current contract and add new
   coverage only for stable, user-visible or domain-critical behaviour.
 - Add each layer as a vertical slice: DTO/Zod, factory, domain class, form,
-  SVG, overlay/handles, thumbnail, example/workbench, and tests.
+  SVG, overlay/handles, thumbnail, and tests. Keep the existing development
+  workbench temporary and deterministic; do not expand it as a layer registry.
 - Autosave is `localStorage` only: every three minutes, retain five snapshots.
+  The Open action validates JSON first and then atomically replaces the whole
+  project; do not add a separate Import action, merge projects, or import
+  individual layers in MVP.
   Export is deterministic SVG plus PNG and a basic PDF; overlays never export.

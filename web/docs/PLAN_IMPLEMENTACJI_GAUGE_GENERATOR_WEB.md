@@ -17,8 +17,8 @@ PDF-a.
 
 Każdy etap kończy się **bramką weryfikacyjną**. Nie należy przechodzić dalej,
 gdy kryteria etapu nie są spełnione. Nowy typ warstwy zawsze powstaje w jednym
-małym kroku: model, walidacja, formularz, renderer, uchwyty, miniatura,
-przykład/workbench i testy w tym samym PR-ze.
+małym kroku: model, walidacja, formularz, renderer, uchwyty, miniatura i testy
+w tym samym PR-ze.
 
 ### Ustalenia niepodlegające zmianie w MVP
 
@@ -31,7 +31,8 @@ przykład/workbench i testy w tym samym PR-ze.
 - Light mode; paleta szarości z czerwonym akcentem.
 - Kanoniczną jednostką i jednostką JSON-a jest mm. Domyślne płótno ma 120 ×
   120 mm, lecz każdy projekt może mieć prostokątne płótno.
-- Projekt startuje pusty — bez Range i innych warstw.
+- Produkcja i jawna akcja New project startują od pustego projektu — bez Range
+  i innych warstw. Tymczasowy fixture developerski nie zmienia tego kontraktu.
 - Renderowanie jest SVG, a model wizualnych `layers` pozostaje płaską listą w
   kolejności oryginału: niższy indeks listy jest renderowany wyżej.
 - `layers` i `ranges` są osobnymi kolekcjami obiektów w JSON-ie, domenie oraz
@@ -54,7 +55,7 @@ web/
     app/help/page.tsx
   features/
     editor/                     # use-case edytora, UI i kontroler uchwytów
-    project/                    # DTO, Zod, migracje, serializacja, storage
+    project/                    # DTO, Zod, serializacja, import i storage
     ranges/                     # niezależna domena Range i mapowanie wartości
       range/
       scale-mapping/
@@ -64,11 +65,13 @@ web/
       numeric-scale/
       label/
       arc/
-      clock-hand/
+      needle/
       ellipse/
       rectangle/
+      line/
+      icon/
     export/                     # SVG, PNG oraz podstawowy PDF
-    examples/                   # statyczne przykłady JSON i workbench dev
+    examples/                   # statyczne, walidowane przykłady JSON
     help/                       # treści mini-wiki
   components/
     atoms/ molecules/ organisms/ templates/
@@ -104,7 +107,12 @@ uchwytu. JSON nigdy nie zawiera instancji klas: przepływ to
 opcjonalne `extensions`. Zod waliduje strukturę, a walidacja domenowa sprawdza
 UUID, duplikaty, istniejące `rangeId`, granice wartości i ograniczenia skali.
 Importer wyświetla zrozumiały błąd, niczego nie zmieniając przy nieudanej
-walidacji. Każda zmiana formatu wymaga migracji z wcześniejszego numeru wersji.
+walidacji. Poprawny import atomowo zastępuje cały bieżący projekt; MVP nie
+obsługuje scalania projektów ani importu pojedynczych warstw. Do jawnej
+stabilizacji format pozostaje kontraktem developerskim:
+zmiany schematu aktualizują bieżącą wersję bez kompatybilności wstecznej,
+migracji i podnoszenia numeru wersji. Polityka migracji powstanie dopiero przy
+stabilizacji formatu.
 
 Snapshot autosave zawiera czas, wersję formatu i komplet projektu. Przy szóstym
 zapisie kasowany jest wyłącznie najstarszy rekord aplikacji. `Restore` pokazuje
@@ -146,8 +154,8 @@ angielskich kluczy tłumaczeń.
    `#C62828`, `#A61F1F`, `#FCE8E8`, `#B42318`, `#E57373`.
 2. Zbudować atomy i molekuły: przyciski z ikoną, tooltip, pola text/number,
    range, switch, select, color input, `FieldRow`, status/toast i dialog.
-3. Zbudować poziomy toolbar w kolejności: New project, Open, Download, Import,
-   Export, Undo, Redo, Restore, Examples, Help center. Na małym ekranie mniej
+3. Zbudować poziomy toolbar w kolejności: New project, Open, Download, Export,
+   Undo, Redo, Restore, Examples, Help center. Na małym ekranie mniej
    ważne akcje przechodzą do przycisku More (`…`).
 4. Zbudować jeden lewy sidebar o stałej szerokości. Zawartość przesuwa się
    poziomo między `Layers`, `Properties` i `Project settings`. Layers jest
@@ -225,7 +233,7 @@ odrzucenie złego `rangeId`, limit historii, undo/redo, przeliczenia mm i snap
    zmienić jej kolejność przez uchwyt drag-and-drop. Hover nad miniaturą visual
    layer tymczasowo pokazuje w preview tylko daną warstwę, bez zmiany selekcji
    lub historii.
-   Kliknięcie canvasu nie wybiera warstwy.
+   Kliknięcie geometrii warstwy na canvasie wybiera ją i otwiera jej Properties.
 6. Po powrocie do Layers overlay znika, a miniatura jest regenerowana.
 
 **Weryfikacja:** użytkownik może stworzyć Range z pustego ekranu, przesunąć i
@@ -310,8 +318,7 @@ etapem są pliki użytkownika, autosave i przykłady.
 3. Formularz z pogrupowanymi parametrami i właściwymi kontrolkami.
 4. Render, kolorowa etykieta typu, generowana miniatura oraz hover preview.
 5. Przypięcie do Range, ograniczenia wartości i blokada usunięcia Range.
-6. Przykład workbench w development i testy: factory, walidacja, SVG oraz co
-   najmniej jeden uchwyt/interakcja.
+6. Testy: factory, walidacja, SVG oraz co najmniej jeden uchwyt/interakcja.
 
 **Weryfikacja:** po każdym podpunkcie gatunku istnieje jeden działający przykład
 i pełen test checklisty. Dopiero wtedy rozpoczyna się następna warstwa.
@@ -320,23 +327,27 @@ i pełen test checklisty. Dopiero wtedy rozpoczyna się następna warstwa.
 
 **Cel:** projekt jest praktycznie używalny i bezpieczny lokalnie.
 
-1. Zaimplementować Download (JSON), Import JSON (file picker, Zod, migracje,
-   raport błędu), New project z ochroną przed utratą zmian oraz Restore.
+1. Zaimplementować Download (JSON), Open wybierający JSON i zastępujący atomowo
+   cały projekt (file picker, Zod i raport błędu), New project z ochroną przed
+   utratą zmian oraz Restore. Osobna akcja Import oraz scalanie pojedynczych
+   warstw nie wchodzą do MVP. Migracje nie wchodzą do etapu 6, ponieważ format
+   nie jest jeszcze ustabilizowany.
 2. Dodać autosave co 3 minuty, localStorage, maks. pięć snapshotów, toast i
    testy fake timer/storage. Preferencje snappingu przechowywać lokalnie, ale
    poza JSON-em projektu.
 3. Dodać katalog Examples jako statyczne, walidowane JSON-y. Wybranie przykładu
    ładuje jego kopię do bieżącego store, nie zmienia pliku źródłowego.
-4. Tylko w `NODE_ENV=development` uruchamiać fabrykę projektu roboczego: jeden
-   Range, dwie warstwy Tick Scale i Numeric Scale. Następnie rozwinąć ją do `Layer workbench`,
-   zasilanego przez `ACTIVE_WORKBENCH_LAYER`. Dane muszą przechodzić Zod i nie
-   mogą wejść do produkcji.
+4. Zachować obecny deterministyczny projekt roboczy wyłącznie dla
+   `NODE_ENV=development`, bez dalszego rozbudowywania go ani dodawania do
+   katalogu Examples. Dane muszą przechodzić Zod i nie mogą wejść do produkcji;
+   sam workbench należy usunąć przed finalnym domknięciem MVP.
 5. Dodać mini-wiki wewnątrz `/app/help`: Getting started, interface, layers,
    project JSON i examples.
 
 **Weryfikacja:** odświeżenie przeglądarki pozwala przywrócić jeden z pięciu
-snapshotów; zły JSON nie nadpisuje obecnego projektu; examples i workbench
-zachowują się zgodnie z environmentem; wszystkie teksty Help są po angielsku.
+snapshotów; zły JSON nie nadpisuje obecnego projektu; examples zachowują się
+zgodnie z environmentem, a workbench pozostaje wyłącznie developerski;
+wszystkie teksty Help są po angielsku.
 
 ### Etap 7 — eksport i jakość wydania
 
@@ -362,7 +373,7 @@ blokuje pracy; CI jest zielone.
 
 ## 4. Definition of done dla MVP
 
-MVP jest gotowe, gdy realizuje osiem typów warstw, wiele Range, płaską kolejność
+MVP jest gotowe, gdy realizuje dziewięć typów warstw, wiele Range, płaską kolejność
 renderowania, scalę linear/log/custom curve, bezpośrednią edycję podstawowych
 parametrów uchwytami, snapping, JSON, autosave/restore, historię 50 operacji,
 angielskie UI, mini-wiki, przykłady i eksport PNG/SVG/podstawowy PDF. Tekst po

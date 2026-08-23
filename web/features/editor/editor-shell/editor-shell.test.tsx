@@ -215,6 +215,15 @@ describe("EditorShell", () => {
     expect(screen.getByRole("heading", { name: "Layers" })).toBeTruthy();
     expect(screen.queryByText(/Large changes to this Range may automatically adjust/)).toBeNull();
   });
+  it("leaves project settings when Escape is pressed", () => {
+    const { store } = renderEditor(<EditorShell />);
+    fireEvent.click(screen.getByRole("button", { name: "Project" }));
+
+    fireEvent.keyDown(document, { key: "Escape" });
+
+    expect(store.getState().editor.sidebarMode).toBe("layers");
+    expect(screen.getByRole("heading", { name: "Layers" })).toBeTruthy();
+  });
   it("connects toolbar undo and redo to project history", () => {
     const { store } = renderEditor(<EditorShell />);
     fireEvent.click(screen.getAllByRole("button", { name: "Create first Range" })[0]);

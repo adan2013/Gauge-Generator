@@ -424,7 +424,7 @@ jest to jeden, czytelny mechanizm zmiany trybu panelu.
 Pasek ma stałą wysokość, jasne tło i dolną linię oddzielającą go od edytora.
 Każda akcja jest jednym przyciskiem z ikoną oraz angielską etykietą w tym samym
 wierszu, a także z dostępnym tooltipem i aria-label. Kolejność: New project,
-Open, Download, Import, Export, Undo, Redo, Restore, Examples, Help center.
+Open, Download, Export, Undo, Redo, Restore, Examples, Help center.
 
 Przy zmniejszaniu dostępnej szerokości priorytetowo widoczne pozostają New
 project, Open, Download, Export, Undo i Redo. Pozostałe akcje są kolejno
@@ -638,7 +638,7 @@ Minimalna struktura wiki:
   otwieranie, zapisywanie i eksport PNG;
 - Interface — opis panelu projektu, panelu warstw, edytora właściwości i
   podglądu SVG;
-- Layers — osobna sekcja dla każdego z ośmiu typów warstw, z opisem wszystkich
+- Layers — osobna sekcja dla każdego z dziewięciu typów warstw, z opisem wszystkich
   właściwości, zakresami i grafiką;
 - Projects — format JSON, walidacja oraz zasada relacji między warstwą a Range;
 - Examples — opis wbudowanych przykładów i sposób ich otwierania.
@@ -649,45 +649,33 @@ nazwa, opis, miniatura i ścieżka pliku. Ekran Home pokaże katalog przykładó
 Otwarcie przykładu ładuje jego kopię do local state — nie nadpisuje pliku
 źródłowego i nie wymaga połączenia z siecią.
 
-#### Deweloperski projekt workbench
+#### Deweloperski projekt roboczy
 
-W trybie deweloperskim (NODE_ENV=development) w katalogu Examples ma być
-widoczny dodatkowy projekt **Layer workbench**. Ma zawierać reprezentatywny
-Range oraz aktualnie rozwijany element/warstwę wraz z parametrami testowymi.
-To umożliwia szybkie ręczne sprawdzenie renderera, formularza właściwości i
-eksportu bez tworzenia projektu od zera.
-
-Workbench jest wpisem generowanym wyłącznie w kodzie dla developmentu:
-
-1. rejestr przykładów dodaje go tylko, gdy środowisko jest deweloperskie;
-2. fabryka warstw wskazuje bieżący typ rozwijany przez programistę;
-3. Zod waliduje wygenerowany DTO tak samo jak każdy zwykły przykład;
-4. wpis, jego przełącznik i testowe dane nie są dołączane do produkcyjnego
-   katalogu przykładów.
-
-Docelowo warstwy można rozwijać pojedynczo, ustawiając stałą
-ACTIVE_WORKBENCH_LAYER na odpowiedni typ. Każdy nowy typ powinien otrzymać
-konfigurację workbencha i test wizualny zanim trafi do katalogu przykładów.
+Obecny deterministyczny projekt roboczy może pozostać tymczasowym stanem
+startowym wyłącznie w `NODE_ENV=development`. Nie jest częścią katalogu Examples
+i nie należy rozbudowywać go do rejestru sterowanego aktywnym typem warstwy.
+Produkcja oraz jawna akcja New project zawsze rozpoczynają się od pustego
+projektu. Projekt roboczy należy usunąć przed finalnym domknięciem MVP.
 
 ## 8. Katalog przycisków interfejsu
 
 Poniższy katalog opisuje akcje obecnej aplikacji jako funkcjonalny punkt
 odniesienia. W nowym interfejsie angielskie etykiety i tooltipy muszą korzystać
-z lokalizacji. Import dotyczy wyłącznie nowego JSON-a, nie starszych plików ggp.
+z lokalizacji. Open dotyczy wyłącznie nowego JSON-a, nie starszych plików ggp.
 
 ### Główny pasek projektu
 
-| Etykieta EN | Akcja                                                                                |
-| ----------- | ------------------------------------------------------------------------------------ |
-| New project | tworzy pusty projekt; przy niezapisanych zmianach prosi o decyzję                    |
-| Download    | pobiera bieżący, zwalidowany projekt jako plik JSON na komputer                      |
-| Import      | wybiera plik JSON; użytkownik decyduje, czy zastępuje projekt, czy importuje warstwy |
-| Export      | otwiera menu lub dialog wyboru PNG, SVG albo PDF                                     |
-| Undo        | cofa ostatnią zmianę w historii edytora                                              |
-| Redo        | przywraca cofniętą zmianę                                                            |
-| Restore     | otwiera dialog przywrócenia ostatniego lokalnego autosave                            |
-| Examples    | otwiera katalog predefiniowanych projektów, w tym workbench w development            |
-| Help center | otwiera mini-wiki wewnątrz aplikacji                                                 |
+| Etykieta EN | Akcja                                                                    |
+| ----------- | ------------------------------------------------------------------------ |
+| New project | tworzy pusty projekt; przy niezapisanych zmianach prosi o decyzję        |
+| Open        | wybiera JSON; po pełnej walidacji atomowo zastępuje cały bieżący projekt |
+| Download    | pobiera bieżący, zwalidowany projekt jako plik JSON na komputer          |
+| Export      | otwiera menu lub dialog wyboru PNG, SVG albo PDF                         |
+| Undo        | cofa ostatnią zmianę w historii edytora                                  |
+| Redo        | przywraca cofniętą zmianę                                                |
+| Restore     | otwiera dialog przywrócenia ostatniego lokalnego autosave                |
+| Examples    | otwiera katalog predefiniowanych, walidowanych projektów                 |
+| Help center | otwiera mini-wiki wewnątrz aplikacji                                     |
 
 Export otwiera duże okno dialogowe zamiast bezpośrednio pobierać plik. Dialog
 ma osobne, czytelne sekcje dla PNG, SVG i PDF, z podglądem właściwych ustawień
@@ -728,22 +716,20 @@ reset zachowuje identyfikator, nazwę, widoczność oraz wybrany Range warstwy.
 
 ### Dialogi i ekran startowy
 
-| Kontekst        | Etykieta EN            | Akcja                                                               |
-| --------------- | ---------------------- | ------------------------------------------------------------------- |
-| Create layer    | Create                 | tworzy warstwę po wybraniu typu, nazwy i Range dla warstw zależnych |
-| Create layer    | Cancel                 | zamyka dialog bez zmian                                             |
-| Duplicate layer | Duplicate              | zatwierdza utworzenie kopii                                         |
-| Duplicate layer | Cancel                 | zamyka dialog bez zmian                                             |
-| Import layers   | Import selected        | dodaje wybrane warstwy                                              |
-| Import layers   | Select all / Clear all | zaznacza albo odznacza wszystkie importowalne warstwy               |
-| Import layers   | Preview selected       | chwilowo pokazuje wyłącznie wybrane warstwy                         |
-| Import layers   | Cancel                 | zamyka dialog bez zmian                                             |
-| Home            | New project            | rozpoczyna pusty projekt                                            |
-| Home            | Open project           | wybiera lokalny projekt                                             |
-| Home            | Example project        | otwiera jeden z przykładowych projektów                             |
-| Home            | Video tutorials        | otwiera stronę tutoriali                                            |
-| Help            | Back to editor         | wraca z mini-wiki do bieżącego projektu bez utraty stanu            |
-| Help            | Previous / Next        | przechodzi między kolejnymi sekcjami mini-wiki                      |
+| Kontekst        | Etykieta EN     | Akcja                                                               |
+| --------------- | --------------- | ------------------------------------------------------------------- |
+| Create layer    | Create          | tworzy warstwę po wybraniu typu, nazwy i Range dla warstw zależnych |
+| Create layer    | Cancel          | zamyka dialog bez zmian                                             |
+| Duplicate layer | Duplicate       | zatwierdza utworzenie kopii                                         |
+| Duplicate layer | Cancel          | zamyka dialog bez zmian                                             |
+| Open project    | Open            | po pełnej walidacji zastępuje cały bieżący projekt                  |
+| Open project    | Cancel          | zamyka dialog bez zmian                                             |
+| Home            | New project     | rozpoczyna pusty projekt                                            |
+| Home            | Open project    | wybiera lokalny projekt                                             |
+| Home            | Example project | otwiera jeden z przykładowych projektów                             |
+| Home            | Video tutorials | otwiera stronę tutoriali                                            |
+| Help            | Back to editor  | wraca z mini-wiki do bieżącego projektu bez utraty stanu            |
+| Help            | Previous / Next | przechodzi między kolejnymi sekcjami mini-wiki                      |
 
 Dialog duplikowania wstępnie wypełnia pole nazwą warstwy źródłowej i zaznacza
 cały tekst. Zatwierdzona kopia otrzymuje nowy identyfikator i pojawia się
@@ -846,10 +832,11 @@ poprawność rangeMin/rangeMax względem źródłowego Range.
 Format JSON jest otwarty na rozwój, ale nie nieokreślony: metadata przechowuje
 co najmniej tytuł i czasy utworzenia/modyfikacji, canvas opisuje fizyczny
 rozmiar, a każda warstwa ma jawny type i parametry jako pary key-value.
-Nowe opcjonalne możliwości trafiają najpierw do pola extensions albo do nowej
-wersji formatu z migratorem. Nie zmieniamy znaczenia istniejącego pola bez
-podniesienia version. Dzięki temu stare pliki pozostają możliwe do odczytu przez
-migrację, a Zod nadal wykrywa literówki i uszkodzone dane.
+Do jawnej stabilizacji format pozostaje kontraktem developerskim. Zmiany
+schematu aktualizują bieżący kontrakt bez kompatybilności wstecznej, migracji i
+podnoszenia numeru wersji; Zod nadal wykrywa literówki i uszkodzone dane.
+Politykę wersjonowania i migracji należy zaprojektować dopiero przy stabilizacji
+formatu.
 
 ```ts
 const layerSchema = z.discriminatedUnion("type", [
@@ -918,8 +905,9 @@ np. Radius: 42 mm albo Angle: 120°.
 ### Strategia testów jednostkowych
 
 Testy jednostkowe są tworzone razem z każdym komponentem i modułem domenowym.
-Celem nie jest 100% coverage, tylko sprawdzenie podstawowych zadań, regresji
-i zachowania istotnego dla użytkownika.
+Celem nie jest 100% coverage, tylko sprawdzenie podstawowych zadań i stabilnego
+zachowania istotnego dla użytkownika. Nie utrwalamy osobnymi testami prostych,
+tymczasowych poprawek wynikających z aktywnego developmentu.
 
 | Obszar                  | Co testujemy                                                                 |
 | ----------------------- | ---------------------------------------------------------------------------- |
@@ -975,7 +963,7 @@ renderowania, walidacji oraz jednego testu uchwytu nakładki.
 ### Etap 2 — kolejne warstwy, po jednym kroku
 
 Każdy kolejny krok obejmuje jeden typ warstwy: model, formularz, SVG,
-nakładkę edycyjną, miniaturę, walidację Zod, testy oraz przykład workbench.
+nakładkę edycyjną, miniaturę, walidację Zod oraz testy.
 Kolejność zwiększa złożoność stopniowo:
 
 1. Tick Scale;
@@ -993,7 +981,7 @@ wdrażaniu Tick Scale oraz Numeric Scale.
 
 ### Etap 3 — dopracowanie i wydanie
 
-1. Dodać Import, Download (JSON), PNG, SVG oraz podstawowy PDF.
+1. Dodać Open i Download (JSON), PNG, SVG oraz podstawowy PDF.
 2. Dopracować responsywność, dostępność i komunikaty walidacyjne.
 3. Rozbudować bibliotekę przykładów i testy regresji dla uzgodnionych zasad.
 4. Udokumentować nowy JSON i publiczne API renderera, a następnie opublikować
@@ -1012,8 +1000,8 @@ wdrażaniu Tick Scale oraz Numeric Scale.
 
 ## 12. Zakres sensownego MVP
 
-MVP: osiem typów warstw, wiele Range, podgląd SVG, kolejność/widoczność/
-klonowanie, typowane formularze, Import i Download (JSON), localStorage autosave
+MVP: dziewięć typów warstw, wiele Range, podgląd SVG, kolejność/widoczność/
+klonowanie, typowane formularze, Open i Download (JSON), localStorage autosave
 co 3 minuty z Restore, skale liniowe, logarytmiczne i edytowalne krzywe
 nieliniowe, snapping, interaktywne nakładki edycyjne, PNG, SVG, wektorowy PDF
 w skali, mini-wiki, własne przykłady, undo/redo oraz testy jednostkowe z

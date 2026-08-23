@@ -2,12 +2,12 @@
 
 import { useEffect } from "react";
 
-type UseLayerEditingEscapeOptions = {
+type UseSidebarPanelEscapeOptions = {
   enabled: boolean;
   onEscape: () => void;
 };
 
-export function useLayerEditingEscape({ enabled, onEscape }: UseLayerEditingEscapeOptions) {
+export function useSidebarPanelEscape({ enabled, onEscape }: UseSidebarPanelEscapeOptions) {
   useEffect(() => {
     if (!enabled) return;
     function handleKeyDown(event: KeyboardEvent) {

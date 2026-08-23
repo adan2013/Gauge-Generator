@@ -200,6 +200,11 @@ and missing `rangeId` references. The format is development-only and unstable;
 until its explicit stabilization, schema changes update the current contract
 without backward compatibility, migrations, or version bumps.
 
+The user-facing Open action is project-level and atomic: a fully parsed and
+domain-valid document replaces the current project, while any validation
+failure leaves it unchanged. MVP has no separate Import action and does not
+merge projects or import individual layers.
+
 `scaleDefinition` is a strict discriminated union:
 
 - `linear`: finite, strictly increasing integer `start` and `end` values;

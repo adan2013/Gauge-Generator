@@ -2,8 +2,12 @@
 
 ## Boundaries
 
-- `features/project/` owns plain Project DTOs, Zod parsing, factories, future
-  migrations, import/export serialization, and persistence adapters.
+- `features/project/` owns plain Project DTOs, Zod parsing, factories,
+  import/export serialization, and persistence adapters. Migrations become a
+  responsibility only after the project format is explicitly stabilized.
+- Opening a project is an atomic replacement boundary: parsing and domain
+  validation finish before store mutation. MVP has no separate Import action
+  and does not merge projects or import individual layers.
 - `features/layers/` owns React-independent domain abstractions. `Layer` is the
   base class for visual layers; `Range` is a separate domain object and never a
   visual layer. `core/layer-registry.ts` instantiates the appropriate visual
@@ -13,6 +17,10 @@
   client `StoreProvider`.
 - React UI reads state through typed hooks and dispatches typed actions. It does
   not serialize projects, calculate geometry, or use ad-hoc object shapes.
+- `EditorShell` is a stable composition root. Its provider exposes editor
+  `state`, `actions`, and toolbar `meta`; header, sidebar, and canvas consume
+  that interface independently so new project workflows do not accumulate in
+  the shell component.
 - Range and visual-layer domain objects expose editing overlays as typed
   `EditingOverlayPrimitive` collections. The shared `EditingOverlayGeometry`
   component is the only place that translates those React-free path and line

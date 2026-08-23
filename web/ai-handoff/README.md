@@ -10,16 +10,16 @@ Ten katalog skraca wejście kolejnego agenta AI w projekt. Najpierw przeczytaj:
 
 ## Current status
 
-Stages 1–4 are complete: the UI/store foundation, full Range editing flow, Tick
-Scale, Numeric Scale, and the Linear/Logarithmic/Custom Curve mappings are in
-place. Custom Curve has an interactive two-axis editor with locked endpoints,
-monotonic point constraints, integer value snapping, `0.05` position steps, and
-transactional dragging. All scale-domain values are integers; fractional Numeric
-Scale labels are presentation produced by its multiplier and decimal-place
-settings. Curve mapping, visible-sequence generation, Range-bound constraints,
-and ready-to-render angular distribution are shared outside visual layers. Stage
-5 is complete: Label, Arc, Needle, Ellipse, Rectangle, Line, and Icon are
-implemented. Label includes shared
+Stages 1–5 are complete: the UI/store foundation, full Range editing flow, Tick
+Scale, Numeric Scale, the Linear/Logarithmic/Custom Curve mappings, and all
+remaining visual layers are in place. Custom Curve has an interactive two-axis
+editor with locked endpoints, monotonic point constraints, integer value
+snapping, `0.05` position steps, and transactional dragging. All scale-domain
+values are integers; fractional Numeric Scale labels are presentation produced
+by its multiplier and decimal-place settings. Curve mapping, visible-sequence
+generation, Range-bound constraints, and ready-to-render angular distribution
+are shared outside visual layers. Stage 5 delivered Label, Arc, Needle, Ellipse,
+Rectangle, Line, and Icon. Label includes shared
 typography with Numeric Scale, millimetre point offsets, and Range-mapped text
 paths. Arc is defined only by a Range-mapped value interval, radius offset,
 stroke thickness, color, and flat or rounded end caps; it has no manual angle
