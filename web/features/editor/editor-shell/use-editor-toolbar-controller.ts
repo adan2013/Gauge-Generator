@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useStatusMessage } from "@/components/providers/status-message-provider/status-message-provider";
 import type { EditorToolbarAction } from "@/features/editor/editor-toolbar/editor-toolbar";
+import { useProjectWorkflowController } from "@/features/editor/editor-shell/use-project-workflow-controller";
 import type { ProjectDto, RangeDto } from "@/features/project/project-dto/project-dto";
 import { redoProject, undoProject } from "@/store/history-actions";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -35,6 +36,7 @@ export function useEditorToolbarController({
   const { past, future } = useAppSelector((state) => state.history);
   const t = useTranslations("Editor");
   const { showMessage } = useStatusMessage();
+  const projectWorkflow = useProjectWorkflowController();
   const actions: EditorToolbarAction[] = [
     { id: "newProject", label: t("toolbar.newProject"), icon: FilePlus2 },
     { id: "open", label: t("toolbar.open"), icon: FolderOpen },
@@ -48,13 +50,33 @@ export function useEditorToolbarController({
   ];
 
   function handleAction(action: EditorToolbarAction) {
+    if (action.id === "newProject") {
+      void projectWorkflow.newProject();
+      return;
+    }
+    if (action.id === "open") {
+      void projectWorkflow.openProject();
+      return;
+    }
+    if (action.id === "download") {
+      projectWorkflow.downloadProject();
+      return;
+    }
+    if (action.id === "restore") {
+      projectWorkflow.openRestore();
+      return;
+    }
+    if (action.id === "examples") {
+      projectWorkflow.openExamples();
+      return;
+    }
     if (action.id === "undo") {
       const targetProject = past.at(-1);
       dispatch(undoProject());
       if (selectedRange && targetProject?.ranges.some((range) => range.id === selectedRange.id))
         showRangeDependencyWarning(selectedRange.id, targetProject);
       else dismissRangeDependencyWarning();
-      showMessage({ content: t("status.undo"), duration: 2_500 });
+      showMessage({ content: t("status.undo"), duration: "short" });
       return;
     }
     if (action.id === "redo") {
@@ -63,7 +85,7 @@ export function useEditorToolbarController({
       if (selectedRange && targetProject?.ranges.some((range) => range.id === selectedRange.id))
         showRangeDependencyWarning(selectedRange.id, targetProject);
       else dismissRangeDependencyWarning();
-      showMessage({ content: t("status.redo"), duration: 2_500 });
+      showMessage({ content: t("status.redo"), duration: "short" });
     }
   }
 
@@ -71,5 +93,6 @@ export function useEditorToolbarController({
     actions,
     handleAction,
     openHelp: () => router.push("/app/help"),
+    projectWorkflow,
   };
 }

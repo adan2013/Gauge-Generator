@@ -58,11 +58,13 @@ export function EditorShellSidebar() {
           onDistanceSnapChange={(value) => actions.updateSnapping({ distanceMm: Number(value) })}
           onHistoryTransactionEnd={actions.completeHistoryTransaction}
           onHistoryTransactionStart={actions.beginHistoryTransaction}
+          onTitleChange={actions.updateProjectTitle}
           onSnapEnabledChange={(enabled) => actions.updateSnapping({ enabled })}
           onTransparentBackgroundChange={(enabled) =>
             actions.updateCanvas({ transparentBackground: enabled })
           }
           snapEnabled={snapping.enabled}
+          title={project.meta.title}
           transparentBackground={project.canvas.transparentBackground}
         />
       }

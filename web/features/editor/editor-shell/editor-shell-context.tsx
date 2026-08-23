@@ -6,6 +6,9 @@ import { useTranslations } from "next-intl";
 import { useStatusMessage } from "@/components/providers/status-message-provider/status-message-provider";
 import { useProjectValidation } from "@/features/editor/project-validation/use-project-validation";
 import { useEditorToolbarController } from "@/features/editor/editor-shell/use-editor-toolbar-controller";
+import { useDirtyBeforeUnload } from "@/features/editor/editor-shell/use-dirty-before-unload";
+import { useProjectAutosave } from "@/features/editor/editor-shell/use-project-autosave";
+import { useProjectDocumentTitle } from "@/features/editor/editor-shell/use-project-document-title";
 import { useSidebarPanelEscape } from "@/features/editor/editor-shell/use-sidebar-panel-escape";
 import { constrainProjectLayersToRanges } from "@/features/layers/core/layer-registry";
 import {
@@ -32,6 +35,7 @@ import {
 } from "@/store/history-actions";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { projectActions } from "@/store/project-slice";
+import { selectIsProjectDirty } from "@/store/project-file-slice";
 
 type EditorShellState = {
   hoveredLayerId: string | null;
@@ -73,6 +77,7 @@ type EditorShellActions = {
   setLayerPreviewModifiers: (modifiers: LayerPreviewModifiers) => void;
   toggleLayerVisibility: (layerId: string) => void;
   updateCanvas: (change: Partial<ProjectDto["canvas"]>) => void;
+  updateProjectTitle: (title: string) => void;
   updateSelectedLayer: (change: Partial<LayerDto>) => void;
   updateSelectedRange: (change: Partial<RangeDto>) => void;
   updateSnapping: (change: Partial<EditorShellState["snapping"]>) => void;
@@ -89,12 +94,22 @@ const EditorShellContext = createContext<EditorShellContextValue | null>(null);
 export function EditorShellProvider({ children }: { children: ReactNode }) {
   const dispatch = useAppDispatch();
   const project = useAppSelector((state) => state.project.current);
-  const { hoveredLayerId, layerPreviewModifiers, selectedObject, sidebarMode, snapping } =
-    useAppSelector((state) => state.editor);
+  const isDirty = useAppSelector(selectIsProjectDirty);
+  const { hoveredLayerId, layerPreviewModifiers, selectedObject, sidebarMode } = useAppSelector(
+    (state) => state.editor,
+  );
+  const snapping = project.settings.snapping;
   const t = useTranslations("Editor");
   const { dismissMessage, showMessage } = useStatusMessage();
   const { validateCandidateProject } = useProjectValidation();
   const rangeWarningIdRef = useRef<number | null>(null);
+  useDirtyBeforeUnload(isDirty);
+  useProjectAutosave(project);
+  useProjectDocumentTitle({
+    applicationName: t("brand"),
+    isDirty,
+    projectTitle: project.meta.title,
+  });
 
   function dismissRangeDependencyWarning() {
     if (rangeWarningIdRef.current === null) return;
@@ -159,7 +174,7 @@ export function EditorShellProvider({ children }: { children: ReactNode }) {
     showMessage({
       color: "neutral",
       content: t("status.layerEditModeStarted", { name: layer.name }),
-      duration: 2_500,
+      duration: "short",
       icon: Pencil,
     });
   }
@@ -177,7 +192,7 @@ export function EditorShellProvider({ children }: { children: ReactNode }) {
       showMessage({
         color: "accent",
         content: t("status.rangeRequired"),
-        duration: 4_000,
+        duration: "medium",
         icon: TriangleAlert,
       });
       return;
@@ -246,7 +261,7 @@ export function EditorShellProvider({ children }: { children: ReactNode }) {
     showMessage({
       color: "neutral",
       content: t("status.layerReset"),
-      duration: 3_000,
+      duration: "medium",
       icon: CircleCheck,
     });
   }
@@ -256,7 +271,7 @@ export function EditorShellProvider({ children }: { children: ReactNode }) {
     dispatch(projectActions.setCanvas(canvas));
   }
   function updateSnapping(change: Partial<typeof snapping>) {
-    dispatch(editorActions.setSnapping({ ...snapping, ...change }));
+    dispatch(projectActions.setSnapping({ ...snapping, ...change }));
   }
   function toggleLayerVisibility(layerId: string) {
     const layer = project.layers.find((item) => item.id === layerId);
@@ -277,7 +292,7 @@ export function EditorShellProvider({ children }: { children: ReactNode }) {
       beginHistoryTransaction: () => {
         dispatch(beginProjectHistoryTransaction());
       },
-      browseExamples: () => undefined,
+      browseExamples: toolbar.projectWorkflow.openExamples,
       closeSidebarPanel,
       commitLayer,
       commitRange,
@@ -313,6 +328,9 @@ export function EditorShellProvider({ children }: { children: ReactNode }) {
       },
       toggleLayerVisibility,
       updateCanvas,
+      updateProjectTitle: (title) => {
+        dispatch(projectActions.setProjectTitle(title));
+      },
       updateSelectedLayer,
       updateSelectedRange,
       updateSnapping,

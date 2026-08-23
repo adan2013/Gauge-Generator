@@ -78,7 +78,7 @@ export function useProjectValidation() {
     validationMessageIdRef.current = showMessage({
       color: "danger",
       content,
-      duration: 5_000,
+      duration: "long",
       icon: TriangleAlert,
     });
   }

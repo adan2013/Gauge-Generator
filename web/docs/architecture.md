@@ -48,6 +48,7 @@
 ```ts
 {
   project: { current: ProjectDto },
+  projectFile: { savedProjectFingerprint: string },
   editor: {
     sidebarMode: "layers" | "properties" | "project-settings",
     selectedObject: { collection: "layers" | "ranges"; id: string } | null,
@@ -57,20 +58,35 @@
       bringSelectedLayerToFront: boolean,
       showEditingOverlay: boolean
     },
-    snapping: { enabled: boolean; distanceMm: number; angleDegrees: number },
     autosaveStatus: "idle" | "saved" | "error"
   },
   history: { past: ProjectDto[], future: ProjectDto[] }
 }
 ```
 
+`isDirty` is derived by comparing `savedProjectFingerprint` with a SHA-256 hash
+of the current validated project's canonical, key-sorted JSON. Download, Open,
+and an empty New project establish a clean baseline. Autosave, Restore, and
+Examples do not; Undo becomes clean naturally when it returns to the baseline.
+The editor tab title follows `{project title} — Gauge Generator Web` and prefixes
+the project title with `* ` while this selector is dirty.
+`ProjectDto.meta.title` is edited in Project settings and is the sole source for
+the tab title and downloaded filename; Open never derives it from the selected
+file's name.
+
 Only successful project mutations enter history. UI state never does. Undo and
 redo retain at most 50 project snapshots each.
 
 A project-selection middleware clears a stale selected object and returns the
 sidebar to Layers after a project action removes that Range or visual Layer.
-This covers undo/redo, import, reset, restore, and deletion without a React
+This covers undo/redo, Open, reset, restore, and deletion without a React
 effect.
+
+`ProjectDto.settings.snapping` stores the enabled flag and the distance/angle
+increments. It participates in JSON serialization, dirty tracking, history,
+autosave, Open, Download, and Restore. `beforeunload` is registered only while
+the project is dirty. Autosave stores at most five validated snapshots in
+`localStorage` every three minutes after a project change.
 
 The history middleware observes successful actions in the `project/` namespace
 instead of a duplicated action list. Controls that produce a stream of changes

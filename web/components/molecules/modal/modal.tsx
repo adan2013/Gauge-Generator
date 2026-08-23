@@ -23,10 +23,12 @@ function ModalRoot({
   children,
   onClose,
   role = "dialog",
+  size = "default",
 }: {
   children: ReactNode;
   onClose: () => void;
   role?: "alertdialog" | "dialog";
+  size?: "default" | "wide";
 }) {
   const titleId = useId();
   const descriptionId = useId();
@@ -49,12 +51,21 @@ function ModalRoot({
   if (!canRenderPortal) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 grid place-items-center bg-ink/30 p-4" role="presentation">
+    <div
+      className="fixed inset-0 z-50 grid place-items-center bg-ink/30 p-4"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+      role="presentation"
+    >
       <section
         aria-describedby={descriptionId}
         aria-labelledby={titleId}
         aria-modal="true"
-        className="w-full max-w-sm rounded-xl border border-border bg-surface p-4 shadow-[0_20px_65px_rgba(32,36,43,0.2)]"
+        className={cn(
+          "w-full rounded-xl border border-border bg-surface p-4 shadow-[0_20px_65px_rgba(32,36,43,0.2)]",
+          size === "wide" ? "max-w-4xl" : "max-w-sm",
+        )}
         role={role}
       >
         <ModalContext value={{ descriptionId, titleId }}>{children}</ModalContext>

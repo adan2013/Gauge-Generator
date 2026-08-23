@@ -35,6 +35,23 @@ describe("ProjectSchema", () => {
     ).not.toEqual([]);
   });
 
+  it("stores snapping in the strict project settings contract", () => {
+    const project = createProject({
+      settings: { snapping: { enabled: false, distanceMm: 5, angleDegrees: 15 } },
+    });
+    expect(ProjectSchema.parse(JSON.parse(JSON.stringify(project))).settings.snapping).toEqual({
+      enabled: false,
+      distanceMm: 5,
+      angleDegrees: 15,
+    });
+    expect(
+      ProjectSchema.safeParse({
+        ...project,
+        settings: { snapping: { enabled: true, distanceMm: 0, angleDegrees: 10 } },
+      }).success,
+    ).toBe(false);
+  });
+
   it("rejects a project with more than five Ranges", () => {
     const ranges = Array.from({ length: 6 }, (_, index) =>
       createRange({ name: `Range ${index + 1}` }),

@@ -336,6 +336,20 @@ export const CanvasSchema = z
   })
   .strict();
 
+export const SnappingSchema = z
+  .object({
+    enabled: z.boolean(),
+    distanceMm: z.number().positive().max(CANVAS_DIMENSION_MAX_MM),
+    angleDegrees: z.number().positive().max(360),
+  })
+  .strict();
+
+export const ProjectSettingsSchema = z
+  .object({
+    snapping: SnappingSchema,
+  })
+  .strict();
+
 export const ProjectSchema = z
   .object({
     format: z.literal(PROJECT_FORMAT),
@@ -348,6 +362,7 @@ export const ProjectSchema = z
       })
       .strict(),
     canvas: CanvasSchema,
+    settings: ProjectSettingsSchema,
     layers: z.array(LayerSchema).max(MAX_LAYERS),
     ranges: z.array(RangeSchema).max(MAX_RANGES),
     extensions: z.record(z.string(), z.unknown()).optional(),
@@ -371,6 +386,8 @@ export type PlanarGeometryLayerDto = PlanarShapeLayerDto | IconLayerDto;
 export type FontReferenceDto = z.infer<typeof FontReferenceSchema>;
 export type TextStyleDto = z.infer<typeof TextStyleSchema>;
 export type CanvasDto = z.infer<typeof CanvasSchema>;
+export type SnappingDto = z.infer<typeof SnappingSchema>;
+export type ProjectSettingsDto = z.infer<typeof ProjectSettingsSchema>;
 export type ProjectDto = z.infer<typeof ProjectSchema>;
 
 /** A Range may overhang a nearby canvas edge, but its radius stays bounded. */

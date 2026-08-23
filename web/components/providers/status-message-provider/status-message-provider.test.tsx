@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import { TriangleAlert } from "lucide-react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { useRef } from "react";
+import { STATUS_MESSAGE_DURATION_MS } from "./status-message-duration";
 import { StatusMessageProvider, useStatusMessage } from "./status-message-provider";
 
 function MessageControls() {
@@ -10,7 +11,7 @@ function MessageControls() {
   return (
     <>
       <button
-        onClick={() => showMessage({ content: "Saved", color: "neutral", duration: 2_000 })}
+        onClick={() => showMessage({ content: "Saved", color: "neutral", duration: "short" })}
         type="button"
       >
         Timed
@@ -58,7 +59,7 @@ describe("StatusMessageProvider", () => {
     if (!persistentMessage) throw new Error("Persistent message was not rendered");
     expect(persistentMessage.querySelector("svg")).not.toBeNull();
 
-    act(() => vi.advanceTimersByTime(2_000));
+    act(() => vi.advanceTimersByTime(STATUS_MESSAGE_DURATION_MS.short));
     expect(screen.queryByText("Saved")).toBeNull();
     expect(screen.getByText("Check linked layers")).toBeTruthy();
 

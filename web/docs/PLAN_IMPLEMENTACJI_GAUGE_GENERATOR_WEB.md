@@ -103,12 +103,13 @@ uchwytu. JSON nigdy nie zawiera instancji klas: przepływ to
 
 ### Projekt, pliki i trwałość
 
-`ProjectDto` ma `format`, `version`, `meta`, `canvas`, `layers`, `ranges` i
-opcjonalne `extensions`. Zod waliduje strukturę, a walidacja domenowa sprawdza
+`ProjectDto` ma `format`, `version`, `meta`, `canvas`, `settings`, `layers`,
+`ranges` i opcjonalne `extensions`. `settings.snapping` przechowuje projektowe
+kroki odległości i kąta. Zod waliduje strukturę, a walidacja domenowa sprawdza
 UUID, duplikaty, istniejące `rangeId`, granice wartości i ograniczenia skali.
-Importer wyświetla zrozumiały błąd, niczego nie zmieniając przy nieudanej
-walidacji. Poprawny import atomowo zastępuje cały bieżący projekt; MVP nie
-obsługuje scalania projektów ani importu pojedynczych warstw. Do jawnej
+Open wyświetla zrozumiały błąd, niczego nie zmieniając przy nieudanej walidacji.
+Poprawnie otwarty JSON atomowo zastępuje cały bieżący projekt; MVP nie obsługuje
+osobnej akcji Import, scalania projektów ani importu pojedynczych warstw. Do jawnej
 stabilizacji format pozostaje kontraktem developerskim:
 zmiany schematu aktualizują bieżącą wersję bez kompatybilności wstecznej,
 migracji i podnoszenia numeru wersji. Polityka migracji powstanie dopiero przy
@@ -327,16 +328,23 @@ i pełen test checklisty. Dopiero wtedy rozpoczyna się następna warstwa.
 
 **Cel:** projekt jest praktycznie używalny i bezpieczny lokalnie.
 
+Etap 6 jest ukończony. Dirty state porównuje SHA-256 kanonicznego JSON-a
+bieżącego projektu z fingerprintem ostatniego projektu otwartego lub pobranego
+na komputer. Autosave nie czyści dirty state i jest komunikowany jako kopia
+wyłącznie lokalna.
+
 1. Zaimplementować Download (JSON), Open wybierający JSON i zastępujący atomowo
    cały projekt (file picker, Zod i raport błędu), New project z ochroną przed
    utratą zmian oraz Restore. Osobna akcja Import oraz scalanie pojedynczych
    warstw nie wchodzą do MVP. Migracje nie wchodzą do etapu 6, ponieważ format
    nie jest jeszcze ustabilizowany.
 2. Dodać autosave co 3 minuty, localStorage, maks. pięć snapshotów, toast i
-   testy fake timer/storage. Preferencje snappingu przechowywać lokalnie, ale
-   poza JSON-em projektu.
-3. Dodać katalog Examples jako statyczne, walidowane JSON-y. Wybranie przykładu
-   ładuje jego kopię do bieżącego store, nie zmienia pliku źródłowego.
+   testy fake timer/storage. Ustawienia snappingu są lokalne dla projektu i
+   należą do jego JSON-a, dirty state, historii oraz snapshotów.
+3. Dodać katalog Examples jako statyczne, walidowane JSON-y. Szeroki modal
+   prezentuje projekty w responsywnej, dwukolumnowej galerii i renderuje ich
+   miniatury bezpośrednio przez modele warstw. Wybranie przykładu ładuje jego
+   kopię do bieżącego store, nie zmienia pliku źródłowego.
 4. Zachować obecny deterministyczny projekt roboczy wyłącznie dla
    `NODE_ENV=development`, bez dalszego rozbudowywania go ani dodawania do
    katalogu Examples. Dane muszą przechodzić Zod i nie mogą wejść do produkcji;

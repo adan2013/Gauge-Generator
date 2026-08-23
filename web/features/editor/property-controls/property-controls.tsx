@@ -155,7 +155,7 @@ export function RangePropertyRow({
     validationMessageIdRef.current = showMessage({
       color: "danger",
       content: t("invalidNumber", { label, min, max }),
-      duration: 5_000,
+      duration: "long",
       icon: TriangleAlert,
     });
   }

@@ -16,6 +16,9 @@ importers:
       "@dnd-kit/utilities":
         specifier: ^3.2.2
         version: 3.2.2(react@19.2.8)
+      "@noble/hashes":
+        specifier: ^2.3.0
+        version: 2.3.0
       "@radix-ui/react-tooltip":
         specifier: ^1.2.16
         version: 1.2.16(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -867,6 +870,13 @@ packages:
     engines: { node: ">= 10" }
     cpu: [x64]
     os: [win32]
+
+  "@noble/hashes@2.3.0":
+    resolution:
+      {
+        integrity: sha512-oN+QwyX7VSHotibwubG3kpzbwKrfnyR6OOO+3Nk/53ADL7FmgHHz4TgrbaYKvvOw09u6QTx0oiH1cNCIOuN0CQ==,
+      }
+    engines: { node: ">= 20.19.0" }
 
   "@nodelib/fs.scandir@2.1.5":
     resolution:
@@ -5480,6 +5490,8 @@ snapshots:
 
   "@next/swc-win32-x64-msvc@16.3.1":
     optional: true
+
+  "@noble/hashes@2.3.0": {}
 
   "@nodelib/fs.scandir@2.1.5":
     dependencies:

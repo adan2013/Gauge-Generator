@@ -14,7 +14,6 @@ type EditorState = {
   selectedObject: EditorSelection;
   hoveredLayerId: string | null;
   layerPreviewModifiers: LayerPreviewModifiers;
-  snapping: { enabled: boolean; distanceMm: number; angleDegrees: number };
   autosaveStatus: AutosaveStatus;
 };
 
@@ -27,7 +26,6 @@ const initialState: EditorState = {
     bringSelectedLayerToFront: false,
     showEditingOverlay: true,
   },
-  snapping: { enabled: true, distanceMm: 2, angleDegrees: 10 },
   autosaveStatus: "idle",
 };
 
@@ -46,9 +44,6 @@ export const editorSlice = createSlice({
     },
     setLayerPreviewModifiers: (state, action: PayloadAction<LayerPreviewModifiers>) => {
       state.layerPreviewModifiers = action.payload;
-    },
-    setSnapping: (state, action: PayloadAction<EditorState["snapping"]>) => {
-      state.snapping = action.payload;
     },
     setAutosaveStatus: (state, action: PayloadAction<AutosaveStatus>) => {
       state.autosaveStatus = action.payload;

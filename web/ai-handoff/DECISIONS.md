@@ -20,6 +20,8 @@
 | Historia        | Redux, maks. 50 undo i 50 redo; drag = jedna operacja                                                                                              |
 | Storage         | localStorage, autosave 3 min., maks. 5 snapshotów; projekt pobierany jako wersjonowany JSON, bez baz danych                                        |
 | Open            | jedyna akcja wczytania JSON; atomowo zastępuje cały projekt; bez osobnego Import, scalania projektów i importu pojedynczych warstw w MVP           |
+| Dirty state     | fingerprint względem ostatniego Download/Open; autosave nie czyści dirty; New/Open/beforeunload chronią niezapisane zmiany                         |
+| Settings        | snapping należy do `ProjectDto.settings`, JSON-a, dirty state, historii i autosave; nie używa osobnego klucza `localStorage`                       |
 | Eksport         | JSON, PNG, SVG, podstawowy PDF A4 fit/1:1                                                                                                          |
 | Tests           | wyłącznie testy jednostkowe: Vitest + React Testing Library; bez E2E                                                                               |
 | MVP             | light mode i locale `en`; web-safe fonty; bez skrótów i kont                                                                                       |

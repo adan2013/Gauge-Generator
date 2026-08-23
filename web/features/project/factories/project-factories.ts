@@ -331,6 +331,7 @@ export function createProject(overrides: Partial<ProjectDto> = {}): ProjectDto {
     version: PROJECT_VERSION,
     meta: { title: "Untitled project", createdAt: DEFAULT_TIMESTAMP, updatedAt: DEFAULT_TIMESTAMP },
     canvas: { widthMm: 120, heightMm: 120, background: "#FFFFFF", transparentBackground: true },
+    settings: { snapping: { enabled: true, distanceMm: 2, angleDegrees: 10 } },
     layers: [],
     ranges: [],
     ...overrides,

@@ -15,6 +15,13 @@
     "background": "#FFFFFF",
     "transparentBackground": true
   },
+  "settings": {
+    "snapping": {
+      "enabled": true,
+      "distanceMm": 2,
+      "angleDegrees": 10
+    }
+  },
   "layers": [],
   "ranges": []
 }
@@ -204,6 +211,10 @@ The user-facing Open action is project-level and atomic: a fully parsed and
 domain-valid document replaces the current project, while any validation
 failure leaves it unchanged. MVP has no separate Import action and does not
 merge projects or import individual layers.
+
+Project-local editor settings are stored under `settings`. Its `snapping`
+object contains `enabled`, `distanceMm`, and `angleDegrees`; these values travel
+with Download, Open, autosave, and Restore and participate in dirty tracking.
 
 `scaleDefinition` is a strict discriminated union:
 

@@ -14,11 +14,12 @@ import {
   StatusMessage,
   type StatusMessageColor,
 } from "@/components/molecules/status-message/status-message";
+import { STATUS_MESSAGE_DURATION_MS, type StatusMessageDuration } from "./status-message-duration";
 
 export type StatusMessageRequest = {
   color?: StatusMessageColor;
   content: ReactNode;
-  duration?: number | "persistent";
+  duration: StatusMessageDuration;
   icon?: LucideIcon;
 };
 
@@ -28,7 +29,6 @@ type StatusMessageContextValue = {
   showMessage: (request: StatusMessageRequest) => number;
 };
 
-const DEFAULT_DURATION_MS = 4_000;
 const StatusMessageContext = createContext<StatusMessageContextValue | undefined>(undefined);
 
 export function StatusMessageProvider({ children }: { children: ReactNode }) {
@@ -52,9 +52,11 @@ export function StatusMessageProvider({ children }: { children: ReactNode }) {
       const id = nextIdRef.current;
       nextIdRef.current += 1;
       setMessages((current) => [...current, { ...request, id }]);
-      const duration = request.duration ?? DEFAULT_DURATION_MS;
-      if (duration !== "persistent") {
-        const timer = setTimeout(() => dismissMessage(id), Math.max(0, duration));
+      if (request.duration !== "persistent") {
+        const timer = setTimeout(
+          () => dismissMessage(id),
+          STATUS_MESSAGE_DURATION_MS[request.duration],
+        );
         timersRef.current.set(id, timer);
       }
       return id;

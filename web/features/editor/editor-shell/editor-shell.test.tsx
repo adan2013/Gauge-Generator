@@ -1,4 +1,4 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import {
   createProject,
@@ -103,10 +103,16 @@ describe("EditorShell", () => {
 
     expect(store.getState().project.current.layers[0]?.rangeId).toBe(latestRange.id);
   });
-  it("opens project settings from the layers screen", () => {
-    renderEditor(<EditorShell />);
+  it("opens project settings and updates persisted project title", async () => {
+    const { store } = renderEditor(<EditorShell />);
     fireEvent.click(screen.getByRole("button", { name: "Project" }));
     expect(screen.getByRole("heading", { name: "Project settings" })).toBeTruthy();
+    const title = screen.getByRole("textbox", { name: "Title" });
+    fireEvent.change(title, { target: { value: "Workshop gauge" } });
+    fireEvent.blur(title);
+
+    expect(store.getState().project.current.meta.title).toBe("Workshop gauge");
+    await waitFor(() => expect(document.title).toBe("* Workshop gauge — Gauge Generator Web"));
   });
   it("does not commit an invalid canvas candidate", () => {
     const range = createRange({ centerX: 60, radius: 40 });

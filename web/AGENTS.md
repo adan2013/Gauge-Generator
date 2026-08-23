@@ -178,12 +178,13 @@ Keep those documents current. Put completed-stage evidence in
   to pointer/blur end.
 - Undo/Redo are toolbar actions and are disabled for empty stacks. Middleware
   clears a stale selection and returns to Layers after project replacement,
-  deletion, import, restore, or history operations.
+  deletion, Open, restore, or history operations.
 - Do not use `useEffect` for derived state or Redux-slice synchronization;
   prefer selectors, reducers, thunks, or middleware. Reserve it for external
   systems such as browser APIs, subscriptions, timers, and `localStorage`.
-- Snapping is enabled by default at 2 mm and 10°. It is a local preference,
-  while canvas dimensions are project data.
+- Snapping is enabled by default at 2 mm and 10°. It is project data stored in
+  `ProjectDto.settings.snapping`, included in JSON, dirty tracking, history,
+  autosave, Open, Download, and Restore.
 - Use `dnd-kit` for visual-layer ordering; rely on its sortable motion rather
   than adding a separate drop-target indicator.
 - The Layers browser duplicates a visual layer immediately above its source

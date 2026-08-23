@@ -27,10 +27,16 @@ describe("ConfirmationModal", () => {
     fireEvent.keyDown(document, { key: "Escape" });
     expect(onCancel).toHaveBeenCalledOnce();
     expect(onConfirm).not.toHaveBeenCalled();
+    const dialog = screen.getByRole("alertdialog");
+    fireEvent.click(dialog);
+    expect(onCancel).toHaveBeenCalledOnce();
+    if (!dialog.parentElement) throw new Error("Expected modal backdrop");
+    fireEvent.click(dialog.parentElement);
+    expect(onCancel).toHaveBeenCalledTimes(2);
     fireEvent.keyDown(document, { key: "Enter" });
     expect(onConfirm).toHaveBeenCalledOnce();
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
-    expect(onCancel).toHaveBeenCalledTimes(2);
+    expect(onCancel).toHaveBeenCalledTimes(3);
     fireEvent.click(screen.getByRole("button", { name: "Delete" }));
     expect(onConfirm).toHaveBeenCalledTimes(2);
   });

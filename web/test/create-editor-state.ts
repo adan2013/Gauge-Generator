@@ -12,7 +12,6 @@ export function createEditorState(
       bringSelectedLayerToFront: false,
       showEditingOverlay: true,
     },
-    snapping: { enabled: true, distanceMm: 2, angleDegrees: 10 },
     autosaveStatus: "idle",
     ...overrides,
   };

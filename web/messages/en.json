@@ -29,7 +29,7 @@
       },
       "projects": {
         "title": "Projects",
-        "description": "Projects are versioned JSON files validated before import."
+        "description": "Open and download validated JSON project files. Autosaves remain only in this browser until you download the project."
       },
       "examples": {
         "title": "Examples",
@@ -42,6 +42,19 @@
     "status": {
       "undo": "Undid the last project change.",
       "redo": "Redid the project change.",
+      "downloaded": "Project downloaded to your computer.",
+      "downloadFailed": "The project could not be downloaded.",
+      "openFailed": "This file is not a valid Gauge Generator project. The current project was not changed.",
+      "restoreFailed": "Local autosaves could not be read.",
+      "noAutosaves": "There are no local autosaves to restore yet.",
+      "autosavedLocally": "Autosaved locally. Download the project to keep a file on your computer.",
+      "autosaveFailed": "The local autosave failed. Download the project to protect your work.",
+      "projectLoaded": {
+        "new": "New project created.",
+        "open": "Project opened.",
+        "restore": "Local autosave restored. Download it to keep a file on your computer.",
+        "example": "Example opened. Download it to keep a project file on your computer."
+      },
       "layerReset": "Layer settings restored to their defaults.",
       "layerEditModeStarted": "You are editing layer “{name}”.",
       "rangeRequired": "Create a Range before adding a visual layer.",
@@ -143,13 +156,34 @@
       "resetLayerDescription": "This will restore the visual settings of the selected layer to their defaults.",
       "resetLayerTitle": "Reset layer?",
       "confirmReset": "Reset",
-      "confirmDelete": "Delete"
+      "confirmDelete": "Delete",
+      "unsaved": {
+        "title": "Discard changes not downloaded?",
+        "description": "Your latest project changes have not been downloaded to your computer. A local autosave may exist, but it is not a project file.",
+        "newConfirm": "Discard and create",
+        "openConfirm": "Discard and open",
+        "restoreConfirm": "Discard and restore",
+        "exampleConfirm": "Discard and open example"
+      }
+    },
+    "restore": {
+      "title": "Restore local autosave",
+      "description": "Choose one of the five most recent snapshots stored only in this browser.",
+      "empty": "There are no local autosaves to restore.",
+      "open": "Restore"
+    },
+    "examples": {
+      "title": "Examples",
+      "description": "Preview a complete project, then open it as an editable starting point.",
+      "open": "Open example"
     },
     "projectSettings": {
       "ariaLabel": "Project settings",
       "eyebrow": "Project",
       "title": "Project settings",
-      "description": "Canvas dimensions are project data. Snapping is a local editor preference.",
+      "description": "Canvas dimensions and snapping are saved with this project.",
+      "project": "Project",
+      "projectTitle": "Title",
       "canvas": "Canvas",
       "width": "Width",
       "height": "Height",

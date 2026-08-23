@@ -303,9 +303,9 @@ to **2 mm** dla odległości i **10°** dla kąta. Obsługuje:
 - point snap — przyciąganie do środka, osi wskazówki i punktów skali;
 - przełącznik Snap oraz osobne pola Distance snap (mm) i Angle snap (°).
 
-Ustawienia snappingu nie zmieniają wyniku renderowania projektu. Są lokalną
-preferencją edytora przechowywaną razem z ustawieniami autosave w localStorage,
-nie elementem eksportowanego JSON-a.
+Ustawienia snappingu nie zmieniają finalnego renderowania, ale są lokalne dla
+projektu. Należą do jego JSON-a, dirty state, historii oraz snapshotów autosave,
+dzięki czemu Open i Restore odtwarzają środowisko edycji projektu.
 
 ### Label: tekst po ścieżce Range
 
@@ -570,8 +570,8 @@ asynchronicznego `useConfirmation`; wywołujący przekazuje wyłącznie
 przetłumaczony tytuł, opis i akcję wykonywaną po potwierdzeniu.
 
 Store zawiera co najmniej projectSlice, editorSlice oraz historySlice.
-projectSlice przechowuje aktualny DTO projektu, editorSlice stan UI
-(zaznaczona warstwa, tryb sidebara, snapping i status autosave), a historySlice
+projectSlice przechowuje aktualny DTO projektu wraz ze snappingiem, editorSlice stan UI
+(zaznaczona warstwa, tryb sidebara i status autosave), a historySlice
 utrzymuje stosy past i future, po maksymalnie 50 operacji każdy. Każda mutacja projektu jest pojedynczą akcją
 odwracalną; przeciągnięcie uchwytu tworzy jedną operację dopiero po jego
 zakończeniu, nie osobny wpis dla każdego ruchu kursora. Undo przenosi stan na
@@ -644,10 +644,12 @@ Minimalna struktura wiki:
 - Examples — opis wbudowanych przykładów i sposób ich otwierania.
 
 Predefiniowane projekty należy przechowywać jako zwalidowane pliki JSON w
-repozytorium, np. w katalogu src/examples, wraz z metadanymi: id, angielska
-nazwa, opis, miniatura i ścieżka pliku. Ekran Home pokaże katalog przykładów.
-Otwarcie przykładu ładuje jego kopię do local state — nie nadpisuje pliku
-źródłowego i nie wymaga połączenia z siecią.
+repozytorium wraz z metadanymi: id, angielska nazwa i opis. Modal Examples
+pokazuje je w responsywnej, dwukolumnowej galerii. Miniatury nie są osobnymi
+assetami: aplikacja renderuje bezpośrednio cały projekt JSON tymi samymi modelami
+warstw co podgląd edytora, dzięki czemu karta zawsze odpowiada otwieranemu
+projektowi. Otwarcie przykładu ładuje jego kopię do local state — nie nadpisuje
+pliku źródłowego i nie wymaga połączenia z siecią.
 
 #### Deweloperski projekt roboczy
 

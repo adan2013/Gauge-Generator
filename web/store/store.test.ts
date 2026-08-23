@@ -13,10 +13,51 @@ import {
 } from "@/store/history-actions";
 import { editorActions } from "@/store/editor-slice";
 import { projectActions } from "@/store/project-slice";
+import { selectIsProjectDirty } from "@/store/project-file-slice";
 import { createEditorState } from "@/test/create-editor-state";
 import { createTestStore } from "@/test/create-test-store";
 
 describe("project store and history", () => {
+  it("derives dirty state from the saved project and clears it after undo", () => {
+    const store = createTestStore();
+    expect(selectIsProjectDirty(store.getState())).toBe(false);
+
+    store.dispatch(projectActions.addRange(createRange()));
+    expect(selectIsProjectDirty(store.getState())).toBe(true);
+
+    store.dispatch(undoProject());
+    expect(selectIsProjectDirty(store.getState())).toBe(false);
+  });
+
+  it("treats project snapping as persisted project data", () => {
+    const store = createTestStore();
+    store.dispatch(projectActions.setSnapping({ enabled: false, distanceMm: 5, angleDegrees: 15 }));
+
+    expect(store.getState().project.current.settings.snapping).toEqual({
+      enabled: false,
+      distanceMm: 5,
+      angleDegrees: 15,
+    });
+    expect(selectIsProjectDirty(store.getState())).toBe(true);
+    expect(store.getState().history.past).toHaveLength(1);
+
+    store.dispatch(undoProject());
+    expect(store.getState().project.current.settings.snapping).toEqual({
+      enabled: true,
+      distanceMm: 2,
+      angleDegrees: 10,
+    });
+    expect(selectIsProjectDirty(store.getState())).toBe(false);
+  });
+
+  it("stores the project title as persisted metadata", () => {
+    const store = createTestStore();
+    store.dispatch(projectActions.setProjectTitle("Workshop gauge"));
+
+    expect(store.getState().project.current.meta.title).toBe("Workshop gauge");
+    expect(selectIsProjectDirty(store.getState())).toBe(true);
+  });
+
   it("does not allow a Range with dependent layers to be removed", () => {
     const range = createRange();
     const store = createTestStore({

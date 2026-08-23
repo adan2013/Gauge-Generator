@@ -10,6 +10,7 @@ import {
   type LayerDto,
   type ProjectDto,
   type RangeDto,
+  type SnappingDto,
 } from "@/features/project/project-dto/project-dto";
 import { validateProject } from "@/features/project/project-dto/project-validation";
 
@@ -47,6 +48,18 @@ export const projectSlice = createSlice({
     setCanvas: (state, action: PayloadAction<CanvasDto>) => {
       commitProjectMutation(state, (project) => {
         project.canvas = action.payload;
+        return true;
+      });
+    },
+    setSnapping: (state, action: PayloadAction<SnappingDto>) => {
+      commitProjectMutation(state, (project) => {
+        project.settings.snapping = action.payload;
+        return true;
+      });
+    },
+    setProjectTitle: (state, action: PayloadAction<string>) => {
+      commitProjectMutation(state, (project) => {
+        project.meta.title = action.payload;
         return true;
       });
     },

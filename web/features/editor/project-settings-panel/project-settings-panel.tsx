@@ -1,10 +1,12 @@
 "use client";
 
+import { useState, type KeyboardEvent } from "react";
 import { ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ActionButton } from "@/components/atoms/action-button/action-button";
 import { BooleanPropertyRow } from "@/components/molecules/boolean-property-row/boolean-property-row";
 import { ColorPropertyRow } from "@/components/molecules/color-property-row/color-property-row";
+import { FieldRow } from "@/components/molecules/field-row/field-row";
 import {
   CANVAS_DIMENSION_MAX_MM,
   CANVAS_DIMENSION_MIN_MM,
@@ -23,6 +25,7 @@ export type ProjectSettingsPanelProps = {
   canvasWidth: string;
   distanceSnap: string;
   snapEnabled: boolean;
+  title: string;
   transparentBackground: boolean;
   onAngleSnapChange: (value: string) => void;
   onBack: () => void;
@@ -33,6 +36,7 @@ export type ProjectSettingsPanelProps = {
   onHistoryTransactionEnd: () => void;
   onHistoryTransactionStart: () => void;
   onSnapEnabledChange: (value: boolean) => void;
+  onTitleChange: (value: string) => void;
   onTransparentBackgroundChange: (value: boolean) => void;
 };
 
@@ -51,8 +55,10 @@ export function ProjectSettingsPanel({
   onHistoryTransactionEnd,
   onHistoryTransactionStart,
   onSnapEnabledChange,
+  onTitleChange,
   onTransparentBackgroundChange,
   snapEnabled,
+  title,
   transparentBackground,
 }: ProjectSettingsPanelProps) {
   const t = useTranslations("Editor");
@@ -77,6 +83,14 @@ export function ProjectSettingsPanel({
           </p>
           <h2 className="mt-1 text-xl font-semibold">{t("projectSettings.title")}</h2>
           <p className="mt-2 text-sm leading-6 text-muted">{t("projectSettings.description")}</p>
+          <PropertyGroup title={t("projectSettings.project")}>
+            <ProjectTitleField
+              key={title}
+              label={t("projectSettings.projectTitle")}
+              onCommit={onTitleChange}
+              title={title}
+            />
+          </PropertyGroup>
           <PropertyGroup title={t("projectSettings.canvas")}>
             <RangePropertyRow
               label={t("projectSettings.width")}
@@ -145,5 +159,43 @@ export function ProjectSettingsPanel({
         <PendingCommitIndicator className="absolute right-3 bottom-5 left-3" />
       </section>
     </PendingCommitProvider>
+  );
+}
+
+function ProjectTitleField({
+  label,
+  onCommit,
+  title,
+}: {
+  label: string;
+  onCommit: (title: string) => void;
+  title: string;
+}) {
+  const [draft, setDraft] = useState(title);
+  function commit() {
+    const normalized = draft.trim();
+    if (!normalized) {
+      setDraft(title);
+      return;
+    }
+    if (normalized !== title) onCommit(normalized);
+  }
+  function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Enter") event.currentTarget.blur();
+  }
+  return (
+    <FieldRow htmlFor="project-title" label={label}>
+      <input
+        className="h-9 w-full rounded-md border border-border bg-app px-2 text-sm text-ink outline-none focus:border-focus focus:ring-2 focus:ring-focus/30"
+        id="project-title"
+        maxLength={80}
+        onBlur={commit}
+        onChange={(event) => setDraft(event.target.value)}
+        onKeyDown={handleKeyDown}
+        required
+        type="text"
+        value={draft}
+      />
+    </FieldRow>
   );
 }

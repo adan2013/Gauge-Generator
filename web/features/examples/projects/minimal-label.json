@@ -1,0 +1,144 @@
+{
+  "format": "gauge-generator-web",
+  "version": 1,
+  "meta": {
+    "title": "Track tachometer",
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  "canvas": {
+    "widthMm": 120,
+    "heightMm": 120,
+    "background": "#11151B",
+    "transparentBackground": false
+  },
+  "settings": { "snapping": { "enabled": true, "distanceMm": 2, "angleDegrees": 10 } },
+  "ranges": [
+    {
+      "id": "20000000-0000-4000-8000-000000000001",
+      "name": "Engine speed",
+      "centerX": 60,
+      "centerY": 62,
+      "radius": 50,
+      "cornerRadiusPercent": 50,
+      "angleStart": 140,
+      "openingAngle": 260,
+      "valueDirection": "ascending",
+      "scaleDefinition": { "mode": "linear", "start": 0, "end": 80 }
+    }
+  ],
+  "layers": [
+    {
+      "id": "20000000-0000-4000-8000-000000000002",
+      "name": "Needle",
+      "visible": true,
+      "rangeId": "20000000-0000-4000-8000-000000000001",
+      "type": "needle",
+      "value": 58,
+      "shaft": {
+        "lengthMm": 44,
+        "tailLengthMm": 8,
+        "widthMm": 2.2,
+        "tipStyle": "pointed",
+        "color": "#EF4444",
+        "tailColor": "#EF4444"
+      },
+      "hub": { "visible": true, "radiusMm": 5, "color": "#E5E7EB", "placement": "front" }
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000003",
+      "name": "RPM values",
+      "visible": true,
+      "rangeId": "20000000-0000-4000-8000-000000000001",
+      "type": "numeric-scale",
+      "valueStart": 0,
+      "valueEnd": 80,
+      "valueStep": 10,
+      "scaleMultiplier": 0.1,
+      "decimalPlaces": 0,
+      "radiusOffsetMm": -12,
+      "textStyle": {
+        "font": { "source": "system", "family": "Arial" },
+        "sizeMm": 5,
+        "color": "#F9FAFB",
+        "bold": true,
+        "italic": false,
+        "underline": false
+      },
+      "rotated": false
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000004",
+      "name": "Major ticks",
+      "visible": true,
+      "rangeId": "20000000-0000-4000-8000-000000000001",
+      "type": "tick-scale",
+      "valueStart": 0,
+      "valueEnd": 80,
+      "valueStep": 10,
+      "tickLengthMm": 7,
+      "tickWidthMm": 1.4,
+      "radiusOffsetMm": -1,
+      "color": "#F9FAFB"
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000005",
+      "name": "Minor ticks",
+      "visible": true,
+      "rangeId": "20000000-0000-4000-8000-000000000001",
+      "type": "tick-scale",
+      "valueStart": 0,
+      "valueEnd": 80,
+      "valueStep": 5,
+      "tickLengthMm": 3,
+      "tickWidthMm": 0.7,
+      "radiusOffsetMm": -1,
+      "color": "#9CA3AF"
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000006",
+      "name": "Red zone",
+      "visible": true,
+      "rangeId": "20000000-0000-4000-8000-000000000001",
+      "type": "arc",
+      "valueStart": 65,
+      "valueEnd": 80,
+      "radiusOffsetMm": -6,
+      "strokeWidthMm": 3.2,
+      "roundedEnds": true,
+      "color": "#EF4444"
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000007",
+      "name": "RPM label",
+      "visible": true,
+      "rangeId": "20000000-0000-4000-8000-000000000001",
+      "type": "label",
+      "text": "RPM × 1000",
+      "layout": { "mode": "point", "offsetXMm": 0, "offsetYMm": 22, "rotationDegrees": 0 },
+      "textStyle": {
+        "font": { "source": "system", "family": "Arial" },
+        "sizeMm": 3,
+        "color": "#9CA3AF",
+        "bold": true,
+        "italic": false,
+        "underline": false
+      }
+    },
+    {
+      "id": "20000000-0000-4000-8000-000000000008",
+      "name": "Bezel",
+      "visible": true,
+      "rangeId": "20000000-0000-4000-8000-000000000001",
+      "type": "ellipse",
+      "geometry": {
+        "offsetXMm": 0,
+        "offsetYMm": 0,
+        "widthMm": 112,
+        "heightMm": 112,
+        "rotationDegrees": 0
+      },
+      "style": { "fillColor": "#11151B", "borderColor": "#4B5563", "borderWidthMm": 2.4 }
+    }
+  ]
+}

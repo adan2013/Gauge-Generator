@@ -10,7 +10,7 @@ Ten katalog skraca wejście kolejnego agenta AI w projekt. Najpierw przeczytaj:
 
 ## Current status
 
-Stages 1–5 are complete: the UI/store foundation, full Range editing flow, Tick
+Stages 1–6 are complete: the UI/store foundation, full Range editing flow, Tick
 Scale, Numeric Scale, the Linear/Logarithmic/Custom Curve mappings, and all
 remaining visual layers are in place. Custom Curve has an interactive two-axis
 editor with locked endpoints, monotonic point constraints, integer value
@@ -29,8 +29,12 @@ millimetre geometry, styling, and orientation-aware editing handles. Line stores
 center offsets, length, and rotation while offering center and endpoint handles.
 Icon stores a Lucide name and resolves normalized catalogue SVG nodes on demand
 for the shared domain renderer. It uses the same planar width/height geometry and
-editing overlay as Ellipse and Rectangle. The next stage is user files, autosave,
-and examples.
+editing overlay as Ellipse and Rectangle. Stage 6 adds atomic Open, JSON
+Download, canonical dirty tracking, `beforeunload` protection, guarded New/Open,
+five local autosave snapshots with Restore, project-local snapping settings, and two
+validated bundled examples. Autosave and examples intentionally remain dirty
+until the user downloads the project. The next stage is export and release
+quality.
 
 ## Initial repository context
 

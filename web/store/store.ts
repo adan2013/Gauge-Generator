@@ -2,9 +2,12 @@ import { combineReducers, configureStore, type Middleware } from "@reduxjs/toolk
 import { editorActions, editorSlice } from "@/store/editor-slice";
 import { historyActions, historySlice } from "@/store/history-slice";
 import { projectActions, projectSlice } from "@/store/project-slice";
+import { projectFileSlice, type ProjectFileState } from "@/store/project-file-slice";
+import { createProjectFingerprint } from "@/features/project/project-file/project-fingerprint";
 
 const rootReducer = combineReducers({
   project: projectSlice.reducer,
+  projectFile: projectFileSlice.reducer,
   editor: editorSlice.reducer,
   history: historySlice.reducer,
 });
@@ -56,11 +59,16 @@ const projectSelectionMiddleware: Middleware<unknown, RootState> =
   };
 
 export function makeStore(preloadedState?: Partial<RootState>) {
+  const baseState = rootReducer(undefined, { type: "store/initialize" });
+  const project = preloadedState?.project ?? baseState.project;
+  const projectFile: ProjectFileState = preloadedState?.projectFile ?? {
+    savedProjectFingerprint: createProjectFingerprint(project.current),
+  };
   return configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(projectHistoryMiddleware, projectSelectionMiddleware),
-    preloadedState: preloadedState as RootState | undefined,
+    preloadedState: { ...baseState, ...preloadedState, project, projectFile },
   });
 }
 
