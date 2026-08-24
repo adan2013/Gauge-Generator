@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { EditorToolbar } from "@/features/editor/editor-toolbar/editor-toolbar";
+import { LanguageSwitcher } from "@/features/editor/language-switcher/language-switcher";
 import { useEditorShell } from "@/features/editor/editor-shell/editor-shell-context";
 import { ExamplesModal } from "@/features/examples/examples-modal";
 import { ExportModal } from "@/features/project/export/export-modal/export-modal";
@@ -29,6 +30,7 @@ export function EditorShellHeader() {
           </span>
           <span className="hidden lg:inline">{t("brand")}</span>
         </Link>
+        <LanguageSwitcher />
         <EditorToolbar actions={actions} onAction={handleAction} onOpenHelp={openHelp} />
       </header>
       {projectWorkflow.dialog?.kind === "examples" ? (

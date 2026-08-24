@@ -394,8 +394,8 @@ layers, properties, dialogs, validation i help.
 
 - / — tymczasowy landing page / placeholder; nie zawiera edytora;
 - /app — właściwa aplikacja Gauge Generator;
-- /app/help — mini-wiki otwierana wewnątrz aplikacji, z możliwością powrotu
-  do edytora i zachowaniem bieżącego projektu w local state.
+- /docs/{lang} — publiczne centrum pomocy renderowane z pliku Markdown dla języka;
+  przycisk Help center otwiera je w nowej karcie, zachowując bieżący projekt.
 
 ### Wygląd i układ aplikacji
 
@@ -551,7 +551,7 @@ podziale kodu domenowego na features:
 | Molecules | FieldRow, NumberField, ColorField, LayerListItem, ConfirmationModal, PropertyGroupHeader                         |
 | Organisms | ActionToolbar, SidebarSlider, LayersView, PropertiesView, LayerForm, SvgPreview, ExportPdfDialog, HelpNavigation |
 | Templates | EditorTemplate, HelpTemplate, LandingTemplate                                                                    |
-| Pages     | route /, /app i /app/help                                                                                        |
+| Pages     | route /, /docs/{lang} i /app                                                                                     |
 
 Kod domenowy, renderer SVG, klasy Layer, schematy Zod i operacje plikowe żyją
 poza Atomic Design, w modułach features/editor, features/project i lib. Atomy
@@ -677,7 +677,7 @@ z lokalizacji. Open dotyczy wyłącznie nowego JSON-a, nie starszych plików ggp
 | Redo        | przywraca cofniętą zmianę                                                |
 | Restore     | otwiera dialog przywrócenia ostatniego lokalnego autosave                |
 | Examples    | otwiera katalog predefiniowanych, walidowanych projektów                 |
-| Help center | otwiera mini-wiki wewnątrz aplikacji                                     |
+| Help center | otwiera publiczną dokumentację `/docs/{lang}` w nowej karcie             |
 
 Export otwiera duże okno dialogowe zamiast bezpośrednio pobierać plik. Dialog
 ma osobne, czytelne sekcje dla PNG, SVG i PDF, z podglądem właściwych ustawień

@@ -26,7 +26,7 @@ w tym samym PR-ze.
 - Next.js App Router, TypeScript, React 19, Tailwind CSS v4 i Redux Toolkit.
 - Jedynym package managerem jest pnpm. Lockfile `pnpm-lock.yaml` jest
   autorytatywny; npm, Yarn i Bun nie są używane.
-- Trasy: `/` (prosty landing), `/app` (edytor), `/app/help` (mini-wiki).
+- Trasy: `/` (prosty landing), `/docs/{lang}` (publiczna dokumentacja Markdown), `/app` (edytor).
 - Interfejs ma architekturę i18n, ale zawiera wyłącznie locale `en`.
 - Light mode; paleta szarości z czerwonym akcentem.
 - Kanoniczną jednostką i jednostką JSON-a jest mm. Domyślne płótno ma 120 ×
@@ -133,7 +133,7 @@ projektowych na skróty.
    TS jako źródła prawdy, zachować ją jako jedyne źródło tokenów).
 3. Dodać React Redux, Redux Toolkit, Zod, `next-intl`, Vitest, React Testing
    Library oraz bibliotekę ikon SVG. Nie dodawać narzędzia E2E.
-4. Utworzyć routing `/`, `/app`, `/app/help`; dodać provider store, i18n oraz
+4. Utworzyć routing `/`, `/docs/{lang}`, `/app`; dodać provider store, i18n oraz
    rootowy `ConfirmationProvider` dla destrukcyjnych operacji.
 5. Zapisać `docs/architecture.md`, `docs/json-format.md` i
    `ai-handoff/DECISIONS.md`. Przenieść do nich decyzje z analizy zamiast
@@ -143,7 +143,7 @@ projektowych na skróty.
    pozostaje poza obecnym zakresem; nie dodawać jobu E2E.
 
 **Weryfikacja:** `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` są
-zielone; `/`, `/app` i `/app/help` działają, a wyświetlany tekst pochodzi z
+zielone; `/`, `/docs/{lang}` i `/app` działają, a wyświetlany tekst pochodzi z
 angielskich kluczy tłumaczeń.
 
 ### Etap 1 — szkielet produktu i design system
@@ -348,7 +348,7 @@ wyłącznie lokalna.
 4. Tymczasowy deterministyczny development workbench został usunięty przy
    domknięciu MVP. Każde środowisko zaczyna od pustego projektu, a kompletne
    demonstracje istnieją wyłącznie jako walidowane projekty w Examples.
-5. Dodać mini-wiki wewnątrz `/app/help`: Getting started, interface, layers,
+5. Dodać publiczną dokumentację Markdown pod `/docs/{lang}`: Getting started, interface, layers,
    project JSON i examples.
 
 **Weryfikacja:** odświeżenie przeglądarki pozwala przywrócić jeden z pięciu

@@ -9,33 +9,19 @@
     "description": "The editor workspace is ready for its first implementation stage. Create vector-based gauge layouts locally, then save them as JSON.",
     "openEditor": "Open editor"
   },
-  "Help": {
-    "backToEditor": "Back to editor",
-    "eyebrow": "Help center",
-    "title": "Learn the editor",
-    "description": "The full in-app guide will grow alongside the available layers.",
-    "sections": {
-      "gettingStarted": {
-        "title": "Getting started",
-        "description": "Create a Range or open an example to begin."
-      },
-      "interface": {
-        "title": "Interface",
-        "description": "Use Layers to navigate and Properties to edit a layer."
-      },
-      "layers": {
-        "title": "Layers",
-        "description": "Ranges define the coordinate and scale context for a gauge."
-      },
-      "projects": {
-        "title": "Projects",
-        "description": "Open and download validated JSON project files. Autosaves remain only in this browser until you download the project."
-      },
-      "examples": {
-        "title": "Examples",
-        "description": "Examples provide ready-to-edit starting points."
-      }
-    }
+  "Docs": {
+    "backToHome": "Back to home",
+    "closeNavigation": "Close documentation navigation",
+    "languageLabel": "Language",
+    "metadata": {
+      "title": "Help center | Gauge Generator",
+      "description": "Learn how to build, edit, save, and export vector gauges in Gauge Generator."
+    },
+    "openNavigation": "Open documentation navigation",
+    "openEditor": "Open editor",
+    "tableOfContents": "On this page",
+    "tableOfContentsAriaLabel": "Table of contents",
+    "footer": "Gauge Generator documentation"
   },
   "Editor": {
     "brand": "Gauge Generator Web",
@@ -92,6 +78,14 @@
       "examples": "Examples",
       "helpCenter": "Help center",
       "moreActions": "More actions"
+    },
+    "language": {
+      "trigger": "Language: {language}",
+      "title": "Language",
+      "description": "Choose the language used by the application.",
+      "contribution": "You're invited to contribute and add new languages on <github>GitHub</github>.",
+      "select": "Select {language}",
+      "selected": "Selected"
     },
     "layers": {
       "sidebarAriaLabel": "Editor sidebar",

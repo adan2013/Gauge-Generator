@@ -11,8 +11,7 @@ import {
   Redo2,
   Undo2,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useStatusMessage } from "@/components/providers/status-message-provider/status-message-provider";
 import type { EditorToolbarAction } from "@/features/editor/editor-toolbar/editor-toolbar";
 import { useProjectWorkflowController } from "@/features/editor/editor-shell/use-project-workflow-controller";
@@ -31,8 +30,8 @@ export function useEditorToolbarController({
   selectedRange,
   showRangeDependencyWarning,
 }: UseEditorToolbarControllerOptions) {
-  const router = useRouter();
   const dispatch = useAppDispatch();
+  const locale = useLocale();
   const { past, future } = useAppSelector((state) => state.history);
   const t = useTranslations("Editor");
   const { showMessage } = useStatusMessage();
@@ -96,7 +95,7 @@ export function useEditorToolbarController({
   return {
     actions,
     handleAction,
-    openHelp: () => router.push("/app/help"),
+    openHelp: () => window.open(`/docs/${locale}`, "_blank", "noopener,noreferrer"),
     projectWorkflow,
   };
 }

@@ -30,7 +30,9 @@
     "next-intl": "^4.13.6",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "react-markdown": "^10.1.0",
     "react-redux": "^9.3.0",
+    "remark-gfm": "^4.0.1",
     "svg2pdf.js": "^2.7.0",
     "tailwind-merge": "^3.6.0",
     "zod": "^4.4.3"

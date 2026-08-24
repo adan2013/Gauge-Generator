@@ -63,9 +63,12 @@ Keep those documents current. Put completed-stage evidence in
 
 ## Product constraints
 
-- Routes: `/` landing, `/app` editor, `/app/help` in-app mini wiki.
-- English is the only shipped locale, but every user-facing string, including
-  ARIA labels and errors, belongs in `messages/en.json`. Remove unused keys.
+- Routes: `/` landing, `/docs/{lang}` public Markdown help center (`/docs` redirects
+  to the default language), `/app` editor.
+- English is currently the only shipped locale. The editor exposes a language
+  selector designed for additional locale catalogues. Every user-facing string,
+  including ARIA labels and errors, belongs in the active locale catalogue.
+  Remove unused keys.
   Domain code returns stable `{ code, path }` validation errors, never English.
 - Light mode only; use the centrally defined grey palette and red accent.
 - No backend, account, analytics, telemetry, cloud persistence, IndexedDB,

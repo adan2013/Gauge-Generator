@@ -1,5 +1,5 @@
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   createProject,
   createLabelLayer,
@@ -12,6 +12,21 @@ import { renderEditor } from "@/test/render-editor";
 import { EditorShell } from "./editor-shell";
 
 describe("EditorShell", () => {
+  it("opens the public help center in a new tab", () => {
+    const open = vi.spyOn(window, "open").mockImplementation(() => null);
+    renderEditor(<EditorShell />);
+
+    const help = screen.queryByRole("button", { name: "Help center" });
+    if (help) fireEvent.click(help);
+    else {
+      fireEvent.click(screen.getByText("More actions"));
+      fireEvent.click(screen.getByRole("button", { name: "Help center" }));
+    }
+
+    expect(open).toHaveBeenCalledWith("/docs/en", "_blank", "noopener,noreferrer");
+    open.mockRestore();
+  });
+
   it("warns while editing a Range with linked layers", () => {
     const range = createRange();
     const layer = createTickScaleLayer(range.id);
