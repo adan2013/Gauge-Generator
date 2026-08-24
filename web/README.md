@@ -1,51 +1,79 @@
 # Gauge Generator Web
 
-Niezależny, webowy edytor warstwowych tarcz i wskaźników SVG. Ten katalog jest
-docelową aplikacją; katalog sąsiedni `../pc-legacy/` przechowuje niezmieniony
-projekt WPF wyłącznie jako materiał referencyjny.
+Gauge Generator Web is the current, browser-based edition of Gauge Generator: a
+free and open-source vector editor for gauges, dials, and instrument faces.
 
-## Dokumentacja projektu
+The project is local-first. It has no accounts, backend, analytics, or cloud
+workspace. Project data stays in the browser, local recovery snapshots use
+`localStorage`, and durable editable files are downloaded as readable JSON.
 
-- [Analiza i założenia](docs/ANALIZA_MODERNIZACJI_WEB.md)
-- [Plan implementacji](docs/PLAN_IMPLEMENTACJI_GAUGE_GENERATOR_WEB.md)
-- [Jak dodać nową warstwę wizualną](docs/adding-a-visual-layer.md)
-- [Materiały dla agenta AI](ai-handoff/README.md)
+## What it can do
 
-Aktualny starter został utworzony przez
-[`create-next-app`](https://nextjs.org/docs/app/getting-started/installation) z
-TypeScript, ESLint, Tailwind CSS, App Router i Turbopack.
+- define circular and rounded-square Ranges with linear, logarithmic, or custom
+  value mapping;
+- compose Tick Scale, Numeric Scale, Label, Arc, Needle, Ellipse, Rectangle,
+  Line, and Lucide Icon layers;
+- edit geometry through property controls and on-canvas handles;
+- reorder, duplicate, hide, isolate, and reset visual layers;
+- open editable examples and restore recent local autosaves;
+- download the JSON project or export SVG, PNG, and PDF artwork.
 
-## Package manager
+## Routes
 
-Use **pnpm only**. Do not run npm, Yarn, or Bun commands, and do not create
-their lockfiles. `pnpm-lock.yaml` and the `packageManager` field in
-`package.json` are authoritative.
+- `/` — English landing page;
+- `/app` — local-first editor;
+- `/docs` — redirect to the default Help Center language;
+- `/docs/{lang}` — localized Help Center rendered from `content/docs/{lang}.md`.
 
-## Getting Started
+## Development
 
-Start the development server:
+The application requires a current Node.js release and uses **pnpm only**.
 
 ```bash
+pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Before submitting a change, run:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm format
+pnpm verify
+pnpm build
+```
 
-## Learn More
+`pnpm verify` checks formatting, ESLint, TypeScript, and the Vitest suite.
 
-To learn more about Next.js, take a look at the following resources:
+## Project structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```text
+app/                 Next.js routes, landing page, Help Center, and providers
+components/          shared presentational components
+content/docs/        one Help Center Markdown file per supported locale
+features/editor/     editor composition and interaction flows
+features/layers/     layer domain models, properties, overlays, and tests
+features/project/    JSON DTO, validation, persistence, rendering, and export
+features/ranges/     Range geometry and value mapping
+i18n/                supported locales and next-intl request configuration
+messages/            application and Help Center interface catalogues
+store/               project, editor, history, and session state
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Engineering contracts and the required composition of a new visual layer are in
+[`AGENTS.md`](AGENTS.md). Translation contributions are documented in
+[`../CONTRIBUTING.md`](../CONTRIBUTING.md).
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The web edition is designed for Vercel. Set `NEXT_PUBLIC_SITE_URL` to the final
+custom origin when one is used. Otherwise the metadata configuration uses
+Vercel's `VERCEL_PROJECT_PRODUCTION_URL` automatically.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+No server-side persistence or external service is required.
+
+## License
+
+Gauge Generator Web is distributed under the
+[GNU General Public License v3.0](LICENSE).
