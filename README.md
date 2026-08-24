@@ -1,3 +1,5 @@
+<img alt="Gauge Generator" src="web/public/brand/gauge-generator-logo-readme.svg" width="520">
+
 # Gauge Generator
 
 Gauge Generator is an open-source tool for designing gauges, dials, instrument

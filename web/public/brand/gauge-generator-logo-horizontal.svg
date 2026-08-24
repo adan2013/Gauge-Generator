@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 300" role="img" aria-labelledby="title description">
+  <title id="title">Gauge Generator</title>
+  <desc id="description">Horizontal Gauge Generator logo.</desc>
+  <defs>
+    <clipPath id="horizontal-letter-outline">
+      <circle cx="256" cy="256" r="196" />
+    </clipPath>
+  </defs>
+  <g transform="translate(10 22) scale(.5)">
+    <g fill="none" stroke="#20242c" stroke-width="56" stroke-linecap="butt">
+      <path d="M 374.793939 137.206061 A 168 168 0 1 0 424 256" />
+      <path d="M 256 256 H 452" clip-path="url(#horizontal-letter-outline)" />
+    </g>
+    <path fill="#d12525" d="M 394.592929 117.407071 L 278.424345 272.767491 A 28 28 0 1 1 239.232509 233.575655 Z" />
+  </g>
+  <text x="310" y="184" fill="#20242c" font-family="Arial, Helvetica, sans-serif" font-size="92" font-weight="700" letter-spacing="-3.4">Gauge Generator</text>
+</svg>

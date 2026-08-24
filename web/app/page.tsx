@@ -235,11 +235,23 @@ export default function Home() {
 
       <header className="border-b border-border bg-surface/90">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 sm:px-8 lg:px-10">
-          <Link className="flex min-w-0 items-center gap-3 font-semibold text-ink" href="/">
-            <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-accent text-white">
-              <Gauge aria-hidden="true" size={20} strokeWidth={1.9} />
-            </span>
-            <span className="truncate">Gauge Generator</span>
+          <Link aria-label="Gauge Generator home" className="flex min-w-0 items-center" href="/">
+            <Image
+              alt=""
+              className="size-9 sm:hidden"
+              height={512}
+              priority
+              src="/brand/gauge-generator-mark.svg"
+              width={512}
+            />
+            <Image
+              alt=""
+              className="hidden h-11 w-auto sm:block"
+              height={300}
+              priority
+              src="/brand/gauge-generator-logo-horizontal.svg"
+              width={1180}
+            />
           </Link>
           <nav
             aria-label="Primary navigation"
@@ -516,12 +528,13 @@ export default function Home() {
 
       <footer className="border-t border-border bg-surface">
         <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
-          <div className="flex items-center gap-3 font-semibold text-ink">
-            <span className="grid size-8 place-items-center rounded-lg bg-accent text-white">
-              <Gauge aria-hidden="true" size={17} />
-            </span>
-            Gauge Generator
-          </div>
+          <Image
+            alt="Gauge Generator"
+            className="h-11 w-auto"
+            height={300}
+            src="/brand/gauge-generator-logo-horizontal.svg"
+            width={1180}
+          />
           <nav aria-label="Footer navigation" className="flex flex-wrap gap-x-5 gap-y-2">
             <Link className="hover:text-ink" href="/app">
               Editor

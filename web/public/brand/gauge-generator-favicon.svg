@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Gauge Generator</title>
+  <defs>
+    <clipPath id="favicon-letter-outline">
+      <circle cx="32" cy="32" r="24.5" />
+    </clipPath>
+  </defs>
+  <rect width="64" height="64" rx="14.5" fill="#d12525" />
+  <g fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="butt">
+    <path d="M 46.849242 17.150758 A 21 21 0 1 0 53 32" />
+    <path d="M 32 32 H 56.5" clip-path="url(#favicon-letter-outline)" />
+  </g>
+  <path fill="#20242c" d="M 49.324116 14.675884 L 34.803043 34.095936 A 3.5 3.5 0 1 1 29.904064 29.196957 Z" />
+</svg>

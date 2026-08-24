@@ -1,3 +1,5 @@
+<img alt="Gauge Generator" src="public/brand/gauge-generator-logo-readme.svg" width="520">
+
 # Gauge Generator Web
 
 Gauge Generator Web is the current, browser-based edition of Gauge Generator: a

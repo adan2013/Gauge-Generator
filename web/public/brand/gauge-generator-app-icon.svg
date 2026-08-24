@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title description">
+  <title id="title">Gauge Generator app icon</title>
+  <desc id="description">Gauge Generator mark on a red rounded tile.</desc>
+  <defs>
+    <clipPath id="app-icon-letter-outline">
+      <circle cx="256" cy="256" r="196" />
+    </clipPath>
+  </defs>
+  <rect width="512" height="512" rx="116" fill="#d12525" />
+  <g fill="none" stroke="#ffffff" stroke-width="56" stroke-linecap="butt">
+    <path d="M 374.793939 137.206061 A 168 168 0 1 0 424 256" />
+    <path d="M 256 256 H 452" clip-path="url(#app-icon-letter-outline)" />
+  </g>
+  <path fill="#20242c" d="M 394.592929 117.407071 L 278.424345 272.767491 A 28 28 0 1 1 239.232509 233.575655 Z" />
+</svg>

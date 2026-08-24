@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -63,11 +64,15 @@ export function DocsSidebar({
         id="docs-sidebar"
       >
         <div className="flex items-center justify-between gap-3">
-          <Link className="flex items-center gap-2 font-semibold tracking-tight text-ink" href="/">
-            <span className="grid size-8 place-items-center rounded-md bg-accent text-xs font-bold text-white">
-              GG
-            </span>
-            Gauge Generator
+          <Link aria-label="Gauge Generator home" className="min-w-0" href="/">
+            <Image
+              alt=""
+              className="h-11 w-auto max-w-44"
+              height={300}
+              priority
+              src="/brand/gauge-generator-logo-horizontal.svg"
+              width={1180}
+            />
           </Link>
           <button
             aria-label={closeLabel}
