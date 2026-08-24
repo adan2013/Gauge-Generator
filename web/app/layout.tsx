@@ -8,9 +8,22 @@ import { TooltipProvider } from "@/components/providers/tooltip-provider/tooltip
 import { StoreProvider } from "@/store/store-provider/store-provider";
 import "./globals.css";
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  process.env.CF_PAGES_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "http://localhost:3000");
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Metadata");
-  return { title: t("title"), description: t("description") };
+  return {
+    applicationName: "Gauge Generator",
+    category: "design",
+    description: t("description"),
+    metadataBase: new URL(siteUrl),
+    title: t("title"),
+  };
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {

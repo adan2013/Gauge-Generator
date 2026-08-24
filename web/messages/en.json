@@ -1,13 +1,7 @@
 {
   "Metadata": {
-    "title": "Gauge Generator Web",
-    "description": "A local vector gauge editor."
-  },
-  "Home": {
-    "eyebrow": "Gauge Generator Web",
-    "title": "Build precise gauges in your browser.",
-    "description": "The editor workspace is ready for its first implementation stage. Create vector-based gauge layouts locally, then save them as JSON.",
-    "openEditor": "Open editor"
+    "title": "Gauge Generator — Free browser-based gauge designer",
+    "description": "Design precise gauges and instrument faces locally in your browser. Free, open source, and no registration required."
   },
   "Docs": {
     "backToHome": "Back to home",
