@@ -12,6 +12,15 @@ import { renderEditor } from "@/test/render-editor";
 import { EditorShell } from "./editor-shell";
 
 describe("EditorShell", () => {
+  it("opens the landing page in a new tab so the current project stays open", () => {
+    renderEditor(<EditorShell />);
+
+    const landingLink = screen.getByRole("link", { name: /Gauge Generator Web/ });
+    expect(landingLink.getAttribute("href")).toBe("/");
+    expect(landingLink.getAttribute("target")).toBe("_blank");
+    expect(landingLink.getAttribute("rel")).toBe("noopener noreferrer");
+  });
+
   it("opens the public help center in a new tab", () => {
     const open = vi.spyOn(window, "open").mockImplementation(() => null);
     renderEditor(<EditorShell />);

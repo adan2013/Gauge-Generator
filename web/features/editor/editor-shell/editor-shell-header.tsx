@@ -24,6 +24,8 @@ export function EditorShellHeader() {
             "hover:bg-surface-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
           )}
           href="/"
+          rel="noopener noreferrer"
+          target="_blank"
         >
           <span className="grid size-7 place-items-center rounded-md bg-accent text-xs font-bold text-white">
             GG
