@@ -1,4 +1,4 @@
-import { act, fireEvent, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createProject, createRange } from "@/features/project/factories/project-factories";
 import { serializeProjectJson } from "@/features/project/project-file/project-json";
@@ -17,8 +17,10 @@ const browserFileMocks = vi.hoisted(() => ({
   chooseProjectJsonFile: vi.fn(),
   downloadProjectJson: vi.fn(),
 }));
+const browserExportMocks = vi.hoisted(() => ({ exportProject: vi.fn() }));
 
 vi.mock("@/features/project/project-file/browser-project-file", () => browserFileMocks);
+vi.mock("@/features/project/export/browser-project-export", () => browserExportMocks);
 
 describe("EditorShell project file flow", () => {
   beforeEach(() => {
@@ -26,6 +28,7 @@ describe("EditorShell project file flow", () => {
     document.title = "Gauge Generator Web";
     browserFileMocks.chooseProjectJsonFile.mockReset();
     browserFileMocks.downloadProjectJson.mockReset();
+    browserExportMocks.exportProject.mockReset().mockResolvedValue(undefined);
   });
 
   afterEach(() => vi.useRealTimers());
@@ -95,6 +98,19 @@ describe("EditorShell project file flow", () => {
     fireEvent.click(screen.getAllByRole("button", { name: "Open" }).at(-1)!);
     expect(await screen.findByText(/not a valid Gauge Generator project/)).toBeTruthy();
     expect(store.getState().project.current.meta.title).toBe("Opened project");
+  });
+
+  it("opens Export and keeps project changes dirty after producing artwork", async () => {
+    const store = makeStore();
+    renderEditor(<EditorShell />, store);
+    act(() => store.dispatch(projectActions.addRange(createRange())));
+
+    fireEvent.click(screen.getAllByRole("button", { name: "Export" }).at(-1)!);
+    const dialog = await screen.findByRole("dialog");
+    fireEvent.click(within(dialog).getByRole("button", { name: "Export" }));
+
+    await waitFor(() => expect(browserExportMocks.exportProject).toHaveBeenCalled());
+    expect(selectIsProjectDirty(store.getState())).toBe(true);
   });
 
   it("autosaves changed project data locally without clearing dirty state or the tab title", () => {

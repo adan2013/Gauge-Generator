@@ -345,30 +345,37 @@ wyłącznie lokalna.
    prezentuje projekty w responsywnej, dwukolumnowej galerii i renderuje ich
    miniatury bezpośrednio przez modele warstw. Wybranie przykładu ładuje jego
    kopię do bieżącego store, nie zmienia pliku źródłowego.
-4. Zachować obecny deterministyczny projekt roboczy wyłącznie dla
-   `NODE_ENV=development`, bez dalszego rozbudowywania go ani dodawania do
-   katalogu Examples. Dane muszą przechodzić Zod i nie mogą wejść do produkcji;
-   sam workbench należy usunąć przed finalnym domknięciem MVP.
+4. Tymczasowy deterministyczny development workbench został usunięty przy
+   domknięciu MVP. Każde środowisko zaczyna od pustego projektu, a kompletne
+   demonstracje istnieją wyłącznie jako walidowane projekty w Examples.
 5. Dodać mini-wiki wewnątrz `/app/help`: Getting started, interface, layers,
    project JSON i examples.
 
 **Weryfikacja:** odświeżenie przeglądarki pozwala przywrócić jeden z pięciu
-snapshotów; zły JSON nie nadpisuje obecnego projektu; examples zachowują się
-zgodnie z environmentem, a workbench pozostaje wyłącznie developerski;
-wszystkie teksty Help są po angielsku.
+snapshotów; zły JSON nie nadpisuje obecnego projektu; Examples są walidowanymi
+projektami użytkowymi, a stan startowy jest pusty w każdym środowisku. Help jest
+celowo przeniesiony do osobnego, późniejszego planu produktowego.
 
 ### Etap 7 — eksport i jakość wydania
 
 **Cel:** dostarczyć rezultat poza edytorem i zamknąć MVP.
 
+Etap 7 jest ukończony. Wspólny renderer finalnego SVG, modal, eksport
+SVG/PNG/PDF, usunięcie development workbencha i końcowy audit wydania są
+zamknięte. Aktualizacja Help jest celowo odłożona do osobnego, późniejszego planu
+produktowego. Wyniki i komendy zawiera evidence etapu 7.
+
 1. Przygotować jeden deterministyczny generator finalnego SVG, wspólny dla
    preview i eksportów; overlay nigdy nie jest eksportowany.
 2. Dodać Export dialog z sekcjami PNG, SVG i PDF oraz wydzielonym, nieaktywnym
    miejscem na przyszłe Buy me a coffee.
-3. Eksport SVG zapisuje źródłowy dokument w mm. PNG rasteruje finalny SVG w
-   wybranej rozdzielczości. PDF w MVP: jedna strona, automatyczna orientacja A4,
-   Fit to page albo Actual size 1:1; bez wielostronicowości i zaawansowanych
-   ustawień druku.
+3. Eksport SVG zapisuje źródłowy dokument w mm. PNG rasteruje finalny SVG przy
+   jednym z presetów 72/96/150/300/600 DPI (domyślnie 300), pokazuje wynikową
+   liczbę pikseli. SVG/PNG może być jednym plikiem albo ZIP-em osobnych widocznych
+   warstw na transparentnym, pełnym płótnie. PDF obsługuje
+   A4/A3, automatyczną orientację, Fit to page i Actual size 1:1 z kontrolą
+   dostępnego pola. Tryb warstwowy PDF tworzy jeden dokument z osobną stroną dla
+   każdej widocznej warstwy.
 4. Dodać testy jednostkowe generatora SVG oraz testy komponentów z React
    Testing Library dla kluczowych akcji: create Range, add scale, undo/redo,
    Download i otwarcie Export dialog.

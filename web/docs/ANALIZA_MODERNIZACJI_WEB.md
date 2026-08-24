@@ -681,9 +681,10 @@ z lokalizacji. Open dotyczy wyłącznie nowego JSON-a, nie starszych plików ggp
 
 Export otwiera duże okno dialogowe zamiast bezpośrednio pobierać plik. Dialog
 ma osobne, czytelne sekcje dla PNG, SVG i PDF, z podglądem właściwych ustawień
-oraz jednym przyciskiem wykonania eksportu. Dolna część layoutu zawiera
-zarezerwowane, nieaktywne miejsce na przyszły moduł Buy me a coffee; w MVP nie
-jest to płatność, tracking ani wymagany element użycia aplikacji.
+oraz jednym przyciskiem wykonania eksportu. Lewa kolumna zawiera cały dynamiczny
+formularz, a prawa jest zarezerwowanym, nieaktywnym miejscem na przyszły moduł
+Buy me a coffee; w MVP nie jest to płatność, tracking ani wymagany element
+użycia aplikacji.
 
 ### Panel warstw
 
@@ -747,11 +748,13 @@ Eksport PDF jest osobną akcją i dialogiem od Export PNG. Ma tworzyć PDF z
 elementami wektorowymi, aby linie, łuki i figury pozostały ostre przy druku i
 powiększaniu. PNG nie powinien być jedyną zawartością PDF.
 
-MVP PDF ma świadomie prosty zakres: pojedyncze płótno SVG na jednej stronie,
-domyślnie A4, z automatycznie dobraną orientacją i zachowaniem wymiarów w mm.
-Dialog może oferować tylko Fit to page oraz Actual size 1:1. Nie implementujemy
-jeszcze wielu kopii na arkuszu, własnego formatu strony, marginesów ani
-znacznika referencyjnego.
+PDF obsługuje A4 i A3, automatycznie dobraną orientację oraz Fit to page albo
+Actual size 1:1. Przy 1:1 eksport jest blokowany, jeżeli projekt przekracza pole
+arkusza pomniejszone o margines 10 mm; komunikat podaje wymagany i dostępny
+rozmiar. Tryb połączony tworzy jedną stronę. Tryb warstwowy tworzy jeden PDF,
+w którym każda widoczna warstwa zajmuje osobną, identycznie wyrównaną stronę.
+Nie implementujemy wielu kopii na arkuszu, niestandardowego formatu strony,
+tilingu ani znacznika referencyjnego.
 
 Skala oznacza rozmiar fizyczny na papierze. Płótno w mm daje jednoznaczne 1:1,
 ale dokumentacja nadal instruuje użytkownika, aby w oknie druku wybrał Actual

@@ -5,11 +5,11 @@ import { BookOpen, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ActionButton } from "@/components/atoms/action-button/action-button";
 import { LayerEditingOverlay } from "@/features/editor/layer-editing-overlay/layer-editing-overlay";
-import type { RenderContext } from "@/features/layers/core/layer";
-import { createLayerModel } from "@/features/layers/core/layer-registry";
+import type { SvgIconDefinition } from "@/features/layers/icon/lucide-icon-resources";
 import { useLucideIconDefinitions } from "@/features/layers/icon/use-lucide-icon-definitions";
 import { RangeEditingOverlay } from "@/features/ranges/range/range-editing-overlay/range-editing-overlay";
 import type { LayerDto, ProjectDto, RangeDto } from "@/features/project/project-dto/project-dto";
+import { getProjectIconNames, renderProjectLayers } from "@/features/project/rendering/project-svg";
 import type { LayerPreviewModifiers } from "@/store/editor-slice";
 
 type CanvasPreviewProps = {
@@ -53,14 +53,7 @@ export function CanvasPreview({
   const { canvas } = project;
   const { heightMm: canvasHeight, widthMm: canvasWidth } = canvas;
   const hasRange = project.ranges.length > 0;
-  const iconDefinitions = useLucideIconDefinitions(
-    project.layers.flatMap((layer) => (layer.type === "icon" ? [layer.icon.name] : [])),
-  );
-  const renderContext = {
-    iconDefinitions,
-    project,
-    rangeById: new Map(project.ranges.map((range) => [range.id, range])),
-  };
+  const iconDefinitions = useLucideIconDefinitions(getProjectIconNames(project));
   const viewportRef = useRef<HTMLDivElement>(null);
   const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
   const showWelcome = !hasRange && !selectedRange;
@@ -144,11 +137,14 @@ export function CanvasPreview({
               viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
               xmlns="http://www.w3.org/2000/svg"
             >
+              {!canvas.transparentBackground ? (
+                <rect fill={canvas.background} height={canvasHeight} width={canvasWidth} />
+              ) : null}
               <VisualLayers
                 hoveredLayerId={hoveredLayerId}
-                layers={project.layers}
+                iconDefinitions={iconDefinitions}
                 previewModifiers={layerPreviewModifiers}
-                renderContext={renderContext}
+                project={project}
                 selectedLayerId={selectedLayer?.id}
                 onSelectLayer={onSelectLayer}
               />
@@ -171,11 +167,14 @@ export function CanvasPreview({
               viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
               xmlns="http://www.w3.org/2000/svg"
             >
+              {!canvas.transparentBackground ? (
+                <rect fill={canvas.background} height={canvasHeight} width={canvasWidth} />
+              ) : null}
               <VisualLayers
                 hoveredLayerId={hoveredLayerId}
-                layers={project.layers}
+                iconDefinitions={iconDefinitions}
                 previewModifiers={layerPreviewModifiers}
-                renderContext={renderContext}
+                project={project}
                 selectedLayerId={selectedLayer?.id}
                 onSelectLayer={onSelectLayer}
               />
@@ -222,41 +221,39 @@ export function getOverlayDisplayScale(
 
 function VisualLayers({
   hoveredLayerId,
-  layers,
+  iconDefinitions,
   previewModifiers,
-  renderContext,
+  project,
   selectedLayerId,
   onSelectLayer,
 }: {
   hoveredLayerId: string | null;
-  layers: LayerDto[];
+  iconDefinitions: ReadonlyMap<string, SvgIconDefinition>;
   previewModifiers: LayerPreviewModifiers;
-  renderContext: RenderContext;
+  project: ProjectDto;
   selectedLayerId: string | undefined;
   onSelectLayer: (layerId: string) => void;
 }) {
   const isolatedLayerId =
     previewModifiers.showOnlySelectedLayer && selectedLayerId ? selectedLayerId : hoveredLayerId;
+  const renderedLayers = renderProjectLayers(project, iconDefinitions);
   const previewLayers = isolatedLayerId
-    ? layers.filter((layer) => layer.id === isolatedLayerId)
-    : layers;
+    ? renderedLayers.filter((layer) => layer.id === isolatedLayerId)
+    : renderedLayers;
   const orderedLayers =
     previewModifiers.bringSelectedLayerToFront && selectedLayerId && !isolatedLayerId
       ? [
-          ...previewLayers.filter((layer) => layer.id !== selectedLayerId).toReversed(),
+          ...previewLayers.filter((layer) => layer.id !== selectedLayerId),
           ...previewLayers.filter((layer) => layer.id === selectedLayerId),
         ]
-      : previewLayers.toReversed();
-  return orderedLayers
-    .map((layer) => ({ id: layer.id, svg: createLayerModel(layer).toSvg(renderContext) }))
-    .filter((layer) => layer.svg)
-    .map((layer) => (
-      <g
-        className="cursor-pointer"
-        dangerouslySetInnerHTML={{ __html: layer.svg }}
-        data-layer-id={layer.id}
-        key={layer.id}
-        onClick={() => onSelectLayer(layer.id)}
-      />
-    ));
+      : previewLayers;
+  return orderedLayers.map((layer) => (
+    <g
+      className="cursor-pointer"
+      dangerouslySetInnerHTML={{ __html: layer.svg }}
+      data-layer-id={layer.id}
+      key={layer.id}
+      onClick={() => onSelectLayer(layer.id)}
+    />
+  ));
 }

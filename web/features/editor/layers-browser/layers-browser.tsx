@@ -1,8 +1,20 @@
 "use client";
 
 import { useState, type DragEvent as ReactDragEvent } from "react";
-import { DndContext, PointerSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
-import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import {
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  sortableKeyboardCoordinates,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Copy, Eye, EyeOff, GripVertical, Layers3, Plus, Settings2, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -58,7 +70,10 @@ export function LayersBrowser({
   const confirmationT = useTranslations("Editor.confirmation");
   const { confirm } = useConfirmation();
   const [layerToDuplicate, setLayerToDuplicate] = useState<LayerDto>();
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
   function handleLayerDragEnd({ active, over }: DragEndEvent) {
     if (!over || active.id === over.id) return;
     const targetIndex = layers.findIndex((layer) => layer.id === over.id);
@@ -311,7 +326,7 @@ function SortableLayerRow({
           <span className="inline-flex">
             <button
               aria-label={reorderLabel}
-              className="grid size-8 shrink-0 touch-none cursor-grab place-items-center rounded-md text-muted hover:bg-surface-subtle hover:text-ink active:cursor-grabbing"
+              className="grid size-8 shrink-0 touch-none cursor-grab place-items-center rounded-md text-muted hover:bg-surface-subtle hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus active:cursor-grabbing"
               onDragStart={(event) => {
                 event.dataTransfer.setData("application/x-gauge-layer", layer.id);
                 event.dataTransfer.setData("text/plain", layer.id);

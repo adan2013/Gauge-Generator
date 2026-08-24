@@ -1,8 +1,5 @@
 import { createSlice, current, type PayloadAction } from "@reduxjs/toolkit";
-import {
-  createDevelopmentProject,
-  createProject,
-} from "@/features/project/factories/project-factories";
+import { createProject } from "@/features/project/factories/project-factories";
 import { constrainProjectLayersToRanges } from "@/features/layers/core/layer-registry";
 import {
   MAX_LAYERS,
@@ -17,7 +14,7 @@ import { validateProject } from "@/features/project/project-dto/project-validati
 type ProjectState = { current: ProjectDto };
 
 const initialState: ProjectState = {
-  current: process.env.NODE_ENV === "development" ? createDevelopmentProject() : createProject(),
+  current: createProject(),
 };
 
 function touch(project: ProjectDto) {

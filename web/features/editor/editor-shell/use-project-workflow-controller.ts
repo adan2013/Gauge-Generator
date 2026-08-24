@@ -6,6 +6,8 @@ import { useTranslations } from "next-intl";
 import { useConfirmation } from "@/components/providers/confirmation-provider/confirmation-provider";
 import { useStatusMessage } from "@/components/providers/status-message-provider/status-message-provider";
 import { EXAMPLE_PROJECTS } from "@/features/examples/example-projects";
+import { exportProject as exportProjectFiles } from "@/features/project/export/browser-project-export";
+import type { ProjectExportOptions } from "@/features/project/export/project-export-options";
 import { createProject } from "@/features/project/factories/project-factories";
 import {
   chooseProjectJsonFile,
@@ -23,7 +25,10 @@ import { projectFileActions, selectIsProjectDirty } from "@/store/project-file-s
 import { replaceProjectSession } from "@/store/project-session-actions";
 
 export type OpenProjectDialog =
-  { kind: "examples" } | { kind: "restore"; snapshots: AutosaveSnapshot[] } | null;
+  | { kind: "examples" }
+  | { kind: "export" }
+  | { kind: "restore"; snapshots: AutosaveSnapshot[] }
+  | null;
 
 export function useProjectWorkflowController() {
   const dispatch = useAppDispatch();
@@ -140,6 +145,32 @@ export function useProjectWorkflowController() {
     setOpenDialog({ kind: "examples" });
   }
 
+  function openExport() {
+    setOpenDialog({ kind: "export" });
+  }
+
+  async function exportProject(options: ProjectExportOptions): Promise<boolean> {
+    try {
+      await exportProjectFiles(project, options);
+      setOpenDialog(null);
+      showMessage({
+        color: "neutral",
+        content: t("status.exported"),
+        duration: "medium",
+        icon: CircleCheck,
+      });
+      return true;
+    } catch {
+      showMessage({
+        color: "accent",
+        content: t("status.exportFailed"),
+        duration: "long",
+        icon: TriangleAlert,
+      });
+      return false;
+    }
+  }
+
   async function openExample(id: string) {
     const example = EXAMPLE_PROJECTS.find((candidate) => candidate.id === id);
     if (example) await replaceProject(example.project, "example", false);
@@ -155,10 +186,12 @@ export function useProjectWorkflowController() {
     closeDialog: () => setOpenDialog(null),
     dialog: openDialog,
     downloadProject,
+    exportProject,
     isDirty,
     newProject,
     openExample,
     openExamples,
+    openExport,
     openProject,
     openRestore,
     restoreSnapshot,

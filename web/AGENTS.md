@@ -191,11 +191,9 @@ Keep those documents current. Put completed-stage evidence in
   (the preceding, visually higher index) with a fresh ID. Duplication first opens
   a modal whose selected text is the source name; only submitting a valid name
   mutates the project and participates in Undo/Redo.
-- The initial store state in `NODE_ENV=development` uses a deterministic
-  logarithmic pressure-gauge workbench (`1..10 bar`) with high-value detail and
-  representative Arc, Needle, Label, Ellipse, Rectangle, Line, Icon, Tick Scale,
-  and Numeric Scale layers. Production
-  and explicit New project flows remain empty.
+- The initial store state is an empty project in every environment. Use the
+  validated Examples catalogue for representative complete projects; do not add
+  a separate development-only workbench.
 
 ## Quality and future slices
 
@@ -207,10 +205,10 @@ Keep those documents current. Put completed-stage evidence in
   development. Update existing expectations to the current contract and add new
   coverage only for stable, user-visible or domain-critical behaviour.
 - Add each layer as a vertical slice: DTO/Zod, factory, domain class, form,
-  SVG, overlay/handles, thumbnail, and tests. Keep the existing development
-  workbench temporary and deterministic; do not expand it as a layer registry.
+  SVG, overlay/handles, thumbnail, and tests.
 - Autosave is `localStorage` only: every three minutes, retain five snapshots.
   The Open action validates JSON first and then atomically replaces the whole
   project; do not add a separate Import action, merge projects, or import
   individual layers in MVP.
-  Export is deterministic SVG plus PNG and a basic PDF; overlays never export.
+  Export is deterministic SVG, preset-DPI PNG, and vector PDF on A4/A3;
+  per-layer PDF uses one page per visible layer. Overlays never export.

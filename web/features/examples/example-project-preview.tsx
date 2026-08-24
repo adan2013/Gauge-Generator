@@ -1,8 +1,8 @@
 "use client";
 
 import type { ProjectDto } from "@/features/project/project-dto/project-dto";
-import { createLayerModel } from "@/features/layers/core/layer-registry";
 import { useLucideIconDefinitions } from "@/features/layers/icon/use-lucide-icon-definitions";
+import { getProjectIconNames, renderProjectLayers } from "@/features/project/rendering/project-svg";
 import { cn } from "@/lib/cn";
 
 type ExampleProjectPreviewProps = {
@@ -12,18 +12,8 @@ type ExampleProjectPreviewProps = {
 };
 
 export function ExampleProjectPreview({ className, project, title }: ExampleProjectPreviewProps) {
-  const iconDefinitions = useLucideIconDefinitions(
-    project.layers.flatMap((layer) => (layer.type === "icon" ? [layer.icon.name] : [])),
-  );
-  const renderContext = {
-    iconDefinitions,
-    project,
-    rangeById: new Map(project.ranges.map((range) => [range.id, range])),
-  };
-  const renderedLayers = project.layers
-    .toReversed()
-    .map((layer) => ({ id: layer.id, svg: createLayerModel(layer).toSvg(renderContext) }))
-    .filter((layer) => layer.svg);
+  const iconDefinitions = useLucideIconDefinitions(getProjectIconNames(project));
+  const renderedLayers = renderProjectLayers(project, iconDefinitions);
 
   return (
     <div

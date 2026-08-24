@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  createDevelopmentProject,
   createArcLayer,
   createLayerFromType,
   createLabelLayer,
@@ -25,74 +24,6 @@ describe("createRangeForCanvas", () => {
         transparentBackground: true,
       }),
     ).toMatchObject({ centerX: 15, centerY: 15, radius: 12 });
-  });
-});
-
-describe("createDevelopmentProject", () => {
-  it("provides a logarithmic pressure-gauge workbench", () => {
-    const project = createDevelopmentProject();
-
-    expect(project.ranges).toHaveLength(1);
-    expect(project.layers).toHaveLength(11);
-    expect(project.layers.every((layer) => layer.rangeId === project.ranges[0].id)).toBe(true);
-    expect(project.ranges[0]).toMatchObject({
-      angleStart: 135,
-      cornerRadiusPercent: 30,
-      openingAngle: 270,
-      radius: 46,
-      valueDirection: "ascending",
-      scaleDefinition: {
-        mode: "logarithmic",
-        start: 10,
-        end: 100,
-        detailEmphasis: "high-values",
-      },
-    });
-    expect(project.canvas).toMatchObject({ background: "#FFFFFF", transparentBackground: false });
-    expect(project.layers.filter((layer) => layer.type === "tick-scale")).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ color: "#C4C4C4" }),
-        expect.objectContaining({ color: "#3F3F3F" }),
-      ]),
-    );
-    expect(project.layers.find((layer) => layer.type === "arc")).toMatchObject({
-      radiusOffsetMm: 3,
-      roundedEnds: false,
-    });
-    expect(project.layers.find((layer) => layer.type === "needle")).toMatchObject({
-      value: 70,
-      shaft: { lengthMm: 35, tipStyle: "tapered-rounded" },
-      hub: { placement: "front" },
-    });
-    expect(project.layers.map((layer) => layer.name)).toEqual([
-      "Warning arc",
-      "Pressure needle",
-      "Unit label",
-      "Arc caption",
-      "Major pressure ticks",
-      "Minor pressure ticks",
-      "Pressure values (bar)",
-      "Unit badge",
-      "Pressure symbol",
-      "Unit divider",
-      "Gauge plate",
-    ]);
-    expect(project.layers.find((layer) => layer.type === "ellipse")).toMatchObject({
-      geometry: { offsetYMm: 16, widthMm: 24, heightMm: 12 },
-      style: { borderWidthMm: 0.8 },
-    });
-    expect(project.layers.find((layer) => layer.type === "rectangle")).toMatchObject({
-      style: { fillColor: "#E8F1FA", borderWidthMm: 1.2 },
-      cornerRadiusPercent: 5,
-    });
-    expect(project.layers.find((layer) => layer.type === "line")).toMatchObject({
-      geometry: { offsetYMm: 25, lengthMm: 20, rotationDegrees: 0 },
-      style: { color: "#1565C0", strokeWidthMm: 1, roundedEnds: true },
-    });
-    expect(project.layers.find((layer) => layer.type === "icon")).toMatchObject({
-      icon: { library: "lucide", name: "gauge" },
-      geometry: { offsetXMm: 28, offsetYMm: 25, widthMm: 12, heightMm: 12 },
-    });
   });
 });
 

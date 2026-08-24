@@ -22,9 +22,10 @@
 | Open            | jedyna akcja wczytania JSON; atomowo zastępuje cały projekt; bez osobnego Import, scalania projektów i importu pojedynczych warstw w MVP           |
 | Dirty state     | fingerprint względem ostatniego Download/Open; autosave nie czyści dirty; New/Open/beforeunload chronią niezapisane zmiany                         |
 | Settings        | snapping należy do `ProjectDto.settings`, JSON-a, dirty state, historii i autosave; nie używa osobnego klucza `localStorage`                       |
-| Eksport         | JSON, PNG, SVG, podstawowy PDF A4 fit/1:1                                                                                                          |
+| Eksport         | SVG; PNG 72/96/150/300/600 DPI z podglądem pikseli; PDF A4/A3 fit/1:1; PDF warstwowy = jedna strona na widoczną warstwę                            |
+| Wsparcie        | prawa kolumna Export jest placeholderem Buy Me a Coffee; bez płatności, trackingu i aktywnego odnośnika w MVP                                      |
 | Tests           | wyłącznie testy jednostkowe: Vitest + React Testing Library; bez E2E                                                                               |
 | MVP             | light mode i locale `en`; web-safe fonty; bez skrótów i kont                                                                                       |
-| Development     | każda warstwa pionowo: DTO/Zod → UI → SVG → overlay → miniatura → testy; obecny workbench pozostaje tymczasowy i nie jest dalej rozwijany          |
+| Development     | każda warstwa pionowo: DTO/Zod → UI → SVG → overlay → miniatura → testy; pusty stan startowy w każdym środowisku, pełne projekty tylko w Examples  |
 
 Szczegóły i uzasadnienia znajdują się w dokumentach nadrzędnych.

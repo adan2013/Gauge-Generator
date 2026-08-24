@@ -44,6 +44,8 @@
       "redo": "Redid the project change.",
       "downloaded": "Project downloaded to your computer.",
       "downloadFailed": "The project could not be downloaded.",
+      "exported": "Export files downloaded.",
+      "exportFailed": "The project could not be exported.",
       "openFailed": "This file is not a valid Gauge Generator project. The current project was not changed.",
       "restoreFailed": "Local autosaves could not be read.",
       "noAutosaves": "There are no local autosaves to restore yet.",
@@ -176,6 +178,51 @@
       "title": "Examples",
       "description": "Preview a complete project, then open it as an editable starting point.",
       "open": "Open example"
+    },
+    "export": {
+      "title": "Export project",
+      "description": "Create production files from the final artwork without editing overlays.",
+      "format": {
+        "label": "File format",
+        "svg": "SVG",
+        "png": "PNG",
+        "pdf": "PDF"
+      },
+      "scope": {
+        "label": "File arrangement",
+        "combined": "One combined file",
+        "combinedDescription": "Render every visible layer together in project order.",
+        "layers": "One file per layer",
+        "layersDescription": "Export {count, plural, one {the visible layer} other {# visible layers}} separately.",
+        "layersNote": "Layer files use the full canvas size and a transparent background so printed sheets stay aligned. They are downloaded together in a ZIP archive.",
+        "pdfLayers": "One page per layer",
+        "pdfLayersDescription": "Place {count, plural, one {the visible layer} other {# visible layers}} on separate pages in one PDF.",
+        "pdfLayersNote": "Each visible layer is placed on its own {size} page in the same position, ready for aligned printing."
+      },
+      "settings": "Format settings",
+      "png": {
+        "dpi": "Print resolution (DPI)",
+        "outputResolution": "Output image",
+        "resolution": "{width} × {height} px",
+        "tooLarge": "This resolution would create an image that is too large for reliable browser export. Reduce the DPI."
+      },
+      "pdf": {
+        "paperSizeLabel": "Paper size",
+        "scaleLabel": "Page placement",
+        "fit": "Fit to page",
+        "actual": "Actual size 1:1",
+        "a4TooSmall": "This {projectWidth} × {projectHeight} mm project does not fit on A4 at 1:1. The available area is {availableWidth} × {availableHeight} mm. Choose A3 or Fit to page.",
+        "a3TooSmall": "This {projectWidth} × {projectHeight} mm project does not fit on A3 at 1:1. The available area is {availableWidth} × {availableHeight} mm. Choose Fit to page."
+      },
+      "support": {
+        "eyebrow": "Support the project",
+        "title": "Buy me a coffee",
+        "description": "Gauge Generator is built as an independent, local-first tool. A simple way to support its continued development will appear here.",
+        "comingSoon": "Coming soon"
+      },
+      "cancel": "Cancel",
+      "confirm": "Export",
+      "exporting": "Exporting…"
     },
     "projectSettings": {
       "ariaLabel": "Project settings",

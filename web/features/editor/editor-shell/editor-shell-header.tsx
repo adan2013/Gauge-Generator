@@ -5,12 +5,14 @@ import { useTranslations } from "next-intl";
 import { EditorToolbar } from "@/features/editor/editor-toolbar/editor-toolbar";
 import { useEditorShell } from "@/features/editor/editor-shell/editor-shell-context";
 import { ExamplesModal } from "@/features/examples/examples-modal";
+import { ExportModal } from "@/features/project/export/export-modal/export-modal";
 import { RestoreModal } from "@/features/project/persistence/restore-modal";
 import { cn } from "@/lib/cn";
 
 export function EditorShellHeader() {
   const t = useTranslations("Editor");
-  const { actions, handleAction, openHelp, projectWorkflow } = useEditorShell().meta.toolbar;
+  const editor = useEditorShell();
+  const { actions, handleAction, openHelp, projectWorkflow } = editor.meta.toolbar;
 
   return (
     <>
@@ -40,6 +42,13 @@ export function EditorShellHeader() {
           onCancel={projectWorkflow.closeDialog}
           onSelect={projectWorkflow.restoreSnapshot}
           snapshots={projectWorkflow.dialog.snapshots}
+        />
+      ) : null}
+      {projectWorkflow.dialog?.kind === "export" ? (
+        <ExportModal
+          onCancel={projectWorkflow.closeDialog}
+          onExport={projectWorkflow.exportProject}
+          project={editor.state.project}
         />
       ) : null}
     </>

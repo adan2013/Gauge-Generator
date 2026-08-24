@@ -31,10 +31,15 @@ Icon stores a Lucide name and resolves normalized catalogue SVG nodes on demand
 for the shared domain renderer. It uses the same planar width/height geometry and
 editing overlay as Ellipse and Rectangle. Stage 6 adds atomic Open, JSON
 Download, canonical dirty tracking, `beforeunload` protection, guarded New/Open,
-five local autosave snapshots with Restore, project-local snapping settings, and two
-validated bundled examples. Autosave and examples intentionally remain dirty
-until the user downloads the project. The next stage is export and release
-quality.
+five local autosave snapshots with Restore, project-local snapping settings, and
+four validated bundled examples. Autosave and examples intentionally remain
+dirty until the user downloads the project. Stage 7 is complete: preview and
+examples share the deterministic final renderer; export supports SVG, five PNG
+DPI presets, and vector A4/A3 PDF. SVG/PNG can export visible layers in ZIP;
+layered PDF uses one aligned page per visible layer. The development workbench
+is removed and every environment starts empty. The release audit is recorded in
+`implementation-evidence/stage-07-export-release.md`. Help content is deferred,
+and Buy Me a Coffee remains an intentionally inactive placeholder.
 
 ## Initial repository context
 

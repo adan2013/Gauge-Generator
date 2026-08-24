@@ -190,7 +190,9 @@ history transaction regardless of the number of live preview updates.
 
 Corner messages are owned by the root `StatusMessageProvider` and opened through
 `useStatusMessage()`. A request supplies `content`, an optional `color` and icon,
-and `duration` as milliseconds or `"persistent"`. Timed operation feedback may
+and a required `duration`: `short` (2.5 seconds), `medium` (3.5 seconds), `long`
+(5 seconds), or `persistent`. The exact timed values live in one provider-owned
+map; callers cannot introduce arbitrary timeouts. Timed operation feedback may
 stack alongside persistent contextual warnings. Callers retain the returned id
 when they need to dismiss a persistent message.
 
@@ -206,3 +208,27 @@ drafts through the same status-message channel. `useProjectValidation` owns
 validation-code translation, contextual Canvas messages, and the lifecycle of
 the current project-validation message; `EditorShell` only asks it to validate
 a candidate before dispatch.
+
+## Final rendering and export
+
+`features/project/rendering/project-svg.ts` is the shared, React-free final
+rendering boundary. It filters hidden layers, emits the project collection in
+reverse order so index zero remains topmost, supplies the shared Range and icon
+resources, and creates a complete SVG document with physical millimetre size and
+matching `viewBox`. Canvas preview and example thumbnails consume the same
+rendered layer entries. Editing overlays and preview-only isolation/front-order
+modifiers stay outside this boundary and never enter an exported file.
+
+Export supports SVG, PNG, and vector PDF. PNG dimensions are derived from the
+physical canvas and one of the fixed 72/96/150/300/600 DPI presets; 300 DPI is
+the default. The dialog displays the resulting pixel dimensions. Combined
+SVG/PNG respects the project background. Per-layer SVG/PNG
+includes only visible layers, retains the full canvas coordinate system, forces
+a transparent background for physical alignment, and packages files into ZIP.
+
+PDF supports A4 and A3 with automatic orientation, a 10 mm printable margin,
+and either fit-to-page or physical 1:1 placement. The modal blocks 1:1 export
+when the project exceeds the selected printable area and reports both sizes.
+Combined PDF uses one page; per-layer PDF creates one document with each visible
+layer on a separate, identically aligned page. Artwork export never updates the
+JSON saved fingerprint or clears dirty state.

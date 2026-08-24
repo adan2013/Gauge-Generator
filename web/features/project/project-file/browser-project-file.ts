@@ -1,4 +1,5 @@
 import type { ProjectDto } from "@/features/project/project-dto/project-dto";
+import { sanitizeFilename } from "@/features/project/project-file/project-filename";
 import { serializeProjectJson } from "@/features/project/project-file/project-json";
 
 export async function chooseProjectJsonFile(): Promise<File | null> {
@@ -20,13 +21,4 @@ export function downloadProjectJson(project: ProjectDto): void {
   anchor.download = `${sanitizeFilename(project.meta.title)}.json`;
   anchor.click();
   URL.revokeObjectURL(url);
-}
-
-function sanitizeFilename(title: string): string {
-  const sanitized = title
-    .trim()
-    .replace(/[^a-z0-9._-]+/gi, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80);
-  return sanitized || "gauge-project";
 }

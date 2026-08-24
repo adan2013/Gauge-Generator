@@ -62,6 +62,10 @@ export function useEditorToolbarController({
       projectWorkflow.downloadProject();
       return;
     }
+    if (action.id === "export") {
+      projectWorkflow.openExport();
+      return;
+    }
     if (action.id === "restore") {
       projectWorkflow.openRestore();
       return;

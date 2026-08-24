@@ -511,9 +511,10 @@ Po zmianie kontraktu danych zaktualizuj:
 - `docs/PLAN_IMPLEMENTACJI_GAUGE_GENERATOR_WEB.md` — status planowanego slice'a;
 - `ai-handoff/README.md` — aktualny stan i następny krok.
 
-Dodaj warstwę do `createDevelopmentProject()` tylko wtedy, gdy pomaga ona
-sprawdzać lub demonstrować nową funkcję. Nie zmieniaj przez to pustego projektu
-produkcyjnego.
+Jeżeli warstwa powinna być demonstrowana użytkownikowi, dodaj ją świadomie do
+jednego z walidowanych projektów w `features/examples/projects/`. Stan startowy
+edytora pozostaje pusty we wszystkich środowiskach; nie twórz osobnego
+development workbencha.
 
 ## 15. Weryfikacja końcowa
 
