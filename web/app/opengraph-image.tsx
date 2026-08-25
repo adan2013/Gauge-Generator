@@ -34,21 +34,27 @@ export default function OpenGraphImage() {
         }}
       >
         <div style={{ alignItems: "center", display: "flex", fontSize: 28, fontWeight: 700 }}>
-          <div
-            style={{
-              alignItems: "center",
-              background: "#c62828",
-              borderRadius: "14px",
-              color: "#ffffff",
-              display: "flex",
-              height: 58,
-              justifyContent: "center",
-              marginRight: 18,
-              width: 58,
-            }}
+          <svg
+            aria-hidden="true"
+            height="82"
+            style={{ marginRight: 18 }}
+            viewBox="0 0 512 512"
+            width="82"
           >
-            GG
-          </div>
+            <defs>
+              <clipPath id="og-letter-outline">
+                <circle cx="256" cy="256" r="196" />
+              </clipPath>
+            </defs>
+            <g fill="none" stroke="#20242c" strokeLinecap="butt" strokeWidth="56">
+              <path d="M 374.793939 137.206061 A 168 168 0 1 0 424 256" />
+              <path clipPath="url(#og-letter-outline)" d="M 256 256 H 452" />
+            </g>
+            <path
+              d="M 394.592929 117.407071 L 278.424345 272.767491 A 28 28 0 1 1 239.232509 233.575655 Z"
+              fill="#d12525"
+            />
+          </svg>
           Gauge Generator
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -57,7 +63,7 @@ export default function OpenGraphImage() {
           </div>
           <div
             style={{
-              fontSize: 66,
+              fontSize: 58,
               fontWeight: 700,
               letterSpacing: -3,
               lineHeight: 1.04,
