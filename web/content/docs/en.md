@@ -75,6 +75,8 @@ When a visual layer is being edited, the controls at the bottom of the sidebar c
 
 Many layers also expose handles directly on the preview. Dragging a handle and editing the related field are two views of the same project data.
 
+Typography controls include a small cross-platform starter set. Press **Load local fonts** to let a supported browser list the font families installed on your computer, then select any of them from the same Font menu. The browser asks for permission before revealing this list. Gauge Generator stores only the family name in project JSON—the font file is never copied into the project—so opening the file on another computer may produce a fallback font until the same family is installed there.
+
 ![Needle layer properties beside its editing overlay on the live preview](/docs/layer-properties.png)
 
 ### Live preview

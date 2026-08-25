@@ -10,7 +10,7 @@ import { PLANAR_GEOMETRY_LIMITS } from "@/features/layers/planar-geometry/planar
 import { LINE_LIMITS } from "@/features/layers/line/line-limits";
 import { ICON_LIMITS } from "@/features/layers/icon/icon-limits";
 import {
-  SYSTEM_FONT_FAMILIES,
+  FONT_FAMILY_NAME_MAX_LENGTH,
   TEXT_STYLE_LIMITS,
 } from "@/features/layers/core/text-style/text-style-limits";
 export { LAYER_TYPE, type LayerType } from "./layer-type";
@@ -39,7 +39,12 @@ const ScaleStepSchema = z
 export const FontReferenceSchema = z
   .object({
     source: z.literal("system"),
-    family: z.enum(SYSTEM_FONT_FAMILIES),
+    family: z
+      .string()
+      .trim()
+      .min(1)
+      .max(FONT_FAMILY_NAME_MAX_LENGTH)
+      .refine((family) => !/[\u0000-\u001f\u007f]/.test(family)),
   })
   .strict();
 

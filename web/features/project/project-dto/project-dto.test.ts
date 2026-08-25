@@ -52,6 +52,28 @@ describe("ProjectSchema", () => {
     ).toBe(false);
   });
 
+  it("accepts local font family names without changing the project contract", () => {
+    const range = createRange();
+    const layer = createLabelLayer(range.id, {
+      textStyle: {
+        ...createLabelLayer(range.id).textStyle,
+        font: { source: "system", family: "Avenir Next" },
+      },
+    });
+
+    expect(
+      ProjectSchema.safeParse(createProject({ ranges: [range], layers: [layer] })).success,
+    ).toBe(true);
+    expect(
+      ProjectSchema.safeParse({
+        ...createProject({ ranges: [range], layers: [layer] }),
+        layers: [
+          { ...layer, textStyle: { ...layer.textStyle, font: { source: "system", family: "" } } },
+        ],
+      }).success,
+    ).toBe(false);
+  });
+
   it("rejects a project with more than five Ranges", () => {
     const ranges = Array.from({ length: 6 }, (_, index) =>
       createRange({ name: `Range ${index + 1}` }),

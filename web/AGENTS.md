@@ -172,6 +172,10 @@ responsibility must remain in the lowest owning module.
   the Range centre.
 - Icon stores a Lucide catalogue name plus planar geometry and stroke style; it
   does not persist library SVG nodes.
+- Text styles persist only a system font family name. The local-font catalogue,
+  browser permission, and font binaries are transient environment state and
+  never enter project JSON; unavailable families may fall back on another
+  computer.
 - Range corner radius percentage `50` is circular and values down to `1` form a
   rounded square with an unambiguous normal.
 

@@ -3,11 +3,10 @@
 import { useTranslations } from "next-intl";
 import { BooleanPropertyRow } from "@/components/molecules/boolean-property-row/boolean-property-row";
 import { ColorPropertyRow } from "@/components/molecules/color-property-row/color-property-row";
-import { SelectPropertyRow } from "@/components/molecules/select-property-row/select-property-row";
 import { NumericPropertyFields } from "@/features/editor/numeric-property-fields/numeric-property-fields";
-import { SYSTEM_FONT_FAMILIES } from "@/features/layers/core/text-style/text-style-limits";
 import type { TextStyleSizePropertyDefinition } from "@/features/layers/core/text-style/text-style-properties";
 import type { TextStyleDto } from "@/features/project/project-dto/project-dto";
+import { FontFamilyPropertyRow } from "./font-family-property-row";
 
 type TextStylePropertiesEditorProps = {
   definition: TextStyleSizePropertyDefinition;
@@ -40,15 +39,13 @@ export function TextStylePropertiesEditor({
         onValueChange={(_, sizeMm) => onChange({ ...style, sizeMm })}
         snapping={snapping}
       />
-      <SelectPropertyRow
-        label={t("font")}
+      <FontFamilyPropertyRow
         onChange={(family) =>
           onChange({
             ...style,
-            font: { source: "system", family: family as TextStyleDto["font"]["family"] },
+            font: { source: "system", family },
           })
         }
-        options={SYSTEM_FONT_FAMILIES.map((family) => ({ label: family, value: family }))}
         value={style.font.family}
       />
       <BooleanPropertyRow
