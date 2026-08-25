@@ -35,7 +35,7 @@ To start from scratch:
 
 The workspace has three main regions: the toolbar across the top, the sidebar on the left, and the live canvas preview on the right.
 
-![Gauge Generator workspace showing the Grand tourer example, layer sidebar, project toolbar, and live preview](/docs/editor-overview.png)
+![Gauge Generator workspace showing the Grand tourer example, layer sidebar, project toolbar, and live preview](/docs/editor-overview.png?v=20260825)
 
 ### Project toolbar
 
@@ -75,7 +75,7 @@ When a visual layer is being edited, the controls at the bottom of the sidebar c
 
 Many layers also expose handles directly on the preview. Dragging a handle and editing the related field are two views of the same project data.
 
-![Needle layer properties beside its editing overlay on the live preview](/docs/layer-properties.png)
+![Needle layer properties beside its editing overlay on the live preview](/docs/layer-properties.png?v=20260825)
 
 ### Live preview
 
@@ -110,7 +110,7 @@ Changing a Range can affect every linked layer. The editor warns about large dep
 
 Visual layers are emitted in their list order: the first item is visually on top. Every one has a required name, a visibility state, and a source Range.
 
-![Visual layer picker showing the layer types available in Gauge Generator](/docs/layer-picker.png)
+![Visual layer picker showing the layer types available in Gauge Generator](/docs/layer-picker.png?v=20260825)
 
 ### Tick scale {#tick-scale}
 

@@ -286,8 +286,9 @@ export default function Home() {
           <p className="mb-5 text-sm font-semibold uppercase tracking-[0.16em] text-accent">
             Open source · local first · completely free
           </p>
-          <h1 className="max-w-2xl text-balance text-5xl font-semibold tracking-[-0.045em] text-ink sm:text-6xl lg:text-7xl">
-            Design precise gauges. Keep every file yours.
+          <h1 className="max-w-2xl text-[2rem] font-semibold leading-[1.02] tracking-[-0.04em] text-ink sm:text-[2.5rem]">
+            <span className="block">Design precise gauges.</span>
+            <span className="block">Keep every file yours.</span>
           </h1>
           <p className="mt-6 max-w-xl text-pretty text-lg leading-8 text-muted">
             A focused vector editor for gauges, dials, and instrument faces. It runs entirely in
