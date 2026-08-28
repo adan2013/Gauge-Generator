@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
-const nextConfig: NextConfig = {/* config options here */};
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [new URL("https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png")],
+  },
+};
 
 const withNextIntl = createNextIntlPlugin();
 

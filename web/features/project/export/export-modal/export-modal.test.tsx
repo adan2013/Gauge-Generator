@@ -9,6 +9,18 @@ import { renderEditor } from "@/test/render-editor";
 import { ExportModal } from "./export-modal";
 
 describe("ExportModal", () => {
+  it("links to the project support page", () => {
+    renderEditor(<ExportModal onCancel={vi.fn()} onExport={vi.fn()} project={createProject()} />);
+
+    const supportLink = screen.getByRole("link", { name: /support the project/i });
+    expect(supportLink.getAttribute("href")).toBe("https://buymeacoffee.com/danielalberski");
+    expect(supportLink.getAttribute("target")).toBe("_blank");
+    expect(supportLink.getAttribute("rel")).toBe("noopener noreferrer");
+    expect(screen.getByRole("img", { name: "Buy Me a Coffee" }).getAttribute("src")).toContain(
+      "default-yellow.png",
+    );
+  });
+
   it("shows PDF format settings with actual size first and selected by default", () => {
     const project = createProject();
     renderEditor(<ExportModal onCancel={vi.fn()} onExport={vi.fn()} project={project} />);

@@ -33,6 +33,7 @@ import {
   UserRoundX,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { BuyMeACoffeeButton } from "@/components/atoms/buy-me-a-coffee-button/buy-me-a-coffee-button";
 import { cn } from "@/lib/cn";
 
 export const metadata: Metadata = {
@@ -504,9 +505,9 @@ export default function Home() {
         aria-labelledby="coffee-title"
         className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10"
       >
-        <div className="flex flex-col gap-6 rounded-2xl border border-dashed border-border bg-surface p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+        <div className="flex flex-col gap-6 rounded-2xl border border-border bg-surface p-6 shadow-[0_12px_35px_rgba(32,36,43,0.05)] sm:flex-row sm:items-center sm:justify-between sm:p-8">
           <div className="flex items-start gap-4">
-            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-surface-subtle text-muted">
+            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[#ffdd00] text-[#242424]">
               <Coffee aria-hidden="true" size={22} strokeWidth={1.8} />
             </span>
             <div>
@@ -514,16 +515,14 @@ export default function Home() {
                 Support the project
               </p>
               <h2 id="coffee-title" className="mt-1 text-xl font-semibold text-ink">
-                Buy me a coffee
+                Do you like Gauge Generator?
               </h2>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
-                A simple way to support future development will appear here.
+                Would you like to support its creator? You can thank him by buying him a coffee.
               </p>
             </div>
           </div>
-          <span className="w-fit rounded-full bg-surface-subtle px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] text-muted">
-            Coming soon
-          </span>
+          <BuyMeACoffeeButton className="shrink-0" label="Buy me a coffee" />
         </div>
       </section>
 

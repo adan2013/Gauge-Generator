@@ -205,8 +205,8 @@
       "support": {
         "eyebrow": "Support the project",
         "title": "Buy me a coffee",
-        "description": "Gauge Generator is built as an independent, local-first tool. A simple way to support its continued development will appear here.",
-        "comingSoon": "Coming soon"
+        "description": "If this app saved you time or you would like to thank its author, you can do so by buying him a coffee.",
+        "action": "Support the project"
       },
       "cancel": "Cancel",
       "confirm": "Export",
