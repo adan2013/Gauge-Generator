@@ -185,7 +185,12 @@ describe("EditorShell", () => {
     fireEvent.click(screen.getByRole("button", { name: `Edit ${layer.name}` }));
     const name = screen.getByRole("textbox", { name: "Name" });
 
+    fireEvent.focus(name);
     fireEvent.change(name, { target: { value: "" } });
+    expect(
+      screen.queryByText("The name is required and must contain no more than 80 characters."),
+    ).toBeNull();
+    fireEvent.blur(name);
 
     expect(
       screen.getByText("The name is required and must contain no more than 80 characters."),

@@ -78,19 +78,59 @@ export function TextPropertyRow({
   value,
 }: TextPropertyRowProps) {
   const inputId = useId();
+  const pendingCommit = useContext(PendingCommitContext);
+  const [draftValue, setDraftValue] = useState(value);
+  const [isEditing, setIsEditing] = useState(false);
+  const cancelCommitRef = useRef(false);
+  const hasPendingChange = isEditing && draftValue !== value;
+  function handleFocus() {
+    cancelCommitRef.current = false;
+    setDraftValue(value);
+    setIsEditing(true);
+    pendingCommit?.setPendingLabel(null);
+    onInteractionStart();
+  }
+  function handleBlur() {
+    setIsEditing(false);
+    if (!cancelCommitRef.current && draftValue !== value) onChange(draftValue);
+    pendingCommit?.setPendingLabel(null);
+    onInteractionEnd();
+  }
   return (
     <FieldRow htmlFor={inputId} label={label}>
       <input
+        aria-describedby={hasPendingChange ? pendingCommit?.hintId : undefined}
         aria-label={label}
-        className="h-9 w-full rounded-md border border-border bg-app px-2 text-right text-sm text-ink outline-none focus:border-focus focus:ring-2 focus:ring-focus/30"
+        className={cn(
+          "h-9 w-full rounded-md border bg-app px-2 text-right text-sm text-ink outline-none",
+          "border-border focus:border-focus focus:ring-2 focus:ring-focus/30",
+          hasPendingChange && "border-focus ring-2 ring-focus/20",
+        )}
         id={inputId}
         maxLength={maxLength}
-        onBlur={onInteractionEnd}
-        onChange={(event) => onChange(event.target.value)}
-        onFocus={onInteractionStart}
+        onBlur={handleBlur}
+        onChange={(event) => {
+          const nextValue = event.target.value;
+          setDraftValue(nextValue);
+          pendingCommit?.setPendingLabel(nextValue !== value ? label : null);
+        }}
+        onFocus={handleFocus}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            cancelCommitRef.current = true;
+            if (draftValue !== value) onChange(draftValue);
+            pendingCommit?.setPendingLabel(null);
+          }
+          if (event.key === "Escape") {
+            cancelCommitRef.current = true;
+            setDraftValue(value);
+            pendingCommit?.setPendingLabel(null);
+          }
+          if (event.key === "Enter" || event.key === "Escape") event.currentTarget.blur();
+        }}
         required
         type="text"
-        value={value}
+        value={isEditing ? draftValue : value}
       />
     </FieldRow>
   );

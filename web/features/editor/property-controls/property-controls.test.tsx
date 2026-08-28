@@ -5,7 +5,58 @@ import {
   PendingCommitIndicator,
   PendingCommitProvider,
   RangePropertyRow,
+  TextPropertyRow,
 } from "./property-controls";
+
+describe("TextPropertyRow", () => {
+  it("keeps an empty value as a draft and commits it on blur", () => {
+    const onChange = vi.fn();
+    renderEditor(
+      <TextPropertyRow
+        label="Text"
+        onChange={onChange}
+        onInteractionEnd={vi.fn()}
+        onInteractionStart={vi.fn()}
+        value="Label"
+      />,
+    );
+    const input = screen.getByRole("textbox", { name: "Text" });
+
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: "" } });
+
+    expect((input as HTMLInputElement).value).toBe("");
+    expect(onChange).not.toHaveBeenCalled();
+
+    fireEvent.blur(input);
+    expect(onChange).toHaveBeenCalledWith("");
+  });
+
+  it("commits with Enter and cancels with Escape", () => {
+    const onChange = vi.fn();
+    renderEditor(
+      <TextPropertyRow
+        label="Name"
+        onChange={onChange}
+        onInteractionEnd={vi.fn()}
+        onInteractionStart={vi.fn()}
+        value="Original"
+      />,
+    );
+    const input = screen.getByRole("textbox", { name: "Name" });
+
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: "Changed" } });
+    fireEvent.keyDown(input, { key: "Enter" });
+    expect(onChange).toHaveBeenCalledWith("Changed");
+
+    onChange.mockClear();
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: "Cancelled" } });
+    fireEvent.keyDown(input, { key: "Escape" });
+    expect(onChange).not.toHaveBeenCalled();
+  });
+});
 
 describe("RangePropertyRow", () => {
   it("keeps a typed value as a draft and clamps it when editing finishes", () => {

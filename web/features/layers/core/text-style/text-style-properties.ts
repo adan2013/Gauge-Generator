@@ -15,7 +15,7 @@ export function getTextStyleSizePropertyDefinition(
     group: "textStyle",
     max: Math.min(maximum, TEXT_STYLE_LIMITS.sizeMm.max),
     min: TEXT_STYLE_LIMITS.sizeMm.min,
-    snap: "distance",
+    snap: "none",
     step: 0.1,
     unit: "millimeters",
     value,

@@ -27,9 +27,13 @@ describe("LabelPropertiesEditor", () => {
       />,
     );
 
-    fireEvent.change(screen.getByRole("textbox", { name: "Text" }), {
+    const text = screen.getByRole("textbox", { name: "Text" });
+    fireEvent.focus(text);
+    fireEvent.change(text, {
       target: { value: "Pressure" },
     });
+    expect(onLayerChange).not.toHaveBeenCalled();
+    fireEvent.keyDown(text, { key: "Enter" });
     const rotation = screen.getByRole("spinbutton", { name: "Rotation" });
     fireEvent.focus(rotation);
     fireEvent.change(rotation, { target: { value: "45" } });
