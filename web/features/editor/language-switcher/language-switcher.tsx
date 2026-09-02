@@ -3,18 +3,31 @@
 import { useState } from "react";
 import { Check, Flag, Languages, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { ActionButton } from "@/components/atoms/action-button/action-button";
 import { Modal } from "@/components/molecules/modal/modal";
 import { ProjectOptionCard } from "@/features/editor/project-option-card/project-option-card";
-import { SUPPORTED_LANGUAGES } from "@/i18n/locales";
+import { setLocaleCookie } from "@/i18n/locale-cookie";
+import { SUPPORTED_LANGUAGES, type SupportedLocale } from "@/i18n/locales";
 import { cn } from "@/lib/cn";
 
 export function LanguageSwitcher() {
   const locale = useLocale();
+  const router = useRouter();
   const t = useTranslations("Editor");
   const [isOpen, setIsOpen] = useState(false);
   const selectedLanguage =
     SUPPORTED_LANGUAGES.find((language) => language.locale === locale) ?? SUPPORTED_LANGUAGES[0];
+
+  function selectLanguage(nextLocale: SupportedLocale) {
+    if (nextLocale !== locale) {
+      setIsOpen(false);
+      setLocaleCookie(nextLocale);
+      router.refresh();
+      return;
+    }
+    setIsOpen(false);
+  }
 
   return (
     <>
@@ -63,7 +76,7 @@ export function LanguageSwitcher() {
                     <ProjectOptionCard
                       accessibleLabel={t("language.select", { language: language.name })}
                       className="flex items-center gap-3 p-3"
-                      onClick={() => setIsOpen(false)}
+                      onClick={() => selectLanguage(language.locale)}
                     >
                       <Flag aria-hidden="true" className="text-muted" size={20} />
                       <span className="min-w-0 flex-1 font-medium text-ink">{language.name}</span>

@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { TableOfContentsItem } from "@/app/docs/docs-markdown";
+import { setLocaleCookie } from "@/i18n/locale-cookie";
 import { SUPPORTED_LANGUAGES, type SupportedLocale } from "@/i18n/locales";
 import { cn } from "@/lib/cn";
 
@@ -90,7 +91,11 @@ export function DocsSidebar({
               "mt-2 h-10 w-full rounded-lg border border-border bg-app px-3 text-sm font-medium normal-case tracking-normal text-ink",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
             )}
-            onChange={(event) => router.push(`/docs/${event.target.value}`)}
+            onChange={(event) => {
+              const nextLocale = event.target.value as SupportedLocale;
+              setLocaleCookie(nextLocale);
+              router.push(`/docs/${nextLocale}`);
+            }}
             value={locale}
           >
             {SUPPORTED_LANGUAGES.map((language) => (

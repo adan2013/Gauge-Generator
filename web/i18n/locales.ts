@@ -1,4 +1,7 @@
-export const SUPPORTED_LANGUAGES = [{ locale: "en", name: "English" }] as const;
+export const SUPPORTED_LANGUAGES = [
+  { locale: "en", name: "English" },
+  { locale: "pl", name: "Polski" },
+] as const;
 
 export type SupportedLocale = (typeof SUPPORTED_LANGUAGES)[number]["locale"];
 

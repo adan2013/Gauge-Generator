@@ -1,5 +1,9 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { act, fireEvent, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { createRange } from "@/features/project/factories/project-factories";
+import { localeFromCookieValue, LOCALE_COOKIE_NAME, setLocaleCookie } from "@/i18n/locale-cookie";
+import { projectActions } from "@/store/project-slice";
+import { makeStore } from "@/store/store";
 import { renderEditor } from "@/test/render-editor";
 import { LanguageSwitcher } from "./language-switcher";
 
@@ -23,5 +27,23 @@ describe("LanguageSwitcher", () => {
     fireEvent.click(screen.getByRole("button", { name: "Select English" }));
 
     expect(screen.queryByRole("heading", { name: "Language" })).toBeNull();
+  });
+
+  it("switches languages without warning when the project has unsaved changes", () => {
+    setLocaleCookie("en");
+    const store = makeStore();
+    renderEditor(<LanguageSwitcher />, store);
+    act(() => store.dispatch(projectActions.addRange(createRange())));
+    fireEvent.click(screen.getByRole("button", { name: "Language: English" }));
+
+    fireEvent.click(screen.getByRole("button", { name: "Select Polski" }));
+
+    expect(screen.queryByRole("alertdialog")).toBeNull();
+    expect(
+      localeFromCookieValue(
+        document.cookie.match(new RegExp(`${LOCALE_COOKIE_NAME}=([^;]+)`))?.[1],
+      ),
+    ).toBe("pl");
+    expect(store.getState().project.current.ranges).toHaveLength(1);
   });
 });

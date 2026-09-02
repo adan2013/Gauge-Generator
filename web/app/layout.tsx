@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { ConfirmationProvider } from "@/components/providers/confirmation-provider/confirmation-provider";
 import { StatusMessageProvider } from "@/components/providers/status-message-provider/status-message-provider";
 import { TooltipProvider } from "@/components/providers/tooltip-provider/tooltip-provider";
@@ -26,9 +26,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const locale = await getLocale();
+
   return (
-    <html lang="en" className="h-full">
+    <html lang={locale} className="h-full">
       <body className="min-h-full font-sans antialiased">
         <NextIntlClientProvider>
           <TooltipProvider>
