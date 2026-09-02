@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import type { ProjectDto } from "@/features/project/project-dto/project-dto";
 import { useLucideIconDefinitions } from "@/features/layers/icon/use-lucide-icon-definitions";
 import { getProjectIconNames, renderProjectLayers } from "@/features/project/rendering/project-svg";
@@ -14,6 +15,7 @@ type ExampleProjectPreviewProps = {
 export function ExampleProjectPreview({ className, project, title }: ExampleProjectPreviewProps) {
   const iconDefinitions = useLucideIconDefinitions(getProjectIconNames(project));
   const renderedLayers = renderProjectLayers(project, iconDefinitions);
+  const canvasClipId = `example-canvas-clip-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
 
   return (
     <div
@@ -30,16 +32,23 @@ export function ExampleProjectPreview({ className, project, title }: ExampleProj
         viewBox={`0 0 ${project.canvas.widthMm} ${project.canvas.heightMm}`}
         xmlns="http://www.w3.org/2000/svg"
       >
-        {!project.canvas.transparentBackground ? (
-          <rect
-            fill={project.canvas.background}
-            height={project.canvas.heightMm}
-            width={project.canvas.widthMm}
-          />
-        ) : null}
-        {renderedLayers.map((layer) => (
-          <g dangerouslySetInnerHTML={{ __html: layer.svg }} key={layer.id} />
-        ))}
+        <defs>
+          <clipPath id={canvasClipId} clipPathUnits="userSpaceOnUse">
+            <rect height={project.canvas.heightMm} width={project.canvas.widthMm} />
+          </clipPath>
+        </defs>
+        <g clipPath={`url(#${canvasClipId})`}>
+          {!project.canvas.transparentBackground ? (
+            <rect
+              fill={project.canvas.background}
+              height={project.canvas.heightMm}
+              width={project.canvas.widthMm}
+            />
+          ) : null}
+          {renderedLayers.map((layer) => (
+            <g dangerouslySetInnerHTML={{ __html: layer.svg }} key={layer.id} />
+          ))}
+        </g>
       </svg>
     </div>
   );

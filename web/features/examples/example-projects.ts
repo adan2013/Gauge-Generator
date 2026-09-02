@@ -1,7 +1,7 @@
-import classicScaleJson from "@/features/examples/projects/classic-scale.json";
-import electricRangeJson from "@/features/examples/projects/electric-range.json";
-import grandTourerJson from "@/features/examples/projects/grand-tourer.json";
-import minimalLabelJson from "@/features/examples/projects/minimal-label.json";
+import appleClockJson from "@/features/examples/projects/apple-clock.json";
+import leonGaugeJson from "@/features/examples/projects/leon-gauge.json";
+import mazdaGaugeJson from "@/features/examples/projects/mazda-gauge.json";
+import pressureGaugeJson from "@/features/examples/projects/pressure-gauge.json";
 import { validateProject } from "@/features/project/project-dto/project-validation";
 import type { ProjectDto } from "@/features/project/project-dto/project-dto";
 
@@ -14,28 +14,28 @@ export type ExampleProject = {
 
 export const EXAMPLE_PROJECTS: ExampleProject[] = [
   createExample(
-    "heritage-clock",
-    "Heritage clock",
-    "A warm, mechanical clock face with layered hands and classic typography.",
-    classicScaleJson,
+    "apple-clock",
+    "Square rounded clock",
+    "A crisp analogue clock face inspired by Apple's familiar clock design.",
+    appleClockJson,
   ),
   createExample(
-    "track-tachometer",
-    "Track tachometer",
-    "A high-contrast racing dial with minor marks, redline, and a live needle.",
-    minimalLabelJson,
+    "leon-gauge",
+    "Car speedometer with multiple masks",
+    "A layered automotive instrument inspired by the SEAT Leon dashboard.",
+    leonGaugeJson,
   ),
   createExample(
-    "grand-tourer",
-    "Grand tourer",
-    "A refined dual-scale speedometer with KPH, MPH, warning zone, and odometer.",
-    grandTourerJson,
+    "mazda-gauge",
+    "Car tachometer with LCD display",
+    "A Mazda-inspired automotive dial with a segmented display showing speed and the active gear.",
+    mazdaGaugeJson,
   ),
   createExample(
-    "electric-range",
-    "Electric range",
-    "A wide, rounded dashboard instrument for charge and remaining distance.",
-    electricRangeJson,
+    "pressure-gauge",
+    "Custom curve scale gauge",
+    "A compact pressure gauge with part of its range marked by an arc and a warning icon.",
+    pressureGaugeJson,
   ),
 ];
 

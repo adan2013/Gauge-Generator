@@ -149,9 +149,13 @@ describe("EditorShell project file flow", () => {
 
     fireEvent.click(screen.getAllByRole("button", { name: "Examples" }).at(-1)!);
     expect(await screen.findAllByRole("img", { name: /Preview of/ })).toHaveLength(4);
-    fireEvent.click(await screen.findByRole("button", { name: /Open example: Heritage clock/ }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: /Open example: Square rounded clock/ }),
+    );
     fireEvent.click(await screen.findByRole("button", { name: "Discard and open example" }));
-    await waitFor(() => expect(store.getState().project.current.meta.title).toBe("Heritage clock"));
+    await waitFor(() =>
+      expect(store.getState().project.current.meta.title).toBe("Square rounded clock"),
+    );
     expect(selectIsProjectDirty(store.getState())).toBe(true);
   });
 
