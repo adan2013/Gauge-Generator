@@ -1,0 +1,502 @@
+{
+  "Metadata": {
+    "title": "Gauge Generator — bezpłatny generator tarcz w przeglądarce",
+    "description": "Projektuj precyzyjne wskaźniki i tarcze przyrządów lokalnie w przeglądarce. Bezpłatnie, open source i bez rejestracji."
+  },
+  "Docs": {
+    "backToHome": "Wróć na stronę główną",
+    "closeNavigation": "Zamknij nawigację dokumentacji",
+    "languageLabel": "Język",
+    "metadata": {
+      "title": "Centrum pomocy | Gauge Generator",
+      "description": "Dowiedz się, jak tworzyć, edytować, zapisywać i eksportować wektorowe tarcze w Gauge Generator."
+    },
+    "openNavigation": "Otwórz nawigację dokumentacji",
+    "openEditor": "Otwórz edytor",
+    "tableOfContents": "Na tej stronie",
+    "tableOfContentsAriaLabel": "Spis treści",
+    "footer": "Dokumentacja Gauge Generator"
+  },
+  "Editor": {
+    "brand": "Gauge Generator Web",
+    "status": {
+      "undo": "Cofnięto ostatnią zmianę projektu.",
+      "redo": "Ponowiono zmianę projektu.",
+      "downloaded": "Projekt pobrano na komputer.",
+      "downloadFailed": "Nie udało się pobrać projektu.",
+      "exported": "Pobrano wyeksportowane pliki.",
+      "exportFailed": "Nie udało się wyeksportować projektu.",
+      "openFailed": "Ten plik nie jest prawidłowym projektem Gauge Generator. Bieżący projekt nie został zmieniony.",
+      "restoreFailed": "Nie udało się odczytać lokalnych automatycznych zapisów.",
+      "noAutosaves": "Nie ma jeszcze lokalnych automatycznych zapisów do przywrócenia.",
+      "autosavedLocally": "Zapisano lokalnie. Pobierz projekt, aby zachować plik na komputerze.",
+      "autosaveFailed": "Lokalny zapis automatyczny nie powiódł się. Pobierz projekt, aby zabezpieczyć swoją pracę.",
+      "projectLoaded": {
+        "new": "Utworzono nowy projekt.",
+        "open": "Otwarto projekt.",
+        "restore": "Przywrócono lokalny zapis. Pobierz go, aby zachować plik na komputerze.",
+        "example": "Otwarto przykład. Pobierz go, aby zachować plik projektu na komputerze."
+      },
+      "layerReset": "Przywrócono domyślne ustawienia warstwy.",
+      "layerEditModeStarted": "Edytujesz warstwę „{name}”.",
+      "rangeRequired": "Utwórz zakres przed dodaniem warstwy wizualnej.",
+      "rangeDependencyWarning": "Duże zmiany tego zakresu mogą automatycznie dostosować {count, plural, one {powiązaną warstwę} few {# powiązane warstwy} many {# powiązanych warstw} other {# powiązanej warstwy}}. Rozmiary elementów i widoczne wartości mogą zostać ograniczone, aby pasowały do nowego zakresu.",
+      "canvasWidthTooSmall": "Szerokość obszaru roboczego musi wynosić co najmniej {minimum} mm, aby środek „{name}” pozostał wewnątrz.",
+      "canvasHeightTooSmall": "Wysokość obszaru roboczego musi wynosić co najmniej {minimum} mm, aby środek „{name}” pozostał wewnątrz.",
+      "canvasRadiusTooLarge": "Co najmniej jeden wymiar obszaru roboczego musi wynosić {minimum} mm lub więcej, aby pomieścić promień „{name}”.",
+      "validation": {
+        "invalidProject": "Wartość nie została zastosowana, ponieważ projekt stałby się nieprawidłowy.",
+        "invalidSchema": "Wprowadzona wartość ma nieprawidłowy format lub wykracza poza dozwolony zakres.",
+        "invalidName": "Nazwa jest wymagana i może mieć najwyżej 80 znaków.",
+        "duplicateObjectId": "Wartość nie została zastosowana, ponieważ identyfikatory obiektów muszą być unikatowe.",
+        "missingRangeReference": "Wybierz istniejący zakres dla tej warstwy.",
+        "valueMustBePositive": "Wynikowa wartość musi być większa od zera.",
+        "valueOutsideAllowedRange": "Wprowadzona wartość wykracza poza zakres dozwolony przez powiązaną geometrię.",
+        "valueStartAfterEnd": "Wartość początkowa nie może być większa od końcowej.",
+        "valueRangeMustHaveSpan": "Wartości początkowa i końcowa muszą wyznaczać niezerowy przedział.",
+        "tooManyGeneratedItems": "Zwiększ krok, aby skala generowała najwyżej {max} elementów.",
+        "scaleBoundsNotAscending": "Wartość końcowa skali musi być większa od początkowej.",
+        "customScaleEndpointsInvalid": "Pozycje skali niestandardowej muszą zaczynać się od 0 i kończyć na 1.",
+        "customScaleNotMonotonic": "Każda wartość i pozycja skali niestandardowej musi być większa od poprzedniego punktu."
+      }
+    },
+    "toolbar": {
+      "ariaLabel": "Działania projektu",
+      "newProject": "Nowy projekt",
+      "open": "Otwórz",
+      "download": "Pobierz",
+      "export": "Eksportuj",
+      "undo": "Cofnij",
+      "redo": "Ponów",
+      "restore": "Przywróć",
+      "examples": "Przykłady",
+      "helpCenter": "Centrum pomocy",
+      "moreActions": "Więcej działań"
+    },
+    "language": {
+      "trigger": "Język: {language}",
+      "title": "Język",
+      "description": "Wybierz język aplikacji.",
+      "contribution": "Zapraszamy do współtworzenia i dodawania nowych języków w serwisie <github>GitHub</github>.",
+      "select": "Wybierz język {language}",
+      "selected": "Wybrano"
+    },
+    "layers": {
+      "sidebarAriaLabel": "Panel boczny edytora",
+      "title": "Warstwy",
+      "visualLayers": "Warstwy wizualne",
+      "projectSettings": "Projekt",
+      "addLayer": "Warstwa",
+      "defaultName": "Warstwa {number}",
+      "eyebrow": "Warstwa",
+      "propertiesAriaLabel": "Właściwości warstwy",
+      "propertiesTitle": "Ustawienia warstwy",
+      "propertiesDescription": "Dostosuj ten element wizualny i jego zakres źródłowy.",
+      "range": "Zakres",
+      "rangeSource": "Zakres źródłowy",
+      "picker": {
+        "eyebrow": "Nowa warstwa",
+        "title": "Wybierz typ warstwy",
+        "description": "Wybierz element wizualny, który chcesz dodać do tej tarczy."
+      },
+      "types": {
+        "tickScale": "Podziałka kreskowa",
+        "numericScale": "Podziałka liczbowa",
+        "label": "Etykieta",
+        "arc": "Łuk",
+        "needle": "Wskazówka",
+        "ellipse": "Elipsa",
+        "rectangle": "Prostokąt",
+        "line": "Linia",
+        "icon": "Ikona"
+      },
+      "editLayer": "Edytuj {name}",
+      "deleteLayer": "Usuń {name}",
+      "duplicateLayer": "Duplikuj {name}",
+      "duplicateDialog": {
+        "title": "Duplikuj warstwę",
+        "description": "Wybierz nazwę zduplikowanej warstwy.",
+        "nameLabel": "Nazwa warstwy",
+        "confirm": "Duplikuj",
+        "cancel": "Anuluj"
+      },
+      "hideLayer": "Ukryj {name}",
+      "showLayer": "Pokaż {name}",
+      "reorderLayer": "Zmień kolejność {name}",
+      "emptyDescription": "Dodaj warstwę wizualną, aby rozpocząć tworzenie tarczy.",
+      "createFirstRange": "Utwórz pierwszy zakres",
+      "createFirstLayer": "Utwórz pierwszą warstwę"
+    },
+    "ranges": {
+      "title": "Zakresy",
+      "defaultName": "Zakres {number}",
+      "emptyDescription": "Zakresy określają położenie, promień i przedział wartości używane przez warstwy wizualne.",
+      "count": "{current} / {maximum}",
+      "add": "Dodaj zakres",
+      "edit": "Edytuj {name}",
+      "delete": "Usuń {name}",
+      "deleteDisabled": "Przed usunięciem tego zakresu usuń {count, plural, one {zależną warstwę} few {# zależne warstwy} many {# zależnych warstw} other {# zależnej warstwy}}."
+    },
+    "confirmation": {
+      "cancel": "Anuluj",
+      "deleteLayerDescription": "Spowoduje to trwałe usunięcie {name} z projektu.",
+      "deleteLayerTitle": "Usunąć warstwę?",
+      "deleteRangeDescription": "Spowoduje to trwałe usunięcie {name} i jego mapowania wartości.",
+      "deleteRangeTitle": "Usunąć zakres?",
+      "resetLayerDescription": "Spowoduje to przywrócenie domyślnych ustawień wizualnych wybranej warstwy.",
+      "resetLayerTitle": "Zresetować warstwę?",
+      "confirmReset": "Resetuj",
+      "confirmDelete": "Usuń",
+      "unsaved": {
+        "title": "Odrzucić niepobrane zmiany?",
+        "description": "Najnowsze zmiany projektu nie zostały pobrane na komputer. Lokalny zapis automatyczny może istnieć, ale nie jest plikiem projektu.",
+        "newConfirm": "Odrzuć i utwórz",
+        "openConfirm": "Odrzuć i otwórz",
+        "restoreConfirm": "Odrzuć i przywróć",
+        "exampleConfirm": "Odrzuć i otwórz przykład"
+      }
+    },
+    "restore": {
+      "title": "Przywróć lokalny zapis",
+      "description": "Wybierz jedną z pięciu najnowszych migawek zapisanych tylko w tej przeglądarce.",
+      "empty": "Nie ma lokalnych zapisów do przywrócenia.",
+      "open": "Przywróć"
+    },
+    "examples": {
+      "title": "Przykłady",
+      "description": "Obejrzyj kompletny projekt, a następnie otwórz go jako edytowalny punkt wyjścia.",
+      "open": "Otwórz przykład"
+    },
+    "export": {
+      "title": "Eksportuj projekt",
+      "description": "Utwórz pliki produkcyjne z gotowej grafiki bez nakładek edycyjnych.",
+      "format": { "label": "Format pliku", "svg": "SVG", "png": "PNG", "pdf": "PDF" },
+      "scope": {
+        "label": "Układ plików",
+        "combined": "Jeden plik łączny",
+        "combinedDescription": "Renderuj wszystkie widoczne warstwy razem w kolejności projektu.",
+        "layers": "Jeden plik na warstwę",
+        "layersDescription": "Eksportuj {count, plural, one {widoczną warstwę} few {# widoczne warstwy} many {# widocznych warstw} other {# widocznej warstwy}} oddzielnie.",
+        "layersNote": "Pliki warstw używają pełnego rozmiaru obszaru roboczego i przezroczystego tła, dzięki czemu wydrukowane arkusze pozostają wyrównane. Są pobierane razem w archiwum ZIP.",
+        "pdfLayers": "Jedna strona na warstwę",
+        "pdfLayersDescription": "Umieść {count, plural, one {widoczną warstwę} few {# widoczne warstwy} many {# widocznych warstw} other {# widocznej warstwy}} na osobnych stronach jednego pliku PDF.",
+        "pdfLayersNote": "Każda widoczna warstwa jest umieszczana na własnej stronie {size} w tej samej pozycji, gotowa do wyrównanego druku."
+      },
+      "settings": "Ustawienia formatu",
+      "png": {
+        "dpi": "Rozdzielczość druku (DPI)",
+        "outputResolution": "Obraz wynikowy",
+        "resolution": "{width} × {height} px",
+        "tooLarge": "Ta rozdzielczość utworzyłaby obraz zbyt duży do niezawodnego eksportu w przeglądarce. Zmniejsz DPI."
+      },
+      "pdf": {
+        "paperSizeLabel": "Rozmiar papieru",
+        "scaleLabel": "Umieszczenie na stronie",
+        "fit": "Dopasuj do strony",
+        "actual": "Rozmiar rzeczywisty 1:1",
+        "a4TooSmall": "Projekt {projectWidth} × {projectHeight} mm nie mieści się na A4 w skali 1:1. Dostępny obszar to {availableWidth} × {availableHeight} mm. Wybierz A3 lub Dopasuj do strony.",
+        "a3TooSmall": "Projekt {projectWidth} × {projectHeight} mm nie mieści się na A3 w skali 1:1. Dostępny obszar to {availableWidth} × {availableHeight} mm. Wybierz Dopasuj do strony."
+      },
+      "support": {
+        "eyebrow": "Wesprzyj projekt",
+        "title": "Postaw mi kawę",
+        "description": "Jeśli ta aplikacja zaoszczędziła Ci czas lub chcesz podziękować autorowi, możesz postawić mu kawę.",
+        "action": "Wesprzyj projekt"
+      },
+      "cancel": "Anuluj",
+      "confirm": "Eksportuj",
+      "exporting": "Eksportowanie…"
+    },
+    "projectSettings": {
+      "ariaLabel": "Ustawienia projektu",
+      "eyebrow": "Projekt",
+      "title": "Ustawienia projektu",
+      "description": "Wymiary obszaru roboczego i przyciąganie są zapisywane w projekcie.",
+      "project": "Projekt",
+      "projectTitle": "Tytuł",
+      "canvas": "Obszar roboczy",
+      "width": "Szerokość",
+      "height": "Wysokość",
+      "background": "Tło",
+      "transparentBackground": "Przezroczyste tło",
+      "snapping": "Przyciąganie",
+      "enableSnapping": "Włącz przyciąganie",
+      "distanceIncrement": "Krok odległości",
+      "angleIncrement": "Krok kąta"
+    },
+    "range": {
+      "ariaLabel": "Właściwości zakresu",
+      "eyebrow": "Zakres",
+      "title": "Ustawienia zakresu",
+      "description": "Określ geometrię, mapowanie wartości i punkt obrotu wspólne dla warstw wizualnych.",
+      "position": "Położenie",
+      "centerX": "Środek X",
+      "centerY": "Środek Y",
+      "geometry": "Geometria",
+      "radius": "Promień",
+      "cornerRadius": "Promień narożnika",
+      "angleStart": "Kąt początkowy",
+      "openingAngle": "Kąt rozwarcia",
+      "values": "Mapowanie wartości",
+      "scaleMode": "Tryb skali",
+      "scaleModes": {
+        "linear": "Liniowa",
+        "logarithmic": "Logarytmiczna",
+        "custom": "Krzywa niestandardowa"
+      },
+      "valueDirection": "Kierunek wartości",
+      "valueDirections": {
+        "ascending": "Rosnąco wzdłuż łuku",
+        "descending": "Malejąco wzdłuż łuku"
+      },
+      "logarithmicDetailEmphasis": "Podkreślenie szczegółów",
+      "logarithmicDetailEmphases": {
+        "low-values": "Niskie wartości (więcej miejsca)",
+        "high-values": "Wysokie wartości (więcej miejsca)"
+      },
+      "scaleStart": "Wartość początkowa",
+      "scaleEnd": "Wartość końcowa",
+      "scaleModeChangeTitle": "Zmienić tryb skali?",
+      "scaleModeChangeDescription": "Zmiana trybu przywraca domyślne wartości wybranego trybu i może dostosować powiązane warstwy.",
+      "scaleModeConfirm": "Zmień tryb",
+      "customCurve": {
+        "ariaLabel": "Edytor niestandardowej krzywej skali",
+        "description": "Wartość przebiega poziomo, a znormalizowana pozycja na tarczy pionowo. Wartości są całkowite i podążają za krokiem odległości projektu, gdy przyciąganie jest włączone; pozycje używają kroku 0,05.",
+        "valueAxis": "Wartość",
+        "pointValue": "Wartość (oś X)",
+        "pointPosition": "Pozycja (oś Y)",
+        "pointCount": "{count, plural, one {# punkt} few {# punkty} many {# punktów} other {# punktu}}",
+        "addPoint": "Dodaj punkt krzywej",
+        "pointsAriaLabel": "Punkty krzywej niestandardowej",
+        "locked": "Zablokowany",
+        "lockedPoint": "Zablokowany punkt krzywej: wartość {value}, pozycja {position}",
+        "editablePoint": "Punkt krzywej: wartość {value}, pozycja {position}",
+        "removePoint": "Usuń punkt"
+      },
+      "overlayAriaLabel": "Nakładka edycji zakresu",
+      "handles": {
+        "center": "Przesuń środek",
+        "radius": "Dostosuj promień",
+        "angle-start": "Dostosuj kąt początkowy",
+        "angle-end": "Dostosuj kąt końcowy"
+      },
+      "handleValues": {
+        "center": "{x}; {y} mm",
+        "radius": "r: {radius} mm",
+        "angle-start": "początek: {start}°",
+        "angle-end": "rozwarcie: {opening}°"
+      }
+    },
+    "tickScale": {
+      "range": "Widoczny zakres wartości",
+      "geometry": "Geometria",
+      "ticks": "Kreski",
+      "radiusOffset": "Przesunięcie promienia",
+      "valueStart": "Wartość początkowa",
+      "valueEnd": "Wartość końcowa",
+      "valueStep": "Krok wartości",
+      "tickLength": "Długość kreski",
+      "tickWidth": "Szerokość kreski",
+      "color": "Kolor",
+      "overlayAriaLabel": "Nakładka edycji podziałki kreskowej",
+      "handles": { "radiusOffset": "Dostosuj promień kresek" },
+      "handleValues": { "radiusOffset": "{value} mm" }
+    },
+    "numericScale": {
+      "range": "Widoczny zakres wartości",
+      "geometry": "Geometria",
+      "font": "Czcionka",
+      "valueStart": "Wartość początkowa",
+      "valueEnd": "Wartość końcowa",
+      "valueStep": "Krok wartości",
+      "scaleMultiplier": "Mnożnik wartości",
+      "decimalPlaces": "Miejsca dziesiętne",
+      "radiusOffset": "Przesunięcie promienia",
+      "rotated": "Obracaj tekst",
+      "overlayAriaLabel": "Nakładka edycji podziałki liczbowej",
+      "handles": { "radiusOffset": "Dostosuj promień etykiet" },
+      "handleValues": { "radiusOffset": "{value} mm" }
+    },
+    "label": {
+      "content": "Treść",
+      "layout": "Układ",
+      "layoutMode": "Układ tekstu",
+      "layoutModes": { "point": "Tekst punktowy", "textArc": "Tekst na ścieżce zakresu" },
+      "text": "Tekst",
+      "offsetX": "Przesunięcie poziome",
+      "offsetY": "Przesunięcie pionowe",
+      "rotation": "Obrót",
+      "valueStart": "Wartość początkowa",
+      "valueEnd": "Wartość końcowa",
+      "radiusOffset": "Przesunięcie promienia",
+      "alignment": "Wyrównanie",
+      "alignments": { "start": "Do początku", "center": "Do środka", "end": "Do końca" },
+      "direction": "Kierunek",
+      "directions": { "forward": "Do przodu", "reverse": "Wstecz" },
+      "overlayAriaLabel": "Nakładka edycji etykiety",
+      "handles": {
+        "position": "Przesuń etykietę",
+        "rotation": "Obróć etykietę",
+        "radius-offset": "Dostosuj promień ścieżki tekstu"
+      },
+      "handleValues": {
+        "position": "{x}; {y} mm",
+        "rotation": "{value}°",
+        "radiusOffset": "{value} mm"
+      }
+    },
+    "arc": {
+      "range": "Widoczny zakres wartości",
+      "appearance": "Wygląd",
+      "valueStart": "Wartość początkowa",
+      "valueEnd": "Wartość końcowa",
+      "radiusOffset": "Przesunięcie promienia",
+      "strokeWidth": "Grubość łuku",
+      "roundedEnds": "Zaokrąglone końce",
+      "color": "Kolor",
+      "overlayAriaLabel": "Nakładka edycji łuku",
+      "handles": { "radiusOffset": "Dostosuj promień łuku" },
+      "handleValues": { "radiusOffset": "{value} mm" }
+    },
+    "needle": {
+      "groups": { "value": "Wartość", "shaft": "Trzon", "hub": "Piasta" },
+      "value": "Wartość",
+      "length": "Długość",
+      "tailLength": "Długość ogona",
+      "width": "Szerokość",
+      "tipStyle": "Styl końcówki",
+      "shaftColor": "Kolor trzonu",
+      "tailColor": "Kolor ogona",
+      "hubVisible": "Pokaż piastę",
+      "hubRadius": "Promień piasty",
+      "hubColor": "Kolor piasty",
+      "hubPlacement": "Położenie piasty",
+      "tipStyles": {
+        "flat": "Płaska",
+        "rounded": "Zaokrąglona",
+        "arrowhead": "Grot",
+        "pointed": "Spiczaste zwężenie",
+        "tapered-rounded": "Zaokrąglone zwężenie"
+      },
+      "hubPlacements": { "front": "Przed trzonem", "behind": "Za trzonem" },
+      "overlayAriaLabel": "Nakładka edycji wskazówki",
+      "handles": {
+        "value": "Dostosuj wskazywaną wartość",
+        "length": "Dostosuj długość trzonu",
+        "tail-length": "Dostosuj długość ogona"
+      },
+      "handleValues": {
+        "value": "wartość: {value}",
+        "length": "długość: {value} mm",
+        "tailLength": "ogon: {value} mm"
+      }
+    },
+    "shape": {
+      "groups": { "position": "Położenie", "size": "Rozmiar", "appearance": "Wygląd" },
+      "offsetX": "Przesunięcie poziome",
+      "offsetY": "Przesunięcie pionowe",
+      "width": "Szerokość",
+      "height": "Wysokość",
+      "rotation": "Obrót",
+      "borderWidth": "Szerokość obramowania",
+      "cornerRadius": "Promień narożnika",
+      "fillColor": "Kolor tła",
+      "borderColor": "Kolor obramowania"
+    },
+    "line": {
+      "groups": { "position": "Położenie", "geometry": "Geometria", "appearance": "Wygląd" },
+      "offsetX": "Przesunięcie poziome",
+      "offsetY": "Przesunięcie pionowe",
+      "length": "Długość",
+      "rotation": "Obrót",
+      "strokeWidth": "Szerokość linii",
+      "roundedEnds": "Zaokrąglone końce",
+      "color": "Kolor",
+      "overlayAriaLabel": "Nakładka edycji linii",
+      "handles": {
+        "position": "Przesuń linię",
+        "start": "Dostosuj początek linii",
+        "end": "Dostosuj koniec linii"
+      },
+      "handleValues": { "position": "{x}; {y} mm" }
+    },
+    "icon": {
+      "groups": {
+        "icon": "Ikona",
+        "position": "Położenie",
+        "geometry": "Geometria",
+        "appearance": "Wygląd"
+      },
+      "browser": {
+        "searchAriaLabel": "Szukaj ikon Lucide",
+        "searchPlaceholder": "Szukaj ikon według nazwy",
+        "emptyHint": "Wpisz tekst w polu wyszukiwania, aby przeglądać przykładowe ikony.",
+        "noResults": "Nie znaleziono pasujących ikon.",
+        "poweredBy": "Obsługiwane przez Lucide"
+      },
+      "offsetX": "Przesunięcie poziome",
+      "offsetY": "Przesunięcie pionowe",
+      "width": "Szerokość",
+      "height": "Wysokość",
+      "rotation": "Obrót",
+      "strokeWidth": "Szerokość obrysu",
+      "color": "Kolor"
+    },
+    "planarGeometryOverlay": {
+      "overlayAriaLabel": "Nakładka edycji geometrii warstwy",
+      "handles": {
+        "position": "Przesuń warstwę",
+        "rotation": "Obróć warstwę",
+        "size": "Zmień rozmiar warstwy"
+      },
+      "handleValues": {
+        "position": "{x}; {y} mm",
+        "rotation": "{value}°",
+        "size": "{width} × {height} mm"
+      }
+    },
+    "textStyle": {
+      "title": "Typografia",
+      "size": "Rozmiar czcionki",
+      "font": "Czcionka",
+      "loadLocalFonts": "Wczytaj lokalne czcionki",
+      "loadingLocalFonts": "Wczytywanie lokalnych czcionek…",
+      "reloadLocalFonts": "Wczytaj ponownie lokalne czcionki ({count})",
+      "localFontsUnsupported": "Ta przeglądarka nie może wyświetlić listy czcionek zainstalowanych na komputerze.",
+      "localFontsDenied": "Nie zezwolono na dostęp do lokalnych czcionek.",
+      "localFontsError": "Nie udało się wczytać lokalnych czcionek.",
+      "bold": "Pogrubienie",
+      "italic": "Kursywa",
+      "underline": "Podkreślenie",
+      "color": "Kolor"
+    },
+    "layerEditor": {
+      "reset": "Resetuj warstwę",
+      "showOnlySelectedLayer": "Wyświetl tylko tę warstwę",
+      "bringSelectedLayerToFront": "Przenieś tę warstwę na wierzch",
+      "showEditingOverlay": "Pokaż nakładkę edycyjną"
+    },
+    "canvas": {
+      "ariaLabel": "Podgląd obszaru roboczego",
+      "previewAriaLabel": "Podgląd tarczy",
+      "previewDetailsAriaLabel": "Szczegóły podglądu",
+      "zoom": "{value}%",
+      "dimensions": "{width} × {height} mm",
+      "emptyTitle": "Obszar roboczy jest gotowy",
+      "emptyDescription": "Utwórz pierwszy zakres, aby zdefiniować tarczę, lub wybierz jeden z przykładowych projektów.",
+      "browseExamples": "Przeglądaj przykłady"
+    },
+    "controls": {
+      "backToLayers": "Wróć do warstw",
+      "identity": "Tożsamość",
+      "name": "Nazwa",
+      "adjust": "Dostosuj: {label}",
+      "pendingCommit": "Naciśnij Enter lub kliknij poza polem, aby zastosować. Esc anuluje.",
+      "invalidNumber": "Wprowadź dla pola {label} liczbę od {min} do {max}.",
+      "millimeters": "mm",
+      "degrees": "°",
+      "percent": "%",
+      "unavailable": "—"
+    }
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "format": "gauge-generator-web",
+  "version": 1,
+  "meta": {
+    "title": "Square rounded clock",
+    "createdAt": "2026-09-02T18:31:10.269Z",
+    "updatedAt": "2026-09-02T18:40:22.092Z"
+  },
+  "canvas": {
+    "widthMm": 120,
+    "heightMm": 120,
+    "background": "#FFFFFF",
+    "transparentBackground": false
+  },
+  "settings": {
+    "snapping": {
+      "enabled": true,
+      "distanceMm": 2,
+      "angleDegrees": 10
+    }
+  },
+  "layers": [
+    {
+      "id": "6986f185-c223-4463-833e-52ee978193d7",
+      "name": "center",
+      "visible": true,
+      "rangeId": "4f56f019-2d03-47b5-9c8f-d3cad5025b8a",
+      "type": "ellipse",
+      "geometry": {
+        "offsetXMm": 0,
+        "offsetYMm": 0,
+        "widthMm": 4,
+        "heightMm": 4,
+        "rotationDegrees": 0
+      },
+      "style": {
+        "fillColor": "#FFFFFF",
+        "borderColor": "#1565C0",
+        "borderWidthMm": 0
+      }
+    },
+    {
+      "id": "1421c07f-78c4-4c98-a41f-863ebf3353e9",
+      "name": "sec",
+      "visible": true,
+      "rangeId": "4f56f019-2d03-47b5-9c8f-d3cad5025b8a",
+      "type": "needle",
+      "value": 30,
+      "shaft": {
+        "lengthMm": 46,
+        "tailLengthMm": 8,
+        "widthMm": 1.5,
+        "tipStyle": "rounded",
+        "color": "#F09F14",
+        "tailColor": "#F09F14"
+      },
+      "hub": {
+        "visible": true,
+        "radiusMm": 4,
+        "color": "#F09F14",
+        "placement": "front"
+      }
+    },
+    {
+      "id": "3ddae7d3-8834-4387-93af-8455a31db8d7",
+      "name": "min",
+      "visible": true,
+      "rangeId": "4f56f019-2d03-47b5-9c8f-d3cad5025b8a",
+      "type": "needle",
+      "value": 9,
+      "shaft": {
+        "lengthMm": 48,
+        "tailLengthMm": 0,
+        "widthMm": 2.8,
+        "tipStyle": "rounded",
+        "color": "#000000",
+        "tailColor": "#000000"
+      },
+      "hub": {
+        "visible": true,
+        "radiusMm": 4,
+        "color": "#20242B",
+        "placement": "front"
+      }
+    },
+    {
+      "id": "d774e8be-f1b9-4066-9f44-594d8c01681b",
+      "name": "hr",
+      "visible": true,
+      "rangeId": "4f56f019-2d03-47b5-9c8f-d3cad5025b8a",
+      "type": "needle",
+      "value": 51,
+      "shaft": {
+        "lengthMm": 36,
+        "tailLengthMm": 0,
+        "widthMm": 2.8,
+        "tipStyle": "rounded",
+        "color": "#000000",
+        "tailColor": "#000000"
+      },
+      "hub": {
+        "visible": true,
+        "radiusMm": 4,
+        "color": "#20242B",
+        "placement": "front"
+      }
+    },
+    {
+      "id": "f6ea1099-52d4-4263-9e2f-767b809a49a1",
+      "name": "hr num",
+      "visible": true,
+      "rangeId": "4f56f019-2d03-47b5-9c8f-d3cad5025b8a",
+      "type": "numeric-scale",
+      "valueStart": 15,
+      "valueEnd": 60,
+      "valueStep": 15,
+      "scaleMultiplier": 0.2,
+      "decimalPlaces": 0,
+      "radiusOffsetMm": -16,
+      "textStyle": {
+        "font": {
+          "source": "system",
+          "family": "Impact"
+        },
+        "sizeMm": 12,
+        "color": "#20242B",
+        "bold": false,
+        "italic": false,
+        "underline": false
+      },
+      "rotated": false
+    },
+    {
+      "id": "d93f5114-85cd-4010-acc8-5d3a6eaac274",
+      "name": "large hr",
+      "visible": true,
+      "rangeId": "4f56f019-2d03-47b5-9c8f-d3cad5025b8a",
+      "type": "tick-scale",
+      "valueStart": 0,
+      "valueEnd": 60,
+      "valueStep": 5,
+      "tickLengthMm": 8,
+      "tickWidthMm": 1.3,
+      "radiusOffsetMm": 0,
+      "color": "#000000"
+    },
+    {
+      "id": "da0cd234-06e8-4358-ac40-91a03bd1b69a",
+      "name": "small min",
+      "visible": true,
+      "rangeId": "4f56f019-2d03-47b5-9c8f-d3cad5025b8a",
+      "type": "tick-scale",
+      "valueStart": 0,
+      "valueEnd": 60,
+      "valueStep": 1,
+      "tickLengthMm": 4,
+      "tickWidthMm": 1,
+      "radiusOffsetMm": 0,
+      "color": "#ADADAD"
+    }
+  ],
+  "ranges": [
+    {
+      "id": "4f56f019-2d03-47b5-9c8f-d3cad5025b8a",
+      "name": "Range 1",
+      "centerX": 60,
+      "centerY": 60,
+      "radius": 56,
+      "cornerRadiusPercent": 26,
+      "angleStart": 270,
+      "openingAngle": 360,
+      "valueDirection": "ascending",
+      "scaleDefinition": {
+        "mode": "linear",
+        "start": 0,
+        "end": 60
+      }
+    }
+  ]
+}

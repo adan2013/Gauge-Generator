@@ -1,0 +1,240 @@
+{
+  "format": "gauge-generator-web",
+  "version": 1,
+  "meta": {
+    "title": "Custom curve scale gauge",
+    "createdAt": "2026-09-02T18:47:43.503Z",
+    "updatedAt": "2026-09-02T19:00:58.350Z"
+  },
+  "canvas": {
+    "widthMm": 120,
+    "heightMm": 120,
+    "background": "#FFFFFF",
+    "transparentBackground": false
+  },
+  "settings": {
+    "snapping": {
+      "enabled": true,
+      "distanceMm": 2,
+      "angleDegrees": 10
+    }
+  },
+  "layers": [
+    {
+      "id": "c319879a-6e89-4b20-a261-3d21a301484a",
+      "name": "froze icon",
+      "visible": true,
+      "rangeId": "e2c0ec27-f37f-4500-b3e9-888d41692fac",
+      "type": "icon",
+      "icon": {
+        "library": "lucide",
+        "name": "snowflake"
+      },
+      "geometry": {
+        "offsetXMm": -34,
+        "offsetYMm": 14,
+        "widthMm": 12,
+        "heightMm": 12,
+        "rotationDegrees": 0
+      },
+      "style": {
+        "color": "#79AFEC",
+        "strokeWidthMm": 1
+      }
+    },
+    {
+      "id": "0908dc26-4ee5-408a-ae49-83a7b777bcdf",
+      "name": "rest point",
+      "visible": true,
+      "rangeId": "e2c0ec27-f37f-4500-b3e9-888d41692fac",
+      "type": "ellipse",
+      "geometry": {
+        "offsetXMm": -30,
+        "offsetYMm": 28,
+        "widthMm": 2,
+        "heightMm": 2,
+        "rotationDegrees": 0
+      },
+      "style": {
+        "fillColor": "#000000",
+        "borderColor": "#1565C0",
+        "borderWidthMm": 0
+      }
+    },
+    {
+      "id": "2753e920-f445-4135-b7d0-2bb55c9e73ae",
+      "name": "center",
+      "visible": true,
+      "rangeId": "e2c0ec27-f37f-4500-b3e9-888d41692fac",
+      "type": "ellipse",
+      "geometry": {
+        "offsetXMm": 0,
+        "offsetYMm": 0,
+        "widthMm": 2,
+        "heightMm": 2,
+        "rotationDegrees": 0
+      },
+      "style": {
+        "fillColor": "#FFFFFF",
+        "borderColor": "#1565C0",
+        "borderWidthMm": 0
+      }
+    },
+    {
+      "id": "96f7dec0-24f5-4fef-99f1-e856767da440",
+      "name": "needle",
+      "visible": true,
+      "rangeId": "e2c0ec27-f37f-4500-b3e9-888d41692fac",
+      "type": "needle",
+      "value": 13,
+      "shaft": {
+        "lengthMm": 48,
+        "tailLengthMm": 18,
+        "widthMm": 3.7,
+        "tipStyle": "tapered-rounded",
+        "color": "#000000",
+        "tailColor": "#20242B"
+      },
+      "hub": {
+        "visible": true,
+        "radiusMm": 6,
+        "color": "#20242B",
+        "placement": "front"
+      }
+    },
+    {
+      "id": "fc3f3365-2659-4849-ac18-f02a9c0016cd",
+      "name": "unit",
+      "visible": true,
+      "rangeId": "e2c0ec27-f37f-4500-b3e9-888d41692fac",
+      "type": "label",
+      "text": "bar",
+      "layout": {
+        "mode": "point",
+        "offsetXMm": 0,
+        "offsetYMm": -22,
+        "rotationDegrees": 0
+      },
+      "textStyle": {
+        "font": {
+          "source": "system",
+          "family": "Aachen Std"
+        },
+        "sizeMm": 7.9,
+        "color": "#20242B",
+        "bold": false,
+        "italic": false,
+        "underline": false
+      }
+    },
+    {
+      "id": "428d845d-e302-4491-b954-dc740f4fed44",
+      "name": "num",
+      "visible": true,
+      "rangeId": "e2c0ec27-f37f-4500-b3e9-888d41692fac",
+      "type": "numeric-scale",
+      "valueStart": 0,
+      "valueEnd": 100,
+      "valueStep": 10,
+      "scaleMultiplier": 0.1,
+      "decimalPlaces": 0,
+      "radiusOffsetMm": 10,
+      "textStyle": {
+        "font": {
+          "source": "system",
+          "family": "Aachen Std"
+        },
+        "sizeMm": 5.5,
+        "color": "#20242B",
+        "bold": false,
+        "italic": false,
+        "underline": false
+      },
+      "rotated": true
+    },
+    {
+      "id": "fd1dffc8-b45f-40d6-9f45-6e1e77982413",
+      "name": "arc scale",
+      "visible": true,
+      "rangeId": "e2c0ec27-f37f-4500-b3e9-888d41692fac",
+      "type": "arc",
+      "valueStart": 0,
+      "valueEnd": 100,
+      "radiusOffsetMm": 0,
+      "strokeWidthMm": 0.2,
+      "roundedEnds": false,
+      "color": "#000000"
+    },
+    {
+      "id": "4b207cf9-38bc-46e5-ba3b-6ab4c7a1cd2a",
+      "name": "large scale",
+      "visible": true,
+      "rangeId": "e2c0ec27-f37f-4500-b3e9-888d41692fac",
+      "type": "tick-scale",
+      "valueStart": 0,
+      "valueEnd": 100,
+      "valueStep": 10,
+      "tickLengthMm": 6,
+      "tickWidthMm": 0.8,
+      "radiusOffsetMm": 6,
+      "color": "#20242B"
+    },
+    {
+      "id": "b3040bd0-f50c-4372-a9e1-6b77b22ce541",
+      "name": "basic scale",
+      "visible": true,
+      "rangeId": "e2c0ec27-f37f-4500-b3e9-888d41692fac",
+      "type": "tick-scale",
+      "valueStart": 0,
+      "valueEnd": 100,
+      "valueStep": 1,
+      "tickLengthMm": 4,
+      "tickWidthMm": 0.2,
+      "radiusOffsetMm": 4,
+      "color": "#20242B"
+    },
+    {
+      "id": "f5a489c5-d730-4a7c-9fbe-74cee3b7b499",
+      "name": "Layer 10",
+      "visible": true,
+      "rangeId": "e2c0ec27-f37f-4500-b3e9-888d41692fac",
+      "type": "arc",
+      "valueStart": 0,
+      "valueEnd": 20,
+      "radiusOffsetMm": 2,
+      "strokeWidthMm": 3.5,
+      "roundedEnds": false,
+      "color": "#79AFEC"
+    }
+  ],
+  "ranges": [
+    {
+      "id": "e2c0ec27-f37f-4500-b3e9-888d41692fac",
+      "name": "BAR",
+      "centerX": 60,
+      "centerY": 60,
+      "radius": 44,
+      "cornerRadiusPercent": 50,
+      "angleStart": 140,
+      "openingAngle": 260,
+      "valueDirection": "ascending",
+      "scaleDefinition": {
+        "mode": "custom",
+        "points": [
+          {
+            "value": 0,
+            "position": 0
+          },
+          {
+            "value": 34,
+            "position": 0.5
+          },
+          {
+            "value": 100,
+            "position": 1
+          }
+        ]
+      }
+    }
+  ]
+}

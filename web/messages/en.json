@@ -1,0 +1,542 @@
+{
+  "Metadata": {
+    "title": "Gauge Generator — Free browser-based gauge designer",
+    "description": "Design precise gauges and instrument faces locally in your browser. Free, open source, and no registration required."
+  },
+  "Docs": {
+    "backToHome": "Back to home",
+    "closeNavigation": "Close documentation navigation",
+    "languageLabel": "Language",
+    "metadata": {
+      "title": "Help center | Gauge Generator",
+      "description": "Learn how to build, edit, save, and export vector gauges in Gauge Generator."
+    },
+    "openNavigation": "Open documentation navigation",
+    "openEditor": "Open editor",
+    "tableOfContents": "On this page",
+    "tableOfContentsAriaLabel": "Table of contents",
+    "footer": "Gauge Generator documentation"
+  },
+  "Editor": {
+    "brand": "Gauge Generator Web",
+    "status": {
+      "undo": "Undid the last project change.",
+      "redo": "Redid the project change.",
+      "downloaded": "Project downloaded to your computer.",
+      "downloadFailed": "The project could not be downloaded.",
+      "exported": "Export files downloaded.",
+      "exportFailed": "The project could not be exported.",
+      "openFailed": "This file is not a valid Gauge Generator project. The current project was not changed.",
+      "restoreFailed": "Local autosaves could not be read.",
+      "noAutosaves": "There are no local autosaves to restore yet.",
+      "autosavedLocally": "Autosaved locally. Download the project to keep a file on your computer.",
+      "autosaveFailed": "The local autosave failed. Download the project to protect your work.",
+      "projectLoaded": {
+        "new": "New project created.",
+        "open": "Project opened.",
+        "restore": "Local autosave restored. Download it to keep a file on your computer.",
+        "example": "Example opened. Download it to keep a project file on your computer."
+      },
+      "layerReset": "Layer settings restored to their defaults.",
+      "layerEditModeStarted": "You are editing layer “{name}”.",
+      "rangeRequired": "Create a Range before adding a visual layer.",
+      "rangeDependencyWarning": "Large changes to this Range may automatically adjust {count, plural, one {the linked layer} other {# linked layers}}. Element sizes and visible values may be limited to fit the new Range.",
+      "canvasWidthTooSmall": "Canvas width must be at least {minimum} mm to keep the center of “{name}” inside.",
+      "canvasHeightTooSmall": "Canvas height must be at least {minimum} mm to keep the center of “{name}” inside.",
+      "canvasRadiusTooLarge": "At least one canvas dimension must be {minimum} mm or greater to support the radius of “{name}”.",
+      "validation": {
+        "invalidProject": "The value was not applied because it would make the project invalid.",
+        "invalidSchema": "The entered value has an invalid format or is outside its permitted range.",
+        "invalidName": "The name is required and must contain no more than 80 characters.",
+        "duplicateObjectId": "The value was not applied because object identifiers must be unique.",
+        "missingRangeReference": "Select an existing Range for this layer.",
+        "valueMustBePositive": "The resulting value must be greater than zero.",
+        "valueOutsideAllowedRange": "The entered value is outside the range allowed by the related geometry.",
+        "valueStartAfterEnd": "The start value cannot be greater than the end value.",
+        "valueRangeMustHaveSpan": "The start and end values must define a non-zero interval.",
+        "tooManyGeneratedItems": "Increase the step so the scale generates no more than {max} items.",
+        "scaleBoundsNotAscending": "The scale end value must be greater than its start value.",
+        "customScaleEndpointsInvalid": "Custom Scale positions must begin at 0 and end at 1.",
+        "customScaleNotMonotonic": "Each Custom Scale value and position must be greater than the previous point."
+      }
+    },
+    "toolbar": {
+      "ariaLabel": "Project actions",
+      "newProject": "New project",
+      "open": "Open",
+      "download": "Download",
+      "export": "Export",
+      "undo": "Undo",
+      "redo": "Redo",
+      "restore": "Restore",
+      "examples": "Examples",
+      "helpCenter": "Help center",
+      "moreActions": "More actions"
+    },
+    "language": {
+      "trigger": "Language: {language}",
+      "title": "Language",
+      "description": "Choose the language used by the application.",
+      "contribution": "You're invited to contribute and add new languages on <github>GitHub</github>.",
+      "select": "Select {language}",
+      "selected": "Selected"
+    },
+    "layers": {
+      "sidebarAriaLabel": "Editor sidebar",
+      "title": "Layers",
+      "visualLayers": "Visual layers",
+      "projectSettings": "Project",
+      "addLayer": "Layer",
+      "defaultName": "Layer {number}",
+      "eyebrow": "Layer",
+      "propertiesAriaLabel": "Layer properties",
+      "propertiesTitle": "Layer setup",
+      "propertiesDescription": "Adjust this visual element and its source Range.",
+      "range": "Range",
+      "rangeSource": "Source Range",
+      "picker": {
+        "eyebrow": "New layer",
+        "title": "Choose a layer type",
+        "description": "Select the visual element you want to add to this gauge."
+      },
+      "types": {
+        "tickScale": "Tick scale",
+        "numericScale": "Numeric scale",
+        "label": "Label",
+        "arc": "Arc",
+        "needle": "Needle",
+        "ellipse": "Ellipse",
+        "rectangle": "Rectangle",
+        "line": "Line",
+        "icon": "Icon"
+      },
+      "editLayer": "Edit {name}",
+      "deleteLayer": "Delete {name}",
+      "duplicateLayer": "Duplicate {name}",
+      "duplicateDialog": {
+        "title": "Duplicate layer",
+        "description": "Choose a name for the duplicated layer.",
+        "nameLabel": "Layer name",
+        "confirm": "Duplicate",
+        "cancel": "Cancel"
+      },
+      "hideLayer": "Hide {name}",
+      "showLayer": "Show {name}",
+      "reorderLayer": "Reorder {name}",
+      "emptyDescription": "Add a visual layer to start rendering your gauge.",
+      "createFirstRange": "Create first Range",
+      "createFirstLayer": "Create first Layer"
+    },
+    "ranges": {
+      "title": "Ranges",
+      "defaultName": "Range {number}",
+      "emptyDescription": "Ranges define the position, radius, and value range used by visual layers.",
+      "count": "{current} / {maximum}",
+      "add": "Add Range",
+      "edit": "Edit {name}",
+      "delete": "Delete {name}",
+      "deleteDisabled": "Remove the {count, plural, one {dependent layer} other {# dependent layers}} before deleting this Range."
+    },
+    "confirmation": {
+      "cancel": "Cancel",
+      "deleteLayerDescription": "This will permanently remove {name} from the project.",
+      "deleteLayerTitle": "Delete layer?",
+      "deleteRangeDescription": "This will permanently remove {name} and its value mapping from the project.",
+      "deleteRangeTitle": "Delete Range?",
+      "resetLayerDescription": "This will restore the visual settings of the selected layer to their defaults.",
+      "resetLayerTitle": "Reset layer?",
+      "confirmReset": "Reset",
+      "confirmDelete": "Delete",
+      "unsaved": {
+        "title": "Discard changes not downloaded?",
+        "description": "Your latest project changes have not been downloaded to your computer. A local autosave may exist, but it is not a project file.",
+        "newConfirm": "Discard and create",
+        "openConfirm": "Discard and open",
+        "restoreConfirm": "Discard and restore",
+        "exampleConfirm": "Discard and open example"
+      }
+    },
+    "restore": {
+      "title": "Restore local autosave",
+      "description": "Choose one of the five most recent snapshots stored only in this browser.",
+      "empty": "There are no local autosaves to restore.",
+      "open": "Restore"
+    },
+    "examples": {
+      "title": "Examples",
+      "description": "Preview a complete project, then open it as an editable starting point.",
+      "open": "Open example"
+    },
+    "export": {
+      "title": "Export project",
+      "description": "Create production files from the final artwork without editing overlays.",
+      "format": {
+        "label": "File format",
+        "svg": "SVG",
+        "png": "PNG",
+        "pdf": "PDF"
+      },
+      "scope": {
+        "label": "File arrangement",
+        "combined": "One combined file",
+        "combinedDescription": "Render every visible layer together in project order.",
+        "layers": "One file per layer",
+        "layersDescription": "Export {count, plural, one {the visible layer} other {# visible layers}} separately.",
+        "layersNote": "Layer files use the full canvas size and a transparent background so printed sheets stay aligned. They are downloaded together in a ZIP archive.",
+        "pdfLayers": "One page per layer",
+        "pdfLayersDescription": "Place {count, plural, one {the visible layer} other {# visible layers}} on separate pages in one PDF.",
+        "pdfLayersNote": "Each visible layer is placed on its own {size} page in the same position, ready for aligned printing."
+      },
+      "settings": "Format settings",
+      "png": {
+        "dpi": "Print resolution (DPI)",
+        "outputResolution": "Output image",
+        "resolution": "{width} × {height} px",
+        "tooLarge": "This resolution would create an image that is too large for reliable browser export. Reduce the DPI."
+      },
+      "pdf": {
+        "paperSizeLabel": "Paper size",
+        "scaleLabel": "Page placement",
+        "fit": "Fit to page",
+        "actual": "Actual size 1:1",
+        "a4TooSmall": "This {projectWidth} × {projectHeight} mm project does not fit on A4 at 1:1. The available area is {availableWidth} × {availableHeight} mm. Choose A3 or Fit to page.",
+        "a3TooSmall": "This {projectWidth} × {projectHeight} mm project does not fit on A3 at 1:1. The available area is {availableWidth} × {availableHeight} mm. Choose Fit to page."
+      },
+      "support": {
+        "eyebrow": "Support the project",
+        "title": "Buy me a coffee",
+        "description": "If this app saved you time or you would like to thank its author, you can do so by buying him a coffee.",
+        "action": "Support the project"
+      },
+      "cancel": "Cancel",
+      "confirm": "Export",
+      "exporting": "Exporting…"
+    },
+    "projectSettings": {
+      "ariaLabel": "Project settings",
+      "eyebrow": "Project",
+      "title": "Project settings",
+      "description": "Canvas dimensions and snapping are saved with this project.",
+      "project": "Project",
+      "projectTitle": "Title",
+      "canvas": "Canvas",
+      "width": "Width",
+      "height": "Height",
+      "background": "Background",
+      "transparentBackground": "Transparent background",
+      "snapping": "Snapping",
+      "enableSnapping": "Enable snapping",
+      "distanceIncrement": "Distance increment",
+      "angleIncrement": "Angle increment"
+    },
+    "range": {
+      "ariaLabel": "Range properties",
+      "eyebrow": "Range",
+      "title": "Range setup",
+      "description": "Define the geometry, value mapping, and pivot context shared by visual layers.",
+      "position": "Position",
+      "centerX": "Center X",
+      "centerY": "Center Y",
+      "geometry": "Geometry",
+      "radius": "Radius",
+      "cornerRadius": "Corner radius",
+      "angleStart": "Start angle",
+      "openingAngle": "Opening angle",
+      "values": "Value mapping",
+      "scaleMode": "Scale mode",
+      "scaleModes": {
+        "linear": "Linear",
+        "logarithmic": "Logarithmic",
+        "custom": "Custom curve"
+      },
+      "valueDirection": "Value direction",
+      "valueDirections": {
+        "ascending": "Ascending along arc",
+        "descending": "Descending along arc"
+      },
+      "logarithmicDetailEmphasis": "Detail emphasis",
+      "logarithmicDetailEmphases": {
+        "low-values": "Low values (more space)",
+        "high-values": "High values (more space)"
+      },
+      "scaleStart": "Start value",
+      "scaleEnd": "End value",
+      "scaleModeChangeTitle": "Change scale mode?",
+      "scaleModeChangeDescription": "Changing the mode resets all scale values to the defaults for the selected mode and may adjust linked layers.",
+      "scaleModeConfirm": "Change mode",
+      "customCurve": {
+        "ariaLabel": "Custom scale curve editor",
+        "description": "Value runs horizontally and normalized dial position vertically. Values are integers and follow the project distance increment when snapping is enabled; positions use 0.05 increments.",
+        "valueAxis": "Value",
+        "pointValue": "Value (X-axis)",
+        "pointPosition": "Position (Y-axis)",
+        "pointCount": "{count, plural, one {# point} other {# points}}",
+        "addPoint": "Add curve point",
+        "pointsAriaLabel": "Custom curve points",
+        "locked": "Locked",
+        "lockedPoint": "Locked curve point: value {value}, position {position}",
+        "editablePoint": "Curve point: value {value}, position {position}",
+        "removePoint": "Remove point"
+      },
+      "overlayAriaLabel": "Range editing overlay",
+      "handles": {
+        "center": "Move center",
+        "radius": "Adjust radius",
+        "angle-start": "Adjust start angle",
+        "angle-end": "Adjust end angle"
+      },
+      "handleValues": {
+        "center": "{x}; {y} mm",
+        "radius": "r: {radius} mm",
+        "angle-start": "start: {start}°",
+        "angle-end": "opening: {opening}°"
+      }
+    },
+    "tickScale": {
+      "range": "Visible value range",
+      "geometry": "Geometry",
+      "ticks": "Ticks",
+      "radiusOffset": "Radius offset",
+      "valueStart": "Start value",
+      "valueEnd": "End value",
+      "valueStep": "Value step",
+      "tickLength": "Tick length",
+      "tickWidth": "Tick width",
+      "color": "Color",
+      "overlayAriaLabel": "Tick scale editing overlay",
+      "handles": {
+        "radiusOffset": "Adjust tick radius"
+      },
+      "handleValues": {
+        "radiusOffset": "{value} mm"
+      }
+    },
+    "numericScale": {
+      "range": "Visible value range",
+      "geometry": "Geometry",
+      "font": "Font",
+      "valueStart": "Start value",
+      "valueEnd": "End value",
+      "valueStep": "Value step",
+      "scaleMultiplier": "Value multiplier",
+      "decimalPlaces": "Decimal places",
+      "radiusOffset": "Radius offset",
+      "rotated": "Rotate text",
+      "overlayAriaLabel": "Numeric scale editing overlay",
+      "handles": { "radiusOffset": "Adjust label radius" },
+      "handleValues": { "radiusOffset": "{value} mm" }
+    },
+    "label": {
+      "content": "Content",
+      "layout": "Layout",
+      "layoutMode": "Text layout",
+      "layoutModes": {
+        "point": "Point text",
+        "textArc": "Text on Range path"
+      },
+      "text": "Text",
+      "offsetX": "Horizontal offset",
+      "offsetY": "Vertical offset",
+      "rotation": "Rotation",
+      "valueStart": "Start value",
+      "valueEnd": "End value",
+      "radiusOffset": "Radius offset",
+      "alignment": "Alignment",
+      "alignments": {
+        "start": "Start",
+        "center": "Center",
+        "end": "End"
+      },
+      "direction": "Direction",
+      "directions": {
+        "forward": "Forward",
+        "reverse": "Reverse"
+      },
+      "overlayAriaLabel": "Label editing overlay",
+      "handles": {
+        "position": "Move label",
+        "rotation": "Rotate label",
+        "radius-offset": "Adjust text path radius"
+      },
+      "handleValues": {
+        "position": "{x}; {y} mm",
+        "rotation": "{value}°",
+        "radiusOffset": "{value} mm"
+      }
+    },
+    "arc": {
+      "range": "Visible value range",
+      "appearance": "Appearance",
+      "valueStart": "Start value",
+      "valueEnd": "End value",
+      "radiusOffset": "Radius offset",
+      "strokeWidth": "Arc thickness",
+      "roundedEnds": "Rounded ends",
+      "color": "Color",
+      "overlayAriaLabel": "Arc editing overlay",
+      "handles": {
+        "radiusOffset": "Adjust arc radius"
+      },
+      "handleValues": {
+        "radiusOffset": "{value} mm"
+      }
+    },
+    "needle": {
+      "groups": {
+        "value": "Value",
+        "shaft": "Shaft",
+        "hub": "Hub"
+      },
+      "value": "Value",
+      "length": "Length",
+      "tailLength": "Tail length",
+      "width": "Width",
+      "tipStyle": "Tip style",
+      "shaftColor": "Shaft color",
+      "tailColor": "Tail color",
+      "hubVisible": "Show hub",
+      "hubRadius": "Hub radius",
+      "hubColor": "Hub color",
+      "hubPlacement": "Hub placement",
+      "tipStyles": {
+        "flat": "Flat",
+        "rounded": "Rounded",
+        "arrowhead": "Arrowhead",
+        "pointed": "Pointed taper",
+        "tapered-rounded": "Rounded taper"
+      },
+      "hubPlacements": {
+        "front": "In front of shaft",
+        "behind": "Behind shaft"
+      },
+      "overlayAriaLabel": "Needle editing overlay",
+      "handles": {
+        "value": "Adjust indicated value",
+        "length": "Adjust shaft length",
+        "tail-length": "Adjust tail length"
+      },
+      "handleValues": {
+        "value": "value: {value}",
+        "length": "length: {value} mm",
+        "tailLength": "tail: {value} mm"
+      }
+    },
+    "shape": {
+      "groups": {
+        "position": "Position",
+        "size": "Size",
+        "appearance": "Appearance"
+      },
+      "offsetX": "Horizontal offset",
+      "offsetY": "Vertical offset",
+      "width": "Width",
+      "height": "Height",
+      "rotation": "Rotation",
+      "borderWidth": "Border width",
+      "cornerRadius": "Corner radius",
+      "fillColor": "Background color",
+      "borderColor": "Border color"
+    },
+    "line": {
+      "groups": {
+        "position": "Position",
+        "geometry": "Geometry",
+        "appearance": "Appearance"
+      },
+      "offsetX": "Horizontal offset",
+      "offsetY": "Vertical offset",
+      "length": "Length",
+      "rotation": "Rotation",
+      "strokeWidth": "Line width",
+      "roundedEnds": "Rounded ends",
+      "color": "Color",
+      "overlayAriaLabel": "Line editing overlay",
+      "handles": {
+        "position": "Move line",
+        "start": "Adjust line start",
+        "end": "Adjust line end"
+      },
+      "handleValues": {
+        "position": "{x}; {y} mm"
+      }
+    },
+    "icon": {
+      "groups": {
+        "icon": "Icon",
+        "position": "Position",
+        "geometry": "Geometry",
+        "appearance": "Appearance"
+      },
+      "browser": {
+        "searchAriaLabel": "Search Lucide icons",
+        "searchPlaceholder": "Search icons by name",
+        "emptyHint": "Type in the search field to browse icon examples.",
+        "noResults": "No matching icons found.",
+        "poweredBy": "Powered by Lucide"
+      },
+      "offsetX": "Horizontal offset",
+      "offsetY": "Vertical offset",
+      "width": "Width",
+      "height": "Height",
+      "rotation": "Rotation",
+      "strokeWidth": "Stroke width",
+      "color": "Color"
+    },
+    "planarGeometryOverlay": {
+      "overlayAriaLabel": "Layer geometry editing overlay",
+      "handles": {
+        "position": "Move layer",
+        "rotation": "Rotate layer",
+        "size": "Resize layer"
+      },
+      "handleValues": {
+        "position": "{x}; {y} mm",
+        "rotation": "{value}°",
+        "size": "{width} × {height} mm"
+      }
+    },
+    "textStyle": {
+      "title": "Typography",
+      "size": "Font size",
+      "font": "Font",
+      "loadLocalFonts": "Load local fonts",
+      "loadingLocalFonts": "Loading local fonts…",
+      "reloadLocalFonts": "Reload local fonts ({count})",
+      "localFontsUnsupported": "This browser cannot list fonts installed on your computer.",
+      "localFontsDenied": "Access to local fonts was not allowed.",
+      "localFontsError": "Local fonts could not be loaded.",
+      "bold": "Bold",
+      "italic": "Italic",
+      "underline": "Underline",
+      "color": "Color"
+    },
+    "layerEditor": {
+      "reset": "Reset layer",
+      "showOnlySelectedLayer": "Display only this layer",
+      "bringSelectedLayerToFront": "Bring this layer to front",
+      "showEditingOverlay": "Show editing overlay"
+    },
+    "canvas": {
+      "ariaLabel": "Canvas preview",
+      "previewAriaLabel": "Gauge preview",
+      "previewDetailsAriaLabel": "Preview details",
+      "zoom": "{value}%",
+      "dimensions": "{width} × {height} mm",
+      "emptyTitle": "Your canvas is ready",
+      "emptyDescription": "Create your first Range to define a dial, or select one of the starter examples.",
+      "browseExamples": "Browse examples"
+    },
+    "controls": {
+      "backToLayers": "Back to layers",
+      "identity": "Identity",
+      "name": "Name",
+      "adjust": "Adjust {label}",
+      "pendingCommit": "Press Enter or click outside to apply. Esc cancels.",
+      "invalidNumber": "Enter a number for {label} between {min} and {max}.",
+      "millimeters": "mm",
+      "degrees": "°",
+      "percent": "%",
+      "unavailable": "—"
+    }
+  }
+}

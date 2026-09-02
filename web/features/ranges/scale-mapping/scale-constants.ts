@@ -1,0 +1,1 @@
+export const MAX_GENERATED_SCALE_ITEMS = 200;

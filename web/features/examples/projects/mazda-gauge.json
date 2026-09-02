@@ -1,0 +1,264 @@
+{
+  "format": "gauge-generator-web",
+  "version": 1,
+  "meta": {
+    "title": "Car tachometer with LCD display",
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-09-02T17:59:33.423Z"
+  },
+  "canvas": {
+    "widthMm": 120,
+    "heightMm": 120,
+    "background": "#000000",
+    "transparentBackground": false
+  },
+  "settings": {
+    "snapping": {
+      "enabled": true,
+      "distanceMm": 2,
+      "angleDegrees": 10
+    }
+  },
+  "layers": [
+    {
+      "id": "a7a3153e-cbf2-4de7-bec0-d57a24315193",
+      "name": "needle",
+      "visible": true,
+      "rangeId": "d9f1c450-2a36-4eed-8cbb-a0a652cfaa31",
+      "type": "needle",
+      "value": 34,
+      "shaft": {
+        "lengthMm": 40,
+        "tailLengthMm": 14,
+        "widthMm": 2,
+        "tipStyle": "tapered-rounded",
+        "color": "#C62828",
+        "tailColor": "#C62828"
+      },
+      "hub": {
+        "visible": true,
+        "radiusMm": 6,
+        "color": "#20242B",
+        "placement": "behind"
+      }
+    },
+    {
+      "id": "085077cc-ec61-4afc-9a3c-fa0339f518a5",
+      "name": "speed unit",
+      "visible": true,
+      "rangeId": "d9f1c450-2a36-4eed-8cbb-a0a652cfaa31",
+      "type": "label",
+      "text": "KM/H",
+      "layout": {
+        "mode": "point",
+        "offsetXMm": 24,
+        "offsetYMm": 26,
+        "rotationDegrees": 0
+      },
+      "textStyle": {
+        "font": {
+          "source": "system",
+          "family": "LCDMono2"
+        },
+        "sizeMm": 3,
+        "color": "#000000",
+        "bold": false,
+        "italic": false,
+        "underline": false
+      }
+    },
+    {
+      "id": "62ff7eb2-ff33-4359-8ab5-fb2f2efcacbe",
+      "name": "gear",
+      "visible": true,
+      "rangeId": "d9f1c450-2a36-4eed-8cbb-a0a652cfaa31",
+      "type": "label",
+      "text": "N",
+      "layout": {
+        "mode": "point",
+        "offsetXMm": 8,
+        "offsetYMm": 30,
+        "rotationDegrees": 0
+      },
+      "textStyle": {
+        "font": {
+          "source": "system",
+          "family": "LCDMono2"
+        },
+        "sizeMm": 9.5,
+        "color": "#000000",
+        "bold": true,
+        "italic": false,
+        "underline": false
+      }
+    },
+    {
+      "id": "0a43c9a1-44a1-47c3-90bc-87c1071e73c3",
+      "name": "speed value",
+      "visible": true,
+      "rangeId": "d9f1c450-2a36-4eed-8cbb-a0a652cfaa31",
+      "type": "label",
+      "text": "000",
+      "layout": {
+        "mode": "point",
+        "offsetXMm": 22,
+        "offsetYMm": 20,
+        "rotationDegrees": 0
+      },
+      "textStyle": {
+        "font": {
+          "source": "system",
+          "family": "LCDMono2"
+        },
+        "sizeMm": 9.5,
+        "color": "#000000",
+        "bold": true,
+        "italic": false,
+        "underline": false
+      }
+    },
+    {
+      "id": "4c1457ce-d03f-4147-ac4b-edd5f56b04e4",
+      "name": "numeric scale",
+      "visible": true,
+      "rangeId": "d9f1c450-2a36-4eed-8cbb-a0a652cfaa31",
+      "type": "numeric-scale",
+      "valueStart": 0,
+      "valueEnd": 320,
+      "valueStep": 40,
+      "scaleMultiplier": 0.025,
+      "decimalPlaces": 0,
+      "radiusOffsetMm": -12,
+      "textStyle": {
+        "font": {
+          "source": "system",
+          "family": "Verdana"
+        },
+        "sizeMm": 7.9,
+        "color": "#FFFFFF",
+        "bold": true,
+        "italic": false,
+        "underline": false
+      },
+      "rotated": false
+    },
+    {
+      "id": "c0dabe93-a445-4776-a5b8-89904a2df120",
+      "name": "large scale",
+      "visible": true,
+      "rangeId": "d9f1c450-2a36-4eed-8cbb-a0a652cfaa31",
+      "type": "tick-scale",
+      "valueStart": 0,
+      "valueEnd": 320,
+      "valueStep": 40,
+      "tickLengthMm": 6,
+      "tickWidthMm": 1.2,
+      "radiusOffsetMm": 0,
+      "color": "#D6D6D6"
+    },
+    {
+      "id": "596c0ede-d615-45b8-93d6-98dd1553d458",
+      "name": "small scale",
+      "visible": true,
+      "rangeId": "d9f1c450-2a36-4eed-8cbb-a0a652cfaa31",
+      "type": "tick-scale",
+      "valueStart": 0,
+      "valueEnd": 320,
+      "valueStep": 20,
+      "tickLengthMm": 4,
+      "tickWidthMm": 0.6,
+      "radiusOffsetMm": 0,
+      "color": "#D6D6D6"
+    },
+    {
+      "id": "6b084d2d-b738-46c0-917b-d213e81fb975",
+      "name": "danger zone",
+      "visible": true,
+      "rangeId": "d9f1c450-2a36-4eed-8cbb-a0a652cfaa31",
+      "type": "arc",
+      "valueStart": 260,
+      "valueEnd": 320,
+      "radiusOffsetMm": -2,
+      "strokeWidthMm": 3.7,
+      "roundedEnds": false,
+      "color": "#DD2C2C"
+    },
+    {
+      "id": "00f84ab7-b9f6-4711-981b-b626c1dd1d5c",
+      "name": "cover2",
+      "visible": true,
+      "rangeId": "d9f1c450-2a36-4eed-8cbb-a0a652cfaa31",
+      "type": "rectangle",
+      "geometry": {
+        "offsetXMm": -18,
+        "offsetYMm": 0,
+        "widthMm": 48,
+        "heightMm": 116,
+        "rotationDegrees": 10
+      },
+      "style": {
+        "fillColor": "#000000",
+        "borderColor": "#1565C0",
+        "borderWidthMm": 0
+      },
+      "cornerRadiusPercent": 0
+    },
+    {
+      "id": "16e6c303-e36b-4dd0-a5cb-3ce3c02c7dea",
+      "name": "cover1",
+      "visible": true,
+      "rangeId": "d9f1c450-2a36-4eed-8cbb-a0a652cfaa31",
+      "type": "rectangle",
+      "geometry": {
+        "offsetXMm": 2,
+        "offsetYMm": -8,
+        "widthMm": 98,
+        "heightMm": 42,
+        "rotationDegrees": 0
+      },
+      "style": {
+        "fillColor": "#000000",
+        "borderColor": "#1565C0",
+        "borderWidthMm": 0
+      },
+      "cornerRadiusPercent": 0
+    },
+    {
+      "id": "223d53b4-cf4d-43bc-8f60-5a64ec35fc98",
+      "name": "Layer 6",
+      "visible": true,
+      "rangeId": "d9f1c450-2a36-4eed-8cbb-a0a652cfaa31",
+      "type": "ellipse",
+      "geometry": {
+        "offsetXMm": 2,
+        "offsetYMm": 8,
+        "widthMm": 74,
+        "heightMm": 60,
+        "rotationDegrees": 0
+      },
+      "style": {
+        "fillColor": "#6B6224",
+        "borderColor": "#1565C0",
+        "borderWidthMm": 0
+      }
+    }
+  ],
+  "ranges": [
+    {
+      "id": "d9f1c450-2a36-4eed-8cbb-a0a652cfaa31",
+      "name": "RPM range",
+      "centerX": 60,
+      "centerY": 60,
+      "radius": 48,
+      "cornerRadiusPercent": 50,
+      "angleStart": 110,
+      "openingAngle": 250,
+      "valueDirection": "ascending",
+      "scaleDefinition": {
+        "mode": "linear",
+        "start": 0,
+        "end": 320
+      }
+    }
+  ]
+}

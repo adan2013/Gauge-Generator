@@ -1,28 +1,44 @@
-# Gauge-Generator
+<img alt="Gauge Generator" src="web/public/brand/gauge-generator-logo-readme.svg" width="520">
 
-![Gauge Generator logo](img/gg_logo.png)
+# Gauge Generator
 
-Gauge Generator is a free application which allows generate different types of analog clock face. Here is the full online documentation containing tips and examples of projects. Select the next page from menu on the left side of this website.
+Gauge Generator is an open-source tool for designing gauges, dials, instrument
+faces, and other value-driven vector graphics. This repository contains two
+separate editions of the application.
 
-## Documentation
+## Web edition
 
-More information about the application, together with examples of work you can find [here](https://adan2013.github.io/Gauge-Generator).
+[`web/`](web/) is the current edition, rebuilt from scratch for modern browsers.
+It is a local-first Next.js application: it requires no account, sends no project
+data to a backend, and stores editable projects as readable JSON files.
 
-## Instalation
+The web editor adds a broader layer system, live editing handles, local autosaves,
+example projects, and SVG, PNG, and PDF export. Its public routes are:
 
-1. Go to [releases page on GitHub](https://github.com/adan2013/Gauge-Generator/releases)
-2. Download ZIP file of the newest version
+- `/` — English landing page;
+- `/app` — the editor;
+- `/docs/{lang}` — the Markdown Help Center.
 
-![GitHub Releases](img/githubreleases.jpg)
+See [`web/README.md`](web/README.md) for local development and deployment details.
 
-3. Unzip downloaded file by using an application such as WinRAR or 7-Zip
+## Original PC edition
 
-![Unzip file](img/unzip.jpg)
+[`pc-legacy/`](pc-legacy/) contains the original Windows/WPF application released
+in 2019, together with its source code and historical documentation. It is kept
+as an archive and is not a dependency of the web application.
 
-4. Run the file with the `.exe` extension
+The editions use different project formats. The web editor does not open legacy
+`.ggp` files and does not copy or depend on the old implementation.
 
-![Run exe](img/runexe.jpg)
+## Contributing
 
-5. The application is ready for use
+Contributions are welcome. See [`CONTRIBUTING.md`](CONTRIBUTING.md), including the
+guide for adding application and Help Center translations.
 
-![Gauge Generator application](img/full-interface.png)
+## Licenses
+
+Both editions are distributed under the GNU General Public License v3.0. Each
+edition keeps its license in its own directory:
+
+- [`web/LICENSE`](web/LICENSE)
+- [`pc-legacy/LICENSE`](pc-legacy/LICENSE)
