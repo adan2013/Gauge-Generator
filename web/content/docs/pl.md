@@ -175,6 +175,14 @@ W przypadku tarczy produkcyjnej wcześnie wyeksportuj wersję roboczą. Sprawdze
 
 ## Filmy poklatkowe z budowy
 
-Już wkrótce.
+Zobacz w przyspieszonym tempie, jak powstają przykłady do Gauge Generatora. Filmy możesz odtworzyć tutaj lub otworzyć bezpośrednio w YouTube.
+
+[Gauge Generator 2 - square rounded clock example](https://www.youtube.com/watch?v=OYj0auyJ2pw)
+
+[Gauge Generator 2 - car speedometer example](https://www.youtube.com/watch?v=4VuLSKFEPO8)
+
+[Gauge Generator 2 - car tachometer example](https://www.youtube.com/watch?v=Oj78NdAmlEw)
+
+[Gauge Generator 2 - custom curve scale gauge example](https://www.youtube.com/watch?v=gXwXKAwQVG4)
 
 Chcesz poeksperymentować? [Otwórz edytor](/app) lub rozpocznij od kompletnego projektu z sekcji **Przykłady**.

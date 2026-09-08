@@ -175,6 +175,14 @@ For a production face, export a quick draft early. Checking the real print size 
 
 ## Build timelapses
 
-Coming soon.
+Watch how Gauge Generator examples are built in these timelapse videos. Play them here or open them directly on YouTube.
+
+[Gauge Generator 2 - square rounded clock example](https://www.youtube.com/watch?v=OYj0auyJ2pw)
+
+[Gauge Generator 2 - car speedometer example](https://www.youtube.com/watch?v=4VuLSKFEPO8)
+
+[Gauge Generator 2 - car tachometer example](https://www.youtube.com/watch?v=Oj78NdAmlEw)
+
+[Gauge Generator 2 - custom curve scale gauge example](https://www.youtube.com/watch?v=gXwXKAwQVG4)
 
 Ready to experiment? [Open the editor](/app) or begin with a complete project from **Examples**.

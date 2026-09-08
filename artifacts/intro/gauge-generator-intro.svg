@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<title>Gauge Generator — intro</title>
+<desc>White intro card with the original Gauge Generator logo, red gauge accents and the landing page address.</desc>
+<rect width="1920" height="1080" fill="#ffffff"/>
+<g fill="none" stroke="#d12525">
+  <circle cx="1910" cy="-5" r="330" stroke-width="2" opacity=".10"/>
+  <circle cx="1910" cy="-5" r="288" stroke-width="1" opacity=".07"/>
+  <path d="M 1580 -5 A 330 330 0 0 0 1666.76 218.08" stroke-width="5"/>
+  <circle cx="-15" cy="1080" r="280" stroke-width="2" opacity=".10"/>
+  <circle cx="-15" cy="1080" r="238" stroke-width="1" opacity=".07"/>
+  <path d="M 199.49 900.02 A 280 280 0 0 1 265 1080" stroke-width="5"/>
+</g>
+<path d="M 1899.18 304.81 L 1899.74 288.82" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 1866.86 301.98 L 1867.97 294.06" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 1835.00 295.79 L 1836.94 288.03" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 1803.97 286.30 L 1806.71 278.79" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 1774.10 273.63 L 1777.61 266.44" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 1745.73 257.89 L 1754.20 244.33" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 1719.14 239.28 L 1724.07 232.98" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 1694.66 218.00 L 1700.21 212.24" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 1672.53 194.26 L 1678.65 189.12" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 1653.00 168.35 L 1659.63 163.88" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 1636.29 140.54 L 1650.41 133.02" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 1622.57 111.13 L 1629.99 108.13" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 1612.01 80.45 L 1619.70 78.24" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 1604.71 48.83 L 1612.59 47.44" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 1600.76 16.62 L 1608.74 16.07" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M -15.00 820.00 L -15.00 836.00" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 12.18 821.42 L 11.34 829.38" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 39.06 825.68 L 37.39 833.51" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 65.34 832.73 L 62.87 840.33" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 90.75 842.48 L 87.50 849.79" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 115.00 854.83 L 107.00 868.69" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 137.82 869.66 L 133.12 876.13" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 158.97 886.78 L 153.62 892.73" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 178.22 906.03 L 172.27 911.38" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 195.34 927.18 L 188.87 931.88" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 210.17 950.00 L 196.31 958.00" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 222.52 974.25 L 215.21 977.50" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 232.27 999.66 L 224.67 1002.13" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 239.32 1025.94 L 231.49 1027.61" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 243.58 1052.82 L 235.62 1053.66" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<path d="M 245.00 1080.00 L 229.00 1080.00" stroke="#d12525" stroke-width="2" opacity=".18"/>
+<svg x="469" y="355" width="1100" height="279.661" viewBox="0 0 1180 300">  <defs>
+    <clipPath id="horizontal-letter-outline">
+      <circle cx="256" cy="256" r="196" />
+    </clipPath>
+  </defs>
+  <g transform="translate(10 22) scale(.5)">
+    <g fill="none" stroke="#20242c" stroke-width="56" stroke-linecap="butt">
+      <path d="M 374.793939 137.206061 A 168 168 0 1 0 424 256" />
+      <path d="M 256 256 H 452" clip-path="url(#horizontal-letter-outline)" />
+    </g>
+    <path fill="#d12525" d="M 394.592929 117.407071 L 278.424345 272.767491 A 28 28 0 1 1 239.232509 233.575655 Z" />
+  </g>
+  <text x="310" y="184" fill="#20242c" font-family="Arial, Helvetica, sans-serif" font-size="92" font-weight="700" letter-spacing="-3.4">Gauge Generator</text>
+</svg>
+<rect x="932" y="636" width="56" height="4" rx="2" fill="#d12525"/>
+<a href="https://gauge-generator.adanit.pl/">
+<text x="960" y="706" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="400" letter-spacing=".4" fill="#555b65">gauge-generator.adanit.pl</text>
+</a>
+</svg>

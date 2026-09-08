@@ -14,6 +14,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
+import type { ExtraProps } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 export type TableOfContentsItem = { depth: 2 | 3; id: string; label: string };
@@ -86,6 +87,40 @@ function MarkdownLink({ href = "", children, ...props }: ComponentPropsWithoutRe
   );
 }
 
+function MarkdownParagraph({ children, node }: ComponentPropsWithoutRef<"p"> & ExtraProps) {
+  const link = node?.children.length === 1 ? node.children[0] : undefined;
+  if (link?.type === "element" && link.tagName === "a") {
+    const href = link.properties.href;
+    const videoId =
+      typeof href === "string"
+        ? /^https:\/\/www\.youtube\.com\/watch\?v=([A-Za-z0-9_-]{11})$/.exec(href)?.[1]
+        : undefined;
+    const title = link.children
+      .filter((child) => child.type === "text")
+      .map((child) => child.value)
+      .join("");
+
+    if (videoId && title) {
+      return (
+        <figure className="my-8 space-y-3">
+          <iframe
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            className="aspect-video w-full rounded-xl border border-border bg-surface"
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+            src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+            title={title}
+          />
+          <figcaption className="text-sm leading-6 text-muted">{children}</figcaption>
+        </figure>
+      );
+    }
+  }
+
+  return <p className="my-5 leading-7 text-muted">{children}</p>;
+}
+
 export function DocsMarkdown({ markdown }: { markdown: string }) {
   return (
     <ReactMarkdown
@@ -147,7 +182,7 @@ export function DocsMarkdown({ markdown }: { markdown: string }) {
         ol: ({ children }) => (
           <ol className="my-5 list-decimal space-y-2 pl-6 leading-7 text-muted">{children}</ol>
         ),
-        p: ({ children }) => <p className="my-5 leading-7 text-muted">{children}</p>,
+        p: MarkdownParagraph,
         strong: ({ children }) => <strong className="font-semibold text-ink">{children}</strong>,
         table: ({ children }) => (
           <div className="my-7 overflow-x-auto rounded-xl border border-border bg-surface">
